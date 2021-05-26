@@ -1,0 +1,59 @@
+<!--begin::Signin-->
+<div class="login-form login-signin">
+  <!--begin::Title-->
+  <div class="pb-13 pt-lg-0 pt-5">
+    <h3 class="font-weight-bolder text-dark font-size-h4 font-size-h1-lg">
+      Repository Management System
+    </h3>
+  </div>
+  <!--end::Title-->
+
+  <!-- begin::Alert error-->
+  <ng-container *ngIf="hasError">
+    <div
+      class="mb-10 alert alert-custom alert-light-danger alert-dismissible"
+    >
+      <div class="alert-text">The login details are incorrect</div>
+    </div>
+  </ng-container>
+  <!-- end::Alert error-->
+
+  <!--begin::Action-->
+  <div class="pb-lg-0 pb-5">
+    <button
+      type="button"
+      class="btn btn-light-primary font-weight-bolder px-8 py-4 my-3 font-size-lg mr-3"
+      (click)="login()"
+    >
+      <span class="svg-icon svg-icon-md">
+        <img src="./assets/media/svg/social-icons/elixir.png"
+          style="width: 20px !important; height: 20px !important;"
+        />
+      </span>
+      Sign in with Elixir
+    </button>
+
+    <ng-container *ngIf="isLoading$ | async">
+      <span class="spinner spinner-primary ml-5"></span>
+    </ng-container>
+  </div>
+  <!--end::Action-->
+</div>
+<!--end::Signin-->
+
+<ng-template
+  #formError
+  let-control="control"
+  let-message="message"
+  let-validation="validation"
+>
+  <ng-container
+    *ngIf="control.hasError(validation) && (control.dirty || control.touched)"
+  >
+    <div class="fv-plugins-message-container">
+      <div class="fv-help-block">
+        {{ message }}
+      </div>
+    </div>
+  </ng-container>
+</ng-template>
