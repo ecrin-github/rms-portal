@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
 import { ErrorsComponent } from './errors.component';
-import { Error1Component } from './error1/error1.component';
-import { Error2Component } from './error2/error2.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { ServerErrorComponent } from './server-error/server-error.component';
+
 
 const routes: Routes = [
   {
@@ -12,16 +12,16 @@ const routes: Routes = [
     children: [
       {
         path: 'not-found',
-        component: Error1Component,
+        component: NotFoundComponent,
       },
       {
         path: 'server-error',
-        component: Error2Component,
+        component: ServerErrorComponent,
       },
       { path: '', redirectTo: 'not-found', pathMatch: 'full' },
       {
         path: '**',
-        component: Error1Component,
+        component: NotFoundComponent,
         pathMatch: 'full',
       },
     ],
