@@ -1,5 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { LayoutService } from '../../../../_rms/core';
+import { environment } from 'src/environments/environment.prod';
+
 
 @Component({
   selector: 'app-header-mobile',
@@ -12,7 +14,14 @@ export class HeaderMobileComponent implements OnInit, AfterViewInit {
   headerMenuSelfDisplay = true;
   headerMobileClasses = '';
   headerMobileAttributes = {};
-  constructor(private layout: LayoutService) {}
+
+  version: string;
+  status: string;
+
+  constructor(private layout: LayoutService) {
+    this.version = environment.appVersion;
+    this.status = `Beta version (${this.version})`;
+  }
 
   ngOnInit(): void {
     // build view by layout config settings

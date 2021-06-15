@@ -19,6 +19,7 @@ import KTLayoutHeader from '../../../../../assets/js/layout/base/header';
 import KTLayoutHeaderMenu from '../../../../../assets/js/layout/base/header-menu';
 import { KTUtil } from '../../../../../assets/js/components/util';
 import { Subscription, Observable, BehaviorSubject } from 'rxjs';
+import {environment} from '../../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-header',
@@ -35,6 +36,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   headerMenuCSSClasses: string;
   headerMenuHTMLAttributes: any = {};
   routerLoaderTimout: any;
+  appVersion: string;
 
   @ViewChild('ktHeaderMenu', { static: true }) ktHeaderMenu: ElementRef;
   loader$: Observable<number>;
@@ -79,6 +81,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.headerMenuSelfDisplay = this.layout.getProp(
       'header.menu.self.display'
     );
+    this.appVersion = environment.appVersion;
     this.headerMenuSelfStatic = this.layout.getProp('header.menu.self.static');
     this.asideSelfDisplay = this.layout.getProp('aside.self.display');
     this.headerSelfTheme = this.layout.getProp('header.self.theme') || '';

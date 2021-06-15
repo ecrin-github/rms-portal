@@ -1,5 +1,7 @@
+import {environment} from '../../../environments/environment.prod';
+
 export const DefaultLayoutConfig = {
-  demo: 'rms-portal-v1',
+  demo: 'rms-portal-' + environment.appVersion,
   js: {
     breakpoints: {
       sm: 576,

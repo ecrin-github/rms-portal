@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { LayoutService } from '../../../../../_rms/core';
+import { environment } from 'src/environments/environment.prod';
+
 
 function getCurrentURL(location) {
   return location.split(/[?#]/)[0];
@@ -16,9 +18,13 @@ export class HeaderMenuComponent implements OnInit {
   rootArrowEnabled: boolean;
   location: Location;
   headerMenuDesktopToggle: string;
+  version: string;
+  status: string;
 
   constructor(private layout: LayoutService, private loc: Location) {
     this.location = this.loc;
+    this.version = environment.appVersion;
+    this.status = `BETA (${this.version}), in development`;
   }
 
   ngOnInit(): void {

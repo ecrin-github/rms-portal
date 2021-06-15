@@ -13,7 +13,7 @@ const routes: Routes = [
           import('./main-page/main-page.module').then((m) => m.MainPageModule),
       },
       {
-        path: 'user-management',
+        path: 'users-management',
         loadChildren: () =>
           import('../modules/user-management/user-management.module').then(
             (m) => m.UserManagementModule
