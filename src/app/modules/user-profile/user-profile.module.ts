@@ -5,12 +5,23 @@ import {HttpClientModule} from '@angular/common/http';
 import {InlineSVGModule} from 'ng-inline-svg';
 import {NgbDropdownModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {CRUDTableModule} from '../../_rms/shared/crud-table';
+import {WidgetsModule} from '../../_rms/partials/content/widgets/widgets.module';
+import {UserProfileComponent} from './user-profile.component';
 import {PersonalInformationComponent} from './personal-information/personal-information.component';
+import {OrganizationInformationComponent} from './organization-information/organization-information.component';
+import {EmailSettingsComponent} from './email-settings/email-settings.component';
 import {UserProfileRoutingModule} from './user-profile-routing.module';
+import {ProfileCardComponent} from './_components/profile-card/profile-card.component';
+import {AccountInformationComponent} from './account-information/account-information.component';
 
 @NgModule({
   declarations: [
-    PersonalInformationComponent
+    UserProfileComponent,
+    PersonalInformationComponent,
+    AccountInformationComponent,
+    OrganizationInformationComponent,
+    EmailSettingsComponent,
+    ProfileCardComponent
   ],
   imports: [
     CommonModule,
@@ -22,6 +33,7 @@ import {UserProfileRoutingModule} from './user-profile-routing.module';
     UserProfileRoutingModule,
     NgbDropdownModule,
     NgbTooltipModule,
+    WidgetsModule
   ]
 })
 export class UserProfileModule {}

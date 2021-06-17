@@ -1,1 +1,69 @@
-<p>data transfers page works!</p>
+<div class="card">
+    <div class="card-header">
+        <h2>Data transfers</h2>
+        <div style="float: right; margin-top: -40px;">
+            <a href="" class="btn btn-success">Add new a transfer</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <mat-table [dataSource]="dataSource">
+
+            <ng-container matColumnDef="dataTransfer">
+                <mat-header-cell *matHeaderCellDef> Data transfer </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.dataTransfer}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="dataObject">
+                <mat-header-cell *matHeaderCellDef> Data object </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.dataObject}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="dta">
+                <mat-header-cell *matHeaderCellDef> DTA </mat-header-cell>
+                <mat-cell *matCellDef="let row"> <strong (click)="openLarge(content6)" style="text-decoration: underline; color: #3699FF;">{{row.dta}}</strong> </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="contributor">
+                <mat-header-cell *matHeaderCellDef> Contributor(s) </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.contributor}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+                <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.status}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;">
+            </mat-row>
+        </mat-table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </div>
+
+</div>
+
+<br />
+
+<div class="example-preview">
+    <div>
+        <ng-template #content6 let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <h4 class="modal-title">Agreement</h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam.
+                    Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.
+                    Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </ng-template>
+    </div>
+</div>
