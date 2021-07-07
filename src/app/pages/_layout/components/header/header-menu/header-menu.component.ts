@@ -35,10 +35,6 @@ export class HeaderMenuComponent implements OnInit {
     );
   }
 
-  getMenuItemActive(url) {
-    return this.checkIsActive(url) ? 'menu-item-active' : '';
-  }
-
   checkIsActive(url) {
     const location = this.location.path();
     const current = getCurrentURL(location);
