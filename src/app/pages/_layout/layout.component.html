@@ -14,26 +14,22 @@
     <div class="d-flex flex-row flex-column-fluid page">
       <!-- begin:: Aside Left -->
       <ng-container *ngIf="asideSelfDisplay">
-        <ng-container *ngIf="asideMenuStatic">
-          <!--begin::STATIC Aside-->
-          <app-aside
-            #ktAside
-            id="kt_aside"
-            class="aside aside-left d-flex flex-column flex-row-auto"
-            [ngClass]="asideCSSClasses"
-          ></app-aside>
-          <!--end::STATIC Aside-->
-        </ng-container>
-        <ng-container *ngIf="!asideMenuStatic">
-          <!--begin::DYNAMIC Aside-->
-          <app-aside-dynamic
-            #ktAside
-            id="kt_aside"
-            class="aside aside-left d-flex flex-column flex-row-auto"
-            [ngClass]="asideCSSClasses"
-          ></app-aside-dynamic>
-          <!--end::DYNAMIC Aside-->
-        </ng-container>
+        <app-aside-external
+          *ngIf="isExternalUser"
+          #ktAside
+          id="kt_aside"
+          class="aside aside-left d-flex flex-column flex-row-auto"
+          [ngClass]="asideCSSClasses"
+        ></app-aside-external>
+
+        <app-aside-internal
+          *ngIf="isInternalUser"
+          #ktAside
+          id="kt_aside"
+          class="aside aside-left d-flex flex-column flex-row-auto"
+          [ngClass]="asideCSSClasses"
+        ></app-aside-internal>
+
       </ng-container>
       <!-- end:: Aside Left -->
 

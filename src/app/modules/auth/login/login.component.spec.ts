@@ -8,14 +8,13 @@ import {
 } from '@angular/core/testing';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule, Routes } from '@angular/router';
-import { AuthService } from '../_services/auth.service';
 import { LoginComponent } from './login.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Observable, of } from 'rxjs';
-import { UserModel } from '../_models/user.model';
 import { LogoutComponent } from '../logout/logout.component';
-import { TranslationModule } from '../../i18n/translation.module';
 import { TranslateModule } from '@ngx-translate/core';
+import {UserInterface} from '../../../_rms/interfaces/user/user.model';
+import {AuthService} from '../../../_rms/services/auth/auth.service';
 
 const fakeAuth = {
   email: 'admin@demo.com',
@@ -36,14 +35,14 @@ const fakeRoutes: Routes = [
 ];
 
 class FakeAuthService {
-  login(email: string, password: string): Observable<UserModel> {
+  login(email: string, password: string): Observable<UserInterface> {
     const isChecked =
       email === fakeAuth.email && password === fakeAuth.password;
     if (!isChecked) {
       return of(undefined);
     }
 
-    const user = new UserModel();
+    const user = new UserInterface();
     user.username = 'admin';
     user.password = 'demo';
     user.email = 'admin@demo.com';

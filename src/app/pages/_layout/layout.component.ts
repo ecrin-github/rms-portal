@@ -5,8 +5,9 @@ import {
   ElementRef,
   AfterViewInit,
 } from '@angular/core';
-import { LayoutService, LayoutInitService } from '../../_rms/core';
+import { LayoutService, LayoutInitService } from '../../_rms';
 import KTLayoutContent from '../../../assets/js/layout/base/content';
+import {StatesService} from '../../_rms/services/states/states.service';
 
 @Component({
   selector: 'app-layout',
@@ -30,6 +31,7 @@ export class LayoutComponent implements OnInit, AfterViewInit {
   footerCSSClasses: string;
   headerCSSClasses: string;
   headerHTMLAttributes: any = {};
+
   // offcanvases
   extrasSearchOffcanvasDisplay = false;
   extrasNotificationsOffcanvasDisplay = false;
@@ -42,11 +44,26 @@ export class LayoutComponent implements OnInit, AfterViewInit {
   @ViewChild('ktHeaderMobile', { static: true }) ktHeaderMobile: ElementRef;
   @ViewChild('ktHeader', { static: true }) ktHeader: ElementRef;
 
+  // Role checker
+  public isExternalUser = false;
+  public isInternalUser = false;
+
   constructor(
     private initService: LayoutInitService,
     private layout: LayoutService,
+    private statesService: StatesService
   ) {
     this.initService.init();
+
+    // Roles checker
+    if (this.statesService.isExternalUser) {
+      this.isExternalUser = true;
+      this.isInternalUser = false;
+    }
+    if (this.statesService.isInternalUser) {
+      this.isExternalUser = false;
+      this.isInternalUser = true;
+    }
   }
 
   ngOnInit(): void {
@@ -103,6 +120,16 @@ export class LayoutComponent implements OnInit, AfterViewInit {
     this.extrasScrollTopDisplay = this.layout.getProp(
       'extras.scrolltop.display'
     );
+
+    // Roles checker
+    if (this.statesService.isExternalUser) {
+      this.isExternalUser = true;
+      this.isInternalUser = false;
+    }
+    if (this.statesService.isInternalUser) {
+      this.isExternalUser = false;
+      this.isInternalUser = true;
+    }
   }
 
   ngAfterViewInit(): void {
@@ -135,6 +162,7 @@ export class LayoutComponent implements OnInit, AfterViewInit {
         }
       }
     }
+
     // Init Content
     KTLayoutContent.init('kt_content');
   }

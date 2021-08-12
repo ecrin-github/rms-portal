@@ -6,7 +6,8 @@ import {
 } from '@angular/core/testing';
 
 import { LogoutComponent } from './logout.component';
-import { AuthService } from '../_services/auth.service';
+import {AuthService} from '../../../_rms/services/auth/auth.service';
+
 
 class FakeAuthService {
   logout() {}

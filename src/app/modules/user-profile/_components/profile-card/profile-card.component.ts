@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthService, UserModel } from '../../../auth';
+import {UserInterface} from '../../../../_rms/interfaces/user/user.interface';
+import {States} from '../../../../_rms/states/states';
 
 @Component({
   selector: 'app-profile-card',
@@ -8,8 +9,10 @@ import { AuthService, UserModel } from '../../../auth';
   styleUrls: ['./profile-card.component.scss']
 })
 export class ProfileCardComponent {
-  user$: Observable<UserModel>;
-  constructor(public userService: AuthService) {
-    this.user$ = this.userService.currentUserSubject.asObservable();
+  user$: Observable<UserInterface>;
+  constructor(
+      public states: States
+  ) {
+    this.user$ = this.states.currentUser.asObservable();
   }
 }

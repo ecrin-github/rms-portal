@@ -1,10 +1,14 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
-import { UserModel } from '../_models/user.model';
-import { AuthService } from '../_services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import {AuthService} from '../../../_rms/services/auth/auth.service';
+import {UserInterface} from '../../../_rms/interfaces/user/user.interface';
+import {States} from '../../../_rms/states/states';
+import {StatesService} from '../../../_rms/services/states/states.service';
+import {PrivilegesService} from '../../../_rms/services/privileges/privileges.service';
+
 
 @Component({
   selector: 'app-login',
@@ -12,9 +16,13 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  defaultAuth: any = {
+  internalAuth: any = {
     email: 'sergei.gorianin@ecrin.org',
     password: 'admin',
+  };
+  externalAuth: any = {
+    email: 'username@mail.org',
+    password: 'username',
   };
   loginForm: FormGroup;
   hasError: boolean;
@@ -27,12 +35,15 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private states: States,
+    private statesService: StatesService,
+    private privilegesService: PrivilegesService,
     private route: ActivatedRoute,
     private router: Router
   ) {
     this.isLoading$ = this.authService.isLoading$;
     // redirect to home if already logged in
-    if (this.authService.currentUserValue) {
+    if (this.statesService.currentUser) {
       this.router.navigate(['/']);
     }
   }
@@ -48,19 +59,35 @@ export class LoginComponent implements OnInit, OnDestroy {
     return this.loginForm.controls;
   }
 
-  login() {
+  loginExternal() {
     this.hasError = false;
     const loginSubscr = this.authService
-      .login(this.defaultAuth.email, this.defaultAuth.password)
+      .login(this.externalAuth.email, this.externalAuth.password)
       .pipe(first())
-      .subscribe((user: UserModel) => {
+      .subscribe((user: UserInterface) => {
         if (user) {
-          this.router.navigate([this.  returnUrl]);
+          this.router.navigate([this.returnUrl]);
         } else {
           this.hasError = true;
         }
       });
     this.unsubscribe.push(loginSubscr);
+  }
+
+  loginInternal() {
+    this.hasError = false;
+    const loginSubscr = this.authService
+        .login(this.internalAuth.email, this.internalAuth.password)
+        .pipe(first())
+        .subscribe((user: UserInterface) => {
+          if (user) {
+            this.router.navigate([this.returnUrl]);
+          } else {
+            this.hasError = true;
+          }
+        });
+    this.unsubscribe.push(loginSubscr);
+
   }
 
   ngOnDestroy() {

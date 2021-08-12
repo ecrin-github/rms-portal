@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { LayoutService } from '../../../../../core';
+import { LayoutService } from '../../../../../../_rms';
 import { Observable } from 'rxjs';
-import { UserModel } from '../../../../../../modules/auth/_models/user.model';
-import { AuthService } from '../../../../../../modules/auth/_services/auth.service';
+import {UserInterface} from '../../../../../interfaces/user/user.interface';
+import {States} from '../../../../../states/states';
+import {AuthService} from '../../../../../services/auth/auth.service';
+
 
 @Component({
   selector: 'app-user-offcanvas',
@@ -11,15 +13,19 @@ import { AuthService } from '../../../../../../modules/auth/_services/auth.servi
 })
 export class UserOffcanvasComponent implements OnInit {
   extrasUserOffcanvasDirection = 'offcanvas-right';
-  user$: Observable<UserModel>;
+  user$: Observable<UserInterface>;
 
-  constructor(private layout: LayoutService, private auth: AuthService) {}
+  constructor(
+      private layout: LayoutService,
+      private states: States,
+      private auth: AuthService,
+  ) {}
 
   ngOnInit(): void {
     this.extrasUserOffcanvasDirection = `offcanvas-${this.layout.getProp(
       'extras.user.offcanvas.direction'
     )}`;
-    this.user$ = this.auth.currentUserSubject.asObservable();
+    this.user$ = this.states.currentUser.asObservable();
   }
 
   logout() {

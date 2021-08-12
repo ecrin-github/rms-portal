@@ -2,7 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
-import { AuthService, UserModel } from '../../auth';
+import {UserInterface} from '../../../_rms/interfaces/user/user.interface';
+import {AuthService} from '../../../_rms/services/auth/auth.service';
+import {StatesService} from '../../../_rms/services/states/states.service';
+import {States} from '../../../_rms/states/states';
+
 
 @Component({
   selector: 'app-personal-information',
@@ -11,18 +15,23 @@ import { AuthService, UserModel } from '../../auth';
 })
 export class PersonalInformationComponent implements OnInit, OnDestroy {
   formGroup: FormGroup;
-  user: UserModel;
-  firstUserState: UserModel;
+  user: UserInterface;
+  firstUserState: UserInterface;
   subscriptions: Subscription[] = [];
   avatarPic = 'none';
   isLoading$: Observable<boolean>;
 
-  constructor(private userService: AuthService, private fb: FormBuilder) {
-    this.isLoading$ = this.userService.isLoadingSubject.asObservable();
+  constructor(
+      private userService: AuthService,
+      private states: States,
+      private statesService: StatesService,
+      private fb: FormBuilder
+  ) {
+    this.isLoading$ = this.states.isLoadingSubject.asObservable();
   }
 
   ngOnInit(): void {
-    const sb = this.userService.currentUserSubject.asObservable().pipe(
+    const sb = this.states.currentUser.asObservable().pipe(
       first(user => !!user)
     ).subscribe(user => {
       this.user = Object.assign({}, user);
@@ -39,8 +48,8 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
   loadForm() {
     this.formGroup = this.fb.group({
       pic: [this.user.pic],
-      firstname: [this.user.firstname, Validators.required],
-      lastname: [this.user.lastname, Validators.required],
+      firstName: [this.user.firstName, Validators.required],
+      lastName: [this.user.lastName, Validators.required],
       companyName: [this.user.companyName, Validators.required],
       phone: [this.user.phone, Validators.required],
       email: [this.user.email, Validators.compose([Validators.required, Validators.email])],
@@ -58,10 +67,10 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
     this.user = Object.assign(this.user, formValues);
 
     // Do request to your server for user update, we just imitate user update there
-    this.userService.isLoadingSubject.next(true);
+    this.statesService.isLoadingSubject = true;
     setTimeout(() => {
-      this.userService.currentUserSubject.next(Object.assign({}, this.user));
-      this.userService.isLoadingSubject.next(false);
+      this.statesService.currentUser = Object.assign({}, this.user);
+      this.statesService.isLoadingSubject = false;
     }, 2000);
   }
 

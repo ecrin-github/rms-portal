@@ -2,7 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
-import { AuthService, UserModel } from '../../auth';
+import {UserInterface} from '../../../_rms/interfaces/user/user.interface';
+import {AuthService} from '../../../_rms/services/auth/auth.service';
+import {States} from '../../../_rms/states/states';
+import {StatesService} from '../../../_rms/services/states/states.service';
+
 
 @Component({
   selector: 'app-organization-information',
@@ -11,17 +15,22 @@ import { AuthService, UserModel } from '../../auth';
 })
 export class AccountInformationComponent implements OnInit, OnDestroy {
   formGroup: FormGroup;
-  user: UserModel;
-  firstUserState: UserModel;
+  user: UserInterface;
+  firstUserState: UserInterface;
   subscriptions: Subscription[] = [];
   isLoading$: Observable<boolean>;
 
-  constructor(private userService: AuthService, private fb: FormBuilder) {
-    this.isLoading$ = this.userService.isLoadingSubject.asObservable();
+  constructor(
+      private userService: AuthService,
+      private states: States,
+      private statesService: StatesService,
+      private fb: FormBuilder
+  ) {
+    this.isLoading$ = this.states.isLoadingSubject.asObservable();
   }
 
   ngOnInit(): void {
-    const sb = this.userService.currentUserSubject.asObservable().pipe(
+    const sb = this.states.currentUser.asObservable().pipe(
       first(user => !!user)
     ).subscribe(user => {
       this.user = Object.assign({}, user);
@@ -69,10 +78,10 @@ export class AccountInformationComponent implements OnInit, OnDestroy {
     });
 
     // Do request to your server for user update, we just imitate user update there
-    this.userService.isLoadingSubject.next(true);
+    this.statesService.isLoadingSubject = true;
     setTimeout(() => {
-      this.userService.currentUserSubject.next(Object.assign({}, this.user));
-      this.userService.isLoadingSubject.next(false);
+      this.statesService.currentUser = Object.assign({}, this.user);
+      this.statesService.isLoadingSubject = false;
     }, 2000);
   }
 

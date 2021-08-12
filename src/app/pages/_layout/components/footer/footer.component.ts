@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { LayoutService } from '../../../../_rms/core';
+import { LayoutService } from '../../../../_rms';
 import KTLayoutFooter from '../../../../../assets/js/layout/base/footer';
 
 @Component({

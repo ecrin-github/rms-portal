@@ -1,0 +1,885 @@
+<div class="card">
+    <div class="card-header">
+        <h2>View data object details</h2>
+        <div style="float: right; margin-top: -40px;">
+            <a [routerLink]="['/data-objects', '1', 'edit']"
+               class="btn btn-primary mr-5" target="_blank">
+                <i class="fa fa-edit"></i> Edit
+            </a>
+            <button class="btn btn-primary mr-1">
+                <i class="fa fa-print"></i> Print
+            </button>
+            <button class="btn btn-primary">
+                <i class="fa fa-code"></i> JSON
+            </button>
+        </div>
+    </div>
+
+    <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="mt-1">Display title</h6>
+                </div>
+                <div class="col-8">
+                    <span style="font-size: 1.15em;">Title</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="mt-1">DOI</h6>
+                </div>
+                <div class="col-8">
+                    <span style="font-size: 1.15em;">DOI</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="mt-1">Version</h6>
+                </div>
+                <div class="col-8">
+                    <span style="font-size: 1.15em;">v. 1</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="mt-1">Object class</h6>
+                </div>
+                <div class="col-8">
+                    <span style="font-size: 1.15em;">Class name</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="mt-1">Object type</h6>
+                </div>
+                <div class="col-8">
+                    <span style="font-size: 1.15em;">Type name</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="mt-1">Publication year</h6>
+                </div>
+                <div class="col-8">
+                    <span style="font-size: 1.15em;">2021</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="mt-1">Language</h6>
+                </div>
+                <div class="col-8">
+                    <span style="font-size: 1.15em;">English</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="mt-1">Managing organisation</h6>
+                </div>
+                <div class="col-8">
+                    <span style="font-size: 1.15em;">WHO</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="mt-1">Access type</h6>
+                </div>
+                <div class="col-8">
+                    <span style="font-size: 1.15em;">Public access</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Access details</h6>
+                </div>
+            </div>
+            <br />
+            <div>
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Description</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Access description</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>URL</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <a href="https://google.com" target="_blank">Access details link</a>
+                    </div>
+                </div>
+
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">EOSC category</h6>
+                </div>
+                <div class="col-8">
+                    <span>1</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Dataset record keys</h6>
+                </div>
+            </div>
+            <br />
+            <div>
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Keys type</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>Keys type</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Keys details</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Keys details</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Dataset deidentification level</h6>
+                </div>
+            </div>
+            <br />
+            <div>
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Deidentification type</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>Deidentification type</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Deidentification direct</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>False</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Deidentification HIPAA</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>False</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Deidentification dates</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>True</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Deidentification NOARR</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>False</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Deidentification KANON</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>False</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Deidentification details</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>True</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Dataset consent</h6>
+                </div>
+            </div>
+            <br />
+            <div>
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Consent type</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>Type name</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Consent noncommercial</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>True/False</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Consent geographical restrict</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>True</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Consent research type</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>False</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Consent genetic only</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>False</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Consent no methods</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>False</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Consent details</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Details information</span>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Object instance(s)</h6>
+                </div>
+            </div>
+            <br />
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    Organisation
+                </mat-expansion-panel-header>
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Repository organisation</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>Organisation name</span>
+                    </div>
+                </div>
+                <br />
+
+                <div>
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <strong>Access details: Direct access</strong>
+                        </div>
+                        <div class="col-8">
+                            <span>True</span>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <strong>Access details: URL</strong>
+                        </div>
+                        <div class="col-8">
+                            <a href="#" target="_blank">Link</a>
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <div>
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <strong>Resource details: Resource type</strong>
+                        </div>
+                        <div class="col-8">
+                            <span>Resource type</span>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <strong>Resource details: Size</strong>
+                        </div>
+                        <div class="col-8">
+                            <span>8 MB</span>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <strong>Resource details</strong>
+                        </div>
+                        <div class="col-md-8">
+                            <span>Details</span>
+                        </div>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Object title(s)</h6>
+                </div>
+            </div>
+            <br />
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    Title text
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Title type</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Title type</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Title text</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Title text</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Language code</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>English</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Comments</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Comments</span>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Object date(s)</h6>
+                </div>
+            </div>
+            <br />
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    Date type
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Date type</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Date type</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Is date range?</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>True/False</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Start date</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>27 July 2021</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>End date</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>None</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Comments</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Comments</span>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Object contributor(s)</h6>
+                </div>
+            </div>
+            <br />
+
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    Contributor type
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Contributor type</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>Contributor type</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Is individual?</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>Yes/No</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Organisation</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>Organisation</span>
+                    </div>
+                </div>
+                <br />
+
+                <div>
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <strong>Person: Family name</strong>
+                        </div>
+                        <div class="col-8">
+                            <span>Doe</span>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <strong>Person: Given name</strong>
+                        </div>
+                        <div class="col-8">
+                            <span>John</span>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <strong>Person: ORCID</strong>
+                        </div>
+                        <div class="col-8">
+                            <span>None</span>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <strong>Person: Affiliation</strong>
+                        </div>
+                        <div class="col-8">
+                            <span>Prof.</span>
+                        </div>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Object topic(s)</h6>
+                </div>
+            </div>
+            <br />
+
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    Topic value
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Topic type</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>Topic type</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>MESH coded</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>True/False</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Topic code</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>Code</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Topic value</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>Topic value</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Topic qualified code</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>Value</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Topic qualified code value</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>None</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Original value</strong>
+                    </div>
+                    <div class="col-8">
+                        <span>Original value</span>
+                    </div>
+                </div>
+
+            </mat-expansion-panel>
+
+
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Object identifier(s)</h6>
+                </div>
+            </div>
+            <br />
+
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    Identifier value
+                </mat-expansion-panel-header>
+
+
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Identifier type</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Identifier type name</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Identifier value</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Identifier value</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Identifier organisation</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Organisation</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Identifier date</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>27.04.2019</span>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Object descriptions(s)</h6>
+                </div>
+            </div>
+            <br />
+
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    Description label
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Description type</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Description type</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Description label</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Label</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Description text</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Description text</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Language code</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>English</span>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Object right(s)</h6>
+                </div>
+            </div>
+            <br />
+
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    Right name
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Rights name</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Name</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Rights URL</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <a href="#" target="_blank">Link</a>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Comments</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Comments</span>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Object relationship(s)</h6>
+                </div>
+            </div>
+            <br />
+
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    Object id - 10000001
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Relationship type</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Relation type name</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Target data object</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <a [routerLink]="['/data-objects', '10000001', 'view']">Object id - 10000001</a>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 justify-content-center text-center">
+                    <button class="btn btn-primary">Back</button>
+                </div>
+            </div>
+
+    </div>
+</div>
+</div>
+
+<br />

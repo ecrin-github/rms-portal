@@ -9,13 +9,13 @@ import { InlineSVGModule } from 'ng-inline-svg';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthService } from './modules/auth/_services/auth.service';
 import { environment } from 'src/environments/environment';
 // Highlight JS
 import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 import { SplashScreenModule } from './_rms/partials/layout/splash-screen/splash-screen.module';
 // #fake-start#
 import { FakeAPIService } from './_fake/fake-api.service';
+import {AuthService} from './_rms/services/auth/auth.service';
 // #fake-end#
 
 function appInitializer(authService: AuthService) {
@@ -28,7 +28,10 @@ function appInitializer(authService: AuthService) {
 
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    // Main component(s) declaration
+    AppComponent
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -39,11 +42,11 @@ function appInitializer(authService: AuthService) {
     ClipboardModule,
     // #fake-start#
     environment.isMockEnabled
-      ? HttpClientInMemoryWebApiModule.forRoot(FakeAPIService, {
-        passThruUnknownUrl: true,
-        dataEncapsulation: false,
-      })
-      : [],
+        ? HttpClientInMemoryWebApiModule.forRoot(FakeAPIService, {
+          passThruUnknownUrl: true,
+          dataEncapsulation: false,
+        })
+        : [],
     // #fake-end#
     AppRoutingModule,
     InlineSVGModule.forRoot(),

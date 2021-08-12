@@ -10,7 +10,7 @@ const routes: Routes = [
       {
         path: '',
         loadChildren: () =>
-          import('./main-page/main-page.module').then((m) => m.MainPageModule),
+          import('./pages.module').then((m) => m.PagesModule),
       },
       {
         path: 'users-management',

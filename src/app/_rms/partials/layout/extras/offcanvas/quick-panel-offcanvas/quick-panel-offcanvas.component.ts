@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LayoutService } from '../../../../../core';
+import { LayoutService } from '../../../../../../_rms';
 
 @Component({
   selector: 'app-quick-panel-offcanvas',

@@ -23,14 +23,27 @@
     <button
       type="button"
       class="btn btn-light-primary font-weight-bolder px-8 py-4 my-3 font-size-lg mr-3"
-      (click)="login()"
+      (click)="loginExternal()"
     >
       <span class="svg-icon svg-icon-md">
         <img src="./assets/media/svg/social-icons/elixir.png"
           style="width: 20px !important; height: 20px !important;"
         />
       </span>
-      Sign in with Elixir
+      Sign in with Elixir (External)
+    </button>
+    <br />
+    <button
+            type="button"
+            class="btn btn-light-primary font-weight-bolder px-8 py-4 my-3 font-size-lg mr-3"
+            (click)="loginInternal()"
+    >
+      <span class="svg-icon svg-icon-md">
+        <img src="./assets/media/svg/social-icons/elixir.png"
+             style="width: 20px !important; height: 20px !important;"
+        />
+      </span>
+      Sign in with Elixir (Internal)
     </button>
 
     <ng-container *ngIf="isLoading$ | async">

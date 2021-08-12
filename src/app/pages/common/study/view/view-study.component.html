@@ -1,0 +1,385 @@
+<div class="card">
+    <div class="card-header">
+        <h2>View study details</h2>
+        <div style="float: right; margin-top: -40px;">
+            <a [routerLink]="['/studies', '1', 'edit']"
+               class="btn btn-primary mr-5" target="_blank">
+                <i class="fa fa-edit"></i> Edit
+            </a>
+            <button class="btn btn-primary mr-1">
+                <i class="fa fa-print"></i> Print
+            </button>
+            <button class="btn btn-primary">
+                <i class="fa fa-code"></i> JSON
+            </button>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="mt-1">Display title</h6>
+                </div>
+                <div class="col-8">
+                    <span style="font-size: 1.15em;">Title</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="mt-1">Brief description</h6>
+                </div>
+                <div class="col-8">
+                    <span style="font-size: 1.15em;">Description</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="mt-1">Data sharing statement</h6>
+                </div>
+                <div class="col-8">
+                    <span style="font-size: 1.15em;">Data sharing statement</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="mt-1">Study type</h6>
+                </div>
+                <div class="col-8">
+                    <span style="font-size: 1.15em;">Study type</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="mt-1">Study status</h6>
+                </div>
+                <div class="col-8">
+                    <span style="font-size: 1.15em;">Study status</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="mt-1">Study enrollment</h6>
+                </div>
+                <div class="col-8">
+                    <span style="font-size: 1.15em;">Enrollment</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="mt-1">Study gender eligibility</h6>
+                </div>
+                <div class="col-8">
+                    <span style="font-size: 1.15em;">Gender</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="mt-1">Min age</h6>
+                </div>
+                <div class="col-8">
+                    <span style="font-size: 1.15em;">18 years</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="mt-1">Max age</h6>
+                </div>
+                <div class="col-8">
+                    <span style="font-size: 1.15em;">70 years</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Study identifier(s)</h6>
+                </div>
+            </div>
+            <br />
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    Identifier value
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Identifier type</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Identifier type</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Identifier value</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Identifier value</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Identifier organisation</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Organisation</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Identifier date</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>27.04.2021</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Identifier link</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <a href="https://google.com" target="_blank">Identifier link</a>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Study title(s)</h6>
+                </div>
+            </div>
+            <br />
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    Study title
+                </mat-expansion-panel-header>
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Title type</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Title type</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Title text</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Study title</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Language code</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>English</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Comments</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Comments</span>
+                    </div>
+                </div>
+
+            </mat-expansion-panel>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Study feature(s)</h6>
+                </div>
+            </div>
+            <br />
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    Feature value
+                </mat-expansion-panel-header>
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Feature type</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Feature type</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Feature value</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Feature value</span>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Study topic(s)</h6>
+                </div>
+            </div>
+            <br />
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    Topic value
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Topic type</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Topic type</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Mesh coded</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>True</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Topic code</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Code</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Topic value</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Topic value</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Topic qualcode</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Qual code</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Topic qualvalue</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Qual value</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Original value</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Original value</span>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Study relationship(s)</h6>
+                </div>
+            </div>
+            <br />
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    Study id - 1000001
+                </mat-expansion-panel-header>
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Relationship type</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <span>Relation type</span>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Target study</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <a [routerLink]="['/studies', '1000001', 'view']" target="_blank">Study id - 1000001</a>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 justify-content-center text-center">
+                    <button class="btn btn-primary">Back</button>
+                </div>
+            </div>
+
+
+    </div>
+</div>
+
+<br />
