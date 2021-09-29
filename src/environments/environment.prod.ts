@@ -1,8 +1,13 @@
 export const environment = {
+
   production: true,
   appVersion: 'v.0.1.0',
+
   USERDATA_KEY: 'authf649fc9a5f55',
   isMockEnabled: true,
-  apiUrl: 'api'
-  // apiUrl: 'mysite.com/api'
+
+  hostname: 'http://localhost:5001/',
+  apiUrl: 'api',
+  apiVersion: 'v1'
+
 };

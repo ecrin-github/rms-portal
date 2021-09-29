@@ -8,6 +8,8 @@ export class UserService {
     ) {
     }
 
+    updateUser(userId: number) {
 
+    }
 
 }
