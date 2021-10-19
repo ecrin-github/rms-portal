@@ -1,19 +1,19 @@
-export interface DtpInterface {
+export interface DtpDto {
     id: number;
     orgId: number;
+    displayName: string;
     statusId: number;
-    initialContactDate: Date | string;
-    setUpCompleted: Date | string;
-    mdAccessGranted: Date | string;
-    mdCompleteDate: Date | string;
-    dtaAgreedDate: Date | string;
-    uploadAccessRequested: Date | string;
-    uploadAccessConfirmed: Date | string;
-    uploadsComplete: Date | string;
-    qcCheckCompleted: Date | string;
-    mdIntegratedWithMdr: Date | string;
-    availabilityRequested: Date | string;
-    availabilityConfirmed: Date | string;
-    createdOn: Date | string;
-    lastEditedOn: Date | string;
+    initialContactDate: string;
+    setUpCompleted: string | null;
+    mdAccessGranted: string;
+    mdCompleteDate: string;
+    dtaAgreedDate: string;
+    uploadAccessRequested: string;
+    uploadAccessConfirmed: string;
+    uploadsComplete: string;
+    qcChecksCompleted: string;
+    mdIntegratedWithMdr: string;
+    availabilityRequested: string;
+    availabilityConfirmed: string;
+    createdOn: string;
 }

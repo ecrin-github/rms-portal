@@ -1,10 +1,10 @@
-export interface SecondaryUseInterface {
+export interface SecondaryUseDto {
     id: number;
     dupId: number;
     secondaryUseType: string;
-    publication: number;
+    publication: string;
+    doi: string;
     attributionPresent: boolean;
     notes: string;
-    createdOn: Date | string;
-    lastEditedOn: Date | string;
+    createdOn: string;
 }

@@ -1,4 +1,4 @@
-export interface DuaInterface {
+export interface DuaDto {
     id: number;
     dupId: number;
     conformsToDefault: number;
@@ -11,6 +11,5 @@ export interface DuaInterface {
     requesterSignatory1: number;
     requesterSignatory2: number;
     notes: string;
-    createdOn: Date | string;
-    lastEditedOn: Date | string;
+    createdOn: string;
 }

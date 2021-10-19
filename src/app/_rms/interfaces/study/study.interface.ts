@@ -1,0 +1,59 @@
+import {StudyContributorDto} from './study-contributor.interface';
+import {StudyFeatureDto} from './study-feature.interface';
+import {StudyIdentifierDto} from './study-identifiers.interface';
+import {StudyReferenceDto} from './study-reference.interface';
+import {StudyRelationshipDto} from './study-relationship.interface';
+import {StudyTitleDto} from './study-title.interface';
+import {StudyTopicDto} from './study-topic.interface';
+
+
+export interface StudyDto {
+    id: number | null;
+    sdSid: string | null;
+    mdrSdSid: string | null;
+    mdrSourceId: number | null;
+    displayTitle: string | null;
+    titleLangCode: string | null;
+    briefDescription: string | null;
+    dataSharingStatement: string | null;
+    studyStartYear: number | null;
+    studyStartMonth: number | null;
+    studyTypeId: number | null;
+    studyStatusId: number | null;
+    studyEnrolment: number | null;
+    studyGenderEligId: number | null;
+    minAge: number | null;
+    minAgeUnitsId: number | null;
+    maxAge: number | null;
+    maxAgeUnitsId: number | null;
+    createdOn: string | null;
+    studyContributors: StudyContributorDto[] | null;
+    studyFeatures: StudyFeatureDto[] | null;
+    studyIdentifiers: StudyIdentifierDto[] | null;
+    studyReferences: StudyReferenceDto[] | null;
+    studyRelationships: StudyRelationshipDto[] | null;
+    studyTitles: StudyTitleDto[] | null;
+    studyTopics: StudyTopicDto[] | null;
+}
+
+export interface StudyDataDto {
+    id: number | null;
+    sdSid: string | null;
+    mdrSdSid: string | null;
+    mdrSourceId: number | null;
+    displayTitle: string | null;
+    titleLangCode: string | null;
+    briefDescription: string | null;
+    dataSharingStatement: string | null;
+    studyStartYear: number | null;
+    studyStartMonth: number | null;
+    studyTypeId: number | null;
+    studyStatusId: number | null;
+    studyEnrolment: number | null;
+    studyGenderEligId: number | null;
+    minAge: number | null;
+    minAgeUnitsId: number | null;
+    maxAge: number | null;
+    maxAgeUnitsId: number | null;
+    createdOn: string | null;
+}

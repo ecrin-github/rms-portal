@@ -1,4 +1,4 @@
-export interface DtaInterface {
+export interface DtaDto {
     id: number;
     dtpId: number;
     conformsToDefault: number;
@@ -8,6 +8,5 @@ export interface DtaInterface {
     providerSignatory1: number;
     providerSignatory2: number;
     notes: string;
-    createdOn: Date | string;
-    lastEditedOn: Date | string;
+    createdOn: string;
 }
