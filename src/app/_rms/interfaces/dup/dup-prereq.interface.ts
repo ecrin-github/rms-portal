@@ -1,4 +1,4 @@
-export interface DupPrereqDto {
+export interface DupPrereqInterface {
     id: number;
     dupId: number;
     objectId: string;

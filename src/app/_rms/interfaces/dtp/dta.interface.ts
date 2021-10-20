@@ -1,4 +1,4 @@
-export interface DtaDto {
+export interface DtaInterface {
     id: number;
     dtpId: number;
     conformsToDefault: number;

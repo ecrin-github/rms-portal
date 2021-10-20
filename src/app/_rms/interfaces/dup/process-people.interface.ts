@@ -1,4 +1,4 @@
-export interface ProcessPeopleDto {
+export interface ProcessPeopleInterface {
     id: number;
     processType: number;
     processId: number;

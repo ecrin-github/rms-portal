@@ -1,4 +1,4 @@
-export interface StudyRelationshipDto {
+export interface StudyRelationshipInterface {
     id: number;
     sdSid: string;
     relationshipTypeId: number;

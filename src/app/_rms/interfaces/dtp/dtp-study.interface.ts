@@ -1,4 +1,4 @@
-export interface DtpStudyDto {
+export interface DtpStudyInterface {
     id: number;
     dtpId: number;
     studyId: string;

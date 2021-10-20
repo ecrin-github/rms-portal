@@ -1,4 +1,4 @@
-export interface DupDto {
+export interface DupInterface {
     id: number;
     orgId: number;
     displayName: string;

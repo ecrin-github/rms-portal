@@ -1,4 +1,4 @@
-export interface ObjectDescriptionDto {
+export interface ObjectDescriptionInterface {
     id: number;
     sdOid: string;
     descriptionTypeId: number;

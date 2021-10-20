@@ -1,4 +1,4 @@
-export interface ProcessNoteDto {
+export interface ProcessNoteInterface {
     id: number;
     processType: number;
     processId: number;

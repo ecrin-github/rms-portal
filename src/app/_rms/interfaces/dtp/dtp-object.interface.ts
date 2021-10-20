@@ -1,4 +1,4 @@
-export interface DtpObjectDto {
+export interface DtpObjectInterface {
     id: number;
     dtpId: number;
     objectId: string;

@@ -1,4 +1,4 @@
-export interface ObjectDateDto {
+export interface ObjectDateInterface {
     id: number;
     sdOid: string;
     dateTypeId: number;

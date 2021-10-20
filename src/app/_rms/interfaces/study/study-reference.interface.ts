@@ -1,4 +1,4 @@
-export interface StudyReferenceDto {
+export interface StudyReferenceInterface {
     id: number;
     sdSid: string;
     pmid: string;

@@ -1,15 +1,15 @@
-import { ObjectContributorDto } from './object-contributor.interface';
-import {ObjectDatasetDto} from './object-dataset.interface';
-import {ObjectDateDto} from './object-date.interface';
-import {ObjectDescriptionDto} from './object-description.interface';
-import {ObjectIdentifierDto} from './object-identifier.interface';
-import {ObjectInstanceDto} from './object-instance.interface';
-import {ObjectRelationshipDto} from './object-relationship.interface';
-import {ObjectRightDto} from './object-right.interface';
-import {ObjectTitleDto} from './object-title.interface';
-import {ObjectTopicDto} from './object-topic.interface';
+import { ObjectContributorInterface } from './object-contributor.interface';
+import {ObjectDatasetInterface} from './object-dataset.interface';
+import {ObjectDateInterface} from './object-date.interface';
+import {ObjectDescriptionInterface} from './object-description.interface';
+import {ObjectIdentifierInterface} from './object-identifier.interface';
+import {ObjectInstanceInterface} from './object-instance.interface';
+import {ObjectRelationshipInterface} from './object-relationship.interface';
+import {ObjectRightInterface} from './object-right.interface';
+import {ObjectTitleInterface} from './object-title.interface';
+import {ObjectTopicInterface} from './object-topic.interface';
 
-export interface DataObjectDto {
+export interface DataObjectInterface {
     id: number;
     sdOid: string | null;
     sdSid: string | null;
@@ -32,20 +32,20 @@ export interface DataObjectDto {
     addStudyContribs: boolean;
     addStudyTopics: boolean;
     createdOn: string;
-    objectContributors: ObjectContributorDto[] | null;
-    objectDatasets: ObjectDatasetDto[] | null;
-    objectDates: ObjectDateDto[] | null;
-    objectDescriptions: ObjectDescriptionDto[] | null;
-    objectIdentifiers: ObjectIdentifierDto[] | null;
-    objectInstances: ObjectInstanceDto[] | null;
-    objectRelationships: ObjectRelationshipDto[] | null;
-    objectRights: ObjectRightDto[] | null;
-    objectTitles: ObjectTitleDto[] | null;
-    objectTopics: ObjectTopicDto[] | null;
+    objectContributors: ObjectContributorInterface[] | null;
+    objectDatasets: ObjectDatasetInterface[] | null;
+    objectDates: ObjectDateInterface[] | null;
+    objectDescriptions: ObjectDescriptionInterface[] | null;
+    objectIdentifiers: ObjectIdentifierInterface[] | null;
+    objectInstances: ObjectInstanceInterface[] | null;
+    objectRelationships: ObjectRelationshipInterface[] | null;
+    objectRights: ObjectRightInterface[] | null;
+    objectTitles: ObjectTitleInterface[] | null;
+    objectTopics: ObjectTopicInterface[] | null;
 }
 
 
-export interface DataObjectDataDto {
+export interface DataObjectDataInterface {
     id: number;
     sdOid: string | null;
     sdSid: string | null;

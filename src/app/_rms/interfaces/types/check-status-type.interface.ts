@@ -1,4 +1,4 @@
-export interface CheckStatusTypeDto {
+export interface CheckStatusTypeInterface {
     id: number;
     name: string;
     description: string;

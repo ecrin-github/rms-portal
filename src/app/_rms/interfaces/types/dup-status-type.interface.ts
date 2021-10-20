@@ -1,4 +1,4 @@
-export interface DupStatusTypeDto {
+export interface DupStatusTypeInterface {
     id: number;
     name: string;
     description: string;

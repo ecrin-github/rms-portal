@@ -1,4 +1,4 @@
-export interface LegalStatusTypeDto {
+export interface LegalStatusTypeInterface {
     id: number;
     name: string;
     description: string;

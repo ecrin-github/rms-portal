@@ -1,4 +1,4 @@
-export interface SecondaryUseDto {
+export interface SecondaryUseInterface {
     id: number;
     dupId: number;
     secondaryUseType: string;

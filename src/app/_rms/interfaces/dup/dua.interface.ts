@@ -1,4 +1,4 @@
-export interface DuaDto {
+export interface DuaInterface {
     id: number;
     dupId: number;
     conformsToDefault: number;

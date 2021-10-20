@@ -1,4 +1,4 @@
-export interface AccessPrereqDto {
+export interface AccessPrereqInterface {
     id: number;
     objectId: number;
     preRequisiteId: number;

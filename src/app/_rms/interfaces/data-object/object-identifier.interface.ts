@@ -1,4 +1,4 @@
-export interface ObjectIdentifierDto {
+export interface ObjectIdentifierInterface {
     id: number;
     sdOid: string;
     identifierValue: string;

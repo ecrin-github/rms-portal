@@ -1,4 +1,4 @@
-export interface AccessPrereqTypeDto {
+export interface AccessPrereqTypeInterface {
     id: number;
     name: string;
     description: string;

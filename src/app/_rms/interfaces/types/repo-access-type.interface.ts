@@ -1,4 +1,4 @@
-export interface RepoAccessTypeDto {
+export interface RepoAccessTypeInterface {
     id: number;
     name: string;
     description: string;

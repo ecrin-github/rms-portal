@@ -1,4 +1,4 @@
-export interface StudyTopicDto {
+export interface StudyTopicInterface {
     id: number;
     sdSid: string;
     topicTypeId: number;

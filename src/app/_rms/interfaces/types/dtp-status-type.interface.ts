@@ -1,4 +1,4 @@
-export interface DtpStatusTypeDto {
+export interface DtpStatusTypeInterface {
     id: number;
     name: string;
     description: string;

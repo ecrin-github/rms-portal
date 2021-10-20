@@ -1,4 +1,4 @@
-export interface ObjectInstanceDto {
+export interface ObjectInstanceInterface {
     id: number;
     sdOid: string;
     instanceTypeId: number;

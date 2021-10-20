@@ -1,4 +1,4 @@
-export interface ObjectDatasetDto {
+export interface ObjectDatasetInterface {
     id: number;
     sdOid: string;
     recordKeysTypeId: number;

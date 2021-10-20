@@ -1,4 +1,4 @@
-export interface StudyTitleDto {
+export interface StudyTitleInterface {
     id: number;
     sdSid: string;
     titleTypeId: number;

@@ -1,4 +1,4 @@
-export interface ObjectContributorDto {
+export interface ObjectContributorInterface {
     id: number;
     sdOid: string;
     contribTypeId: number;

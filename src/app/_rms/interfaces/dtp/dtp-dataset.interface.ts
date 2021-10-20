@@ -1,4 +1,4 @@
-export interface DtpDatasetDto {
+export interface DtpDatasetInterface {
     id: number;
     objectId: string;
     legalStatusId: number;

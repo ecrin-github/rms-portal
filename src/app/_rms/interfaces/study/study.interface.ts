@@ -1,13 +1,13 @@
-import {StudyContributorDto} from './study-contributor.interface';
-import {StudyFeatureDto} from './study-feature.interface';
-import {StudyIdentifierDto} from './study-identifiers.interface';
-import {StudyReferenceDto} from './study-reference.interface';
-import {StudyRelationshipDto} from './study-relationship.interface';
-import {StudyTitleDto} from './study-title.interface';
-import {StudyTopicDto} from './study-topic.interface';
+import {StudyContributorInterface} from './study-contributor.interface';
+import {StudyFeatureInterface} from './study-feature.interface';
+import {StudyIdentifierInterface} from './study-identifiers.interface';
+import {StudyReferenceInterface} from './study-reference.interface';
+import {StudyRelationshipInterface} from './study-relationship.interface';
+import {StudyTitleInterface} from './study-title.interface';
+import {StudyTopicInterface} from './study-topic.interface';
 
 
-export interface StudyDto {
+export interface StudyInterface {
     id: number | null;
     sdSid: string | null;
     mdrSdSid: string | null;
@@ -27,16 +27,16 @@ export interface StudyDto {
     maxAge: number | null;
     maxAgeUnitsId: number | null;
     createdOn: string | null;
-    studyContributors: StudyContributorDto[] | null;
-    studyFeatures: StudyFeatureDto[] | null;
-    studyIdentifiers: StudyIdentifierDto[] | null;
-    studyReferences: StudyReferenceDto[] | null;
-    studyRelationships: StudyRelationshipDto[] | null;
-    studyTitles: StudyTitleDto[] | null;
-    studyTopics: StudyTopicDto[] | null;
+    studyContributors: StudyContributorInterface[] | null;
+    studyFeatures: StudyFeatureInterface[] | null;
+    studyIdentifiers: StudyIdentifierInterface[] | null;
+    studyReferences: StudyReferenceInterface[] | null;
+    studyRelationships: StudyRelationshipInterface[] | null;
+    studyTitles: StudyTitleInterface[] | null;
+    studyTopics: StudyTopicInterface[] | null;
 }
 
-export interface StudyDataDto {
+export interface StudyDataInterface {
     id: number | null;
     sdSid: string | null;
     mdrSdSid: string | null;

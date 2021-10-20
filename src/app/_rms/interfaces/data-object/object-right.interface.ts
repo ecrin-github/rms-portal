@@ -1,4 +1,4 @@
-export interface ObjectRightDto {
+export interface ObjectRightInterface {
     id: number;
     sdOid: string;
     rightsName: string;

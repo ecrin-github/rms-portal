@@ -1,4 +1,4 @@
-export interface StudyFeatureDto {
+export interface StudyFeatureInterface {
     id: number;
     sdSid: string;
     featureTypeId: number;

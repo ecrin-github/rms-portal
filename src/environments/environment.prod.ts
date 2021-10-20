@@ -7,7 +7,11 @@ export const environment = {
   isMockEnabled: true,
 
   hostname: 'http://localhost:5001/',
-  apiUrl: 'api',
-  apiVersion: 'v1'
+
+  restApiUrl: 'rest/',
+  restApiVersion: 'v1/',
+
+  graphQlUrl: 'graphql/',
+  graphQlVersion: 'v1'
 
 };

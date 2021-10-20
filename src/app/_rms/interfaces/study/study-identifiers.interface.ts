@@ -1,4 +1,4 @@
-export interface StudyIdentifierDto {
+export interface StudyIdentifierInterface {
     id: number;
     sdSid: string;
     identifierValue: string;

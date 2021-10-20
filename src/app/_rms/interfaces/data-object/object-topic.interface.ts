@@ -1,4 +1,4 @@
-export interface ObjectTopicDto {
+export interface ObjectTopicInterface {
     id: number;
     sdOid: string;
     topicTypeId: number;

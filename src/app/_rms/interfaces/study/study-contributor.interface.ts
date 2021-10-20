@@ -1,4 +1,4 @@
-export interface StudyContributorDto {
+export interface StudyContributorInterface {
     id: number;
     sdSid: string;
     contribTypeId: number;

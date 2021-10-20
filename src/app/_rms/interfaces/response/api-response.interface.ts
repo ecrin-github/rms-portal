@@ -1,4 +1,4 @@
-export interface ApiResponse<T> {
+export interface ApiResponseInterface<T> {
     total: number;
     size: number | null;
     page: number | null;

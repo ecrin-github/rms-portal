@@ -1,4 +1,4 @@
-export interface ObjectRelationshipDto {
+export interface ObjectRelationshipInterface {
     id: number;
     sdOid: string;
     relationshipTypeId: number;

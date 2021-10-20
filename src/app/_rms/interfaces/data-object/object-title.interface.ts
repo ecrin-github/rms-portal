@@ -1,4 +1,4 @@
-export interface ObjectTitleDto {
+export interface ObjectTitleInterface {
     id: number;
     sdOid: string;
     titleTypeId: number;
