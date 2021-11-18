@@ -10,15 +10,15 @@ import {NgbDatepickerModule} from '@ng-bootstrap/ng-bootstrap';
 
 // Pages
 import {InternalMainPageComponent} from './main-page/internal-main-page.component';
-import {DtpSummaryInternalComponent} from './dtp/summary/dtp-summary-internal.component';
-import {DupSummaryInternalComponent} from './dup/summary/dup-summary-internal.component';
-import {StudiesSummaryInternalComponent} from './studies/summary/studies-summary-internal.component';
-import {ObjectsSummaryInternalComponent} from './objects/summary/objects-summary-internal.component';
+// import {DtpSummaryInternalComponent} from './dtp/summary/dtp-summary-internal.component';
+// import {DupSummaryInternalComponent} from './dup/summary/dup-summary-internal.component';
+// import {StudiesSummaryInternalComponent} from './studies/summary/studies-summary-internal.component';
+// import {ObjectsSummaryInternalComponent} from './objects/summary/objects-summary-internal.component';
 import {ReportsPageInternalComponent} from './reports/reports-page-internal.component';
-import {AddDtpComponent} from './dtp/add/add-dtp.component';
-import {AddDupComponent} from './dup/add/add-dup.component';
-import {AddStudyComponent} from './studies/add/add-study.component';
-import {AddObjectComponent} from './objects/add/add-object.component';
+// import {AddDtpComponent} from './dtp/add/add-dtp.component';
+// import {AddDupComponent} from './dup/add/add-dup.component';
+// import {AddStudyComponent} from './studies/add/add-study.component';
+// import {AddObjectComponent} from './objects/add/add-object.component';
 
 // Additional modules
 import {WidgetsModule} from '../../_rms/partials/content/widgets/widgets.module';
@@ -26,23 +26,31 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatButtonModule} from '@angular/material/button';
+import { UpsertDtpComponent } from '../common/dtp/upsert-dtp/upsert-dtp.component';
+import { SummaryDtpComponent } from '../common/dtp/summary-dtp/summary-dtp.component';
+import { UpsertDupComponent } from '../common/dup/upsert-dup/upsert-dup.component';
+import { SummaryDupComponent } from '../common/dup/summary-dup/summary-dup.component';
+import { SummaryStudyComponent } from '../common/study/summary-study/summary-study.component';
+import { UpsertStudyComponent } from '../common/study/upsert/upsert-study/upsert-study.component';
+import { SummaryObjectComponent } from '../common/object/summary-object/summary-object.component';
+import { UpsertObjectComponent } from '../common/object/upsert-object/upsert-object.component';
 
 
 @NgModule({
     declarations: [
         InternalMainPageComponent,
 
-        AddDtpComponent,
-        DtpSummaryInternalComponent,
+        // AddDtpComponent,
+        // DtpSummaryInternalComponent,
 
-        AddDupComponent,
-        DupSummaryInternalComponent,
+        // AddDupComponent,
+        // DupSummaryInternalComponent,
 
-        AddStudyComponent,
-        StudiesSummaryInternalComponent,
+        // AddStudyComponent,
+        // StudiesSummaryInternalComponent,
 
-        AddObjectComponent,
-        ObjectsSummaryInternalComponent,
+        // AddObjectComponent,
+        // ObjectsSummaryInternalComponent,
 
         ReportsPageInternalComponent
     ],
@@ -59,45 +67,45 @@ import {MatButtonModule} from '@angular/material/button';
             {
                 path: 'data-transfers',
                 pathMatch: 'full',
-                component: DtpSummaryInternalComponent
+                component: SummaryDtpComponent
             },
             {
                 path: 'data-transfers/add',
                 pathMatch: 'full',
-                component: AddDtpComponent,
+                component: UpsertDtpComponent,
             },
             // Data use
             {
                 path: 'data-use',
                 pathMatch: 'full',
-                component: DupSummaryInternalComponent
+                component: SummaryDupComponent
             },
             {
                 path: 'data-use/add',
                 pathMatch: 'full',
-                component: AddDupComponent
+                component: UpsertDupComponent
             },
             // Studies
             {
                 path: 'studies',
                 pathMatch: 'full',
-                component: StudiesSummaryInternalComponent
+                component: SummaryStudyComponent
             },
             {
                 path: 'studies/add',
                 pathMatch: 'full',
-                component: AddStudyComponent
+                component: UpsertStudyComponent
             },
             // Data objects
             {
                 path: 'data-objects',
                 pathMatch: 'full',
-                component: ObjectsSummaryInternalComponent
+                component: SummaryObjectComponent
             },
             {
                 path: 'data-objects/add',
                 pathMatch: 'full',
-                component: AddObjectComponent
+                component: UpsertObjectComponent
             },
             // Reports
             {

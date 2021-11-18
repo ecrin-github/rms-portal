@@ -1,0 +1,81 @@
+<div class="card">
+    <div class="card-header">
+        <h2>Data objects list</h2>
+        <div style="float: right; margin-top: -40px;" *ngIf="user === 'internal'">
+            <a [routerLink]="['/data-objects', 'add']" class="btn btn-success" target="_blank">
+                <i class="fa fa-plus"></i> New data object
+            </a>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-3">
+                <select class="form-control">
+                    <option selected disabled value="">Search by...</option>
+                    <option>ID</option>
+                    <option>Organisation</option>
+                </select>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search data object..." />
+                </div>
+            </div>
+            <div class="col-1">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </div>
+
+        <mat-table [dataSource]="dataSource">
+
+            <ng-container matColumnDef="id">
+                <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="title">
+                <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.title}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="type">
+                <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.type}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="linkedStudy">
+                <mat-header-cell *matHeaderCellDef> Linked to studies </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <a [routerLink]="['/studies', row.linkedStudyId.toString(), 'view']" target="_blank">
+                        Study {{row.linkedStudyId.toString()}}
+                    </a>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <a [routerLink]="['/data-objects', row.id, 'view']" target="_blank">
+                        <i class="fa fa-eye mr-5" style="color:#0688fa;"></i>
+                    </a>
+                    <a [routerLink]="['/data-objects', row.id, 'edit']" target="_blank">
+                        <i class="fa fa-edit mr-5" style="color:#0688fa;"></i>
+                    </a>
+                    <i class="fa fa-trash mr-5" style="color:#f24437;">
+
+                    </i>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;">
+            </mat-row>
+        </mat-table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </div>
+</div>
+
+<br />

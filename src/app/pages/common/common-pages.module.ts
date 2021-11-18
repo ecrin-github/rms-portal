@@ -15,14 +15,26 @@ import {ContextPageComponent} from './context-page/context-page.component';
 import {NewContextComponent} from './context-page/new-context/new-context.component';
 import {StudiesContextComponent} from './context-page/studies-context/studies-context.component';
 import {ObjectsContextComponent} from './context-page/objects-context/objects-context.component';
-import {ViewDupComponent} from './dup/view/view-dup.component';
-import {ViewDtpComponent} from './dtp/view/view-dtp.component';
-import {EditStudyComponent} from './study/edit/edit-study.component';
-import {ViewStudyComponent} from './study/view/view-study.component';
-import {EditObjectComponent} from './object/edit/edit-object.component';
-import {ViewObjectComponent} from './object/view/view-object.component';
-import {EditDtpComponent} from './dtp/edit/edit-dtp.component';
-import {EditDupComponent} from './dup/edit/edit-dup.component';
+// import {ViewDupComponent} from './dup/view/view-dup.component';
+// import {ViewDtpComponent} from './dtp/view/view-dtp.component';
+// import {EditStudyComponent} from './study/edit/edit-study.component';
+// import {ViewStudyComponent} from './study/view/view-study.component';
+// import {EditObjectComponent} from './object/edit/edit-object.component';
+// import {ViewObjectComponent} from './object/view/view-object.component';
+// import {EditDtpComponent} from './dtp/edit/edit-dtp.component';
+// import {EditDupComponent} from './dup/edit/edit-dup.component';
+import { SummaryDtpComponent } from './dtp/summary-dtp/summary-dtp.component';
+import { UpsertDtpComponent } from './dtp/upsert-dtp/upsert-dtp.component';
+import { SummaryDupComponent } from './dup/summary-dup/summary-dup.component';
+import { UpsertDupComponent } from './dup/upsert-dup/upsert-dup.component';
+import { SummaryObjectComponent } from './object/summary-object/summary-object.component';
+import { UpsertObjectComponent } from './object/upsert-object/upsert-object.component';
+import { SummaryStudyComponent } from './study/summary-study/summary-study.component';
+import { UpsertStudyComponent } from './study/upsert/upsert-study/upsert-study.component';
+import { UpsertModule } from './study/upsert/upsert.module';
+import { StudyIdentifierComponent } from './study/upsert/study-identifier/study-identifier.component';
+import { StudyTitleComponent } from './study/upsert/study-title/study-title.component';
+import { StudyFeatureComponent } from './study/upsert/study-feature/study-feature.component';
 
 
 @NgModule({
@@ -32,17 +44,28 @@ import {EditDupComponent} from './dup/edit/edit-dup.component';
         StudiesContextComponent,
         ObjectsContextComponent,
 
-        ViewDtpComponent,
-        EditDtpComponent,
+        // ViewDtpComponent,
+        // EditDtpComponent,
 
-        ViewDupComponent,
-        EditDupComponent,
+        // ViewDupComponent,
+        // EditDupComponent,
 
-        EditStudyComponent,
-        ViewStudyComponent,
+        // EditStudyComponent,
+        // ViewStudyComponent,
 
-        EditObjectComponent,
-        ViewObjectComponent,
+        // EditObjectComponent,
+        // ViewObjectComponent,
+        SummaryDtpComponent,
+        UpsertDtpComponent,
+        SummaryDupComponent,
+        UpsertDupComponent,
+        SummaryObjectComponent,
+        UpsertObjectComponent,
+        SummaryStudyComponent,
+        UpsertStudyComponent,
+        StudyIdentifierComponent,
+        StudyTitleComponent,
+        StudyFeatureComponent,
     ],
     imports: [
         CommonModule,
@@ -57,45 +80,45 @@ import {EditDupComponent} from './dup/edit/edit-dup.component';
             {
                 path: 'data-use/:id/view',
                 pathMatch: 'full',
-                component: ViewDupComponent
+                component: UpsertDupComponent
             },
             {
                 path: 'data-use/:id/edit',
                 pathMatch: 'full',
-                component: EditDupComponent
+                component: UpsertDupComponent
             },
             // DTP details pages
             {
                 path: 'data-transfers/:id/view',
                 pathMatch: 'full',
-                component: ViewDtpComponent
+                component: UpsertDtpComponent
             },
             {
                 path: 'data-transfers/:id/edit',
                 pathMatch: 'full',
-                component: EditDtpComponent
+                component: UpsertDtpComponent
             },
             // Studies details pages
             {
                 path: 'studies/:id/edit',
                 pathMatch: 'full',
-                component: EditStudyComponent
+                component: UpsertStudyComponent
             },
             {
                 path: 'studies/:id/view',
                 pathMatch: 'full',
-                component: ViewStudyComponent
+                component: UpsertStudyComponent
             },
             // Object details pages
             {
                 path: 'data-objects/:id/edit',
                 pathMatch: 'full',
-                component: EditObjectComponent
+                component: UpsertObjectComponent
             },
             {
                 path: 'data-objects/:id/view',
                 pathMatch: 'full',
-                component: ViewObjectComponent
+                component: UpsertObjectComponent
             }
         ]),
         MatTableModule,
@@ -107,6 +130,6 @@ import {EditDupComponent} from './dup/edit/edit-dup.component';
         MatTabsModule,
         MatExpansionModule,
     ],
-    exports: []
+    exports: [ SummaryDtpComponent, SummaryDupComponent, SummaryStudyComponent, SummaryObjectComponent]
 })
 export class CommonPagesModule {}

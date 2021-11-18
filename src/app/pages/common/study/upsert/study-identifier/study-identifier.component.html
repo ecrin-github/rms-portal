@@ -1,0 +1,101 @@
+<form [formGroup]="form">
+    <ng-template [ngIf]="studyIdentifiers().length <= 0">
+        <div class="row">
+            <div class="col-12 mb-3 mt-3 text-center justify-content-center">
+                <p>No study identifiers yet</p>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template [ngIf]="studyIdentifiers().length > 0">
+        <div formArrayName="studyIdentifiers">
+            <div class="row" *ngFor="let studyIdentifier of studyIdentifiers().controls; let i = index"
+                [formGroupName]="i">
+                <div class="col-12 mb-5">
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            Identifier {{i + 1}}
+                        </mat-expansion-panel-header>
+
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <strong>Identifier type</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <select class="form-control" formControlName="identifierType">
+                                    <option disabled selected value="">Select an option...</option>
+                                    <option value="1">1</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <strong>Identifier value</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" placeholder="Enter a parameter..."
+                                    formControlName="identifierValue" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <strong>Identifier organisation</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" placeholder="Enter a parameter..."
+                                    formControlName="identifierOrg" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <strong>Identifier date</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <div>
+                                    <!-- <form class="form-inline"> -->
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input class="form-control" placeholder="yyyy-mm-dd" name="identifierDate"
+                                                ngbDatepicker #identifierDate="ngbDatepicker"
+                                                formControlName="identifierDate">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" (click)="identifierDate.toggle()"
+                                                    type="button">
+                                                    <i class="fa fa-calendar"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- </form> -->
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <strong>Identifier link</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" placeholder="Enter a parameter..."
+                                    formControlName="identifierLink" />
+                            </div>
+                        </div>
+                        <mat-action-row>
+                            <button mat-button color="warn" (click)="removeStudyIdentifier(i)">Remove</button>
+                        </mat-action-row>
+                    </mat-expansion-panel>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</form>
+<div class="row">
+    <div class="col-12 text-center justify-content-center mt-5">
+        <button class="btn btn-primary" (click)="addStudyIdentifier()">
+            <i class="fa fa-plus"></i> Add new study identifier
+        </button>
+    </div>
+</div>
