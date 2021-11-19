@@ -1,0 +1,81 @@
+<form [formGroup]="form">
+    <ng-template [ngIf]="objectDescriptions().length <= 0">
+        <div class="row">
+            <div class="col-12 mb-3 mt-3 text-center justify-content-center">
+                <p>No object descriptions yet</p>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template [ngIf]="objectDescriptions().length > 0">
+        <div formArrayName="objectDescriptions">
+            <div class="row" *ngFor="let objectDescription of objectDescriptions().controls; let i = index;"
+                [formGroupName]="i">
+                <div class="col-12 mb-5">
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            Description {{i + 1}}
+                        </mat-expansion-panel-header>
+
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <strong>Description type</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <select class="form-control">
+                                    <option disabled selected value="">Select an option...</option>
+                                    <option value="1">1</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <strong>Description label</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" placeholder="Enter a parameter..."
+                                    formControlName="descriptionLabel" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <strong>Description text</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea cols="30" rows="10" placeholder="Enter a parameter..."
+                                    formControlName="descriptionText" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <strong>Language code</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <select class="form-control" formControlName="langCode">
+                                    <option disabled selected value=""></option>
+                                    <option value="1">1</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <mat-action-row>
+                            <button mat-button color="warn" (click)="removeObjectDescription(i)">Remove</button>
+                        </mat-action-row>
+                    </mat-expansion-panel>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</form>
+
+<div class="row">
+    <div class="col-12 text-center mt-5 justify-content-center">
+        <button class="btn btn-primary" (click)="addObjectDescription()">
+            <i class="fa fa-plus"></i>
+            Add new object description
+        </button>
+    </div>
+</div>

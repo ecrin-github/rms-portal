@@ -1,0 +1,509 @@
+<div class="card">
+    <div class="card-header">
+        <h2>{{ isView ? 'View data object' : isEdit ? 'Edit data object details' : 'Add new data object'}}</h2>
+        <div style="float: right; margin-top: -40px;" *ngIf="isView">
+            <a [routerLink]="['/data-transfers', '1', 'edit']" class="btn btn-primary mr-5" target="_blank">
+                <i class="fa fa-edit"></i> Edit
+            </a>
+            <button class="btn btn-primary mr-1">
+                <i class="fa fa-print"></i> Print
+            </button>
+            <button class="btn btn-primary">
+                <i class="fa fa-code"></i> JSON
+            </button>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <form [formGroup]="objectForm" (ngSubmit)="onSave()">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">Display title</h6>
+                </div>
+                <div class="col-8">
+                    <input type="text" class="form-control" placeholder="Enter display title..."
+                        formControlName="displayTitle" />
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">DOI</h6>
+                </div>
+                <div class="col-8">
+                    <input type="text" class="form-control" placeholder="Enter DOI..." formControlName="doi" />
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">Version</h6>
+                </div>
+                <div class="col-8">
+                    <input type="text" class="form-control" placeholder="Enter version..." formControlName="version" />
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">Object class</h6>
+                </div>
+                <div class="col-8">
+                    <select class="form-control" formControlName="objectClass">
+                        <option selected disabled value="">Select an option...</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">Object type</h6>
+                </div>
+                <div class="col-8">
+                    <select class="form-control" formControlName="objectType">
+                        <option selected disabled value="">Select an option...</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">Publication year</h6>
+                </div>
+                <div class="col-8">
+                    <input type="text" class="form-control" placeholder="Enter publication year..."
+                        formControlName="publicationYear" />
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">Language</h6>
+                </div>
+                <div class="col-8">
+                    <select class="form-control" formControlName="langCode">
+                        <option selected disabled value="">Select an option...</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">Managing organisation</h6>
+                </div>
+                <div class="col-8">
+                    <input type="text" class="form-control" placeholder="Enter managing organisation..."
+                        formControlName="managingOrganisation" />
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">Access type</h6>
+                </div>
+                <div class="col-8">
+                    <select class="form-control" formControlName="accessType">
+                        <option selected disabled value="">Select an option...</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Access details</h6>
+                </div>
+            </div>
+            <br />
+            <div formGroupName="accessDetails">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Description</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <textarea class="form-control" cols="30" rows="5" placeholder="Enter description..."
+                            formControlName="description"></textarea>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>URL</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" placeholder="Enter a parameter..."
+                            formControlName="url" />
+                    </div>
+                </div>
+            </div>
+
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">EOSC category</h6>
+                </div>
+                <div class="col-8">
+                    <select class="form-control" formControlName="eoscCategory">
+                        <option selected disabled value="0">Select an option...</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Dataset record keys</h6>
+                </div>
+            </div>
+            <br />
+            <div formGroupName="datasetRecordKeys">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Keys type</strong>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" formControlName="keysTypes">
+                            <option selected disabled value="">Select an option...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Keys details</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <textarea class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
+                            formControlName="keysDetails"></textarea>
+                    </div>
+                </div>
+            </div>
+
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Dataset deidentification level</h6>
+                </div>
+            </div>
+            <br />
+            <div formGroupName="datasetDeidentLevel">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Deidentification type</strong>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" formControlName="deidentType">
+                            <option selected disabled value="">Select an option...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Deidentification direct</strong>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" formControlName="deidentDirect">
+                            <option selected disabled value="">Select an option...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Deidentification HIPAA</strong>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" formControlName="deidentHipaa">
+                            <option selected disabled value="">Select an option...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Deidentification dates</strong>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" formControlName="deidentDates">
+                            <option selected disabled value="">Select an option...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Deidentification NOARR</strong>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" formControlName="deidentNonarr">
+                            <option selected disabled value="">Select an option...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Deidentification KANON</strong>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" formControlName="deidentKanon">
+                            <option selected disabled value="">Select an option...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Deidentification details</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <textarea class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
+                            formControlName="deidentDetails"></textarea>
+                    </div>
+                </div>
+            </div>
+
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Dataset consent</h6>
+                </div>
+            </div>
+            <br />
+            <div formGroupName="datasetConsent">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Consent type</strong>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" formControlName="consentType">
+                            <option selected disabled value="">Select an option...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Consent noncommercial</strong>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" formControlName="consentNoncommercial">
+                            <option selected disabled value="">Select an option...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Consent geographical restrict</strong>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" formControlName="consentGeogRestrict">
+                            <option selected disabled value="">Select an option...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Consent research type</strong>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" formControlName="consentResearchType">
+                            <option selected disabled value="">Select an option...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Consent genetic only</strong>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" formControlName="consentGeneticOnly">
+                            <option selected disabled value="">Select an option...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Consent no methods</strong>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" formControlName="consentNoMethods">
+                            <option selected disabled value="">Select an option...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <strong>Consent details</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <textarea class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
+                            formControlName="consentsDetails"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Object instance(s)</h6>
+                </div>
+            </div>
+            <br />
+            <app-object-instance></app-object-instance>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Object title(s)</h6>
+                </div>
+            </div>
+            <br />
+            <app-object-title></app-object-title>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Object date(s)</h6>
+                </div>
+            </div>
+            <br />
+            <app-object-date></app-object-date>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Object contributor(s)</h6>
+                </div>
+            </div>
+            <br />
+            <app-object-contributor></app-object-contributor>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Object topic(s)</h6>
+                </div>
+            </div>
+            <br />
+
+            <app-object-topic></app-object-topic>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Object identifier(s)</h6>
+                </div>
+            </div>
+            <br />
+            <app-object-identifier></app-object-identifier>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Object descriptions(s)</h6>
+                </div>
+            </div>
+            <br />
+            <app-object-description></app-object-description>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Object right(s)</h6>
+                </div>
+            </div>
+            <br />
+            <app-object-right></app-object-right>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h6 class="pt-3">Object relationship(s)</h6>
+                </div>
+            </div>
+            <br />
+            <app-object-relationship></app-object-relationship>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 justify-content-center text-center">
+                    <button class="btn btn-success mr-5" *ngIf="!isView">{{isEdit ? 'Apply Changes' : 'Save'}}</button>
+                    <button class="btn btn-danger"> {{isView ? 'Back' : 'Cancel'}}</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<br />

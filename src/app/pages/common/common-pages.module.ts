@@ -28,13 +28,23 @@ import { UpsertDtpComponent } from './dtp/upsert-dtp/upsert-dtp.component';
 import { SummaryDupComponent } from './dup/summary-dup/summary-dup.component';
 import { UpsertDupComponent } from './dup/upsert-dup/upsert-dup.component';
 import { SummaryObjectComponent } from './object/summary-object/summary-object.component';
-import { UpsertObjectComponent } from './object/upsert-object/upsert-object.component';
+import { UpsertObjectComponent } from './object/upsert/upsert-object/upsert-object.component';
 import { SummaryStudyComponent } from './study/summary-study/summary-study.component';
 import { UpsertStudyComponent } from './study/upsert/upsert-study/upsert-study.component';
-import { UpsertModule } from './study/upsert/upsert.module';
 import { StudyIdentifierComponent } from './study/upsert/study-identifier/study-identifier.component';
 import { StudyTitleComponent } from './study/upsert/study-title/study-title.component';
 import { StudyFeatureComponent } from './study/upsert/study-feature/study-feature.component';
+import { StudyTopicComponent } from './study/upsert/study-topic/study-topic.component';
+import { StudyRelationshipComponent } from './study/upsert/study-relationship/study-relationship.component';
+import { ObjectInstanceComponent } from './object/upsert/object-instance/object-instance.component';
+import { ObjectTitleComponent } from './object/upsert/object-title/object-title.component';
+import { ObjectDateComponent } from './object/upsert/object-date/object-date.component';
+import { ObjectContributorComponent } from './object/upsert/object-contributor/object-contributor.component';
+import { ObjectTopicComponent } from './object/upsert/object-topic/object-topic.component';
+import { ObjectIdentifierComponent } from './object/upsert/object-identifier/object-identifier.component';
+import { ObjectDescriptionComponent } from './object/upsert/object-description/object-description.component';
+import { ObjectRightComponent } from './object/upsert/object-right/object-right.component';
+import { ObjectRelationshipComponent } from './object/upsert/object-relationship/object-relationship.component';
 
 
 @NgModule({
@@ -66,6 +76,17 @@ import { StudyFeatureComponent } from './study/upsert/study-feature/study-featur
         StudyIdentifierComponent,
         StudyTitleComponent,
         StudyFeatureComponent,
+        StudyTopicComponent,
+        StudyRelationshipComponent,
+        ObjectInstanceComponent,
+        ObjectTitleComponent,
+        ObjectDateComponent,
+        ObjectContributorComponent,
+        ObjectTopicComponent,
+        ObjectIdentifierComponent,
+        ObjectDescriptionComponent,
+        ObjectRightComponent,
+        ObjectRelationshipComponent
     ],
     imports: [
         CommonModule,

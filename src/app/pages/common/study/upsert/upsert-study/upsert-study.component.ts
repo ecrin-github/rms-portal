@@ -32,9 +32,9 @@ export class UpsertStudyComponent implements OnInit {
       }),
       studyIdentifiers: '',
       studyTitles: '',
-      studyFeatures: this.fb.array([]),
-      studyTopics: this.fb.array([]),
-      studyRelationships: this.fb.array([]),
+      studyFeatures: '',
+      studyTopics: '',
+      studyRelationships: '',
       provenanceString: ''
     });
   }
@@ -44,71 +44,6 @@ export class UpsertStudyComponent implements OnInit {
     this.isView = this.router.url.includes('view') ? true : false;
   }
   
-  studyFeatures(): FormArray {
-    return this.studyForm.get('studyFeatures') as FormArray;
-  }
-
-  newStudyFeature(): FormGroup {
-    return this.fb.group({
-      featureType: '',
-      featureValue: ''
-    });
-  }
-
-  addStudyFeature() {
-    this.studyFeatures().push(this.newStudyFeature());
-  }
-
-  removeStudyFeature(i: number) {
-    this.studyFeatures().removeAt(i);
-  }
-
-
-  studyTopics(): FormArray {
-    return this.studyForm.get('studyTopics') as FormArray;
-  }
-
-  newStudyTopic(): FormGroup {
-    return this.fb.group({
-      topicType: '',
-      meshCoded: false,
-      topicCode: '',
-      topicValue: '',
-      topicQualCode: '',
-      topicQualValue: '',
-      originalValue: '',
-    });
-  }
-
-  addStudyTopic() {
-    this.studyTopics().push(this.newStudyTopic());
-  }
-
-  removeStudyTopic(i: number) {
-    this.studyTopics().removeAt(i);
-  }
-
-
-  studyRelationships(): FormArray {
-    return this.studyForm.get('studyRelationships') as FormArray;
-  }
-
-  newStudyRelation(): FormGroup {
-    return this.fb.group({
-      relationshipType: '',
-      targetStudyId: ''
-    });
-  }
-
-  addStudyRelation() {
-    this.studyRelationships().push(this.newStudyRelation());
-  }
-
-  removeStudyRelation(i: number) {
-    this.studyRelationships().removeAt(i);
-  }
-
-
   onSave() {
     console.log(this.studyForm.value);
   }

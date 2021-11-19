@@ -1,0 +1,116 @@
+<form [formGroup]="form">
+    <ng-template [ngIf]="objectContributors().length <= 0">
+        <div class="row">
+            <div class="col-12 mb-3 mt-3 text-center justify-content-center">
+                <p>No object contributors yet</p>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template [ngIf]="objectContributors().length > 0">
+        <div formArrayName="objectContributors">
+            <div class="row" *ngFor="let objectContributor of objectContributors().controls; let i = index;"
+                [formGroupName]="i">
+                <div class="col-12 mb-5">
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            Contributor {{i + 1}}
+                        </mat-expansion-panel-header>
+
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <strong>Contributor type</strong>
+                            </div>
+                            <div class="col-8">
+                                <select class="form-control" formControlName="contributionType">
+                                    <option selected disabled value="">Select an option...</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <strong>Is individual?</strong>
+                            </div>
+                            <div class="col-8">
+                                <select class="form-control" formControlName="isIndividual">
+                                    <option selected disabled value="">Select an option...</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <strong>Organisation</strong>
+                            </div>
+                            <div class="col-8">
+                                <input type="text" class="form-control" placeholder="Enter a parameter..."
+                                    formControlName="organisation" />
+                            </div>
+                        </div>
+                        <br />
+
+                        <div formGroupName="person">
+                            <div class="row">
+                                <div class="col-md-4 text-center">
+                                    <strong>Person: Family name</strong>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" class="form-control" placeholder="Enter a parameter..."
+                                        formControlName="familyName">
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-md-4 text-center">
+                                    <strong>Person: Given name</strong>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" class="form-control" placeholder="Enter a parameter..."
+                                        formControlName="givenName">
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-md-4 text-center">
+                                    <strong>Person: ORCID</strong>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" class="form-control" placeholder="Enter a parameter..."
+                                        formControlName="orcid">
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-md-4 text-center">
+                                    <strong>Person: Affiliation</strong>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" class="form-control" placeholder="Enter a parameter..."
+                                        formControlName="affiliation">
+                                </div>
+                            </div>
+                        </div>
+
+                        <mat-action-row>
+                            <button mat-button color="warn" (click)="removeObjectContributor(i)">Remove</button>
+                        </mat-action-row>
+                    </mat-expansion-panel>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</form>
+
+<div class="row">
+    <div class="col-12 text-center mt-5 justify-content-center">
+        <button class="btn btn-primary" (click)="addObjectContributor()">
+            <i class="fa fa-plus"></i>
+            Add new object contributor
+        </button>
+    </div>
+</div>

@@ -33,7 +33,7 @@ import { SummaryDupComponent } from '../common/dup/summary-dup/summary-dup.compo
 import { SummaryStudyComponent } from '../common/study/summary-study/summary-study.component';
 import { UpsertStudyComponent } from '../common/study/upsert/upsert-study/upsert-study.component';
 import { SummaryObjectComponent } from '../common/object/summary-object/summary-object.component';
-import { UpsertObjectComponent } from '../common/object/upsert-object/upsert-object.component';
+import { UpsertObjectComponent } from '../common/object/upsert/upsert-object/upsert-object.component';
 
 
 @NgModule({

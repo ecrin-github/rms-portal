@@ -1,0 +1,118 @@
+<form [formGroup]="form">
+    <ng-template [ngIf]="objectDates().length <= 0">
+        <div class="row">
+            <div class="col-12 mb-3 mt-3 text-center justify-content-center">
+                <p>No object dates yet</p>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template [ngIf]="objectDates().length > 0">
+        <div formArrayName="objectDates">
+            <div class="row" *ngFor="let objectDate of objectDates().controls; let i = index;" [formGroupName]="i">
+                <div class="col-12 mb-5">
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            Date {{i + 1}}
+                        </mat-expansion-panel-header>
+
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <strong>Date type</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <select class="form-control" formControlName="dateType">
+                                    <option disabled selected value="">Select an option...</option>
+                                    <option value="1">1</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <strong>Is date range?</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <select class="form-control" formControlName="isDateRange">
+                                    <option disabled selected value="">Select an option...</option>
+                                    <option value="1">1</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <strong>Start date</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <div>
+                                    <!-- <form class="form-inline"> -->
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input class="form-control" placeholder="yyyy-mm-dd" name="startDate"
+                                                    ngbDatepicker #startDate="ngbDatepicker"
+                                                    formControlName="startDate">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary" (click)="startDate.toggle()"
+                                                        type="button">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <!-- </form> -->
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <strong>End date</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <div>
+                                    <!-- <form class="form-inline"> -->
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input class="form-control" placeholder="yyyy-mm-dd" name="endDate"
+                                                    ngbDatepicker #endDate="ngbDatepicker" formControlName="endDate">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary" (click)="endDate.toggle()"
+                                                        type="button">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <!-- </form> -->
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <strong>Comments</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea class="form-control" cols="30" rows="10"
+                                    formControlName="comments"></textarea>
+                            </div>
+                        </div>
+
+                        <mat-action-row>
+                            <button mat-button color="warn" (click)="removeObjectDate(i)">Remove</button>
+                        </mat-action-row>
+                    </mat-expansion-panel>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</form>
+
+<div class="row">
+    <div class="col-12 justify-content-center text-center mt-5">
+        <button class="btn btn-primary" (click)="addObjectDate()">
+            <i class="fa fa-plus"></i> Add new object date
+        </button>
+    </div>
+</div>

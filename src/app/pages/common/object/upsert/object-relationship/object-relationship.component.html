@@ -1,27 +1,28 @@
 <form [formGroup]="form">
-    <ng-template [ngIf]="studyFeatures().length <= 0">
+    <ng-template [ngIf]="objectRelationships().length <= 0">
         <div class="row">
             <div class="col-12 mb-3 mt-3 text-center justify-content-center">
-                <p>No study features yet</p>
+                <p>No object relationships yet</p>
             </div>
         </div>
     </ng-template>
 
-    <ng-template [ngIf]="studyFeatures().length > 0">
-        <div formArrayName="studyFeatures">
-            <div class="row" *ngFor="let studyFeature of studyFeatures().controls;
-           let i = index;" [formGroupName]="i">
+    <ng-template [ngIf]="objectRelationships().length > 0">
+        <div formArrayName="objectRelationships">
+            <div class="row" *ngFor="let objectRelation of objectRelationships().controls; let i = index;"
+                [formGroupName]="i">
                 <div class="col-12 mb-5">
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
-                            Feature {{i + 1}}
+                            Relation {{i + 1}}
                         </mat-expansion-panel-header>
+
                         <div class="row">
                             <div class="col-md-4 text-center">
-                                <strong>Feature type</strong>
+                                <strong>Relationship type</strong>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control" formControlName="featureType">
+                                <select class="form-control" formControlName="relationshipType">
                                     <option disabled selected value="">Select an option...</option>
                                     <option value="1">1</option>
                                 </select>
@@ -30,17 +31,16 @@
                         <br />
                         <div class="row">
                             <div class="col-md-4 text-center">
-                                <strong>Feature value</strong>
+                                <strong>Target data object</strong>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control" formControlName="featureValue">
-                                    <option disabled selected value="">Select an option...</option>
-                                    <option value="1">1</option>
-                                </select>
+                                <input type="text" class="form-control" formControlName="targetObjectId"
+                                    placeholder="Enter a parameter..." />
                             </div>
                         </div>
+
                         <mat-action-row>
-                            <button mat-button color="warn" (click)="removeStudyFeature(i)">Remove</button>
+                            <button mat-button color="warn" (click)="removeObjectRelation(i)"></button>
                         </mat-action-row>
                     </mat-expansion-panel>
                 </div>
@@ -48,13 +48,11 @@
         </div>
     </ng-template>
 </form>
-
-
-
 <div class="row">
-    <div class="col-12 text-center justify-content-center mt-5">
-        <button class="btn btn-primary" (click)="addStudyFeature()">
-            <i class="fa fa-plus"></i> Add new study feature
+    <div class="col-12 text-center mt-5 justify-content-center">
+        <button class="btn btn-primary" (click)="addObjectRelation()">
+            <i class="fa fa-plus"></i>
+            Add new object relation
         </button>
     </div>
 </div>
