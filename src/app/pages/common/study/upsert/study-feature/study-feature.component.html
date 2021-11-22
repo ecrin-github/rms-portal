@@ -23,7 +23,7 @@
                             <div class="col-md-8">
                                 <select class="form-control" formControlName="featureType">
                                     <option disabled selected value="">Select an option...</option>
-                                    <option value="1">1</option>
+                                    <option [value]="feature.id" *ngFor="let feature of featureTypes">{{feature.name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -35,7 +35,8 @@
                             <div class="col-md-8">
                                 <select class="form-control" formControlName="featureValue">
                                     <option disabled selected value="">Select an option...</option>
-                                    <option value="1">1</option>
+                                    <option [value]="feature.id" *ngFor="let feature of featureValues">{{feature.name}}</option>
+                                    <!-- <option value="1">1</option> -->
                                 </select>
                             </div>
                         </div>

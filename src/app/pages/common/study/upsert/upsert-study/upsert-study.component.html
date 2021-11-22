@@ -62,8 +62,7 @@
                 <div class="col-8">
                     <select class="form-control" formControlName="studyType">
                         <option selected disabled value="">Select an option...</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
+                        <option value="type.id" *ngFor="let type of studyTypes">{{type.name}}</option>
                     </select>
                 </div>
             </div>
@@ -77,8 +76,7 @@
                 <div class="col-8">
                     <select class="form-control" formControlName="studyStatus">
                         <option selected disabled value="">Select an option...</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
+                        <option value="status.id" *ngFor="let status of studyStatuses">{{status.name}}</option>
                     </select>
                 </div>
             </div>
@@ -104,8 +102,7 @@
                 <div class="col-8">
                     <select class="form-control" formControlName="studyGenderElig">
                         <option selected disabled value="">Select an option...</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
+                        <option value="gender.id" *ngFor="let gender of genderEligibility">{{gender.name}}</option>
                     </select>
                 </div>
             </div>
@@ -125,8 +122,7 @@
                         <div class="col-4">
                             <select class="form-control" formControlName="unitName">
                                 <option selected disabled value="">Select an option...</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
+                                <option value="unit.id" *ngFor="let unit of timeUnits">{{unit.name}}</option>
                             </select>
                         </div>
                     </div>
@@ -148,8 +144,7 @@
                         <div class="col-4">
                             <select class="form-control" formControlName="unitName">
                                 <option selected disabled value="">Select an option...</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
+                                <option value="unit.id" *ngFor="let unit of timeUnits">{{unit.name}}</option>
                             </select>
                         </div>
                     </div>

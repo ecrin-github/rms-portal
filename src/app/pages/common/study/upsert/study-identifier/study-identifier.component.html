@@ -24,7 +24,8 @@
                             <div class="col-md-8">
                                 <select class="form-control" formControlName="identifierType">
                                     <option disabled selected value="">Select an option...</option>
-                                    <option value="1">1</option>
+                                    <!-- <option value="1">1</option> -->
+                                    <option [value]="identifier.id" *ngFor="let identifier of identifierTypes">{{identifier.name}}</option>
                                 </select>
                             </div>
                         </div>

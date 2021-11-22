@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 
 @Component({
   selector: 'app-study-feature',
@@ -8,14 +9,18 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 })
 export class StudyFeatureComponent implements OnInit {
   form: FormGroup;
+  featureTypes: [] = [];
+  featureValues: []= [];
 
-  constructor( private fb: FormBuilder) { 
+  constructor( private fb: FormBuilder, private studyService: StudyService) { 
     this.form = this.fb.group({
       studyFeatures: this.fb.array([])
     });
   }
 
   ngOnInit(): void {
+    this.getFeatureType();
+    this.getFeaturValue();
   }
   
   studyFeatures(): FormArray {
@@ -35,6 +40,24 @@ export class StudyFeatureComponent implements OnInit {
 
   removeStudyFeature(i: number) {
     this.studyFeatures().removeAt(i);
+  }
+  getFeatureType() {
+    this.studyService.getFeatureType().subscribe((res: any) => {
+      if(res.data) {
+        this.featureTypes = res.data;
+      }
+    }, error => {
+      console.log('error', error);
+    });
+  }
+  getFeaturValue() {
+    this.studyService.getFeatureValue().subscribe((res: any) => {
+      if (res.data) {
+        this.featureValues = res.data;
+      }
+    }, error => {
+      console.log('error', error);
+    })
   }
 
 }
