@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 
 @Component({
@@ -10,6 +11,8 @@ import { StudyService } from 'src/app/_rms/services/entities/study/study.service
 export class StudyRelationshipComponent implements OnInit {
   form: FormGroup;
   relationshipType: [] = [];
+  subscription: Subscription = new Subscription();
+
 
   constructor( private fb: FormBuilder, private studyService: StudyService) {
     this.form = this.fb.group({
@@ -39,12 +42,16 @@ export class StudyRelationshipComponent implements OnInit {
     this.studyRelationships().removeAt(i);
   }
   getRelationshipType() {
-    this.studyService.getReleationshiType().subscribe((res: any) => {
+    const getRelationshipType$ = this.studyService.getReleationshiType().subscribe((res: any) => {
       if(res.data) {
         this.relationshipType = res.data;
       }
     }, error => {
       console.log('error', error);
     });
+    this.subscription.add(getRelationshipType$);
+  }
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

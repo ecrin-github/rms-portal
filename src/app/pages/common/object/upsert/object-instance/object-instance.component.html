@@ -62,8 +62,7 @@
                                 <div class="col-8">
                                     <select class="form-control" formControlName="typeName">
                                         <option selected disabled value="">Select an option...</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
+                                        <option [value]="resource.id" *ngFor="let resource of resourceType">{{resource.name}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -81,8 +80,7 @@
                                         <div class="col-4">
                                             <select class="form-control" formControlName="sizeUnit">
                                                 <option selected disabled value="">Select an option...</option>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
+                                                <option [value]="size.id" *ngFor="let size of sizeUnit">{{size.name}}</option>
                                             </select>
                                         </div>
                                     </div>

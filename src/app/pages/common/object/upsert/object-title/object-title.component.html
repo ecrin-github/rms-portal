@@ -23,7 +23,7 @@
                             <div class="col-md-8">
                                 <select class="form-control" formControlName="titleType">
                                     <option disabled selected value="">Select an option...</option>
-                                    <option value="1">1</option>
+                                    <option [value]="title.id" *ngFor="let title of titleType">{{title.name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -45,7 +45,7 @@
                             <div class="col-md-8">
                                 <select class="form-control" formControlName="langCode">
                                     <option disabled selected value=""></option>
-                                    <option value="1">1</option>
+                                    <option [value]="code.code" *ngFor="let code of languageCode">{{code.code}}</option>
                                 </select>
                             </div>
                         </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 
 @Component({
@@ -10,6 +11,8 @@ import { StudyService } from 'src/app/_rms/services/entities/study/study.service
 export class StudyIdentifierComponent implements OnInit {
   form: FormGroup;
   identifierTypes: [] = [];
+  subscription: Subscription = new Subscription();
+
 
   constructor( private fb: FormBuilder, private studyService: StudyService) { 
     this.form = this.fb.group({
@@ -42,13 +45,17 @@ export class StudyIdentifierComponent implements OnInit {
     this.studyIdentifiers().removeAt(i);
   }
   getIdentifierType() {
-    this.studyService.getIdentifierType().subscribe((res: any) => {
+    const getIdentifierType$ = this.studyService.getIdentifierType().subscribe((res: any) => {
       if(res.data) {
         this.identifierTypes = res.data;
       }
     }, error => {
       console.log('error', error);
     });
+    this.subscription.add(getIdentifierType$);
+  }
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

@@ -23,7 +23,7 @@
                             <div class="col-md-8">
                                 <select class="form-control" formControlName="dateType">
                                     <option disabled selected value="">Select an option...</option>
-                                    <option value="1">1</option>
+                                    <option [value]="date.id" *ngFor="let date of dateType">{{date.name}}</option>
                                 </select>
                             </div>
                         </div>

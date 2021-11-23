@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 
 @Component({
@@ -17,6 +18,8 @@ export class UpsertStudyComponent implements OnInit {
   studyStatuses: [] = [];
   genderEligibility: [] = [];
   timeUnits: [] =[];
+  subscription: Subscription = new Subscription();
+
 
   constructor(private fb: FormBuilder, private router: Router, private studyService: StudyService) {
     this.studyForm = this.fb.group({
@@ -53,44 +56,51 @@ export class UpsertStudyComponent implements OnInit {
     this.getTimeUnits();
   }
   getStudyType() {
-    this.studyService.getStudyType().subscribe((res:any) => {
+    const getStudyType$ = this.studyService.getStudyType().subscribe((res:any) => {
       if(res.data) {
         this.studyTypes = res.data;
       }
     }, error => {
       console.log('error', error);
     });
+    this.subscription.add(getStudyType$);
   }
   getStudyStatus() {
-    this.studyService.getStudyStatus().subscribe((res: any) => {
+    const getStudyStatus$ = this.studyService.getStudyStatus().subscribe((res: any) => {
       if(res.data) {
         this.studyStatuses = res.data;
       }
     }, error => {
       console.log('error', error);
     });
+    this.subscription.add(getStudyStatus$);
   }
   getGenderEligibility() {
-    this.studyService.getGenderEligibility().subscribe((res: any) => {
+    const getGenderEligibility$ = this.studyService.getGenderEligibility().subscribe((res: any) => {
       if (res.data) {
         this.genderEligibility = res.data;
       }
     }, error => {
       console.log('error', error);
     });
+    this.subscription.add(getGenderEligibility$);
   }
   getTimeUnits() {
-    this.studyService.getTimeUnits().subscribe((res: any) => {
+    const getTimeUnits$ = this.studyService.getTimeUnits().subscribe((res: any) => {
       if(res.data) {
         this.timeUnits = res.data;
       }
     }, error => {
       console.log('error', error);
-    })
+    });
+    this.subscription.add(getTimeUnits$);
   }
   
   onSave() {
     console.log(this.studyForm.value);
+  }
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

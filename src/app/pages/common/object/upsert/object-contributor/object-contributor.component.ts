@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 
 @Component({
   selector: 'app-object-contributor',
@@ -8,14 +10,17 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 })
 export class ObjectContributorComponent implements OnInit {
   form: FormGroup;
+  contributorType: [] = [];
+  subscription: Subscription = new Subscription();
 
-  constructor( private fb: FormBuilder) { 
+  constructor( private fb: FormBuilder, private objectService: DataObjectService) { 
     this.form = this.fb.group({
       objectContributors: this.fb.array([])
     });
   }
 
   ngOnInit(): void {
+    this.getContributorType();
   }
   objectContributors(): FormArray {
     return this.form.get('objectContributors') as FormArray;
@@ -42,6 +47,19 @@ export class ObjectContributorComponent implements OnInit {
 
   removeObjectContributor(i: number) {
     this.objectContributors().removeAt(i);
+  }
+  getContributorType() {
+    const getContributorType$ = this.objectService.getContributorType().subscribe((res:any) => {
+      if(res.data) {
+        this.contributorType = res.data;
+      }
+    }, error => {
+      console.log('error', error);
+    });
+    this.subscription.add(getContributorType$);
+  }
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

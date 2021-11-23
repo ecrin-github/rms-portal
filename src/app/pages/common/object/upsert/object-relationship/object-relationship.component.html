@@ -24,7 +24,7 @@
                             <div class="col-md-8">
                                 <select class="form-control" formControlName="relationshipType">
                                     <option disabled selected value="">Select an option...</option>
-                                    <option value="1">1</option>
+                                    <option [value]="relationship.id" *ngFor="let relationship of relationshipType">{{relationship.name}}</option>
                                 </select>
                             </div>
                         </div>

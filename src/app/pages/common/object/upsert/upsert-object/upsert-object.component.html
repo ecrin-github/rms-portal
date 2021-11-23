@@ -57,8 +57,7 @@
                 <div class="col-8">
                     <select class="form-control" formControlName="objectClass">
                         <option selected disabled value="">Select an option...</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
+                        <option [value]="class.id" *ngFor="let class of objectClass">{{class.name}}</option>
                     </select>
                 </div>
             </div>
@@ -72,8 +71,7 @@
                 <div class="col-8">
                     <select class="form-control" formControlName="objectType">
                         <option selected disabled value="">Select an option...</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
+                        <option [value]="type.id" *ngFor="let type of objectType">{{type.name}}</option>
                     </select>
                 </div>
             </div>
@@ -126,8 +124,7 @@
                 <div class="col-8">
                     <select class="form-control" formControlName="accessType">
                         <option selected disabled value="">Select an option...</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
+                        <option [value]="access.id" *ngFor="let access of accessType">{{access.name}}</option>
                     </select>
                 </div>
             </div>
@@ -194,8 +191,7 @@
                     <div class="col-8">
                         <select class="form-control" formControlName="keysTypes">
                             <option selected disabled value="">Select an option...</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+                            <option [value]="key.id" *ngFor="let key of keyType">{{key.name}}</option>
                         </select>
                     </div>
                 </div>
@@ -228,8 +224,7 @@
                     <div class="col-8">
                         <select class="form-control" formControlName="deidentType">
                             <option selected disabled value="">Select an option...</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+                            <option [value]="identification.id" *ngFor="let identification of deidentificationType">{{identification.name}}</option>
                         </select>
                     </div>
                 </div>
@@ -327,8 +322,7 @@
                     <div class="col-8">
                         <select class="form-control" formControlName="consentType">
                             <option selected disabled value="">Select an option...</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+                            <option [value]="consent.id" *ngFor="let consent of consentType">{{consent.name}}</option>
                         </select>
                     </div>
                 </div>

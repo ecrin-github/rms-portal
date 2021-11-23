@@ -24,8 +24,7 @@
                             <div class="col-8">
                                 <select class="form-control" formControlName="contributionType">
                                     <option selected disabled value="">Select an option...</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
+                                    <option [value]="contributor.id" *ngFor="let contributor of contributorType">{{contributor.name}}</option>
                                 </select>
                             </div>
                         </div>
