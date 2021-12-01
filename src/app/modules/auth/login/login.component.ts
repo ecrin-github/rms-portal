@@ -8,6 +8,7 @@ import {UserInterface} from '../../../_rms/interfaces/user/user.interface';
 import {States} from '../../../_rms/states/states';
 import {StatesService} from '../../../_rms/services/states/states.service';
 import {PrivilegesService} from '../../../_rms/services/privileges/privileges.service';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 
 @Component({
@@ -15,7 +16,7 @@ import {PrivilegesService} from '../../../_rms/services/privileges/privileges.se
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit {
   internalAuth: any = {
     email: 'sergei.gorianin@ecrin.org',
     password: 'admin',
@@ -39,19 +40,20 @@ export class LoginComponent implements OnInit, OnDestroy {
     private statesService: StatesService,
     private privilegesService: PrivilegesService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    public oidcSecurityService: OidcSecurityService
   ) {
-    this.isLoading$ = this.authService.isLoading$;
+    // this.isLoading$ = this.authService.isLoading$;
     // redirect to home if already logged in
-    if (this.statesService.currentUser) {
-      this.router.navigate(['/']);
-    }
+    // if (this.statesService.currentUser) {
+    //   this.router.navigate(['/']);
+    // }
   }
 
   ngOnInit(): void {
     // get return url from route parameters or default to '/'
-    this.returnUrl =
-        this.route.snapshot.queryParams['returnUrl'.toString()] || '/';
+    // this.returnUrl =
+    //     this.route.snapshot.queryParams['returnUrl'.toString()] || '/';
     }
 
   // convenience getter for easy access to form fields
@@ -59,38 +61,37 @@ export class LoginComponent implements OnInit, OnDestroy {
     return this.loginForm.controls;
   }
 
-  loginExternal() {
-    this.hasError = false;
-    const loginSubscr = this.authService
-      .login(this.externalAuth.email, this.externalAuth.password)
-      .pipe(first())
-      .subscribe((user: UserInterface) => {
-        if (user) {
-          this.router.navigate([this.returnUrl]);
-        } else {
-          this.hasError = true;
-        }
-      });
-    this.unsubscribe.push(loginSubscr);
-  }
+  // loginExternal() {
+  //   this.hasError = false;
+  //   const loginSubscr = this.authService
+  //     .login(this.externalAuth.email, this.externalAuth.password)
+  //     .pipe(first())
+  //     .subscribe((user: UserInterface) => {
+  //       if (user) {
+  //         this.router.navigate([this.returnUrl]);
+  //       } else {
+  //         this.hasError = true;
+  //       }
+  //     });
+  //   this.unsubscribe.push(loginSubscr);
+  // }
 
-  loginInternal() {
-    this.hasError = false;
-    const loginSubscr = this.authService
-        .login(this.internalAuth.email, this.internalAuth.password)
-        .pipe(first())
-        .subscribe((user: UserInterface) => {
-          if (user) {
-            this.router.navigate([this.returnUrl]);
-          } else {
-            this.hasError = true;
-          }
-        });
-    this.unsubscribe.push(loginSubscr);
+  // loginInternal() {
+  //   this.hasError = false;
+  //   const loginSubscr = this.authService
+  //       .login(this.internalAuth.email, this.internalAuth.password)
+  //       .pipe(first())
+  //       .subscribe((user: UserInterface) => {
+  //         if (user) {
+  //           this.router.navigate([this.returnUrl]);
+  //         } else {
+  //           this.hasError = true;
+  //         }
+  //       });
+  //   this.unsubscribe.push(loginSubscr);
 
-  }
-
-  ngOnDestroy() {
-    this.unsubscribe.forEach((sb) => sb.unsubscribe());
+  // }
+  login() {
+    this.oidcSecurityService.authorize();
   }
 }

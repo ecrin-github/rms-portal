@@ -5,7 +5,13 @@ import {AuthGuard} from './_rms/guards/auth/auth.guard';
 
 export const routes: Routes = [
   {
-    path: 'auth',
+    path: '',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./pages/layout.module').then((m) => m.LayoutModule),
+  },
+  {
+    path: '',
     loadChildren: () =>
       import('./modules/auth/auth.module').then((m) => m.AuthModule),
   },
@@ -13,12 +19,6 @@ export const routes: Routes = [
     path: 'error',
     loadChildren: () =>
       import('./modules/errors/errors.module').then((m) => m.ErrorsModule),
-  },
-  {
-    path: '',
-    canActivate: [AuthGuard],
-    loadChildren: () =>
-      import('./pages/layout.module').then((m) => m.LayoutModule),
   },
   { path: '**', redirectTo: 'error/404' },
 ];

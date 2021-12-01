@@ -46,7 +46,7 @@ export class LayoutComponent implements OnInit, AfterViewInit {
 
   // Role checker
   public isExternalUser = false;
-  public isInternalUser = false;
+  public isInternalUser = true;
 
   constructor(
     private initService: LayoutInitService,

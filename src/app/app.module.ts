@@ -1,7 +1,7 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { ClipboardModule } from 'ngx-clipboard';
 import { TranslateModule } from '@ngx-translate/core';
@@ -16,6 +16,11 @@ import { SplashScreenModule } from './_rms/partials/layout/splash-screen/splash-
 // #fake-start#
 import { FakeAPIService } from './_fake/fake-api.service';
 import {AuthService} from './_rms/services/auth/auth.service';
+import { AuthModule, LogLevel, OidcConfigService } from 'angular-auth-oidc-client';
+import { AuthGuard } from './_rms/guards/auth/auth.guard';
+import { CustomStorage } from './custom-storage';
+import { MyinterceptorInterceptor } from './_rms/interceptor/myinterceptor.interceptor';
+
 // #fake-end#
 
 function appInitializer(authService: AuthService) {
@@ -24,6 +29,21 @@ function appInitializer(authService: AuthService) {
       authService.getUserByToken().subscribe().add(resolve);
     });
   };
+}
+export function configureAuth(oidcConfigService: OidcConfigService) {
+  return () =>
+    oidcConfigService.withConfig({
+      stsServer: 'https://login.elixir-czech.org/oidc',
+      redirectUrl: 'http://localhost:4200',
+      postLogoutRedirectUri: window.location.origin,
+      clientId: '5262a0e9-a72c-4854-b23d-6cf31be724ce',
+      scope: 'openid profile email offline_access',
+      silentRenew: true,
+      silentRenewUrl: `${window.location.origin}/silent-renew.html`,
+      logLevel: LogLevel.Debug,
+      useRefreshToken: true,
+      renewTimeBeforeTokenExpiresInSeconds: 100
+    });
 }
 
 
@@ -51,13 +71,27 @@ function appInitializer(authService: AuthService) {
     AppRoutingModule,
     InlineSVGModule.forRoot(),
     NgbModule,
+    AuthModule.forRoot({storage: CustomStorage}),
   ],
   providers: [
+    AuthGuard,
+    OidcConfigService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: configureAuth,
+      deps: [OidcConfigService],
+      multi: true,
+    },
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializer,
       multi: true,
       deps: [AuthService],
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MyinterceptorInterceptor,
+      multi: true,
     },
     {
       provide: HIGHLIGHT_OPTIONS,

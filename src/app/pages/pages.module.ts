@@ -37,31 +37,23 @@ export function configPagesRoutes(
 
     let routes: Routes = [];
 
-    if (statesService.currentUser) {
-        if (statesService.isInternalUser) {
+    // if (statesService.currentUser) {
+        // if (statesService.isInternalUser) {
             routes = [
                 {
                     path: '',
                     loadChildren: () => import('./internal/internal-pages.module').then(m => m.InternalPagesModule)
                 }
             ];
-        } else if (statesService.isExternalUser) {
-            routes = [
-                {
-                    path: '',
-                    loadChildren: () => import('./external/external-pages.module').then(m => m.ExternalPagesModule)
-                }
-            ];
-        } else {
-            router.navigate(['/auth/login'], {
-                queryParams: {}
-            });
-        }
+        // } else if (statesService.isExternalUser) {
+        //     routes = [
+        //         {
+        //             path: '',
+        //             loadChildren: () => import('./external/external-pages.module').then(m => m.ExternalPagesModule)
+        //         }
+        //     ];
+        // } 
+        // }
 
-    } else {
-        router.navigate(['/auth/login'], {
-            queryParams: {}
-        });
-    }
     return routes;
 }

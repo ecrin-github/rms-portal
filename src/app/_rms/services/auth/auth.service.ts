@@ -9,6 +9,7 @@ import {AuthInterface} from '../../interfaces/user/auth.interface';
 import {PrivilegesService} from '../privileges/privileges.service';
 import {StatesService} from '../states/states.service';
 import {States} from '../../states/states';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 
 @Injectable({
@@ -22,18 +23,26 @@ export class AuthService implements OnDestroy {
   // public fields
   currentUser$: Observable<UserInterface>;
   isLoading$: Observable<boolean>;
+  isauthentic: boolean;
 
   constructor(
     private authHttpService: AuthHTTPService,
     private states: States,
     private statesService: StatesService,
     private privilegesService: PrivilegesService,
-    private router: Router
+    private router: Router,
+    private oidcSecurityService: OidcSecurityService
   ) {
     this.currentUser$ = this.states.currentUser.asObservable();
     this.isLoading$ = this.states.isLoadingSubject.asObservable();
     const subscr = this.getUserByToken().subscribe();
     this.unsubscribe.push(subscr);
+  }
+  isAuthenticUser() {
+    this.oidcSecurityService.checkAuth().subscribe((auth) => {
+      this.isauthentic = auth;
+    });
+    return this.isauthentic;
   }
 
   // public methods
@@ -55,8 +64,8 @@ export class AuthService implements OnDestroy {
   }
 
   logout() {
-    localStorage.removeItem(this.authLocalStorageToken);
-    this.router.navigate(['/auth/login'], {
+    // localStorage.removeItem(this.authLocalStorageToken);
+    this.router.navigate(['/login'], {
       queryParams: {},
     });
   }

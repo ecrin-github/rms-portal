@@ -28,7 +28,7 @@ export class PrivilegesService {
         } else {
             this.statesService.isInternalUser = false;
             this.statesService.isExternalUser = false;
-            this.router.navigate(['/auth/login'], {
+            this.router.navigate(['/login'], {
                 queryParams: {},
             });
         }

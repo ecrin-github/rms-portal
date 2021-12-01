@@ -1,15 +1,16 @@
-import {StatesService} from '../states/states.service';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+const url = environment.baseUrl + '/identity/elixir'
 
-
+@Injectable({
+  providedIn: 'root'
+})
 export class UserService {
 
-    constructor(
-        private statesService: StatesService
-    ) {
-    }
+  constructor( private http: HttpClient) { }
 
-    updateUser(userId: number) {
-
-    }
-
+  getUser() {
+    return this.http.get(`${url}/user-info`);
+  }
 }
