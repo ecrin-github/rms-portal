@@ -13,7 +13,7 @@
                 <div class="col-12 mb-5">
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
-                            Topic {{i + 1}}
+                            {{findTopicType(studyTopic.value.topicTypeId)}}
                         </mat-expansion-panel-header>
 
                         <div class="row">
@@ -21,11 +21,11 @@
                                 <strong>Topic type</strong>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control" formControlName="topicType">
+                                <select class="form-control" formControlName="topicTypeId" *ngIf="!isView">
                                     <option disabled selected value="">Select an option...</option>
-                                    <option [value]="title.id" *ngFor="let title of titleTypes">{{title.name}}</option>
-                                    <!-- <option value="1">1</option> -->
+                                    <option [value]="title.id" *ngFor="let title of topicTypes">{{title.name}}</option>
                                 </select>
+                                <span *ngIf="isView">{{findTopicType(studyTopic.value.topicTypeId)}}</span>
                             </div>
                         </div>
                         <br />
@@ -34,11 +34,12 @@
                                 <strong>Mesh coded</strong>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control" formControlName="meshCoded">
+                                <select class="form-control" formControlName="meshCoded" *ngIf="!isView">
                                     <option disabled selected value=""></option>
-                                    <option value="true">Yes</option>
-                                    <option value="false">No</option>
+                                    <option value=true>Yes</option>
+                                    <option value=false>No</option>
                                 </select>
+                                <span *ngIf="isView">{{studyTopic.value.meshCoded}}</span>
                             </div>
                         </div>
                         <br />
@@ -48,7 +49,8 @@
                             </div>
                             <div class="col-md-8">
                                 <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="topicCode" />
+                                    formControlName="meshCode" *ngIf="!isView"/>
+                                <span *ngIf="isView">{{studyTopic.value.meshCode}}</span>
                             </div>
                         </div>
                         <br />
@@ -58,7 +60,8 @@
                             </div>
                             <div class="col-md-8">
                                 <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="topicValue" />
+                                    formControlName="meshValue" *ngIf="!isView"/>
+                                <span *ngIf="isView">{{studyTopic.value.meshValue}}</span>
                             </div>
                         </div>
                         <br />
@@ -68,7 +71,8 @@
                             </div>
                             <div class="col-md-8">
                                 <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="topicQualCode" />
+                                    formControlName="meshQualcode" *ngIf="!isView"/>
+                                <span *ngIf="isView">{{studyTopic.value.meshQualcode}}</span>
                             </div>
                         </div>
                         <br />
@@ -78,7 +82,8 @@
                             </div>
                             <div class="col-md-8">
                                 <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="topicQualValue" />
+                                    formControlName="meshQualvalue" *ngIf="!isView"/>
+                                <span *ngIf="isView">{{studyTopic.value.meshQualvalue}}</span>
                             </div>
                         </div>
                         <br />
@@ -88,11 +93,13 @@
                             </div>
                             <div class="col-md-8">
                                 <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="originalValue" />
+                                    formControlName="originalValue" *ngIf="!isView"/>
+                                <span *ngIf="isView">{{studyTopic.value.originalValue}}</span>
                             </div>
                         </div>
 
-                        <mat-action-row>
+                        <mat-action-row *ngIf="!isView">
+                            <button mat-button color="primary" (click)="studyTopic.value.alreadyExist ? editTopic(studyTopic) : addTopic(i)">Save</button>
                             <button mat-button color="warn" (click)="removeStudyTopic(i)">Remove</button>
                         </mat-action-row>
                     </mat-expansion-panel>
@@ -102,7 +109,7 @@
     </ng-template>
 </form>
 
-<div class="row">
+<div class="row" *ngIf="!isView">
     <div class="col-12 text-center justify-content-center mt-5">
         <button class="btn btn-primary" (click)="addStudyTopic()">
             <i class="fa fa-plus"></i> Add new study topic

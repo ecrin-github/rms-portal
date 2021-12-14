@@ -8,13 +8,13 @@
     </ng-template>
 
     <ng-template [ngIf]="studyIdentifiers().length > 0">
-        <div formArrayName="studyIdentifiers">
+        <div formArrayName="studyIdentifiers" >
             <div class="row" *ngFor="let studyIdentifier of studyIdentifiers().controls; let i = index"
                 [formGroupName]="i">
                 <div class="col-12 mb-5">
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
-                            Identifier {{i + 1}}
+                            {{studyIdentifier.value.identifierValue}}
                         </mat-expansion-panel-header>
 
                         <div class="row">
@@ -22,11 +22,11 @@
                                 <strong>Identifier type</strong>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control" formControlName="identifierType">
+                                <select class="form-control" formControlName="identifierTypeId" *ngIf="!isView">
                                     <option disabled selected value="">Select an option...</option>
-                                    <!-- <option value="1">1</option> -->
-                                    <option [value]="identifier.id" *ngFor="let identifier of identifierTypes">{{identifier.name}}</option>
+                                    <option [value]=identifier.id *ngFor="let identifier of identifierTypes">{{identifier.name}}</option>
                                 </select>
+                                <span *ngIf="isView">{{findIdentifierType(studyIdentifier.value.identifierTypeId)}}</span>
                             </div>
                         </div>
                         <br />
@@ -36,7 +36,8 @@
                             </div>
                             <div class="col-md-8">
                                 <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="identifierValue" />
+                                    formControlName="identifierValue" *ngIf="!isView"/>
+                                <span *ngIf="isView">{{studyIdentifier.value.identifierValue}}</span>
                             </div>
                         </div>
                         <br />
@@ -46,7 +47,8 @@
                             </div>
                             <div class="col-md-8">
                                 <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="identifierOrg" />
+                                    formControlName="identifierOrg" *ngIf="!isView"/>
+                                <span *ngIf="isView">{{studyIdentifier.value.identifierOrg}}</span>
                             </div>
                         </div>
                         <br />
@@ -55,7 +57,7 @@
                                 <strong>Identifier date</strong>
                             </div>
                             <div class="col-md-8">
-                                <div>
+                                <div *ngIf="!isView">
                                     <!-- <form class="form-inline"> -->
                                     <div class="form-group">
                                         <div class="input-group">
@@ -72,6 +74,7 @@
                                     </div>
                                     <!-- </form> -->
                                 </div>
+                                <span *ngIf="isView">{{dateToString(studyIdentifier.value.identifierDate)}}</span>
                             </div>
                         </div>
                         <br />
@@ -81,10 +84,12 @@
                             </div>
                             <div class="col-md-8">
                                 <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="identifierLink" />
+                                    formControlName="identifierLink" *ngIf="!isView"/>
+                                <span *ngIf="isView">{{studyIdentifier.value.identifierLink}}</span>
                             </div>
                         </div>
-                        <mat-action-row>
+                        <mat-action-row *ngIf="!isView">
+                            <button mat-button color="primary" (click)="studyIdentifier.value.alreadyExist ? editIdentifier(studyIdentifier) : addIdentifier(i)">Save</button>
                             <button mat-button color="warn" (click)="removeStudyIdentifier(i)">Remove</button>
                         </mat-action-row>
                     </mat-expansion-panel>
@@ -93,7 +98,7 @@
         </div>
     </ng-template>
 </form>
-<div class="row">
+<div class="row" *ngIf="!isView">
     <div class="col-12 text-center justify-content-center mt-5">
         <button class="btn btn-primary" (click)="addStudyIdentifier()">
             <i class="fa fa-plus"></i> Add new study identifier

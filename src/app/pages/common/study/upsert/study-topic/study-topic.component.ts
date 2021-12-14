@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { StudyTopicInterface } from 'src/app/_rms/interfaces/study/study-topic.interface';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 
 @Component({
@@ -10,11 +13,14 @@ import { StudyService } from 'src/app/_rms/services/entities/study/study.service
 })
 export class StudyTopicComponent implements OnInit {
   form: FormGroup;
-  titleTypes: [] = [];
+  topicTypes: [] = [];
   subscription: Subscription = new Subscription();
+  @Input() isView: boolean;
+  @Input() isEdit: boolean;
+  @Input() sdSid: string;
+  studyTopic: StudyTopicInterface;
 
-
-  constructor( private fb: FormBuilder, private studyService: StudyService) { 
+  constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService) { 
     this.form = this.fb.group({
       studyTopics: this.fb.array([])
     })
@@ -22,6 +28,9 @@ export class StudyTopicComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTopicType();
+    if (this.isEdit || this.isView) {
+      this.getStudyTopic();
+    }
   }
   studyTopics(): FormArray {
     return this.form.get('studyTopics') as FormArray;
@@ -29,13 +38,16 @@ export class StudyTopicComponent implements OnInit {
 
   newStudyTopic(): FormGroup {
     return this.fb.group({
-      topicType: '',
+      id: '',
+      sdSid: '',
+      topicTypeId: '',
       meshCoded: false,
-      topicCode: '',
-      topicValue: '',
-      topicQualCode: '',
-      topicQualValue: '',
+      meshCode: '',
+      meshValue: '',
+      meshQualcode: '',
+      meshQualvalue: '',
       originalValue: '',
+      alreadyExist: false
     });
   }
 
@@ -49,12 +61,80 @@ export class StudyTopicComponent implements OnInit {
   getTopicType() {
     const getTopicType$ = this.studyService.getTopicType().subscribe((res:any) => {
       if(res.data) {
-        this.titleTypes = res.data;
+        this.topicTypes = res.data;
       }
     }, error => {
       console.log('error', error);
     });
     this.subscription.add(getTopicType$);
+  }
+  getStudyTopic() {
+    this.spinner.show();
+    this.studyService.getStudyTopic(this.sdSid).subscribe((res: any) => {
+      if (res && res.data) {
+        this.studyTopic = res.data.length ? res.data : [];
+        this.patchForm(this.studyTopic);
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error);
+    })
+  }
+  patchForm(topics) {
+    this.form.setControl('studyTopics', this.patchArray(topics));
+  }
+  patchArray(topics): FormArray {
+    const formArray = new FormArray([]);
+    topics.forEach(topic => {
+      formArray.push(this.fb.group({
+        id: topic.id,
+        sdSid: topic.sdSid,
+        topicTypeId: topic.topicTypeId,
+        meshCoded: topic.meshCoded,
+        meshCode: topic.meshCode,
+        meshValue: topic.meshValue,
+        meshQualcode: topic.meshQualcode,
+        meshQualvalue: topic.meshQualvalue,
+        originalValue: topic.originalValue,
+        alreadyExist: true
+      }))
+    });
+    return formArray;
+  }
+  addTopic(index) {
+    this.spinner.show();
+    const payload = this.form.value.studyTopics[index];
+    payload.sdSid = this.sdSid;
+    payload.meshCoded = payload.meshCoded === 'true' ? true : false;
+    delete payload.id;
+
+    this.studyService.addStudyTopic(this.sdSid, payload).subscribe((res: any) => {
+      this.spinner.hide();
+      if (res.statusCode === 200) {
+        this.toastr.success('Study Topic added successfully');
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error);
+    });
+  }
+  editTopic(topicObject) {
+    const payload = topicObject.value;
+    payload.meshCoded = payload.meshCoded === 'true' ? true : false;
+    this.spinner.show();
+    this.studyService.editStudyTopic(payload.id, payload.sdSid, payload).subscribe((res: any) => {
+      this.spinner.hide();
+      if (res.statusCode === 200) {
+        this.toastr.success('Study Topic updated successfully');
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error);
+    })
+  }
+  findTopicType(id) {
+    const topicArray: any = this.topicTypes.filter((type: any) => type.id === id);
+    return topicArray && topicArray.length ? topicArray[0].name : '';
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

@@ -38,17 +38,17 @@
 
             <ng-container matColumnDef="title">
                 <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.title}} </mat-cell>
+                <mat-cell *matCellDef="let row"> {{row.displayTitle}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="type">
                 <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.type}} </mat-cell>
+                <mat-cell *matCellDef="let row"> {{row.studyTypeId}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="status">
                 <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.status}} </mat-cell>
+                <mat-cell *matCellDef="let row"> {{row.studyStatusId}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="actions">

@@ -20,6 +20,8 @@ import { AuthModule, LogLevel, OidcConfigService } from 'angular-auth-oidc-clien
 import { AuthGuard } from './_rms/guards/auth/auth.guard';
 import { CustomStorage } from './custom-storage';
 import { MyinterceptorInterceptor } from './_rms/interceptor/myinterceptor.interceptor';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { ToastrModule } from 'ngx-toastr';
 
 // #fake-end#
 
@@ -29,21 +31,6 @@ function appInitializer(authService: AuthService) {
       authService.getUserByToken().subscribe().add(resolve);
     });
   };
-}
-export function configureAuth(oidcConfigService: OidcConfigService) {
-  return () =>
-    oidcConfigService.withConfig({
-      stsServer: 'https://login.elixir-czech.org/oidc',
-      redirectUrl: 'http://localhost:4200',
-      postLogoutRedirectUri: window.location.origin,
-      clientId: '5262a0e9-a72c-4854-b23d-6cf31be724ce',
-      scope: 'openid profile email offline_access',
-      silentRenew: true,
-      silentRenewUrl: `${window.location.origin}/silent-renew.html`,
-      logLevel: LogLevel.Debug,
-      useRefreshToken: true,
-      renewTimeBeforeTokenExpiresInSeconds: 100
-    });
 }
 
 
@@ -71,17 +58,27 @@ export function configureAuth(oidcConfigService: OidcConfigService) {
     AppRoutingModule,
     InlineSVGModule.forRoot(),
     NgbModule,
-    AuthModule.forRoot({storage: CustomStorage}),
+    NgxSpinnerModule,
+    ToastrModule.forRoot(),
+    AuthModule.forRoot({
+      config: {
+        authority: 'https://login.elixir-czech.org/oidc',
+        redirectUrl: window.location.origin,
+        postLogoutRedirectUri: window.location.origin,
+        clientId: '5262a0e9-a72c-4854-b23d-6cf31be724ce',
+        scope: 'openid profile email offline_access perun_api phone country address',
+        responseType: 'code',
+        silentRenew: true,
+        useRefreshToken: true,
+        logLevel: LogLevel.Debug,
+        storage: new CustomStorage(),
+        renewTimeBeforeTokenExpiresInSeconds: 100,
+        ignoreNonceAfterRefresh: true
+      },
+    }),
   ],
   providers: [
     AuthGuard,
-    OidcConfigService,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: configureAuth,
-      deps: [OidcConfigService],
-      multi: true,
-    },
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializer,

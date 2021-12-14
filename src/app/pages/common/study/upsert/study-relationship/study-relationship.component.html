@@ -14,18 +14,18 @@
                 <div class="col-12 mb-5">
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
-                            Relation {{i + 1}}
+                            {{findRelationshipType(studyRelation.value.relationshipTypeId)}}
                         </mat-expansion-panel-header>
                         <div class="row">
                             <div class="col-md-4 text-center">
                                 <strong>Relationship type</strong>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control" formControlName="relationshipType">
+                                <select class="form-control" formControlName="relationshipTypeId" *ngIf="!isView">
                                     <option disabled selected value="">Select an option...</option>
-                                    <option value="relationship.id" *ngFor="let relationship of relationshipType">{{relationship.name}}</option>
-                                    <!-- <option value="1">1</option> -->
+                                    <option [value]="relationship.id" *ngFor="let relationship of relationshipType">{{relationship.name}}</option>
                                 </select>
+                                <span *ngIf="isView">{{findRelationshipType(studyRelation.value.relationshipTypeId)}}</span>
                             </div>
                         </div>
                         <br />
@@ -34,10 +34,12 @@
                                 <strong>Target study</strong>
                             </div>
                             <div class="col-md-8">
-                                <input type="text" class="form-control" formControlName="targetStudyId" />
+                                <input type="text" class="form-control" formControlName="targetSdSid" *ngIf="!isView"/>
+                                <span *ngIf="isView">{{studyRelation.value.targetSdSid}}</span>
                             </div>
                         </div>
-                        <mat-action-row>
+                        <mat-action-row *ngIf="!isView">
+                            <button mat-button color="primary" (click)="studyRelation.value.alreadyExist ? editRelationship(studyRelation) : addRelationship(i)">Save</button>
                             <button mat-button color="warn" (click)="removeStudyRelation(i)">
                                 Remove
                             </button>
@@ -49,7 +51,7 @@
     </ng-template>
 </form>
 
-<div class="row">
+<div class="row" *ngIf="!isView">
     <div class="col-12 text-center justify-content-center mt-5">
         <button class="btn btn-primary" (click)="addStudyRelation()">
             <i class="fa fa-plus"></i>Add new study relationship

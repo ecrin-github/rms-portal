@@ -5,6 +5,7 @@ import {UserInterface} from '../../../../../interfaces/user/user.interface';
 import {States} from '../../../../../states/states';
 import {AuthService} from '../../../../../services/auth/auth.service';
 import { UserService } from 'src/app/_rms/services/user/user.service';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 export interface UserDataResult {
   sub: string,
   name: string
@@ -25,13 +26,14 @@ export interface UserDataResult {
 export class UserOffcanvasComponent implements OnInit {
   extrasUserOffcanvasDirection = 'offcanvas-right';
   user$: Observable<UserInterface>;
-  userData: UserDataResult;
+  userData: any;
 
   constructor(
       private layout: LayoutService,
       private states: States,
       private auth: AuthService,
-      private userService: UserService
+      private userService: UserService,
+      private OidcSecurityService: OidcSecurityService
   ) {}
 
   ngOnInit(): void {
@@ -54,7 +56,8 @@ export class UserOffcanvasComponent implements OnInit {
   }
 
   logout() {
-    this.auth.logout();
-    document.location.reload();
+    this.OidcSecurityService.logoff();
+    // this.auth.logout();
+    // document.location.reload();
   }
 }

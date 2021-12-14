@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { StudyInterface } from 'src/app/_rms/interfaces/study/study.interface';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 
 @Component({
@@ -19,85 +22,197 @@ export class UpsertStudyComponent implements OnInit {
   genderEligibility: [] = [];
   timeUnits: [] =[];
   subscription: Subscription = new Subscription();
+  isSubmitted: boolean = false;
+  id: any;
+  studyData: StudyInterface;
+  studyTypeView: any;
+  studyStatusView: any;
+  studyGenderView: any;
+  studyMinAgeView: any;
+  studyMaxAgeView: any;
 
-
-  constructor(private fb: FormBuilder, private router: Router, private studyService: StudyService) {
+  constructor(private fb: FormBuilder, private router: Router, private studyService: StudyService, private activatedRoute: ActivatedRoute,
+    private spinner: NgxSpinnerService, private toastr: ToastrService) {
     this.studyForm = this.fb.group({
       displayTitle: '',
       briefDescription: '',
       dataSharingStatement: '',
-      studyType: '',
-      studyStatus: '',
-      studyGenderElig: '',
+      studyTypeId: '',
+      studyStatusId: '',
+      studyGenderEligId: '',
       studyEnrolment: 0,
-      minAge: this.fb.group({
-        value: 0,
-        unitName: ''
-      }),
-      maxAge: this.fb.group({
-        value: 0,
-        unitName: ''
-      }),
-      studyIdentifiers: '',
-      studyTitles: '',
-      studyFeatures: '',
-      studyTopics: '',
-      studyRelationships: '',
-      provenanceString: ''
+      minAge: '',
+      minAgeUnitsId: '',
+      maxAge: '',
+      maxAgeUnitsId: '',
+      studyIdentifiers: [],
+      studyTitles: [],
+      studyFeatures: [],
+      studyTopics: [],
+      studyRelationships: [],
     });
   }
 
   ngOnInit(): void {
     this.isEdit = this.router.url.includes('edit') ? true : false;
     this.isView = this.router.url.includes('view') ? true : false;
+    if (this.isEdit || this.isView) {
+      this.id = this.activatedRoute.snapshot.params.id;
+      this.getStudyById(this.id);
+    } else {
+      this.getStudyType();
+      this.getStudyStatus();
+      this.getGenderEligibility();
+      this.getTimeUnits();
+    }
+  }
+  getStudyType() {
+    setTimeout(() => {
+      this.spinner.show(); 
+    });
+    const getStudyType$ = this.studyService.getStudyType().subscribe((res:any) => {
+      this.spinner.hide();
+      if(res.data) {
+        this.studyTypes = res.data;
+      }
+      if(this.isView) {
+        const studyArray = this.studyTypes.filter((type: any) => type.id === this.studyForm.value.studyTypeId);
+        this.studyTypeView = studyArray && studyArray.length ? studyArray[0] : {name: ''};
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error);
+    });
+    this.subscription.add(getStudyType$);
+  }
+  getStudyStatus() {
+    setTimeout(() => {
+      this.spinner.show(); 
+    });
+    const getStudyStatus$ = this.studyService.getStudyStatus().subscribe((res: any) => {
+      this.spinner.hide();
+      if(res.data) {
+        this.studyStatuses = res.data;
+      }
+      if(this.isView){
+        const statusArray = this.studyStatuses.filter((type: any) => type.id === this.studyForm.value.studyStatusId);
+        this.studyStatusView = statusArray && statusArray.length ? statusArray[0] : {name: ''}
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error);
+    });
+    this.subscription.add(getStudyStatus$);
+  }
+  getGenderEligibility() {
+    setTimeout(() => {
+      this.spinner.show(); 
+    });
+    const getGenderEligibility$ = this.studyService.getGenderEligibility().subscribe((res: any) => {
+      this.spinner.hide();
+      if (res.data) {
+        this.genderEligibility = res.data;
+      }
+      if(this.isView) {
+        const genderArray = this.genderEligibility.filter((type: any) => type.id === this.studyForm.value.studyGenderEligId);
+        this.studyGenderView = genderArray && genderArray.length ? genderArray[0] : {name: ''};
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error);
+    });
+    this.subscription.add(getGenderEligibility$);
+  }
+  getTimeUnits() {
+    setTimeout(() => {
+      this.spinner.show(); 
+    });
+    const getTimeUnits$ = this.studyService.getTimeUnits().subscribe((res: any) => {
+      this.spinner.hide();
+      if(res.data) {
+        this.timeUnits = res.data;
+      }
+      if(this.isView) {
+        const minAgeArray = this.timeUnits.filter((type: any) => type.id === this.studyForm.value.minAgeUnitsId);
+        this.studyMinAgeView = minAgeArray && minAgeArray.length ? minAgeArray[0] : {name: ''};
+        const maxAgeArray = this.timeUnits.filter((type: any) => type.id === this.studyForm.value.maxAgeUnitsId);
+        this.studyMaxAgeView = maxAgeArray && maxAgeArray.length ? maxAgeArray[0] : {name: ''};
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error);
+    });
+    this.subscription.add(getTimeUnits$);
+  }
+  getStudyById(id) {
+    setTimeout(() => {
+     this.spinner.show(); 
+    });
+    this.studyService.getStudyById(id).subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data && res.data.length) {
+        this.studyData = res.data[0];
+        this.patchStudyForm();
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error);
+    })
+  }
+  patchStudyForm() {
+    this.studyForm.patchValue({
+      displayTitle: this.studyData.displayTitle,
+      briefDescription: this.studyData.briefDescription,
+      dataSharingStatement: this.studyData.dataSharingStatement,
+      studyTypeId: this.studyData.studyTypeId,
+      studyStatusId: this.studyData.studyStatusId,
+      studyGenderEligId: this.studyData.studyGenderEligId,
+      studyEnrolment: this.studyData.studyEnrolment,
+      minAge: this.studyData.minAge,
+      minAgeUnitsId: this.studyData.minAgeUnitsId,
+      maxAge: this.studyData.maxAge,
+      maxAgeUnitsId: this.studyData.maxAgeUnitsId,
+      studyIdentifiers: this.studyData.studyIdentifiers ? this.studyData.studyIdentifiers : [],
+      studyTitles: this.studyData.studyTitles ? this.studyData.studyTitles : [],
+      studyFeatures: this.studyData.studyFeatures ? this.studyData.studyFeatures : [],
+      studyTopics: this.studyData.studyTopics ? this.studyData.studyTopics : [],
+      studyRelationships: this.studyData.studyRelationships ? this.studyData.studyRelationships : [],
+
+    });
     this.getStudyType();
     this.getStudyStatus();
     this.getGenderEligibility();
     this.getTimeUnits();
   }
-  getStudyType() {
-    const getStudyType$ = this.studyService.getStudyType().subscribe((res:any) => {
-      if(res.data) {
-        this.studyTypes = res.data;
-      }
-    }, error => {
-      console.log('error', error);
-    });
-    this.subscription.add(getStudyType$);
-  }
-  getStudyStatus() {
-    const getStudyStatus$ = this.studyService.getStudyStatus().subscribe((res: any) => {
-      if(res.data) {
-        this.studyStatuses = res.data;
-      }
-    }, error => {
-      console.log('error', error);
-    });
-    this.subscription.add(getStudyStatus$);
-  }
-  getGenderEligibility() {
-    const getGenderEligibility$ = this.studyService.getGenderEligibility().subscribe((res: any) => {
-      if (res.data) {
-        this.genderEligibility = res.data;
-      }
-    }, error => {
-      console.log('error', error);
-    });
-    this.subscription.add(getGenderEligibility$);
-  }
-  getTimeUnits() {
-    const getTimeUnits$ = this.studyService.getTimeUnits().subscribe((res: any) => {
-      if(res.data) {
-        this.timeUnits = res.data;
-      }
-    }, error => {
-      console.log('error', error);
-    });
-    this.subscription.add(getTimeUnits$);
-  }
-  
   onSave() {
-    console.log(this.studyForm.value);
+    this.isSubmitted = true;
+    if (this.studyForm.valid) {
+      const payload = this.studyForm.value;
+      this.spinner.show();
+      if (this.isEdit) {
+        payload.id = this.id;
+        payload.sdSid = this.id;
+        this.studyService.editStudy(this.id, payload).subscribe((res: any) => {
+          this.spinner.hide();
+          if (res.statusCode === 200) {
+            this.toastr.success('Study Details updated successfully');
+          }
+        }, error => {
+          this.spinner.hide();
+          this.toastr.error(error);
+        })
+      } else {
+        this.studyService.addStudy(payload).subscribe((res: any) => {
+          this.spinner.hide();
+          if (res.statusCode === 200) {
+            this.toastr.success('Study Detail added successfully');
+          }
+        }, error => {
+          this.spinner.hide();
+          this.toastr.error(error);
+        })
+      }
+    }
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

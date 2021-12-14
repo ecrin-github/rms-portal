@@ -39,8 +39,8 @@ export class AuthService implements OnDestroy {
     this.unsubscribe.push(subscr);
   }
   isAuthenticUser() {
-    this.oidcSecurityService.checkAuth().subscribe((auth) => {
-      this.isauthentic = auth;
+    this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData, accessToken, idToken }) => {
+      this.isauthentic = isAuthenticated;
     });
     return this.isauthentic;
   }

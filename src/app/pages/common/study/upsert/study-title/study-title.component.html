@@ -14,18 +14,18 @@
                 <div class="col-12 mb-5">
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
-                            Title {{i + 1}}
+                            {{studyTitle.value.titleText}}
                         </mat-expansion-panel-header>
                         <div class="row">
                             <div class="col-md-4 text-center">
                                 <strong>Title type</strong>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control" formControlName="titleType">
+                                <select class="form-control" formControlName="titleTypeId" *ngIf="!isView">
                                     <option disabled selected value="">Select an option...</option>
-                                    <!-- <option value="1">1</option> -->
                                     <option [value]="title.id" *ngFor="let title of titleType">{{title.name}}</option>
                                 </select>
+                                <span *ngIf="isView">{{findTitleType(studyTitle.value.titleTypeId)}}</span>
                             </div>
                         </div>
                         <br />
@@ -35,7 +35,8 @@
                             </div>
                             <div class="col-md-8">
                                 <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="titleText" />
+                                    formControlName="titleText" *ngIf="!isView"/>
+                                    <span *ngIf="isView">{{studyTitle.value.titleText}}</span>
                             </div>
                         </div>
                         <br />
@@ -44,10 +45,11 @@
                                 <strong>Language code</strong>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control" formControlName="langCode">
+                                <select class="form-control" formControlName="langCode" *ngIf="!isView">
                                     <option disabled selected value=""></option>
-                                    <option value="1">1</option>
+                                    <option [value]=language.code *ngFor="let language of languageCodes">{{language.code}}</option>
                                 </select>
+                                <span *ngIf="isView">{{studyTitle.value.langCode}}</span>
                             </div>
                         </div>
                         <br />
@@ -56,10 +58,12 @@
                                 <strong>Comments</strong>
                             </div>
                             <div class="col-md-8">
-                                <textarea class="form-control" cols="30" rows="10" formControlName="comment"></textarea>
+                                <textarea class="form-control" cols="30" rows="10" formControlName="comments" *ngIf="!isView"></textarea>
+                                <span *ngIf="isView">{{studyTitle.value.comments}}</span>
                             </div>
                         </div>
-                        <mat-action-row>
+                        <mat-action-row *ngIf="!isView">
+                            <button mat-button color="primary" (click)="studyTitle.value.alreadyExist ? editTitle(studyTitle) : addTitle(i)">Save</button>
                             <button mat-button color="warn" (click)="removeStudyTitle(i)">Remove</button>
                         </mat-action-row>
                     </mat-expansion-panel>
@@ -70,7 +74,7 @@
 </form>
 
 
-<div class="row">
+<div class="row" *ngIf="!isView">
     <div class="col-12 text-center justify-content-center mt-5">
         <button class="btn btn-primary" (click)="addStudyTitle()">
             <i class="fa fa-plus"></i> Add new study title

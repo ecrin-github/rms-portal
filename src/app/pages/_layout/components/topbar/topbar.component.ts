@@ -28,7 +28,7 @@ export interface UserDataResult {
   styleUrls: ['./topbar.component.scss'],
 })
 export class TopbarComponent implements OnInit, AfterViewInit {
-  userData: UserDataResult;
+  userData: any;
   user$: Observable<UserInterface>;
   // tobbar extras
   extraSearchDisplay: boolean;
@@ -125,17 +125,16 @@ export class TopbarComponent implements OnInit, AfterViewInit {
       KTLayoutHeaderTopbar.init('kt_header_mobile_topbar_toggle');
     });
   }
-  async getUserdate() {
-    console.log('token', this.oidcSecurityService.getToken())
-    await this.oidcSecurityService.userData$.subscribe((data) => {
-      console.log('data1111', data)
-      console.log(this.oidcSecurityService.userData$)
-    });
+  getUserdate() {
+    // console.log('token', this.oidcSecurityService.getAccessToken())
+    // await this.oidcSecurityService.userData$.subscribe((data) => {
+    //   console.log('data1111', data)
+    //   console.log(this.oidcSecurityService.userData$)
+    // });
     this.userService.getUser().subscribe((res: any) => {
       if (res.data && res.data.length) {
         this.userData = res.data[0];
       }
-      console.log('userRes', res);
     }, error => {
       console.log('error', error);
     })

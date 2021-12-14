@@ -15,6 +15,6 @@ export class SplashScreenComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.splashScreenService.init(this.splashScreen);
+    // this.splashScreenService.init(this.splashScreen);
   }
 }
