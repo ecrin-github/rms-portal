@@ -30,7 +30,8 @@ export class UpsertStudyComponent implements OnInit {
   studyGenderView: any;
   studyMinAgeView: any;
   studyMaxAgeView: any;
-
+  initiateEmit: boolean = false;
+  count = 0;
   constructor(private fb: FormBuilder, private router: Router, private studyService: StudyService, private activatedRoute: ActivatedRoute,
     private spinner: NgxSpinnerService, private toastr: ToastrService) {
     this.studyForm = this.fb.group({
@@ -81,7 +82,7 @@ export class UpsertStudyComponent implements OnInit {
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     });
     this.subscription.add(getStudyType$);
   }
@@ -100,7 +101,7 @@ export class UpsertStudyComponent implements OnInit {
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     });
     this.subscription.add(getStudyStatus$);
   }
@@ -119,7 +120,7 @@ export class UpsertStudyComponent implements OnInit {
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     });
     this.subscription.add(getGenderEligibility$);
   }
@@ -140,7 +141,7 @@ export class UpsertStudyComponent implements OnInit {
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     });
     this.subscription.add(getTimeUnits$);
   }
@@ -156,7 +157,7 @@ export class UpsertStudyComponent implements OnInit {
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     })
   }
   patchStudyForm() {
@@ -184,8 +185,60 @@ export class UpsertStudyComponent implements OnInit {
     this.getGenderEligibility();
     this.getTimeUnits();
   }
+  getIdentifier(event) {
+    this.studyForm.patchValue({
+      studyIdentifiers: event.data
+    })
+    this.count += 1;
+    setTimeout(() => {
+      this.initiateEmit = event.isEmit;
+    });
+    if (this.count === 5) {
+      this.onSave();
+    }
+  }
+  getTitle(event) {
+    this.studyForm.patchValue({
+      studyTitles: event.data
+    })
+    this.count += 1;
+    if (this.count === 5) {
+      this.onSave();
+    }
+  }
+  getFeature(event) {
+    this.studyForm.patchValue({
+      studyFeatures: event.data
+    })
+    this.count += 1;
+    if (this.count === 5) {
+      this.onSave();
+    }
+  }
+  getTopic(event) {
+    this.studyForm.patchValue({
+      studyTopics: event.data
+    })
+    this.count += 1;
+    if (this.count === 5) {
+      this.onSave();
+    }
+  }
+  getRelation(event) {
+    this.studyForm.patchValue({
+      studyRelationships: event.data
+    })
+    this.count += 1;
+    if (this.count === 5) {
+      this.onSave();
+    }
+  }
+  onClick() {
+    this.initiateEmit = true;
+  }
   onSave() {
     this.isSubmitted = true;
+    console.log('value', this.studyForm.value)
     if (this.studyForm.valid) {
       const payload = this.studyForm.value;
       this.spinner.show();
@@ -199,7 +252,7 @@ export class UpsertStudyComponent implements OnInit {
           }
         }, error => {
           this.spinner.hide();
-          this.toastr.error(error);
+          this.toastr.error(error.error.title);
         })
       } else {
         this.studyService.addStudy(payload).subscribe((res: any) => {
@@ -209,10 +262,11 @@ export class UpsertStudyComponent implements OnInit {
           }
         }, error => {
           this.spinner.hide();
-          this.toastr.error(error);
+          this.toastr.error(error.error.title);
         })
       }
     }
+    this.count = 0;
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

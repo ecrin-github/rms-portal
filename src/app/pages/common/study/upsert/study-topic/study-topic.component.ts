@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -18,6 +18,12 @@ export class StudyTopicComponent implements OnInit {
   @Input() isView: boolean;
   @Input() isEdit: boolean;
   @Input() sdSid: string;
+  @Input() set initiateEmit(initiateEmit: any) {
+    if (initiateEmit) {
+      this.emitData();
+    }
+  }
+  @Output() emitTopic: EventEmitter<any> = new EventEmitter();
   studyTopic: StudyTopicInterface;
 
   constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService) { 
@@ -77,7 +83,7 @@ export class StudyTopicComponent implements OnInit {
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     })
   }
   patchForm(topics) {
@@ -112,10 +118,12 @@ export class StudyTopicComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Study Topic added successfully');
+      } else {
+        this.toastr.error(res.messages[0]);
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     });
   }
   editTopic(topicObject) {
@@ -126,15 +134,30 @@ export class StudyTopicComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Study Topic updated successfully');
+      } else {
+        this.toastr.error(res.messages[0]);
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     })
   }
   findTopicType(id) {
     const topicArray: any = this.topicTypes.filter((type: any) => type.id === id);
     return topicArray && topicArray.length ? topicArray[0].name : '';
+  }
+  emitData() {
+    const payload = this.form.value.studyTopics.map(item => {
+      if (!item.id) {
+        delete item.id;
+      }
+      if(this.sdSid) {
+        item.sdSid = this.sdSid;
+      }
+      item.meshCoded = item.meshCoded === 'true' ? true : false;
+      return item;
+    })
+    this.emitTopic.emit({data: payload, isEmit: false});
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

@@ -1,6 +1,10 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
+import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
+import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 export interface ObjectRecord {
   id: number;
   title: string;
@@ -17,34 +21,86 @@ export class SummaryObjectComponent implements OnInit {
 
   displayedColumns = ['id', 'title', 'type', 'linkedStudy', 'actions'];
   dataSource: MatTableDataSource<ObjectRecord>;
+  objectType: [] = [];
+  studyList: [] = [];
   @Input() user: string = 'internal';
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor() {
-    this.dataSource = new MatTableDataSource(this.generateObjects(100));
+  constructor( private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private studyService: StudyService) {
   }
 
   ngOnInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.getObjectList();
+    this.getObjectType();
+    this.getStudy();
   }
-
+  getObjectList() {
+    this.objectService.getObject().subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.dataSource = new MatTableDataSource(res.data);
+      } else {
+        this.dataSource = new MatTableDataSource();
+      }
+      this.dataSource.paginator = this.paginator;
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
+  getObjectType() {
+    setTimeout(() => {
+     this.spinner.show(); 
+    });
+    this.objectService.getObjectType().subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.objectType = res.data
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
+  getStudy() {
+    setTimeout(() => {
+     this.spinner.show(); 
+    });
+    this.studyService.getStudy().subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.studyList = res.data;
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
+  findObjectType(id) {
+    const objectTypeArray: any = this.objectType.filter((type: any) => type.id === id);
+    return objectTypeArray && objectTypeArray.length ? objectTypeArray[0].name : '';
+  }
+  findStudy(id) {
+    const studyArray: any = this.studyList.filter((type: any) => type.sdSid === id);
+    return studyArray && studyArray.length ? studyArray[0].displayTitle : '';
+  }
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
-  generateObjects(recordsNumber: number): Array<ObjectRecord> {
-    const records: Array<ObjectRecord> = [];
-    for (let i = 1; i < recordsNumber; i++) {
-      records.push({
-        id: i,
-        title: 'Object title ' + i.toString(),
-        type: 'Type',
-        linkedStudyId: i
-      });
-    }
-    return records;
-  }
+  // generateObjects(recordsNumber: number): Array<ObjectRecord> {
+  //   const records: Array<ObjectRecord> = [];
+  //   for (let i = 1; i < recordsNumber; i++) {
+  //     records.push({
+  //       id: i,
+  //       title: 'Object title ' + i.toString(),
+  //       type: 'Type',
+  //       linkedStudyId: i
+  //     });
+  //   }
+  //   return records;
+  // }
 
 }

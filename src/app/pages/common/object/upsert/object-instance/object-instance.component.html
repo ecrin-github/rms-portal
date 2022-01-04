@@ -14,30 +14,32 @@
                 <div class="col-12 mb-5">
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
-                            Instance {{i + 1}}
+                            {{objectInstance.value.repositoryOrg}}
                         </mat-expansion-panel-header>
                         <div class="row">
                             <div class="col-md-4 text-center">
                                 <strong>Repository organisation</strong>
                             </div>
-                            <div class="col-8">
+                            <div class="col-md-8">
                                 <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="repositoryOrg" />
+                                    formControlName="repositoryOrg" *ngIf="!isView"/>
+                                <span *ngIf="isView">{{objectInstance.value.repositoryOrg}}</span>
                             </div>
                         </div>
                         <br />
 
-                        <div formGroupName="accessDetails">
+                        <!-- <div formGroupName="accessDetails"> -->
                             <div class="row">
                                 <div class="col-md-4 text-center">
                                     <strong>Access details: Direct access</strong>
                                 </div>
-                                <div class="col-8">
-                                    <select class="form-control" formControlName="directAccess">
+                                <div class="col-md-8">
+                                    <select class="form-control" formControlName="urlAccessible" *ngIf="!isView">
                                         <option selected disabled value="">Select an option...</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
+                                        <option value=false>No</option>
+                                        <option value=true>Yes</option>
                                     </select>
+                                    <span *ngIf="isView">{{objectInstance.value.urlAccessible}}</span>
                                 </div>
                             </div>
                             <br />
@@ -45,25 +47,27 @@
                                 <div class="col-md-4 text-center">
                                     <strong>Access details: URL</strong>
                                 </div>
-                                <div class="col-8">
+                                <div class="col-md-8">
                                     <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                        formControlName="url" />
+                                        formControlName="url" *ngIf="!isView"/>
+                                        <span *ngIf="isView">{{objectInstance.value.url}}</span>
                                 </div>
                             </div>
-                        </div>
+                        <!-- </div> -->
 
                         <br />
 
-                        <div formGroupName="resourceDetails">
+                        <!-- <div formGroupName="resourceDetails"> -->
                             <div class="row">
                                 <div class="col-md-4 text-center">
                                     <strong>Resource details: Resource type</strong>
                                 </div>
-                                <div class="col-8">
-                                    <select class="form-control" formControlName="typeName">
+                                <div class="col-md-8">
+                                    <select class="form-control" formControlName="resourceTypeId" *ngIf="!isView">
                                         <option selected disabled value="">Select an option...</option>
-                                        <option [value]="resource.id" *ngFor="let resource of resourceType">{{resource.name}}</option>
+                                        <option [value]=resource.id *ngFor="let resource of resourceType">{{resource.name}}</option>
                                     </select>
+                                    <span *ngIf="isView">{{findResourceType(objectInstance.value.resourceTypeId)}}</span>
                                 </div>
                             </div>
                             <br />
@@ -71,17 +75,19 @@
                                 <div class="col-md-4 text-center">
                                     <strong>Resource details: Size</strong>
                                 </div>
-                                <div class="col-8">
+                                <div class="col-md-8">
                                     <div class="row">
-                                        <div class="col-4">
+                                        <div class="col-md-4">
                                             <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                                formControlName="size" />
+                                                formControlName="resourceSize" *ngIf="!isView"/>
+                                            <span *ngIf="isView">{{objectInstance.value.resourceSize}}</span>
                                         </div>
-                                        <div class="col-4">
-                                            <select class="form-control" formControlName="sizeUnit">
+                                        <div class="col-md-4">
+                                            <select class="form-control" formControlName="resourceSizeUnits" *ngIf="!isView">
                                                 <option selected disabled value="">Select an option...</option>
-                                                <option [value]="size.id" *ngFor="let size of sizeUnit">{{size.name}}</option>
+                                                <option [value]=size.id *ngFor="let size of sizeUnit">{{size.name}}</option>
                                             </select>
+                                            <span *ngIf="isView">{{findSizeUnit(objectInstance.value.resourceSizeUnits)}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -93,12 +99,14 @@
                                 </div>
                                 <div class="col-md-8">
                                     <textarea class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
-                                        formControlName="comments"></textarea>
+                                        formControlName="resourceComments" *ngIf="!isView"></textarea>
+                                    <span *ngIf="isView">{{objectInstance.value.resourceComments}}</span>
                                 </div>
                             </div>
-                        </div>
+                        <!-- </div> -->
 
-                        <mat-action-row>
+                        <mat-action-row *ngIf="!isView">
+                            <button mat-button color="primary" (click)="objectInstance.value.alreadyExist ? editInstance(objectInstance) : addInstance(i)">Save</button>
                             <button mat-button color="warn" (click)="removeObjectInstance(i)">Remove</button>
                         </mat-action-row>
                     </mat-expansion-panel>
@@ -108,7 +116,7 @@
     </ng-template>
 </form>
 
-<div class="row">
+<div class="row" *ngIf="!isView">
     <div class="col-12 text-center justify-content-center mt-5">
         <button class="btn btn-primary" (click)="addObjectInstance()">
             <i class="fa fa-plus"></i> Add new object instance

@@ -33,7 +33,7 @@ export interface DataObjectInterface {
     addStudyTopics: boolean;
     createdOn: string;
     objectContributors: ObjectContributorInterface[] | null;
-    objectDatasets: ObjectDatasetInterface[] | null;
+    objectDatasets: ObjectDatasetInterface | null;
     objectDates: ObjectDateInterface[] | null;
     objectDescriptions: ObjectDescriptionInterface[] | null;
     objectIdentifiers: ObjectIdentifierInterface[] | null;

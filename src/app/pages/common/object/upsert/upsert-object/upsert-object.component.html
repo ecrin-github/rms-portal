@@ -15,14 +15,15 @@
     </div>
 
     <div class="card-body">
-        <form [formGroup]="objectForm" (ngSubmit)="onSave()">
+        <form [formGroup]="objectForm" >
             <div class="row">
                 <div class="col-md-4 text-center">
                     <h6 class="pt-4">Display title</h6>
                 </div>
-                <div class="col-8">
+                <div class="col-md-8">
                     <input type="text" class="form-control" placeholder="Enter display title..."
-                        formControlName="displayTitle" />
+                        formControlName="displayTitle" *ngIf="!isView"/>
+                    <span *ngIf="isView">{{objectData.displayTitle}}</span>
                 </div>
             </div>
 
@@ -32,8 +33,9 @@
                 <div class="col-md-4 text-center">
                     <h6 class="pt-4">DOI</h6>
                 </div>
-                <div class="col-8">
-                    <input type="text" class="form-control" placeholder="Enter DOI..." formControlName="doi" />
+                <div class="col-md-8">
+                    <input type="text" class="form-control" placeholder="Enter DOI..." formControlName="doi" *ngIf="!isView"/>
+                    <span *ngIf="isView">{{objectData.doi}}</span>
                 </div>
             </div>
 
@@ -43,8 +45,9 @@
                 <div class="col-md-4 text-center">
                     <h6 class="pt-4">Version</h6>
                 </div>
-                <div class="col-8">
-                    <input type="text" class="form-control" placeholder="Enter version..." formControlName="version" />
+                <div class="col-md-8">
+                    <input type="text" class="form-control" placeholder="Enter version..." formControlName="version" *ngIf="!isView"/>
+                    <span *ngIf="isView">{{objectData.version}}</span>
                 </div>
             </div>
 
@@ -54,11 +57,12 @@
                 <div class="col-md-4 text-center">
                     <h6 class="pt-4">Object class</h6>
                 </div>
-                <div class="col-8">
-                    <select class="form-control" formControlName="objectClass">
+                <div class="col-md-8">
+                    <select class="form-control" formControlName="objectClassId" *ngIf="!isView">
                         <option selected disabled value="">Select an option...</option>
-                        <option [value]="class.id" *ngFor="let class of objectClass">{{class.name}}</option>
+                        <option [value]=class.id *ngFor="let class of objectClass">{{class.name}}</option>
                     </select>
+                    <span *ngIf="isView">{{findObjectClass(objectData.objectClassId)}}</span>
                 </div>
             </div>
 
@@ -68,11 +72,12 @@
                 <div class="col-md-4 text-center">
                     <h6 class="pt-4">Object type</h6>
                 </div>
-                <div class="col-8">
-                    <select class="form-control" formControlName="objectType">
+                <div class="col-md-8">
+                    <select class="form-control" formControlName="objectTypeId" *ngIf="!isView">
                         <option selected disabled value="">Select an option...</option>
-                        <option [value]="type.id" *ngFor="let type of objectType">{{type.name}}</option>
+                        <option [value]=type.id *ngFor="let type of objectType">{{type.name}}</option>
                     </select>
+                    <span *ngIf="isView">{{findobjectType(objectData.objectTypeId)}}</span>
                 </div>
             </div>
 
@@ -82,9 +87,10 @@
                 <div class="col-md-4 text-center">
                     <h6 class="pt-4">Publication year</h6>
                 </div>
-                <div class="col-8">
+                <div class="col-md-8">
                     <input type="text" class="form-control" placeholder="Enter publication year..."
-                        formControlName="publicationYear" />
+                        formControlName="publicationYear" *ngIf="!isView" />
+                    <span *ngIf="isView">{{objectData.publicationYear}}</span>
                 </div>
             </div>
 
@@ -94,12 +100,12 @@
                 <div class="col-md-4 text-center">
                     <h6 class="pt-4">Language</h6>
                 </div>
-                <div class="col-8">
-                    <select class="form-control" formControlName="langCode">
+                <div class="col-md-8">
+                    <select class="form-control" formControlName="langCode" *ngIf="!isView">
                         <option selected disabled value="">Select an option...</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
+                        <option [value]="language.code" *ngFor="let language of languageCode">{{language.code}}</option>
                     </select>
+                    <span *ngIf="isView">{{objectData.langCode}}</span>
                 </div>
             </div>
 
@@ -109,9 +115,10 @@
                 <div class="col-md-4 text-center">
                     <h6 class="pt-4">Managing organisation</h6>
                 </div>
-                <div class="col-8">
+                <div class="col-md-8">
                     <input type="text" class="form-control" placeholder="Enter managing organisation..."
-                        formControlName="managingOrganisation" />
+                        formControlName="managingOrg" *ngIf="!isView" />
+                    <span *ngIf="isView">{{objectData.managingOrg}}</span>
                 </div>
             </div>
 
@@ -122,10 +129,11 @@
                     <h6 class="pt-4">Access type</h6>
                 </div>
                 <div class="col-8">
-                    <select class="form-control" formControlName="accessType">
+                    <select class="form-control" formControlName="accessTypeId" *ngIf="!isView">
                         <option selected disabled value="">Select an option...</option>
-                        <option [value]="access.id" *ngFor="let access of accessType">{{access.name}}</option>
+                        <option [value]=access.id *ngFor="let access of accessType">{{access.name}}</option>
                     </select>
+                    <span *ngIf="isView">{{findAccessType(objectData.accessTypeId)}}</span>
                 </div>
             </div>
 
@@ -137,14 +145,15 @@
                 </div>
             </div>
             <br />
-            <div formGroupName="accessDetails">
+            <!-- <div formGroupName="accessDetails"> -->
                 <div class="row">
                     <div class="col-md-4 text-center">
                         <strong>Description</strong>
                     </div>
                     <div class="col-md-8">
                         <textarea class="form-control" cols="30" rows="5" placeholder="Enter description..."
-                            formControlName="description"></textarea>
+                            formControlName="accessDetails" *ngIf="!isView"></textarea>
+                        <span *ngIf="isView">{{objectData.accessDetails}}</span>
                     </div>
                 </div>
                 <br />
@@ -154,10 +163,11 @@
                     </div>
                     <div class="col-md-8">
                         <input type="text" class="form-control" placeholder="Enter a parameter..."
-                            formControlName="url" />
+                            formControlName="accessDetailsUrl" *ngIf="!isView" />
+                        <span *ngIf="isView">{{objectData.accessDetailsUrl}}</span>
                     </div>
                 </div>
-            </div>
+            <!-- </div> -->
 
 
             <hr />
@@ -167,32 +177,34 @@
                     <h6 class="pt-4">EOSC category</h6>
                 </div>
                 <div class="col-8">
-                    <select class="form-control" formControlName="eoscCategory">
+                    <select class="form-control" formControlName="eoscCategory" *ngIf="!isView">
                         <option selected disabled value="0">Select an option...</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
                     </select>
+                    <span *ngIf="isView">{{objectData.eoscCategory}}</span>
                 </div>
             </div>
 
             <hr />
-
+            <div formGroupName="objectDatasets">
             <div class="row">
                 <div class="col-md-12 text-center">
                     <h6 class="pt-3">Dataset record keys</h6>
                 </div>
             </div>
             <br />
-            <div formGroupName="datasetRecordKeys">
+            <!-- <div formGroupName="datasetRecordKeys"> -->
                 <div class="row">
                     <div class="col-md-4 text-center">
                         <strong>Keys type</strong>
                     </div>
                     <div class="col-8">
-                        <select class="form-control" formControlName="keysTypes">
+                        <select class="form-control" formControlName="recordKeysTypeId" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
-                            <option [value]="key.id" *ngFor="let key of keyType">{{key.name}}</option>
+                            <option [value]=key.id *ngFor="let key of keyType">{{key.name}}</option>
                         </select>
+                        <span *ngIf="isView">{{findKeyType(objectData.objectDatasets?.recordKeysTypeId)}}</span>
                     </div>
                 </div>
                 <br />
@@ -202,10 +214,11 @@
                     </div>
                     <div class="col-md-8">
                         <textarea class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
-                            formControlName="keysDetails"></textarea>
+                            formControlName="recordKeysDetails" *ngIf="!isView"></textarea>
+                        <span *ngIf="isView">{{objectData.objectDatasets?.recordKeysDetails}}</span>
                     </div>
                 </div>
-            </div>
+            <!-- </div> -->
 
 
             <hr />
@@ -216,29 +229,32 @@
                 </div>
             </div>
             <br />
-            <div formGroupName="datasetDeidentLevel">
+            <!-- <div formGroupName="datasetDeidentLevel"> -->
                 <div class="row">
                     <div class="col-md-4 text-center">
                         <strong>Deidentification type</strong>
                     </div>
-                    <div class="col-8">
-                        <select class="form-control" formControlName="deidentType">
+                    <div class="col-md-8">
+                        <select class="form-control" formControlName="deidentTypeId" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
-                            <option [value]="identification.id" *ngFor="let identification of deidentificationType">{{identification.name}}</option>
+                            <option [value]=identification.id *ngFor="let identification of deidentificationType">{{identification.name}}</option>
                         </select>
+                        <span *ngIf="isView">{{findDeidentificationType(objectData.objectDatasets?.deidentTypeId)}}</span>
                     </div>
                 </div>
                 <br />
+                
                 <div class="row">
                     <div class="col-md-4 text-center">
                         <strong>Deidentification direct</strong>
                     </div>
                     <div class="col-8">
-                        <select class="form-control" formControlName="deidentDirect">
+                        <select class="form-control" formControlName="deidentDirect" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+                            <option value=false>No</option>
+                            <option value=true>Yes</option>
                         </select>
+                        <span *ngIf="isView">{{objectData.objectDatasets?.deidentDirect}}</span>
                     </div>
                 </div>
                 <br />
@@ -247,11 +263,12 @@
                         <strong>Deidentification HIPAA</strong>
                     </div>
                     <div class="col-8">
-                        <select class="form-control" formControlName="deidentHipaa">
+                        <select class="form-control" formControlName="deidentHipaa" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+                            <option value=false>No</option>
+                            <option value=true>Yes</option>
                         </select>
+                        <span *ngIf="isView">{{objectData.objectDatasets?.deidentHipaa}}</span>
                     </div>
                 </div>
                 <br />
@@ -260,11 +277,12 @@
                         <strong>Deidentification dates</strong>
                     </div>
                     <div class="col-8">
-                        <select class="form-control" formControlName="deidentDates">
+                        <select class="form-control" formControlName="deidentDates" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+                            <option value=false>No</option>
+                            <option value=true>Yes</option>
                         </select>
+                        <span *ngIf="isView">{{objectData.objectDatasets?.deidentDates}}</span>
                     </div>
                 </div>
                 <br />
@@ -273,11 +291,12 @@
                         <strong>Deidentification NOARR</strong>
                     </div>
                     <div class="col-8">
-                        <select class="form-control" formControlName="deidentNonarr">
+                        <select class="form-control" formControlName="deidentNonarr" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+                            <option value=false>No</option>
+                            <option value=true>Yes</option>
                         </select>
+                        <span *ngIf="isView">{{objectData.objectDatasets?.deidentNonarr}}</span>
                     </div>
                 </div>
                 <br />
@@ -286,11 +305,12 @@
                         <strong>Deidentification KANON</strong>
                     </div>
                     <div class="col-8">
-                        <select class="form-control" formControlName="deidentKanon">
+                        <select class="form-control" formControlName="deidentKanon" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+                            <option value=false>No</option>
+                            <option value=true>Yes</option>
                         </select>
+                        <span *ngIf="isView">{{objectData.objectDatasets?.deidentKanon}}</span>
                     </div>
                 </div>
                 <br />
@@ -300,10 +320,11 @@
                     </div>
                     <div class="col-md-8">
                         <textarea class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
-                            formControlName="deidentDetails"></textarea>
+                            formControlName="deidentDetails" *ngIf="!isView"></textarea>
+                        <span *ngIf="isView">{{objectData.objectDatasets?.deidentDetails}}</span>
                     </div>
                 </div>
-            </div>
+            <!-- </div> -->
 
 
             <hr />
@@ -314,16 +335,17 @@
                 </div>
             </div>
             <br />
-            <div formGroupName="datasetConsent">
+            <!-- <div formGroupName="datasetConsent"> -->
                 <div class="row">
                     <div class="col-md-4 text-center">
                         <strong>Consent type</strong>
                     </div>
                     <div class="col-8">
-                        <select class="form-control" formControlName="consentType">
+                        <select class="form-control" formControlName="consentTypeId" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
-                            <option [value]="consent.id" *ngFor="let consent of consentType">{{consent.name}}</option>
+                            <option [value]=consent.id *ngFor="let consent of consentType">{{consent.name}}</option>
                         </select>
+                        <span *ngIf="isView">{{findConsentType(objectData.objectDatasets?.consentTypeId)}}</span>
                     </div>
                 </div>
                 <br />
@@ -332,11 +354,12 @@
                         <strong>Consent noncommercial</strong>
                     </div>
                     <div class="col-8">
-                        <select class="form-control" formControlName="consentNoncommercial">
+                        <select class="form-control" formControlName="consentNoncommercial" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+                            <option value=false>No</option>
+                            <option value=true>Yes</option>
                         </select>
+                        <span *ngIf="isView">{{objectData.objectDatasets?.consentNoncommercial}}</span>
                     </div>
                 </div>
                 <br />
@@ -345,11 +368,12 @@
                         <strong>Consent geographical restrict</strong>
                     </div>
                     <div class="col-8">
-                        <select class="form-control" formControlName="consentGeogRestrict">
+                        <select class="form-control" formControlName="consentGeogRestrict" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+                            <option value=false>No</option>
+                            <option value=true>Yes</option>
                         </select>
+                        <span *ngIf="isView">{{objectData.objectDatasets?.consentGeogRestrict}}</span>
                     </div>
                 </div>
                 <br />
@@ -358,11 +382,12 @@
                         <strong>Consent research type</strong>
                     </div>
                     <div class="col-8">
-                        <select class="form-control" formControlName="consentResearchType">
+                        <select class="form-control" formControlName="consentResearchType" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+                            <option value=false>No</option>
+                            <option value=true>Yes</option>
                         </select>
+                        <span *ngIf="isView">{{objectData.objectDatasets?.consentResearchType}}</span>
                     </div>
                 </div>
                 <br />
@@ -371,11 +396,12 @@
                         <strong>Consent genetic only</strong>
                     </div>
                     <div class="col-8">
-                        <select class="form-control" formControlName="consentGeneticOnly">
+                        <select class="form-control" formControlName="consentGeneticOnly" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+                            <option value=false>No</option>
+                            <option value=true>Yes</option>
                         </select>
+                        <span *ngIf="isView">{{objectData.objectDatasets?.consentGeneticOnly}}</span>
                     </div>
                 </div>
                 <br />
@@ -384,11 +410,12 @@
                         <strong>Consent no methods</strong>
                     </div>
                     <div class="col-8">
-                        <select class="form-control" formControlName="consentNoMethods">
+                        <select class="form-control" formControlName="consentNoMethods" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
+                            <option value=false>No</option>
+                            <option value=true>Yes</option>
                         </select>
+                        <span *ngIf="isView">{{objectData.objectDatasets?.consentNoMethods}}</span>
                     </div>
                 </div>
                 <br />
@@ -398,11 +425,12 @@
                     </div>
                     <div class="col-md-8">
                         <textarea class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
-                            formControlName="consentsDetails"></textarea>
+                            formControlName="consentDetails" *ngIf="!isView"></textarea>
+                        <span *ngIf="isView">{{objectData.objectDatasets?.consentDetails}}</span>
                     </div>
                 </div>
-            </div>
-
+            <!-- </div> -->
+        </div>
             <hr />
 
             <div class="row">
@@ -411,7 +439,7 @@
                 </div>
             </div>
             <br />
-            <app-object-instance></app-object-instance>
+            <app-object-instance [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitInstance)="getInstance($event)"></app-object-instance>
 
             <hr />
 
@@ -421,7 +449,7 @@
                 </div>
             </div>
             <br />
-            <app-object-title></app-object-title>
+            <app-object-title [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitTitle)="getTitle($event)"></app-object-title>
             <hr />
 
             <div class="row">
@@ -430,7 +458,7 @@
                 </div>
             </div>
             <br />
-            <app-object-date></app-object-date>
+            <app-object-date [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitDate)="getDate($event)"></app-object-date>
             <hr />
 
             <div class="row">
@@ -439,7 +467,7 @@
                 </div>
             </div>
             <br />
-            <app-object-contributor></app-object-contributor>
+            <app-object-contributor [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitContributor)="getContributor($event)"></app-object-contributor>
             <hr />
 
             <div class="row">
@@ -449,7 +477,7 @@
             </div>
             <br />
 
-            <app-object-topic></app-object-topic>
+            <app-object-topic [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitTopic)="getTopic($event)"></app-object-topic>
             <hr />
 
             <div class="row">
@@ -458,7 +486,7 @@
                 </div>
             </div>
             <br />
-            <app-object-identifier></app-object-identifier>
+            <app-object-identifier [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitIdentifier)="getIdentifier($event)"></app-object-identifier>
 
             <hr />
 
@@ -468,7 +496,7 @@
                 </div>
             </div>
             <br />
-            <app-object-description></app-object-description>
+            <app-object-description [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitDescription)="getDescription($event)"></app-object-description>
             <hr />
 
             <div class="row">
@@ -477,7 +505,7 @@
                 </div>
             </div>
             <br />
-            <app-object-right></app-object-right>
+            <app-object-right [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitRight)="getRight($event)"></app-object-right>
             <hr />
 
             <div class="row">
@@ -486,12 +514,12 @@
                 </div>
             </div>
             <br />
-            <app-object-relationship></app-object-relationship>
+            <app-object-relationship [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitRelation)="getRelation($event)"></app-object-relationship>
             <hr />
 
             <div class="row">
                 <div class="col-md-12 justify-content-center text-center">
-                    <button class="btn btn-success mr-5" *ngIf="!isView">{{isEdit ? 'Apply Changes' : 'Save'}}</button>
+                    <button class="btn btn-success mr-5" *ngIf="!isView" (click)="onClick()">{{isEdit ? 'Apply Changes' : 'Save'}}</button>
                     <button class="btn btn-danger"> {{isView ? 'Back' : 'Cancel'}}</button>
                 </div>
             </div>

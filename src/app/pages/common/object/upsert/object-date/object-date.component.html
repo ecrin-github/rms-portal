@@ -13,7 +13,7 @@
                 <div class="col-12 mb-5">
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
-                            Date {{i + 1}}
+                            {{findDateType(objectDate.value.dateTypeId)}}
                         </mat-expansion-panel-header>
 
                         <div class="row">
@@ -21,10 +21,11 @@
                                 <strong>Date type</strong>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control" formControlName="dateType">
+                                <select class="form-control" formControlName="dateTypeId" *ngIf="!isView">
                                     <option disabled selected value="">Select an option...</option>
-                                    <option [value]="date.id" *ngFor="let date of dateType">{{date.name}}</option>
+                                    <option [value]=date.id *ngFor="let date of dateType">{{date.name}}</option>
                                 </select>
+                                <span *ngIf="isView">{{findDateType(objectDate.value.dateTypeId)}}</span>
                             </div>
                         </div>
                         <br />
@@ -33,10 +34,12 @@
                                 <strong>Is date range?</strong>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control" formControlName="isDateRange">
+                                <select class="form-control" formControlName="isDateRange" *ngIf="!isView">
                                     <option disabled selected value="">Select an option...</option>
-                                    <option value="1">1</option>
+                                    <option value=false>No</option>
+                                    <option value=true>Yes</option>
                                 </select>
+                                <span *ngIf="isView">{{objectDate.value.isDateRange}}</span>
                             </div>
                         </div>
                         <br />
@@ -45,9 +48,9 @@
                                 <strong>Start date</strong>
                             </div>
                             <div class="col-md-8">
-                                <div>
+                                <!-- <div> -->
                                     <!-- <form class="form-inline"> -->
-                                        <div class="form-group">
+                                        <div class="form-group" *ngIf="!isView">
                                             <div class="input-group">
                                                 <input class="form-control" placeholder="yyyy-mm-dd" name="startDate"
                                                     ngbDatepicker #startDate="ngbDatepicker"
@@ -60,8 +63,9 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <span *ngIf="isView">{{dateToString1(objectDate.value.startDate)}}</span>
                                     <!-- </form> -->
-                                </div>
+                                <!-- </div> -->
                             </div>
                         </div>
                         <br />
@@ -70,9 +74,9 @@
                                 <strong>End date</strong>
                             </div>
                             <div class="col-md-8">
-                                <div>
+                                <!-- <div> -->
                                     <!-- <form class="form-inline"> -->
-                                        <div class="form-group">
+                                        <div class="form-group" *ngIf="!isView">
                                             <div class="input-group">
                                                 <input class="form-control" placeholder="yyyy-mm-dd" name="endDate"
                                                     ngbDatepicker #endDate="ngbDatepicker" formControlName="endDate">
@@ -84,8 +88,9 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <span *ngIf="isView">{{dateToString1(objectDate.value.endDate)}}</span>
                                     <!-- </form> -->
-                                </div>
+                                <!-- </div> -->
                             </div>
                         </div>
                         <br />
@@ -95,11 +100,13 @@
                             </div>
                             <div class="col-md-8">
                                 <textarea class="form-control" cols="30" rows="10"
-                                    formControlName="comments"></textarea>
+                                    formControlName="details" *ngIf="!isView"></textarea>
+                                <span *ngIf="isView">{{objectDate.value.details}}</span>
                             </div>
                         </div>
 
-                        <mat-action-row>
+                        <mat-action-row *ngIf="!isView">
+                            <button mat-button color="primary" (click)="objectDate.value.alreadyExist ? editDate(objectDate) : addDate(i)">Save</button>
                             <button mat-button color="warn" (click)="removeObjectDate(i)">Remove</button>
                         </mat-action-row>
                     </mat-expansion-panel>
@@ -109,7 +116,7 @@
     </ng-template>
 </form>
 
-<div class="row">
+<div class="row" *ngIf="!isView">
     <div class="col-12 justify-content-center text-center mt-5">
         <button class="btn btn-primary" (click)="addObjectDate()">
             <i class="fa fa-plus"></i> Add new object date

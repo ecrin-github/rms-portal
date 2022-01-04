@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -19,6 +19,12 @@ export class StudyFeatureComponent implements OnInit {
   @Input() isView: boolean;
   @Input() isEdit: boolean;
   @Input() sdSid: string;
+  @Input() set initiateEmit(initiateEmit: any) {
+    if (initiateEmit) {
+      this.emitData();
+    }
+  }
+  @Output() emitFeature: EventEmitter<any> = new EventEmitter();
   studyFeature: StudyFeatureInterface;
 
 
@@ -80,6 +86,7 @@ export class StudyFeatureComponent implements OnInit {
   getStudyFeature() {
     this.spinner.show();
     this.studyService.getStudyFeature(this.sdSid).subscribe((res: any) => {
+      this.spinner.hide();
       if (res && res.data) {
         this.studyFeature = res.data.length ? res.data : [];
         this.patchForm(this.studyFeature);
@@ -87,7 +94,7 @@ export class StudyFeatureComponent implements OnInit {
       this.spinner.hide();
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     })
   }
   patchForm(features) {
@@ -116,10 +123,12 @@ export class StudyFeatureComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Study Feature added successfully');
+      } else {
+        this.toastr.error(res.messages[0]);
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     });
   }
   editFeature(featureObject) {
@@ -129,10 +138,12 @@ export class StudyFeatureComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Study Feature updated successfully');
+      } else {
+        this.toastr.error(res.messages[0]);
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     })
   }
   findFeatureType(id){
@@ -142,6 +153,18 @@ export class StudyFeatureComponent implements OnInit {
   findFeatureValue(id){
     const featureValueArray: any = this.featureValues.filter((type: any) => type.id === id);
     return featureValueArray && featureValueArray.length ? featureValueArray[0].name : '';
+  }
+  emitData() {
+    const payload = this.form.value.studyFeatures.map(item => {
+      if (!item.id) {
+        delete item.id;
+      }
+      if(this.sdSid) {
+        item.sdSid = this.sdSid;
+      }
+      return item;
+    })
+    this.emitFeature.emit({data: payload, isEmit: false});
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -18,7 +18,13 @@ export class StudyRelationshipComponent implements OnInit {
   @Input() isView: boolean;
   @Input() isEdit: boolean;
   @Input() sdSid: string;
-  studyRelationship: StudyRelationshipInterface
+  @Input() set initiateEmit(initiateEmit: any) {
+    if (initiateEmit) {
+      this.emitData();
+    }
+  }
+  @Output() emitRelation: EventEmitter<any> = new EventEmitter();
+  studyRelationship: StudyRelationshipInterface;
 
   constructor( private fb: FormBuilder, private studyService: StudyService, private toastr: ToastrService, private spinner: NgxSpinnerService) {
     this.form = this.fb.group({
@@ -73,7 +79,7 @@ export class StudyRelationshipComponent implements OnInit {
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     })
   }
   patchForm(relationhips) {
@@ -102,10 +108,12 @@ export class StudyRelationshipComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Study Relationship added successfully');
+      } else {
+        this.toastr.error(res.messages[0]);
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     })
   }
   editRelationship(relationObject) {
@@ -115,15 +123,29 @@ export class StudyRelationshipComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Study Relationship updated successfully');
+      } else {
+        this.toastr.error(res.messages[0]);
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     })
   }
   findRelationshipType(id) {
     const relationArray: any = this.relationshipType.filter((type: any) => type.id === id);
     return relationArray && relationArray.length ? relationArray[0].name : '';
+  }
+  emitData() {
+    const payload = this.form.value.studyRelationships.map(item => {
+      if (!item.id) {
+        delete item.id;
+      }
+      if(this.sdSid) {
+        item.sdSid = this.sdSid;
+      }
+      return item;
+    })
+    this.emitRelation.emit({data: payload, isEmit: false});
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

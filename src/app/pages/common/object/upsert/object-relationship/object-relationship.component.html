@@ -14,7 +14,7 @@
                 <div class="col-12 mb-5">
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
-                            Relation {{i + 1}}
+                            {{findRelationType(objectRelation.value.relationshipTypeId)}}
                         </mat-expansion-panel-header>
 
                         <div class="row">
@@ -22,10 +22,11 @@
                                 <strong>Relationship type</strong>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control" formControlName="relationshipType">
+                                <select class="form-control" formControlName="relationshipTypeId" *ngIf="!isView">
                                     <option disabled selected value="">Select an option...</option>
-                                    <option [value]="relationship.id" *ngFor="let relationship of relationshipType">{{relationship.name}}</option>
+                                    <option [value]=relationship.id *ngFor="let relationship of relationshipType">{{relationship.name}}</option>
                                 </select>
+                                <span *ngIf="isView">{{findRelationType(objectRelation.value.relationshipTypeId)}}</span>
                             </div>
                         </div>
                         <br />
@@ -34,13 +35,15 @@
                                 <strong>Target data object</strong>
                             </div>
                             <div class="col-md-8">
-                                <input type="text" class="form-control" formControlName="targetObjectId"
-                                    placeholder="Enter a parameter..." />
+                                <input type="text" class="form-control" formControlName="targetSdOid"
+                                    placeholder="Enter a parameter..." *ngIf="!isView" />
+                                <span *ngIf="isView">{{objectRelation.value.targetSdOid}}</span>
                             </div>
                         </div>
 
-                        <mat-action-row>
-                            <button mat-button color="warn" (click)="removeObjectRelation(i)"></button>
+                        <mat-action-row *ngIf="!isView">
+                            <button mat-button color="primary" (click)="objectRelation.value.alreadyExist ? editRelation(objectRelation) : addRelation(i)">Save</button>
+                            <button mat-button color="warn" (click)="removeObjectRelation(i)">Remove</button>
                         </mat-action-row>
                     </mat-expansion-panel>
                 </div>
@@ -48,7 +51,7 @@
         </div>
     </ng-template>
 </form>
-<div class="row">
+<div class="row" *ngIf="!isView">
     <div class="col-12 text-center mt-5 justify-content-center">
         <button class="btn btn-primary" (click)="addObjectRelation()">
             <i class="fa fa-plus"></i>

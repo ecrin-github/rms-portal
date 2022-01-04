@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -19,6 +19,12 @@ export class StudyTitleComponent implements OnInit {
   @Input() isView: boolean;
   @Input() isEdit: boolean;
   @Input() sdSid: string;
+  @Input() set initiateEmit(initiateEmit: any) {
+    if (initiateEmit) {
+      this.emitData();
+    }
+  }
+  @Output() emitTitle: EventEmitter<any> = new EventEmitter();
   studyTitle: StudyTitleInterface
 
   constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService) {
@@ -68,7 +74,7 @@ export class StudyTitleComponent implements OnInit {
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     });
     this.subscription.add(getTitleType$);
   }
@@ -83,7 +89,7 @@ export class StudyTitleComponent implements OnInit {
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     })
   }
   getStudyTitle() {
@@ -96,7 +102,7 @@ export class StudyTitleComponent implements OnInit {
       this.spinner.hide();
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     })
   }
   patchForm(titles) {
@@ -127,10 +133,12 @@ export class StudyTitleComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Study Title added successfully');
+      } else {
+        this.toastr.error(res.messages[0]);
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     });
   }
   editTitle(titleObject) {
@@ -140,15 +148,29 @@ export class StudyTitleComponent implements OnInit {
       this.spinner.hide();
       if(res.statusCode === 200) {
         this.toastr.success('Study Title updated successfully');
+      } else {
+        this.toastr.error(res.messages[0]);
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     })
   }
   findTitleType(id) {
     const titleTypeArray: any = this.titleType.filter((type: any) => type.id === id);
     return titleTypeArray && titleTypeArray.length ? titleTypeArray[0].name : '';
+  }
+  emitData() {
+    const payload = this.form.value.studyTitles.map(item => {
+      if (!item.id) {
+        delete item.id;
+      }
+      if(this.sdSid) {
+        item.sdSid = this.sdSid;
+      }
+      return item;
+    })
+    this.emitTitle.emit({data: payload, isEmit: false});
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

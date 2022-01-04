@@ -168,7 +168,7 @@
             </div>
             <br />
 
-           <app-study-identifier [sdSid]="id" [isView]="isView" [isEdit]="isEdit"></app-study-identifier>
+           <app-study-identifier [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitIdentifier)="getIdentifier($event)"></app-study-identifier>
 
             <hr />
 
@@ -178,7 +178,7 @@
                 </div>
             </div>
             <br />
-            <app-study-title [sdSid]="id" [isView]="isView" [isEdit]="isEdit"></app-study-title>
+            <app-study-title [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitTitle)="getTitle($event)"></app-study-title>
             <hr />
 
             <div class="row">
@@ -188,7 +188,7 @@
             </div>
             <br />
 
-            <app-study-feature [sdSid]="id" [isView]="isView" [isEdit]="isEdit"></app-study-feature>
+            <app-study-feature [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitFeature)="getFeature($event)"></app-study-feature>
 
 
             <hr />
@@ -199,7 +199,7 @@
                 </div>
             </div>
             <br />
-            <app-study-topic [sdSid]="id" [isView]="isView" [isEdit]="isEdit"></app-study-topic>
+            <app-study-topic [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitTopic)="getTopic($event)"></app-study-topic>
             <hr />
 
             <div class="row">
@@ -208,12 +208,12 @@
                 </div>
             </div>
             <br />
-            <app-study-relationship [sdSid]="id" [isView]="isView" [isEdit]="isEdit"></app-study-relationship>
+            <app-study-relationship [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitRelation)="getRelation($event)"></app-study-relationship>
             <hr />
 
             <div class="row">
                 <div class="col-12 justify-content-center text-center">
-                    <button class="btn btn-success mr-5" *ngIf="!isView" (click)="onSave()">{{isEdit ? 'Apply Changes' : 'Save'}}</button>
+                    <button class="btn btn-success mr-5" *ngIf="!isView" (click)="onClick()">{{isEdit ? 'Apply Changes' : 'Save'}}</button>
                     <button class="btn btn-danger"> {{isView ? 'Back' : 'Cancel'}}</button>
                 </div>
             </div>

@@ -19,6 +19,12 @@ export class StudyIdentifierComponent implements OnInit {
   @Input() isView: boolean;
   @Input() isEdit: boolean;
   @Input() sdSid: string;
+  @Input() set initiateEmit(initiateEmit: any) {
+    if (initiateEmit) {
+      this.emitData();
+    }
+  }
+  @Output() emitIdentifier: EventEmitter<any> = new EventEmitter();
 
   constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService) { 
     this.form = this.fb.group({
@@ -67,7 +73,7 @@ export class StudyIdentifierComponent implements OnInit {
       this.spinner.hide();
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     });
     this.subscription.add(getIdentifierType$);
   }
@@ -81,7 +87,7 @@ export class StudyIdentifierComponent implements OnInit {
       this.spinner.hide();
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     })
   }
   patchForm(identifiers) {
@@ -114,10 +120,12 @@ export class StudyIdentifierComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Study Identifier added successfully');
+      } else {
+        this.toastr.error(res.messages[0]);
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     })
   }
   editIdentifier(identifierObject) {
@@ -128,10 +136,12 @@ export class StudyIdentifierComponent implements OnInit {
       this.spinner.hide();
       if(res.statusCode === 200) {
         this.toastr.success('Study Identifier updated successfully');
+      } else {
+        this.toastr.error(res.messages[0]);
       }
     }, error => {
       this.spinner.hide();
-      this.toastr.error(error);
+      this.toastr.error(error.error.title);
     });
   }
   dateToString(date) {
@@ -144,6 +154,19 @@ export class StudyIdentifierComponent implements OnInit {
   findIdentifierType(id) {
     const identifierTypeArray:any = this.identifierTypes.filter((type: any) => type.id === id);
     return identifierTypeArray && identifierTypeArray.length ? identifierTypeArray[0].name : ''
+  }
+  emitData() {
+    const payload = this.form.value.studyIdentifiers.map(item => {
+      item.identifierDate = item.identifierDate ? this.dateToString(item.identifierDate) : ''
+      if (!item.id) {
+        delete item.id;
+      }
+      if(this.sdSid) {
+        item.sdSid = this.sdSid;
+      }
+      return item;
+    })
+    this.emitIdentifier.emit({data:payload, isEmit: false});
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

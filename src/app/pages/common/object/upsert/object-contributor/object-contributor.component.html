@@ -14,18 +14,19 @@
                 <div class="col-12 mb-5">
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
-                            Contributor {{i + 1}}
+                            {{findContributorType(objectContributor.value.contribTypeId)}}
                         </mat-expansion-panel-header>
 
                         <div class="row">
                             <div class="col-md-4 text-center">
                                 <strong>Contributor type</strong>
                             </div>
-                            <div class="col-8">
-                                <select class="form-control" formControlName="contributionType">
+                            <div class="col-md-8">
+                                <select class="form-control" formControlName="contribTypeId" *ngIf="!isView">
                                     <option selected disabled value="">Select an option...</option>
-                                    <option [value]="contributor.id" *ngFor="let contributor of contributorType">{{contributor.name}}</option>
+                                    <option [value]=contributor.id *ngFor="let contributor of contributorType">{{contributor.name}}</option>
                                 </select>
+                                <span *ngIf="isView">{{findContributorType(objectContributor.value.contribTypeId)}}</span>
                             </div>
                         </div>
                         <br />
@@ -33,12 +34,13 @@
                             <div class="col-md-4 text-center">
                                 <strong>Is individual?</strong>
                             </div>
-                            <div class="col-8">
-                                <select class="form-control" formControlName="isIndividual">
+                            <div class="col-md-8">
+                                <select class="form-control" formControlName="isIndividual" *ngIf="!isView">
                                     <option selected disabled value="">Select an option...</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
+                                    <option value=false>No</option>
+                                    <option value=true>Yes</option>
                                 </select>
+                                <span *ngIf="isView">{{objectContributor.value.isIndividual}}</span>
                             </div>
                         </div>
                         <br />
@@ -46,21 +48,23 @@
                             <div class="col-md-4 text-center">
                                 <strong>Organisation</strong>
                             </div>
-                            <div class="col-8">
+                            <div class="col-md-8">
                                 <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="organisation" />
+                                    formControlName="organisationName" *ngIf="!isView" />
+                                <span *ngIf="isView">{{objectContributor.value.organisationName}}</span>
                             </div>
                         </div>
                         <br />
 
-                        <div formGroupName="person">
+                        <!-- <div formGroupName="person"> -->
                             <div class="row">
                                 <div class="col-md-4 text-center">
                                     <strong>Person: Family name</strong>
                                 </div>
-                                <div class="col-8">
+                                <div class="col-md-8">
                                     <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                        formControlName="familyName">
+                                        formControlName="personFamilyName" *ngIf="!isView">
+                                    <span *ngIf="isView">{{objectContributor.value.personFamilyName}}</span>
                                 </div>
                             </div>
                             <br />
@@ -68,9 +72,10 @@
                                 <div class="col-md-4 text-center">
                                     <strong>Person: Given name</strong>
                                 </div>
-                                <div class="col-8">
+                                <div class="col-md-8">
                                     <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                        formControlName="givenName">
+                                        formControlName="personGivenName" *ngIf="!isView">
+                                    <span *ngIf="isView">{{objectContributor.value.personGivenName}}</span>
                                 </div>
                             </div>
                             <br />
@@ -78,9 +83,10 @@
                                 <div class="col-md-4 text-center">
                                     <strong>Person: ORCID</strong>
                                 </div>
-                                <div class="col-8">
+                                <div class="col-md-8">
                                     <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                        formControlName="orcid">
+                                        formControlName="orcidId" *ngIf="!isView">
+                                    <span *ngIf="isView">{{objectContributor.value.orcidId}}</span>
                                 </div>
                             </div>
                             <br />
@@ -88,14 +94,16 @@
                                 <div class="col-md-4 text-center">
                                     <strong>Person: Affiliation</strong>
                                 </div>
-                                <div class="col-8">
+                                <div class="col-md-8">
                                     <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                        formControlName="affiliation">
+                                        formControlName="personAffiliation" *ngIf="!isView">
+                                    <span *ngIf="isView">{{objectContributor.value.personAffiliation}}</span>
                                 </div>
                             </div>
-                        </div>
+                        <!-- </div> -->
 
-                        <mat-action-row>
+                        <mat-action-row *ngIf="!isView">
+                            <button mat-button color="primary" (click)="objectContributor.value.alreadyExist ? editContributor(objectContributor) : addContributor(i)">Save</button>
                             <button mat-button color="warn" (click)="removeObjectContributor(i)">Remove</button>
                         </mat-action-row>
                     </mat-expansion-panel>
@@ -105,7 +113,7 @@
     </ng-template>
 </form>
 
-<div class="row">
+<div class="row" *ngIf="!isView">
     <div class="col-12 text-center mt-5 justify-content-center">
         <button class="btn btn-primary" (click)="addObjectContributor()">
             <i class="fa fa-plus"></i>

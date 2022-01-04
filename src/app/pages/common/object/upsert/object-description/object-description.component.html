@@ -14,7 +14,7 @@
                 <div class="col-12 mb-5">
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
-                            Description {{i + 1}}
+                            {{findDescriptionType(objectDescription.value.descriptionTypeId)}}
                         </mat-expansion-panel-header>
 
                         <div class="row">
@@ -22,10 +22,11 @@
                                 <strong>Description type</strong>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control">
+                                <select class="form-control" *ngIf="!isView" formControlName="descriptionTypeId">
                                     <option disabled selected value="">Select an option...</option>
-                                    <option [value]="description.id" *ngFor="let description of descriptionType">{{description.name}}</option>
+                                    <option [value]=description.id *ngFor="let description of descriptionType">{{description.name}}</option>
                                 </select>
+                                <span *ngIf="isView">{{findDescriptionType(objectDescription.value.descriptionTypeId)}}</span>
                             </div>
                         </div>
                         <br />
@@ -35,7 +36,8 @@
                             </div>
                             <div class="col-md-8">
                                 <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="descriptionLabel" />
+                                    formControlName="label" *ngIf="!isView" />
+                                <span *ngIf="isView">{{objectDescription.value.label}}</span>
                             </div>
                         </div>
                         <br />
@@ -45,7 +47,8 @@
                             </div>
                             <div class="col-md-8">
                                 <textarea cols="30" rows="10" placeholder="Enter a parameter..."
-                                    formControlName="descriptionText" class="form-control"></textarea>
+                                    formControlName="descriptionText" class="form-control" *ngIf="!isView"></textarea>
+                                <span *ngIf="isView">{{objectDescription.value.descriptionText}}</span>
                             </div>
                         </div>
                         <br />
@@ -54,14 +57,16 @@
                                 <strong>Language code</strong>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control" formControlName="langCode">
+                                <select class="form-control" formControlName="langCode" *ngIf="!isView">
                                     <option disabled selected value=""></option>
                                     <option [value]="language.code" *ngFor="let language of languageCode">{{language.code}}</option>
                                 </select>
+                                <span *ngIf="isView">{{objectDescription.value.langCode}}</span>
                             </div>
                         </div>
 
-                        <mat-action-row>
+                        <mat-action-row *ngIf="!isView">
+                            <button mat-button color="primary" (click)="objectDescription.value.alreadyExist ? editDescription(objectDescription) : addDescription(i)">Save</button>
                             <button mat-button color="warn" (click)="removeObjectDescription(i)">Remove</button>
                         </mat-action-row>
                     </mat-expansion-panel>
@@ -71,7 +76,7 @@
     </ng-template>
 </form>
 
-<div class="row">
+<div class="row" *ngIf="!isView">
     <div class="col-12 text-center mt-5 justify-content-center">
         <button class="btn btn-primary" (click)="addObjectDescription()">
             <i class="fa fa-plus"></i>
