@@ -1,6 +1,10 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
+import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
+import { DupService } from 'src/app/_rms/services/entities/dup/dup.service';
 export interface DataUseProcess {
   id: string;
   organisation: string;
@@ -17,44 +21,77 @@ export interface DataUseProcess {
 })
 export class SummaryDupComponent implements OnInit {
 
-  displayedColumns = ['id', 'organisation', 'dataObject', 'status', 'createdOn', 'lastEditedOn', 'actions'];
+  displayedColumns = ['id', 'organisation', 'title', 'status', 'actions'];
   dataSource: MatTableDataSource<DataUseProcess>;
-  STATUSES = ['Approved', 'Rejected', 'In progress', 'Success'];
-
+  organizationList:[] = [];
+  statusList:[] = [];
   @Input() user: string = 'internal';
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor() {
-    // Create 100 ongoing requests
-    const dataUses: DataUseProcess[] = [];
-    for (let i = 1; i <= 100; i++) { dataUses.push(this.generateData(i)); }
-    this.dataSource = new MatTableDataSource(dataUses);
+  constructor( private dtpService: DtpService, private dupService:DupService, private spinner: NgxSpinnerService, private toastr: ToastrService) {
   }
 
   ngOnInit() {
-    this.dataSource.paginator = this.paginator;
+    this.getDupList();
+    this.getOrganization();
+    this.getStatus();
   }
-
+  getDupList() {
+    this.spinner.show();
+    this.dupService.getDupList().subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.dataSource = new MatTableDataSource(res.data);
+      } else {
+        this.dataSource = new MatTableDataSource();
+      }
+      this.dataSource.paginator = this.paginator;
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
+  getOrganization() {
+    setTimeout(() => {
+     this.spinner.show(); 
+    });
+    this.dtpService.getOrganizationList().subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.organizationList = res.data;
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
+  getStatus() {
+    setTimeout(() => {
+     this.spinner.show(); 
+    });
+    this.dupService.getStatusList().subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.statusList = res.data;
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
+  findOrganization(id) {
+    const organizationArray: any = this.organizationList.filter((type: any) => type.id === id);
+    return organizationArray && organizationArray.length ? organizationArray[0].defaultName : ''
+  }
+  findStatus(id) {
+    const statusArray: any = this.statusList.filter((type: any) => type.id === id);
+    return statusArray && statusArray.length ? statusArray[0].name : '';
+  }
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
-  }
-  generateData(id: number): DataUseProcess {
-
-    const status = this.STATUSES[Math.round(Math.random() * (this.STATUSES.length - 1))];
-
-    const date = new Date();
-
-    return {
-      id: id.toString(),
-      organisation: 'Organisation ' + id.toString(),
-      dataObject: 'Object ' + id.toString(),
-      createdOn: date.getDay() + '/' + date.getMonth() + '/' + date.getFullYear(),
-      lastEditedOn: date.getDay() + '/' + date.getMonth() + '/' + date.getFullYear(),
-      status,
-    };
   }
 
 }

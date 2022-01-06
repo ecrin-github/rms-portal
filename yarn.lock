@@ -174,7 +174,7 @@
     "symbol-observable" "4.0.0"
     "uuid" "8.3.2"
 
-"@angular/common@^11.0.0", "@angular/common@^11.0.0 || ^12.0.0-0", "@angular/common@^13.0.0", "@angular/common@^9.0.0", "@angular/common@>=10.0.0", "@angular/common@>=12.0.0-0", "@angular/common@>=8.0.0", "@angular/common@>=9.0.0", "@angular/common@>=9.0.0 <13.0.0", "@angular/common@~12.2.13", "@angular/common@12.2.13":
+"@angular/common@^11.0.0", "@angular/common@^11.0.0 || ^12.0.0-0", "@angular/common@^13.0.0", "@angular/common@^9.0.0", "@angular/common@>=10.0.0", "@angular/common@>=12.0.0-0", "@angular/common@>=13.0.0 <14.0.0", "@angular/common@>=8.0.0", "@angular/common@>=9.0.0", "@angular/common@>=9.0.0 <13.0.0", "@angular/common@~12.2.13", "@angular/common@12.2.13":
   "integrity" "sha512-I1t/jl9ojCwTJKT7PKHnk23D+vMHTHS/9qZ2nndCjzGusMK8029nn8l3tHAkwefvxZWSaLAk1MgsVcP+rHQNsQ=="
   "resolved" "https://registry.npmjs.org/@angular/common/-/common-12.2.13.tgz"
   "version" "12.2.13"
@@ -213,7 +213,7 @@
   "resolved" "https://registry.npmjs.org/@angular/compiler/-/compiler-9.0.0.tgz"
   "version" "9.0.0"
 
-"@angular/core@^11.0.0", "@angular/core@^11.0.0 || ^12.0.0-0", "@angular/core@^13.0.0", "@angular/core@^9.0.0", "@angular/core@>=10.0.0", "@angular/core@>=12.0.0-0", "@angular/core@>=8.0.0", "@angular/core@>=9.0.0", "@angular/core@>=9.0.0 <13.0.0", "@angular/core@~12.2.13", "@angular/core@12.2.13":
+"@angular/core@^11.0.0", "@angular/core@^11.0.0 || ^12.0.0-0", "@angular/core@^13.0.0", "@angular/core@^9.0.0", "@angular/core@>=10.0.0", "@angular/core@>=12.0.0-0", "@angular/core@>=13.0.0 <14.0.0", "@angular/core@>=8.0.0", "@angular/core@>=9.0.0", "@angular/core@>=9.0.0 <13.0.0", "@angular/core@~12.2.13", "@angular/core@12.2.13":
   "integrity" "sha512-tZ5nAnmOi418JDaJIFiiP9z2JrluMJZvUvXO4QDUs52BXaL2yuP7MJ2LczWOVJXrBLZXeZGfjDjZmaFPA24grg=="
   "resolved" "https://registry.npmjs.org/@angular/core/-/core-12.2.13.tgz"
   "version" "12.2.13"
@@ -225,7 +225,7 @@
   "resolved" "https://registry.npmjs.org/@angular/core/-/core-9.0.0.tgz"
   "version" "9.0.0"
 
-"@angular/forms@^11.0.0", "@angular/forms@^11.0.0 || ^12.0.0-0", "@angular/forms@~12.2.13":
+"@angular/forms@^11.0.0", "@angular/forms@^11.0.0 || ^12.0.0-0", "@angular/forms@>=13.0.0 <14.0.0", "@angular/forms@~12.2.13":
   "integrity" "sha512-wa7I5R8sck2q+VWNL262GJTVxtpEHMys8Bt6oE+lyHB5zlZAgOXwAb8GE4XVwuc+BZU1Gvrocn21P/8KvDY1uw=="
   "resolved" "https://registry.npmjs.org/@angular/forms/-/forms-12.2.13.tgz"
   "version" "12.2.13"
@@ -1268,6 +1268,13 @@
   "version" "9.1.1"
   dependencies:
     "tslib" "^2.0.0"
+
+"@ng-select/ng-select@^8.1.1":
+  "integrity" "sha512-CP9Pve3L1aGqej38T9utdd6Waobbybwe9QIEObwicBI5fiIMAXwKT6lFT3fDLTUK/79y5nebiGtwTBfMm71Psg=="
+  "resolved" "https://registry.npmjs.org/@ng-select/ng-select/-/ng-select-8.1.1.tgz"
+  "version" "8.1.1"
+  dependencies:
+    "tslib" "^2.3.1"
 
 "@ngtools/webpack@12.2.13":
   "integrity" "sha512-krAwMyRqOaC1S0+IxAFid9F6A6ABip2DJ0tgCx26X+1Vw/d1GKtV9ZqDJFizMf5k1ywl9aBlhOazWpq5d6i+gw=="
@@ -9972,6 +9979,11 @@
   "version" "1.14.1"
 
 "tslib@^2.3.0":
+  "integrity" "sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw=="
+  "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.3.1.tgz"
+  "version" "2.3.1"
+
+"tslib@^2.3.1":
   "integrity" "sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw=="
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.3.1.tgz"
   "version" "2.3.1"

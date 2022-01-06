@@ -2,7 +2,7 @@
     <div class="card-header">
         <h2>{{ isView ? 'View data object' : isEdit ? 'Edit data object details' : 'Add new data object'}}</h2>
         <div style="float: right; margin-top: -40px;" *ngIf="isView">
-            <a [routerLink]="['/data-transfers', '1', 'edit']" class="btn btn-primary mr-5" target="_blank">
+            <a [routerLink]="['/data-transfers', id, 'edit']" class="btn btn-primary mr-5" target="_blank">
                 <i class="fa fa-edit"></i> Edit
             </a>
             <button class="btn btn-primary mr-1">

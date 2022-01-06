@@ -38,32 +38,23 @@
             <ng-container matColumnDef="organisation">
                 <mat-header-cell *matHeaderCellDef> Organisation </mat-header-cell>
                 <mat-cell *matCellDef="let row">
-                    <strong>{{row.organisation}}</strong>
+                    <strong>{{findOrganization(row.orgId)}}</strong>
                 </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="dataObject">
-                <mat-header-cell *matHeaderCellDef> Data object </mat-header-cell>
+            <ng-container matColumnDef="title">
+                <mat-header-cell *matHeaderCellDef> Title</mat-header-cell>
                 <mat-cell *matCellDef="let row">
-                    <a [routerLink]="['/data-objects', row.id, 'view' ]" target="_blank">
-                        <strong>{{row.dataObject}}</strong>
-                    </a>
+                    {{row.displayName}}
+                    <!-- <a [routerLink]="['/data-objects', row.id, 'view' ]" target="_blank">
+                        <strong>{{row.displayName}}</strong>
+                    </a> -->
                 </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="status">
                 <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.status}} </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="createdOn">
-                <mat-header-cell *matHeaderCellDef> Created on </mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.createdOn}} </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="lastEditedOn">
-                <mat-header-cell *matHeaderCellDef> Last edited on </mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.lastEditedOn}} </mat-cell>
+                <mat-cell *matCellDef="let row"> {{findStatus(row.statusId)}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="actions">

@@ -90,17 +90,4 @@ export class SummaryObjectComponent implements OnInit {
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
-  // generateObjects(recordsNumber: number): Array<ObjectRecord> {
-  //   const records: Array<ObjectRecord> = [];
-  //   for (let i = 1; i < recordsNumber; i++) {
-  //     records.push({
-  //       id: i,
-  //       title: 'Object title ' + i.toString(),
-  //       type: 'Type',
-  //       linkedStudyId: i
-  //     });
-  //   }
-  //   return records;
-  // }
-
 }

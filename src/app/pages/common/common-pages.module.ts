@@ -1,5 +1,5 @@
 // Angular modules
-import {NgModule} from '@angular/core';
+import {NgModule, NO_ERRORS_SCHEMA} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
@@ -45,6 +45,7 @@ import { ObjectIdentifierComponent } from './object/upsert/object-identifier/obj
 import { ObjectDescriptionComponent } from './object/upsert/object-description/object-description.component';
 import { ObjectRightComponent } from './object/upsert/object-right/object-right.component';
 import { ObjectRelationshipComponent } from './object/upsert/object-relationship/object-relationship.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -88,6 +89,7 @@ import { ObjectRelationshipComponent } from './object/upsert/object-relationship
         ObjectRightComponent,
         ObjectRelationshipComponent
     ],
+    schemas: [NO_ERRORS_SCHEMA],
     imports: [
         CommonModule,
         RouterModule.forChild([
@@ -150,6 +152,7 @@ import { ObjectRelationshipComponent } from './object/upsert/object-relationship
         ReactiveFormsModule,
         MatTabsModule,
         MatExpansionModule,
+        NgSelectModule
     ],
     exports: [ SummaryDtpComponent, SummaryDupComponent, SummaryStudyComponent, SummaryObjectComponent]
 })

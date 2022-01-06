@@ -249,6 +249,8 @@ export class UpsertStudyComponent implements OnInit {
           this.spinner.hide();
           if (res.statusCode === 200) {
             this.toastr.success('Study Details updated successfully');
+          } else {
+            this.toastr.error(res.messages[0]);
           }
         }, error => {
           this.spinner.hide();
@@ -259,6 +261,8 @@ export class UpsertStudyComponent implements OnInit {
           this.spinner.hide();
           if (res.statusCode === 200) {
             this.toastr.success('Study Detail added successfully');
+          } else {
+            this.toastr.error(res.messages[0]);
           }
         }, error => {
           this.spinner.hide();

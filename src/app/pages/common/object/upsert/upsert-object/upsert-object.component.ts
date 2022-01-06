@@ -365,6 +365,8 @@ export class UpsertObjectComponent implements OnInit {
           this.spinner.hide();
           if (res.statusCode === 200) {
             this.toastr.success('Data Object updated successfully');
+          } else {
+            this.toastr.error(res.messages[0]);
           }
         }, error => {
           this.spinner.hide();
@@ -375,6 +377,8 @@ export class UpsertObjectComponent implements OnInit {
           this.spinner.hide();
           if (res.statusCode === 200) {
             this.toastr.success('Data Object added successfully');
+          } else {
+            this.toastr.error(res.messages[0]);
           }
         }, error => {
           console.log(error.error.title)

@@ -2,7 +2,7 @@
     <div class="card-header">
         <h2>{{ isView ? 'View data transfer details' : isEdit ? 'Edit data transfer' : 'Add new data transfer'}}</h2>
         <div style="float: right; margin-top: -40px;" *ngIf="isView">
-            <a [routerLink]="['/data-transfers', '1', 'edit']"
+            <a [routerLink]="['/data-transfers', id, 'edit']"
                class="btn btn-primary mr-5" target="_blank">
                 <i class="fa fa-edit"></i> Edit
             </a>
@@ -14,145 +14,295 @@
             </button>
         </div>
     </div>
-    <div class="card-body">
-
-        <div class="row">
-            <div class="col-md-4 text-center">
-                <h6 class="pt-4">Organisation</h6>
+    <form [formGroup]="form">
+        <div class="card-body">
+    
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">Organisation</h6>
+                </div>
+                <div class="col-md-8">
+                    <ng-select [items]="organizationList" bindLabel="defaultName" bindValue="id" formControlName="orgId"
+                    [multiple]="false" [virtualScroll]="true" class="custom" notFoundText="No members found"
+                        placeholder="Select email" *ngIf="!isView">
+                    </ng-select>
+                    <span *ngIf="isView">{{findOrganization(dtpData.orgId)}}</span>
+                </div>
             </div>
-            <div class="col-8">
-                <input type="text"
-                       class="form-control"
-                       placeholder="Enter a parameter..."
-                />
+            <br>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">Display Name</h6>
+                </div>
+                <div class="col-md-8">
+                    <input type="text" class="form-control" formControlName="displayName" *ngIf="!isView">
+                    <span *ngIf="isView">{{dtpData.displayName}}</span>
+                </div>
             </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">Status Type</h6>
+                </div>
+                <div class="col-md-8">
+                    <select class="form-control" formControlName="statusId" *ngIf="!isView">
+                        <option disabled selected value="">Select an option...</option>
+                        <option [value]=status.id *ngFor="let status of statusList">{{status.name}}</option>
+                    </select>
+                    <span *ngIf="isView">{{findStatus(dtpData.statusId)}}</span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">Initial Contact Date</h6>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group" *ngIf="!isView">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="initialContactDate" ngbDatepicker
+                                #initialContactDate="ngbDatepicker" formControlName="initialContactDate">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="initialContactDate.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <span *ngIf="isView">{{viewDate(dtpData.initialContactDate)}}</span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">SetUp Completed</h6>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group" *ngIf="!isView">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="setUpCompleted" ngbDatepicker
+                                #setUpCompleted="ngbDatepicker" formControlName="setUpCompleted">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="setUpCompleted.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <span *ngIf="isView">{{viewDate(dtpData.setUpCompleted)}}</span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">MD Access Granted</h6>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group" *ngIf="!isView">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="mdAccessGranted" ngbDatepicker
+                                #mdAccessGranted="ngbDatepicker" formControlName="mdAccessGranted">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="mdAccessGranted.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <span *ngIf="isView">{{viewDate(dtpData.mdAccessGranted)}}</span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">MD Completed Date </h6>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group" *ngIf="!isView">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="mdCompleteDate" ngbDatepicker
+                                #mdCompleteDate="ngbDatepicker" formControlName="mdCompleteDate">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="mdCompleteDate.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <span *ngIf="isView">{{viewDate(dtpData.mdCompleteDate)}}</span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">DTA Agreed Date</h6>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group" *ngIf="!isView">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="dtaAgreedDate" ngbDatepicker
+                                #dtaAgreedDate="ngbDatepicker" formControlName="dtaAgreedDate">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="dtaAgreedDate.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <span *ngIf="isView">{{viewDate(dtpData.dtaAgreedDate)}}</span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">Upload Access Requested</h6>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group" *ngIf="!isView">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="uploadAccessRequested" ngbDatepicker
+                                #uploadAccessRequested="ngbDatepicker" formControlName="uploadAccessRequested">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="uploadAccessRequested.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <span *ngIf="isView">{{viewDate(dtpData.uploadAccessRequested)}}</span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">Upload Access Confirmed</h6>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group" *ngIf="!isView">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="uploadAccessConfirmed" ngbDatepicker
+                                #uploadAccessConfirmed="ngbDatepicker" formControlName="uploadAccessConfirmed">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="uploadAccessConfirmed.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <span *ngIf="isView">{{viewDate(dtpData.uploadAccessConfirmed)}}</span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">Upload Complete</h6>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group" *ngIf="!isView">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="uploadsComplete" ngbDatepicker
+                                #uploadsComplete="ngbDatepicker" formControlName="uploadsComplete">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="uploadsComplete.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <span *ngIf="isView">{{viewDate(dtpData.uploadsComplete)}}</span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">QC Checs Completed</h6>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group" *ngIf="!isView">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="qcChecksCompleted" ngbDatepicker
+                                #qcChecksCompleted="ngbDatepicker" formControlName="qcChecksCompleted">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="qcChecksCompleted.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <span *ngIf="isView">{{viewDate(dtpData.qcChecksCompleted)}}</span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">MD Integrated with MDR</h6>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group" *ngIf="!isView">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="mdIntegratedWithMdr" ngbDatepicker
+                                #mdIntegratedWithMdr="ngbDatepicker" formControlName="mdIntegratedWithMdr">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="mdIntegratedWithMdr.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <span *ngIf="isView">{{viewDate(dtpData.mdIntegratedWithMdr)}}</span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">Availability Requested</h6>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group" *ngIf="!isView">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="availabilityRequested" ngbDatepicker
+                                #availabilityRequested="ngbDatepicker" formControlName="availabilityRequested">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="availabilityRequested.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <span *ngIf="isView">{{viewDate(dtpData.availabilityRequested)}}</span>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h6 class="pt-4">Availability Confirmed</h6>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group" *ngIf="!isView">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="availabilityConfirmed" ngbDatepicker
+                                #availabilityConfirmed="ngbDatepicker" formControlName="availabilityConfirmed">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" (click)="availabilityConfirmed.toggle()" type="button">
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <span *ngIf="isView">{{viewDate(dtpData.availabilityConfirmed)}}</span>
+                </div>
+            </div>
+            <hr />
+    
+            <div class="row">
+                <div class="col-md-12 justify-content-center text-center">
+                    <button class="btn btn-success mr-5" *ngIf="!isView" (click)="onSave()">{{isEdit ? 'Apply Changes' : 'Save'}}</button>
+                    <button class="btn btn-danger"> {{isView ? 'Back' : 'Cancel'}}</button>
+                </div>
+            </div>
+    
         </div>
-
-        <hr />
-
-        <div class="row">
-            <div class="col-md-4 text-center">
-                <h6 class="pt-4">Notes</h6>
-            </div>
-            <div class="col-8">
-                <textarea
-                        class="form-control"
-                        placeholder="Enter a parameter..."
-                ></textarea>
-            </div>
-        </div>
-
-        <hr />
-
-        <div class="row">
-            <div class="col-md-4 text-center">
-                <h6 class="pt-4">Data object</h6>
-            </div>
-            <div class="col-8">
-                <input type="text"
-                       class="form-control"
-                       placeholder="Enter a parameter..."
-                />
-            </div>
-        </div>
-
-        <br />
-
-        <div class="row">
-            <div class="col-md-4 text-center">
-                <h6 class="pt-4">Access type</h6>
-            </div>
-            <div class="col-8">
-                <select class="form-control">
-                    <option disabled selected value="">Select an option...</option>
-                    <option value="1">1</option>
-                </select>
-            </div>
-        </div>
-
-        <br />
-
-        <div class="row">
-            <div class="col-md-4 text-center">
-                <h6 class="pt-4">Access details</h6>
-            </div>
-            <div class="col-8">
-                <textarea type="text"
-                          class="form-control"
-                          rows="5" cols="30"
-                          placeholder="Enter a parameter..."
-                ></textarea>
-            </div>
-        </div>
-
-        <br />
-
-        <div class="row">
-            <div class="col-md-4 text-center">
-                <h6 class="pt-4">Notes</h6>
-            </div>
-            <div class="col-8">
-                <textarea type="text"
-                          class="form-control"
-                          rows="5" cols="30"
-                          placeholder="Enter a parameter..."
-                ></textarea>
-            </div>
-        </div>
-
-        <hr />
-
-        <div class="row">
-            <div class="col-md-4 text-center">
-                <h6 class="pt-4">Study</h6>
-            </div>
-            <div class="col-8">
-                <input type="text"
-                       class="form-control"
-                       placeholder="Enter a parameter..."
-                />
-            </div>
-        </div>
-
-        <br />
-
-        <div class="row">
-            <div class="col-md-4 text-center">
-                <h6 class="pt-4">MD check status</h6>
-            </div>
-            <div class="col-8">
-                <input type="text"
-                       class="form-control"
-                       placeholder="Enter a parameter..."
-                />
-            </div>
-        </div>
-
-        <br />
-
-        <div class="row">
-            <div class="col-md-4 text-center">
-                <h6 class="pt-4">Notes</h6>
-            </div>
-            <div class="col-8">
-                <textarea type="text"
-                          class="form-control"
-                          rows="5" cols="30"
-                          placeholder="Enter a parameter..."
-                ></textarea>
-            </div>
-        </div>
-
-        <hr />
-
-        <div class="row">
-            <div class="col-md-12 justify-content-center text-center">
-                <button class="btn btn-success mr-5" *ngIf="!isView">{{isEdit ? 'Apply Changes' : 'Save'}}</button>
-                <button class="btn btn-danger"> {{isView ? 'Back' : 'Cancel'}}</button>
-            </div>
-        </div>
-
-    </div>
+    </form>
 </div>
 
 <br />
