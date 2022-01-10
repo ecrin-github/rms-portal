@@ -16,4 +16,13 @@ export class DupService {
   getDupList() {
     return this.http.get(`${url}/processes`);
   }
+  addDup(payload) {
+    return this.http.post(`${url}/processes`, payload);
+  }
+  getDupById(id) {
+    return this.http.get(`${url}/processes/${id}`);
+  }
+  editDup(id, payload) {
+    return this.http.put(`${url}/processes/${id}`, payload);
+  }
 }

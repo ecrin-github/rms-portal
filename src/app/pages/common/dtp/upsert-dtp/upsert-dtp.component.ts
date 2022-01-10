@@ -48,10 +48,10 @@ export class UpsertDtpComponent implements OnInit {
       this.id = this.activatedRoute.snapshot.params.id;
       this.getDtpById(this.id);
     }
-    this.getOrganiation();
+    this.getOrganization();
     this.getStatus();
   }
-  getOrganiation() {
+  getOrganization() {
     this.spinner.show();
     this.dtpService.getOrganizationList().subscribe((res: any) => {
       this.spinner.hide();
@@ -128,6 +128,8 @@ export class UpsertDtpComponent implements OnInit {
         this.spinner.hide();
         if (res.statusCode === 200) {
           this.toastr.success('DTP added successfully');
+        } else {
+          this.toastr.error(res.messages[0]);
         }
       }, error => {
         this.spinner.hide();
