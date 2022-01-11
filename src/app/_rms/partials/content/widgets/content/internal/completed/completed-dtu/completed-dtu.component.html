@@ -38,11 +38,13 @@
   <div class="card-body">
     <div class="row">
       <div class="col-md-12">
+        <ng-container *ngIf="dataCompleted">
         <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
           [yaxis]="chartOptions.yaxis" [dataLabels]="chartOptions.dataLabels" [stroke]="chartOptions.stroke"
           [legend]="chartOptions.legend" [fill]="chartOptions.fill" [states]="chartOptions.states"
           [tooltip]="chartOptions.tooltip" [colors]="chartOptions.colors" [markers]="chartOptions.markers"
           [plotOptions]="chartOptions.plotOptions"></apx-chart>
+        </ng-container>
       </div>
     </div>
   </div>

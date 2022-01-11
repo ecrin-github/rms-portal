@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+import { DashboardService } from 'src/app/_rms/services/entities/dashboard/dashboard.service';
 import {LayoutService} from '../../../../../../../services/layout/layout.service';
 
 
@@ -13,8 +15,9 @@ export class CompletedDupComponent implements OnInit {
   colorsThemeLightSuccess: string;
   fontFamily: string;
   chartOptions: any = {};
+  dataCompleted: any;
 
-  constructor(private layout: LayoutService) {
+  constructor(private layout: LayoutService, private dashboardService: DashboardService, private toastr: ToastrService) {
     this.colorsGrayGray100 = this.layout.getProp('js.colors.gray.gray100');
     this.colorsGrayGray700 = this.layout.getProp('js.colors.gray.gray700');
     this.colorsThemeBaseSuccess = this.layout.getProp(
@@ -27,13 +30,21 @@ export class CompletedDupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.chartOptions = this.getChartOptions();
+    this.getStatistics();
+  }
+  getStatistics() {
+    this.dashboardService.getDupStatistics().subscribe((res: any) => {
+      this.dataCompleted = ((res.total-res.uncompleted)/res.total)*100;
+      this.chartOptions = this.getChartOptions();
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
   }
 
   getChartOptions() {
     const strokeColor = '#D13647';
     return {
-      series: [45],
+      series: [this.dataCompleted],
       chart: {
         type: 'radialBar',
         height: 200,

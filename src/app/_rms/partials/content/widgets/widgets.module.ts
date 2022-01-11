@@ -46,6 +46,9 @@ import {RecentDupComponent} from './content/internal/recent/recent-dup/recent-du
 import {RecentStudiesComponent} from './content/internal/recent/recent-studies/recent-studies.component';
 import {RecentObjectsComponent} from './content/internal/recent/recent-objects/recent-objects.component';
 import {RecentUsersComponent} from './content/internal/recent/recent-users/recent-users.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
@@ -91,7 +94,7 @@ import {RecentUsersComponent} from './content/internal/recent/recent-users/recen
       RecentDupComponent,
       RecentStudiesComponent,
       RecentObjectsComponent,
-      RecentUsersComponent
+      RecentUsersComponent,
   ],
     imports: [
         CommonModule,
@@ -100,6 +103,10 @@ import {RecentUsersComponent} from './content/internal/recent/recent-users/recen
         NgApexchartsModule,
         NgbDropdownModule,
         RouterModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatButtonModule,
+  
     ],
   exports: [
     // Advanced Tables
