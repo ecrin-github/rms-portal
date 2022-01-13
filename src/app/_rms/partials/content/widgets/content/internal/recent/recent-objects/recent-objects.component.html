@@ -5,7 +5,7 @@
     <h3 class="card-title align-items-start flex-column">
       <span class="card-label font-weight-bolder text-dark">Recent Data objects</span>
       <span class="text-muted mt-3 font-weight-bold font-size-sm"
-        >5 recently added Data Objects</span
+        >10 recently added Data Objects</span
       >
     </h3>
     <div class="card-toolbar">
@@ -25,255 +25,48 @@
 
   <!--begin::Body-->
   <div class="card-body pt-0 pb-3" style="height: 500px; overflow: auto;">
-    <div class="tab-content">
-      <!--begin::Table-->
-      <div class="table-responsive">
-        <table
-                class="table table-head-custom table-vertical-center table-head-bg table-borderless"
-        >
-          <thead>
-          <tr class="text-left">
-            <th style="min-width: 100px" class="pl-7">
-              <span class="text-dark-75">ID</span>
-            </th>
-            <th style="min-width: 120px">Title</th>
-            <th style="min-width: 100px">Created on</th>
-            <th style="min-width: 100px">Last edited on</th>
-            <th style="min-width: 130px"></th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="pl-0 py-8">
-              <div class="d-flex align-items-center">
-                <div class="ml-5 pl-2">
-                    <span
-                            class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg"
-                    >1</span
-                    >
-                </div>
-              </div>
-            </td>
-            <td>
-                <span
-                        class="text-dark-75 font-weight-bolder d-block font-size-lg"
-                >
-                  Object 1
-                </span>
-            </td>
-            <td>
-                <span
-                        class="text-dark-75 font-weight-bolder d-block font-size-lg"
-                >
-                  24 Jul 2021
-                </span>
-            </td>
-            <td>
-                <span
-                        class="text-dark-75 font-weight-bolder d-block font-size-lg"
-                >
-                  29 Jul 2021
-                </span>
-            </td>
-            <td class="pr-0 text-right">
-                <a
-                        [routerLink]="['/data-objects', '1', 'view']"
-                        target="_blank"
-                        class="btn btn-light-primary font-weight-bolder font-size-sm mr-3"
-                >View</a>
-                <a
-                        [routerLink]="['/data-objects', '1', 'edit']"
-                        target="_blank"
-                        class="btn btn-light-success font-weight-bolder font-size-sm"
-                >Edit</a>
-            </td>
-          </tr>
-          <tr>
-            <td class="pl-0 py-8">
-              <div class="d-flex align-items-center">
-                <div class="ml-5 pl-2">
-                    <span
-                            class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg"
-                    >2</span
-                    >
-                </div>
-              </div>
-            </td>
-            <td>
-                <span
-                        class="text-dark-75 font-weight-bolder d-block font-size-lg"
-                >
-                  Object 2
-                </span>
-            </td>
-            <td>
-                <span
-                        class="text-dark-75 font-weight-bolder d-block font-size-lg"
-                >
-                  24 Jul 2021
-                </span>
-            </td>
-            <td>
-                <span
-                        class="text-dark-75 font-weight-bolder d-block font-size-lg"
-                >
-                  29 Jul 2021
-                </span>
-            </td>
-            <td class="pr-0 text-right">
-                <a
-                        [routerLink]="['/data-objects', '2', 'view']"
-                        target="_blank"
-                        class="btn btn-light-primary font-weight-bolder font-size-sm mr-3"
-                >View</a>
-                <a
-                        [routerLink]="['/data-objects', '2', 'edit']"
-                        target="_blank"
-                        class="btn btn-light-success font-weight-bolder font-size-sm"
-                >Edit</a>
-            </td>
-          </tr>
-          <tr>
-            <td class="pl-0 py-8">
-              <div class="d-flex align-items-center">
-                <div class="ml-5 pl-2">
-                    <span
-                            class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg"
-                    >3</span
-                    >
-                </div>
-              </div>
-            </td>
-            <td>
-                <span
-                        class="text-dark-75 font-weight-bolder d-block font-size-lg"
-                >
-                  Object 3
-                </span>
-            </td>
-            <td>
-                <span
-                        class="text-dark-75 font-weight-bolder d-block font-size-lg"
-                >
-                  24 Jul 2021
-                </span>
-            </td>
-            <td>
-                <span
-                        class="text-dark-75 font-weight-bolder d-block font-size-lg"
-                >
-                  29 Jul 2021
-                </span>
-            </td>
-            <td class="pr-0 text-right">
-                <a
-                        [routerLink]="['/data-objects', '3', 'view']"
-                        target="_blank"
-                        class="btn btn-light-primary font-weight-bolder font-size-sm mr-3"
-                >View</a>
-                <a
-                        [routerLink]="['/data-objects', '3', 'edit']"
-                        target="_blank"
-                        class="btn btn-light-success font-weight-bolder font-size-sm"
-                >Edit</a>
-            </td>
-          </tr>
-          <tr>
-            <td class="pl-0 py-8">
-              <div class="d-flex align-items-center">
-                <div class="ml-5 pl-2">
-                    <span
-                            class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg"
-                    >4</span
-                    >
-                </div>
-              </div>
-            </td>
-            <td>
-                <span
-                        class="text-dark-75 font-weight-bolder d-block font-size-lg"
-                >
-                  Object 4
-                </span>
-            </td>
-            <td>
-                <span
-                        class="text-dark-75 font-weight-bolder d-block font-size-lg"
-                >
-                  24 Jul 2021
-                </span>
-            </td>
-            <td>
-                <span
-                        class="text-dark-75 font-weight-bolder d-block font-size-lg"
-                >
-                  29 Jul 2021
-                </span>
-            </td>
-            <td class="pr-0 text-right">
-                <a
-                        [routerLink]="['/data-objects', '4', 'view']"
-                        target="_blank"
-                        class="btn btn-light-primary font-weight-bolder font-size-sm mr-3"
-                >View</a>
-                <a
-                        [routerLink]="['/data-objects', '4', 'edit']"
-                        target="_blank"
-                        class="btn btn-light-success font-weight-bolder font-size-sm"
-                >Edit</a>
-            </td>
-          </tr>
-          <tr>
-            <td class="pl-0 py-8">
-              <div class="d-flex align-items-center">
-                <div class="ml-5 pl-2">
-                    <span
-                            class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg"
-                    >5</span
-                    >
-                </div>
-              </div>
-            </td>
-            <td>
-                <span
-                        class="text-dark-75 font-weight-bolder d-block font-size-lg"
-                >
-                  Object 5
-                </span>
-            </td>
-            <td>
-                <span
-                        class="text-dark-75 font-weight-bolder d-block font-size-lg"
-                >
-                  24 Jul 2021
-                </span>
-            </td>
-            <td>
-                <span
-                        class="text-dark-75 font-weight-bolder d-block font-size-lg"
-                >
-                  29 Jul 2021
-                </span>
-            </td>
-            <td class="pr-0 text-right">
-                <a
-                        [routerLink]="['/data-objects', '5', 'view']"
-                        target="_blank"
-                        class="btn btn-light-primary font-weight-bolder font-size-sm mr-3"
-                >View</a>
-                <a
-                        [routerLink]="['/data-objects', '5', 'edit']"
-                        target="_blank"
-                        class="btn btn-light-success font-weight-bolder font-size-sm"
-                >Edit</a>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <!--end::Table-->
-    </div>
-  </div>
+    <mat-table [dataSource]="dataSource">
+
+      <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="title">
+          <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.displayTitle}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+          <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{findObjectType(row.objectTypeId)}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="linkedStudy">
+          <mat-header-cell *matHeaderCellDef> Linked to studies </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+              {{findStudy(row.sdSid)}}
+              <!-- <a [routerLink]="['/studies', row.linkedStudyId.toString(), 'view']" target="_blank">
+                  Study {{row.linkedStudyId.toString()}}
+              </a> -->
+          </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <a [routerLink]="['/data-objects', row.id, 'view']" target="_blank"
+              class="btn btn-light-primary font-weight-bolder font-size-sm mr-3">View</a>
+            <a [routerLink]="['/data-objects', row.id, 'edit']" target="_blank"
+              class="btn btn-light-success font-weight-bolder font-size-sm">Edit</a>
+          </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
+      </mat-row>
+  </mat-table>  
+</div>
   <!--end::Body-->
 </div>
 <!--end::Advance Table Widget 9-->

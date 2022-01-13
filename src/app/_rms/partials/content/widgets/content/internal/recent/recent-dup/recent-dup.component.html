@@ -6,7 +6,7 @@
       <div class="col-7 col-sm-6 col-md-7">
         <div class="row">
           <div class="col-md-12 font-weight-bolder text-dark" style="font-size: 1.27rem;">Recent Data Use processes</div>
-          <div class="col-md-12 text-muted font-weight-bold font-size-sm">5 recently added Data Use processes</div>
+          <div class="col-md-12 text-muted font-weight-bold font-size-sm">10 recently added Data Use processes</div>
         </div>
       </div>
       <div class="col-5 col-sm-6 col-md-5 text-right">
@@ -40,178 +40,51 @@
   <div class="card-body pt-0 pb-3" style="height: 500px; overflow: auto;">
     <div class="row">
       <div class="col-md-12 pr-0">
-        <div class="tab-content">
-          <!--begin::Table-->
-          <div class="table-responsive">
-            <table class="table table-head-custom table-vertical-center table-head-bg table-borderless">
-              <thead>
-                <tr class="text-left">
-                  <th style="min-width: 100px" class="pl-7">
-                    <span class="text-dark-75">id</span>
-                  </th>
-                  <th style="min-width: 220px">Organisation</th>
-                  <th style="min-width: 125px">Created on</th>
-                  <th style="min-width: 125px">Last edited on</th>
-                  <th style="min-width: 130px"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="pl-0 py-8">
-                    <div class="d-flex align-items-center">
-                      <div class="ml-5 pl-2">
-                        <span class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">1</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
-                      Organisation 1
-                    </span>
-                  </td>
-                  <td>
-                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
-                      24 Jul 2021
-                    </span>
-                  </td>
-                  <td>
-                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
-                      29 Jul 2021
-                    </span>
-                  </td>
-                  <td class="pr-0 text-right">
-                    <a [routerLink]="['/data-use', '1', 'view']" target="_blank"
+        <mat-table [dataSource]="dataSource">
+
+          <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="organisation">
+              <mat-header-cell *matHeaderCellDef> Organisation </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                  {{findOrganization(row.orgId)}}
+              </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="title">
+              <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                  {{row.displayName}}
+                  <!-- <a [routerLink]="['/data-objects', row.id, 'view' ]" target="_blank">
+                      <strong>{{row.dataObject}}</strong>
+                  </a> -->
+              </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+              <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{findStatus(row.statusId)}} </mat-cell>
+          </ng-container>
+
+
+          <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                  <a [routerLink]="['/data-use', row.id, 'view']" target="_blank"
                       class="btn btn-light-primary font-weight-bolder font-size-sm mr-3">View</a>
-                    <a [routerLink]="['/data-use', '1', 'edit']" target="_blank"
+                    <a [routerLink]="['/data-use', row.id, 'edit']" target="_blank"
                       class="btn btn-light-success font-weight-bolder font-size-sm">Edit</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="pl-0 py-8">
-                    <div class="d-flex align-items-center">
-                      <div class="ml-5 pl-2">
-                        <span class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">2</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
-                      Organisation 1
-                    </span>
-                  </td>
-                  <td>
-                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
-                      24 Jul 2021
-                    </span>
-                  </td>
-                  <td>
-                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
-                      29 Jul 2021
-                    </span>
-                  </td>
-                  <td class="pr-0 text-right">
-                    <a [routerLink]="['/data-use', '2', 'view']" target="_blank"
-                      class="btn btn-light-primary font-weight-bolder font-size-sm mr-3">View</a>
-                    <a [routerLink]="['/data-use', '2', 'edit']" target="_blank"
-                      class="btn btn-light-success font-weight-bolder font-size-sm">Edit</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="pl-0 py-8">
-                    <div class="d-flex align-items-center">
-                      <div class="ml-5 pl-2">
-                        <span class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">3</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
-                      Organisation 1
-                    </span>
-                  </td>
-                  <td>
-                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
-                      24 Jul 2021
-                    </span>
-                  </td>
-                  <td>
-                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
-                      29 Jul 2021
-                    </span>
-                  </td>
-                  <td class="pr-0 text-right">
-                    <a [routerLink]="['/data-use', '3', 'view']" target="_blank"
-                      class="btn btn-light-primary font-weight-bolder font-size-sm mr-3">View</a>
-                    <a [routerLink]="['/data-use', '3', 'edit']" target="_blank"
-                      class="btn btn-light-success font-weight-bolder font-size-sm">Edit</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="pl-0 py-8">
-                    <div class="d-flex align-items-center">
-                      <div class="ml-5 pl-2">
-                        <span class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">4</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
-                      Organisation 1
-                    </span>
-                  </td>
-                  <td>
-                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
-                      24 Jul 2021
-                    </span>
-                  </td>
-                  <td>
-                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
-                      29 Jul 2021
-                    </span>
-                  </td>
-                  <td class="pr-0 text-right">
-                    <a [routerLink]="['/data-use', '4', 'view']" target="_blank"
-                      class="btn btn-light-primary font-weight-bolder font-size-sm mr-3">View</a>
-                    <a [routerLink]="['/data-use', '4', 'edit']" target="_blank"
-                      class="btn btn-light-success font-weight-bolder font-size-sm">Edit</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="pl-0 py-8">
-                    <div class="d-flex align-items-center">
-                      <div class="ml-5 pl-2">
-                        <span class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">5</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
-                      Organisation 1
-                    </span>
-                  </td>
-                  <td>
-                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
-                      24 Jul 2021
-                    </span>
-                  </td>
-                  <td>
-                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
-                      29 Jul 2021
-                    </span>
-                  </td>
-                  <td class="pr-0 text-right">
-                    <a [routerLink]="['/data-use', '5', 'view']" target="_blank"
-                      class="btn btn-light-primary font-weight-bolder font-size-sm mr-3">View</a>
-                    <a [routerLink]="['/data-use', '5', 'edit']" target="_blank"
-                      class="btn btn-light-success font-weight-bolder font-size-sm">Edit</a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <!--end::Table-->
-        </div>
-      </div>
+              </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;">
+          </mat-row>
+      </mat-table>
+    </div>
     </div>
   </div>
   <!--end::Body-->

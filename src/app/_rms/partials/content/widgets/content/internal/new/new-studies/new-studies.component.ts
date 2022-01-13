@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+import { DashboardService } from 'src/app/_rms/services/entities/dashboard/dashboard.service';
 import {LayoutService} from '../../../../../../../services/layout/layout.service';
 
 
@@ -7,170 +9,90 @@ import {LayoutService} from '../../../../../../../services/layout/layout.service
   templateUrl: './new-studies.component.html',
 })
 export class NewStudiesComponent implements OnInit {
-  @Input() cssClass;
-  @Input() symbolShape;
-  @Input() baseColor;
+  colorsGrayGray100: string;
+  colorsGrayGray700: string;
+  colorsThemeBaseSuccess: string;
+  colorsThemeLightSuccess: string;
+  fontFamily: string;
   chartOptions: any = {};
-  fontFamily = '';
-  colorsGrayGray500 = '';
-  colorsGrayGray200 = '';
-  colorsGrayGray300 = '';
-  colorsThemeBase = '';
-  colorsThemeLight = '';
-  symbolCSSClasses = '';
-  svgCSSClasses = '';
+  dataCompleted: any;
 
-  constructor(private layout: LayoutService) { }
-
-  loadLayoutView() {
+  constructor(private layout: LayoutService, private dashboardService: DashboardService, private toastr: ToastrService) { 
+    this.colorsGrayGray100 = this.layout.getProp('js.colors.gray.gray100');
+    this.colorsGrayGray700 = this.layout.getProp('js.colors.gray.gray700');
+    this.colorsThemeBaseSuccess = this.layout.getProp(
+      'js.colors.theme.base.success'
+    );
+    this.colorsThemeLightSuccess = this.layout.getProp(
+      'js.colors.theme.light.success'
+    );
     this.fontFamily = this.layout.getProp('js.fontFamily');
-    this.colorsGrayGray500 = this.layout.getProp('js.colors.gray.gray500');
-    this.colorsGrayGray200 = this.layout.getProp('js.colors.gray.gray200');
-    this.colorsGrayGray300 = this.layout.getProp('js.colors.gray.gray300');
-    this.colorsThemeBase = this.layout.getProp(
-      `js.colors.theme.base.${this.baseColor}`
-    );
 
-    this.colorsThemeLight = this.layout.getProp(
-      `js.colors.theme.light.${this.baseColor}`
-    );
   }
 
   ngOnInit(): void {
-    if (!this.baseColor) {
-      this.baseColor = 'success';
-    }
+    this.getStatistics();
+  }
 
-    if (!this.symbolShape) {
-      this.symbolShape = 'symbol-circle';
-    }
-    this.loadLayoutView();
-    this.symbolCSSClasses = `symbol ${this.symbolShape} symbol-50 symbol-light-${this.baseColor} mr-2`;
-    this.svgCSSClasses = `svg-icon svg-icon-xl svg-icon-${this.baseColor}`;
-    this.chartOptions = this.getChartOptions();
+  getStatistics() {
+    this.dashboardService.getStudyStatistics().subscribe((res: any) => {
+      this.dataCompleted = res.total;
+      this.chartOptions = this.getChartOptions();
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
   }
 
   getChartOptions() {
+    const strokeColor = '#D13647';
     return {
-      series: [{
-        name: 'New studies',
-        data: [3, 2, 2, 3, 1, 4, 3]
-      }],
+      series: [this.dataCompleted],
       chart: {
-        type: 'area',
-        height: '150px',
-        toolbar: {
-          show: false
+        type: 'radialBar',
+        height: 200,
+      },
+      plotOptions: {
+        radialBar: {
+          hollow: {
+            margin: 0,
+            size: '65%',
+          },
+          dataLabels: {
+            showOn: 'always',
+            name: {
+              show: false,
+              fontWeight: '700',
+            },
+            value: {
+              formatter: function(val) {
+                return parseInt(val.toString(), 10).toString();
+              },
+              color: this.colorsGrayGray700,
+              fontSize: '30px',
+              fontWeight: '700',
+              offsetY: 12,
+              show: true,
+            },
+          },
+          track: {
+            background: this.colorsThemeLightSuccess,
+            strokeWidth: '100%',
+          },
         },
-        zoom: {
-          enabled: false
-        },
-        sparkline: {
-          enabled: true
-        }
       },
-      plotOptions: {},
-      legend: {
-        show: false
-      },
-      dataLabels: {
-        enabled: false
-      },
-      fill: {
-        type: 'solid',
-        opacity: 1
-      },
+      colors: [this.colorsThemeBaseSuccess],
       stroke: {
-        curve: 'smooth',
-        show: true,
-        width: 3,
-        colors: [this.colorsThemeBase]
+        lineCap: 'round',
       },
-      xaxis: {
-        categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        axisBorder: {
-          show: false,
-        },
-        axisTicks: {
-          show: false
-        },
-        labels: {
-          show: false,
-          style: {
-            colors: this.colorsGrayGray500,
-            fontSize: '12px',
-            fontFamily: this.fontFamily
-          }
-        },
-        crosshairs: {
-          show: false,
-          position: 'front',
-          stroke: {
-            color: this.colorsGrayGray300,
-            width: 1,
-            dashArray: 3
-          }
-        },
-        tooltip: {
-          enabled: true,
-          formatter: undefined,
-          offsetY: 0,
-          style: {
-            fontSize: '12px',
-            fontFamily: this.fontFamily
-          }
-        }
-      },
-      yaxis: {
-        min: 0,
-        max: 10,
-        labels: {
-          show: false,
-          style: {
-            colors: this.colorsGrayGray500,
-            fontSize: '12px',
-            fontFamily: this.fontFamily
-          }
-        }
-      },
-      states: {
-        normal: {
-          filter: {
-            type: 'none',
-            value: 0
-          }
-        },
-        hover: {
-          filter: {
-            type: 'none',
-            value: 0
-          }
-        },
-        active: {
-          allowMultipleDataPointsSelection: false,
-          filter: {
-            type: 'none',
-            value: 0
-          }
-        }
-      },
-      tooltip: {
-        style: {
-          fontSize: '12px',
-          fontFamily: this.fontFamily
-        },
-        y: {
-          formatter: (val) => {
-            return `${val}`;
-          }
-        }
-      },
-      colors: [this.colorsThemeLight],
-      markers: {
-        colors: [this.colorsThemeLight],
-        strokeColor: [this.colorsThemeBase],
-        strokeWidth: 3
-      }
+      labels: ['Total Studies'],
+      legend: {},
+      dataLabels: {},
+      fill: {},
+      xaxis: {},
+      yaxis: {},
+      states: {},
+      tooltip: {},
+      markers: {},
     };
   }
 }
