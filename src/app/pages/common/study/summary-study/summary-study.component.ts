@@ -23,6 +23,9 @@ export class SummaryStudyComponent implements OnInit {
   @Input() user: string = 'internal';
   studyTypes: [] = [];
   studyStatus: [] = [];
+  filterOption: string = '';
+  searchText:string = '';
+  studyLength: number = 0;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
@@ -41,10 +44,13 @@ export class SummaryStudyComponent implements OnInit {
       this.spinner.hide();
       if (res && res.data) {
         this.dataSource = new MatTableDataSource(res.data);
+        this.studyLength = res.total;
       } else {
         this.dataSource = new MatTableDataSource();
+        this.studyLength = res.total;
       }
       this.dataSource.paginator = this.paginator;
+      this.searchText = '';
     }, error => {
       this.spinner.hide();
       this.toastr.error(error.error.title);
@@ -91,17 +97,27 @@ export class SummaryStudyComponent implements OnInit {
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
-  // generateStudies(recordsNumber: number): Array<StudyRecord> {
-  //   const records: Array<StudyRecord> = [];
-  //   for (let i = 1; i < recordsNumber; i++) {
-  //     records.push({
-  //       id: i,
-  //       title: 'Study title ' + i.toString(),
-  //       type: 'Type',
-  //       status: 'Status'
-  //     });
-  //   }
-  //   return records;
-  // }
+  filterSearch() {
+    const payload = {
+      page: 1,
+      size: 10,
+      title: this.searchText
+    }
+    if (this.filterOption === 'title' && this.searchText !== '') {
+      this.spinner.show();
+      this.studyService.filterByTitle(payload).subscribe((res: any) => {
+        this.spinner.hide()
+        if (res && res.data) {
+          this.dataSource = res.data;
+          this.studyLength = res.total;
+        } else {
+          this.dataSource = new MatTableDataSource();
+        }
+      }, error => {
+        this.spinner.hide();
+        this.toastr.error(error.error.title);
+      })
+    }
+  } 
 
 }

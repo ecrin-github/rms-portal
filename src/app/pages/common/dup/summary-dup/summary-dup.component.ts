@@ -26,6 +26,9 @@ export class SummaryDupComponent implements OnInit {
   organizationList:[] = [];
   statusList:[] = [];
   @Input() user: string = 'internal';
+  filterOption: string = '';
+  searchText:string = '';
+  dupLength: number = 0;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
@@ -47,6 +50,7 @@ export class SummaryDupComponent implements OnInit {
         this.dataSource = new MatTableDataSource();
       }
       this.dataSource.paginator = this.paginator;
+      this.searchText = '';
     }, error => {
       this.spinner.hide();
       this.toastr.error(error.error.title);
@@ -93,5 +97,28 @@ export class SummaryDupComponent implements OnInit {
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
+
+  filterSearch() {
+    const payload = {
+      page: 1,
+      size: 10,
+      title: this.searchText
+    }
+    if (this.filterOption === 'title' && this.searchText !== '') {
+      this.spinner.show();
+      this.dtpService.filterByTitle(payload).subscribe((res: any) => {
+        this.spinner.hide()
+        if (res && res.data) {
+          this.dataSource = res.data;
+          this.dupLength = res.total;
+        } else {
+          this.dataSource = new MatTableDataSource();
+        }
+      }, error => {
+        this.spinner.hide();
+        this.toastr.error(error.error.title);
+      })
+    }
+  } 
 
 }

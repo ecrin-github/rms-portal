@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 const url = environment.baseUrl + '/rms/data-transfers';
 const contetUrl = environment.baseUrl + '/context';
+const filterUrl = environment.baseUrl + '/rms';
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +28,8 @@ export class DtpService {
   }
   editDtp(id, payload) {
     return this.http.put(`${url}/processes/${id}`, payload);
+  }
+  filterByTitle(payload) {
+    return this.http.post(`${filterUrl}/filter/dtp/by-title`, payload);
   }
 }

@@ -10,20 +10,20 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-3">
-                <select class="form-control">
+                <select class="form-control" [(ngModel)]="filterOption">
                     <option selected disabled value="">Search by...</option>
-                    <option>ID</option>
-                    <option>Organisation</option>
+                    <option value="title">Title</option>
                 </select>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-6">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search DTP..." />
+                    <input type="text" class="form-control" placeholder="Search DTP..." [(ngModel)]="searchText" />
                 </div>
             </div>
-            <div class="col-md-1">
+            <div class="col-md-3">
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="submit" class="btn btn-primary" (click)="filterSearch()">Search</button>
+                    <span class="pl-2"><button class="btn btn-danger" (click)="getDtpList()">Reset</button></span>
                 </div>
             </div>
         </div>
@@ -76,7 +76,7 @@
             <mat-row *matRowDef="let row; columns: displayedColumns;">
             </mat-row>
         </mat-table>
-        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [length]="dtpLength" [pageSize]="5"></mat-paginator>
     </div>
 
 </div>

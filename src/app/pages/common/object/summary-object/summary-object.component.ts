@@ -24,6 +24,10 @@ export class SummaryObjectComponent implements OnInit {
   objectType: [] = [];
   studyList: [] = [];
   @Input() user: string = 'internal';
+  filterOption: string = '';
+  searchText:string = '';
+  objectLength: number = 0;
+
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
@@ -44,6 +48,7 @@ export class SummaryObjectComponent implements OnInit {
         this.dataSource = new MatTableDataSource();
       }
       this.dataSource.paginator = this.paginator;
+      this.searchText = '';
     }, error => {
       this.spinner.hide();
       this.toastr.error(error.error.title);
@@ -89,5 +94,27 @@ export class SummaryObjectComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+  }
+  filterSearch() {
+    const payload = {
+      page: 1,
+      size: 10,
+      title: this.searchText
+    }
+    if (this.filterOption === 'title' && this.searchText != '') {
+      this.spinner.show();
+      this.objectService.filterByTitle(payload).subscribe((res: any) => {
+        this.spinner.hide();
+        if (res && res.data) {
+          this.dataSource = res.data;
+          this.objectLength = res.total;
+        } else {
+          this.dataSource = new MatTableDataSource();
+        }
+      }, error => {
+        this.spinner.hide();
+        this.toastr.error(error.error.title);
+      })
+    }
   }
 }

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 const url = environment.baseUrl + '/context';
 const studyUrl = environment.baseUrl + '/metadata-management/studies';
+const filterUrl = environment.baseUrl + '/metadata-management';
 
 @Injectable({
   providedIn: 'root'
@@ -100,5 +101,8 @@ export class StudyService {
   }
   editStudyRelationship(id, sdSid, payload) {
     return this.http.put(`${studyUrl}/${sdSid}/relationships/${id}`, payload);
+  }
+  filterByTitle(payload) {
+    return this.http.post(`${filterUrl}/filter/studies/by-title`, payload);
   }
 }

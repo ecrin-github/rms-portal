@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 const url = environment.baseUrl + '/context';
 const objectUrl = environment.baseUrl + '/metadata-management/data-objects';
+const filterUrl = environment.baseUrl + '/metadata-management';
 
 @Injectable({
   providedIn: 'root'
@@ -141,5 +142,8 @@ export class DataObjectService {
   }
   editObjectRelationship(id, sdSid, payload) {
     return this.http.put(`${objectUrl}/${sdSid}/relationships/${id}`, payload);
+  }
+  filterByTitle(payload) {
+    return this.http.post(`${filterUrl}/filter/data-objects/by-title`, payload);
   }
 }
