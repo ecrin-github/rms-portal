@@ -1,10 +1,21 @@
 <div class="row">
     <div class="col-12">
-        <select class="form-control">
-            <option selected disabled value="">Select...</option>
-            <option value="">Object type</option>
-            <option value="">Object class</option>
-            <option value="">...</option>
+        <select class="form-control" [(ngModel)]="filterOption" (change)="onChange()">
+            <option selected value="all">All</option>
+            <option value="objectClass">Object Class</option>
+            <option value="objectType">Object Type</option>
+            <option value="accessType">Access Type</option>
+            <option value="keyType">Key Type</option>
+            <option value="deidentificationType">Deidentification Type</option>
+            <option value="consentType">Consent Type</option>
+            <option value="resourceType">Resource Type</option>
+            <option value="titleType">Title Type</option>
+            <option value="dateType">Date Type</option>
+            <option value="contributorType">Contributor Type</option>
+            <option value="topicType">Topic Type</option>
+            <option value="identifierType">Identifier Type</option>
+            <option value="descritionType">Descrition Type</option>
+            <option value="relationshipType">Relationship Type</option>
         </select>
     </div>
 </div>
@@ -19,49 +30,11 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="d-flex">
-                <td class="col-3 text-center">
-                    <strong>Name 1</strong>
+            <tr class="d-flex" *ngFor="let item of list">
+                <td class="col-3 ">
+                    <strong>{{item.name}}</strong>
                 </td>
-                <td class="col-9">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Adipisci architecto autem consequatur doloribus earum eos esse,
-                    exercitationem ipsum iure magni maiores minima minus natus necessitatibus
-                    quas quasi rem repellat suscipit.
-                </td>
-            </tr>
-            <tr class="d-flex">
-                <td class="col-3 text-center">
-                    <strong>Name 2</strong>
-                </td>
-                <td class="col-9">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Adipisci architecto autem consequatur doloribus earum eos esse,
-                    exercitationem ipsum iure magni maiores minima minus natus necessitatibus
-                    quas quasi rem repellat suscipit.
-                </td>
-            </tr>
-            <tr class="d-flex">
-                <td class="col-3 text-center">
-                    <strong>Name 3</strong>
-                </td>
-                <td class="col-9">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Adipisci architecto autem consequatur doloribus earum eos esse,
-                    exercitationem ipsum iure magni maiores minima minus natus necessitatibus
-                    quas quasi rem repellat suscipit.
-                </td>
-            </tr>
-            <tr class="d-flex">
-                <td class="col-3 text-center">
-                    <strong>Name 4</strong>
-                </td>
-                <td class="col-9">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Adipisci architecto autem consequatur doloribus earum eos esse,
-                    exercitationem ipsum iure magni maiores minima minus natus necessitatibus
-                    quas quasi rem repellat suscipit.
-                </td>
+                <td class="col-9">{{item.description}}</td>
             </tr>
             </tbody>
         </table>

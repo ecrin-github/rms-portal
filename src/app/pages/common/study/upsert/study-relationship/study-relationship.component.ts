@@ -65,7 +65,7 @@ export class StudyRelationshipComponent implements OnInit {
         this.relationshipType = res.data;
       }
     }, error => {
-      console.log('error', error);
+      this.toastr.error(error.error.title);
     });
     this.subscription.add(getRelationshipType$);
   }

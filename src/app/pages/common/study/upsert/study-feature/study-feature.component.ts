@@ -69,8 +69,8 @@ export class StudyFeatureComponent implements OnInit {
         this.featureTypes = res.data;
       }
     }, error => {
-      console.log('error', error);
-    });
+      this.toastr.error(error.error.title);
+});
     this.subscription.add(getFeatureType$);
   }
   getFeaturValue() {
@@ -79,8 +79,8 @@ export class StudyFeatureComponent implements OnInit {
         this.featureValues = res.data;
       }
     }, error => {
-      console.log('error', error);
-    });
+      this.toastr.error(error.error.title);
+});
     this.subscription.add(getFeaturValue$);
   }
   getStudyFeature() {

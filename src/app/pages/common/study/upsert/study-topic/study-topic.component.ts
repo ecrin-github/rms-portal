@@ -65,12 +65,12 @@ export class StudyTopicComponent implements OnInit {
     this.studyTopics().removeAt(i);
   }
   getTopicType() {
-    const getTopicType$ = this.studyService.getTopicType().subscribe((res:any) => {
-      if(res.data) {
+    const getTopicType$ = this.studyService.getTopicType().subscribe((res: any) => {
+      if (res.data) {
         this.topicTypes = res.data;
       }
     }, error => {
-      console.log('error', error);
+      this.toastr.error(error.error.title);
     });
     this.subscription.add(getTopicType$);
   }
