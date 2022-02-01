@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -117,5 +117,12 @@ export class SummaryDtpComponent implements OnInit {
         this.toastr.error(error.error.title);
       })
     }
-  } 
+  }
+  @HostListener('window:storage', ['$event'])
+  refreshList(event) {
+    console.log('event triggered', event)
+    this.getDtpList();
+    localStorage.removeItem('updateDtpList');
+  }
+
 }

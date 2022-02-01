@@ -90,7 +90,7 @@ export class UpsertDupComponent implements OnInit {
     return date ? dateArray.getFullYear() + '/' + (dateArray.getMonth()+1) + '/' + (dateArray.getDate()+1) : '';
   }
   onSave() {
-    const payload = this.form.value;
+    const payload = JSON.parse(JSON.stringify(this.form.value));
     payload.initialContactDate = this.dateToString(payload.initialContactDate);
     payload.setUpCompleted = this.dateToString(payload.setUpCompleted);
     payload.prereqsMet = this.dateToString(payload.prereqsMet);
@@ -105,6 +105,7 @@ export class UpsertDupComponent implements OnInit {
         this.spinner.hide();
         if (res.statusCode === 200) {
           this.toastr.success('DUP updated successfully');
+          localStorage.setItem('updateDupList', 'true');
         } else {
           this.toastr.error(res.messages[0]);
         }
@@ -118,6 +119,7 @@ export class UpsertDupComponent implements OnInit {
         this.spinner.hide();
         if (res.statusCode === 200) {
           this.toastr.success('DUP added successfully');
+          localStorage.setItem('updateDupList', 'true');
         } else {
           this.toastr.error(res.messages[0]);
         }
@@ -163,5 +165,8 @@ export class UpsertDupComponent implements OnInit {
   findStatus(id) {
     const statusArray: any = this.statusList.filter((type: any) => type.id === id);
     return statusArray && statusArray.length ? statusArray[0].name : '';
+  }
+  close() {
+    window.close();
   }
 }

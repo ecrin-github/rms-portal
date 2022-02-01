@@ -94,7 +94,7 @@ export class UpsertDtpComponent implements OnInit {
     return date ? dateArray.getFullYear() + '/' + (dateArray.getMonth()+1) + '/' + (dateArray.getDate()+1) : '';
   }
   onSave() {
-    const payload = this.form.value;
+    const payload = JSON.parse(JSON.stringify(this.form.value));
     payload.initialContactDate = this.dateToString(payload.initialContactDate);
     payload.setUpCompleted = this.dateToString(payload.setUpCompleted);
     payload.mdAccessGranted = this.dateToString(payload.mdAccessGranted);
@@ -114,6 +114,7 @@ export class UpsertDtpComponent implements OnInit {
         this.spinner.hide();
         if (res.statusCode === 200) {
           this.toastr.success('DTP updated successfully');
+          localStorage.setItem('updateDtpList', 'true');
         } else {
           this.toastr.error(res.messages[0]);
         }
@@ -128,6 +129,7 @@ export class UpsertDtpComponent implements OnInit {
         this.spinner.hide();
         if (res.statusCode === 200) {
           this.toastr.success('DTP added successfully');
+          localStorage.setItem('updateDtpList', 'true');
         } else {
           this.toastr.error(res.messages[0]);
         }
@@ -178,5 +180,8 @@ export class UpsertDtpComponent implements OnInit {
   findStatus(id) {
     const statusArray: any = this.statusList.filter((type: any) => type.id === id);
     return statusArray && statusArray.length ? statusArray[0].name : '';
+  }
+  close() {
+    window.close();
   }
 }

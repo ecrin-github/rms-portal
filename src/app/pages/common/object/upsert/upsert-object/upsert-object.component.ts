@@ -340,9 +340,8 @@ export class UpsertObjectComponent implements OnInit {
     this.initiateEmit = true;
   }
   onSave() {
-    console.log(this.objectForm.value);
     if (this.objectForm.valid) {
-      const payload = this.objectForm.value;
+      const payload = JSON.parse(JSON.stringify(this.objectForm.value));
       payload.objectDatasets.deidentDirect = payload.objectDatasets.deidentDirect === 'true' ? true : false;
       payload.objectDatasets.deidentHipaa = payload.objectDatasets.deidentHipaa === 'true' ? true : false;
       payload.objectDatasets.deidentDates = payload.objectDatasets.deidentDates === 'true' ? true : false;
@@ -365,6 +364,7 @@ export class UpsertObjectComponent implements OnInit {
           this.spinner.hide();
           if (res.statusCode === 200) {
             this.toastr.success('Data Object updated successfully');
+            localStorage.setItem('updateObjectList', 'true');
           } else {
             this.toastr.error(res.messages[0]);
           }
@@ -377,6 +377,7 @@ export class UpsertObjectComponent implements OnInit {
           this.spinner.hide();
           if (res.statusCode === 200) {
             this.toastr.success('Data Object added successfully');
+            localStorage.setItem('updateObjectList', 'true');
           } else {
             this.toastr.error(res.messages[0]);
           }
@@ -416,5 +417,7 @@ export class UpsertObjectComponent implements OnInit {
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
+  close() {
+    window.close();
+  }
 }

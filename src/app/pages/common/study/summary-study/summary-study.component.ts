@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -119,5 +119,10 @@ export class SummaryStudyComponent implements OnInit {
       })
     }
   } 
-
+  @HostListener('window:storage', ['$event'])
+  refreshList(event) {
+    console.log('event triggered', event)
+    this.getStudyList();
+    localStorage.removeItem('updateStudyList');
+  }
 }

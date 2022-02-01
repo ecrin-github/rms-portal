@@ -238,9 +238,8 @@ export class UpsertStudyComponent implements OnInit {
   }
   onSave() {
     this.isSubmitted = true;
-    console.log('value', this.studyForm.value)
     if (this.studyForm.valid) {
-      const payload = this.studyForm.value;
+      const payload = JSON.parse(JSON.stringify(this.studyForm.value));
       this.spinner.show();
       if (this.isEdit) {
         payload.id = this.id;
@@ -249,6 +248,7 @@ export class UpsertStudyComponent implements OnInit {
           this.spinner.hide();
           if (res.statusCode === 200) {
             this.toastr.success('Study Details updated successfully');
+            localStorage.setItem('updateStudyList', 'true');
           } else {
             this.toastr.error(res.messages[0]);
           }
@@ -261,6 +261,7 @@ export class UpsertStudyComponent implements OnInit {
           this.spinner.hide();
           if (res.statusCode === 200) {
             this.toastr.success('Study Detail added successfully');
+            localStorage.setItem('updateStudyList', 'true');
           } else {
             this.toastr.error(res.messages[0]);
           }
@@ -275,5 +276,7 @@ export class UpsertStudyComponent implements OnInit {
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
+  close() {
+    window.close();
+  }
 }
