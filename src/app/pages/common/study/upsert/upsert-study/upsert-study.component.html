@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <h2>{{ isView ? 'View study details' : isEdit ? 'Edit study details' : 'Add a new study'}}</h2>
+        <h2 class="text-uppercase">{{ isView ? 'View study details' : isEdit ? 'Edit study details' : 'Add a new study'}}</h2>
         <div style="float: right; margin-top: -40px;" *ngIf="isView">
             <a [routerLink]="['/studies', id, 'edit']"
                class="btn btn-primary mr-5" target="_blank">
@@ -17,109 +17,56 @@
 
     <div class="card-body" >
         <form [formGroup]="studyForm">
-            <div class="row">
-                <div class="col-4 text-center">
-                    <h6 class="pt-4">Display title</h6>
-                </div>
-                <div class="col-8">
-                    <input type="text" class="form-control" placeholder="Enter study display title..." 
-                    formControlName="displayTitle" *ngIf="!isView"/>
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <label for="displayTitle" class="font-style text-capitalize">Public title</label>
+                    <textarea cols="30" rows="5" class="form-control" placeholder="Enter study display title..." 
+                    formControlName="displayTitle" *ngIf="!isView" id="displayTitle" (change)="onChange()"></textarea>
                     <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.displayTitle}}</h6>
                 </div>
-            </div>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-4 text-center">
-                    <h6 class="">Brief description</h6>
-                </div>
-                <div class="col-8">
-                    <textarea class="form-control" cols="30" rows="5" placeholder="Enter a brief description..."
-                        formControlName="briefDescription" *ngIf="!isView">
-                    </textarea>
-                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.briefDescription}}</h6>
-                </div>
-            </div>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-4 text-center">
-                    <h6 class="pt-4">Data sharing statement</h6>
-                </div>
-                <div class="col-8">
+                <div class="col-md-6">
+                    <label for="dataSharingStatement" class="font-style text-capitalize">Data sharing statement</label>
                     <textarea class="form-control" cols="30" rows="5" placeholder="Enter a data sharing statement"
-                        formControlName="dataSharingStatement" *ngIf="!isView"></textarea>
+                        formControlName="dataSharingStatement" *ngIf="!isView" id="dataSharingStatement" ></textarea>
                     <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.dataSharingStatement}}</h6>
                 </div>
             </div>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-4 text-center">
-                    <h6 class="pt-4">Study type</h6>
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <label for="briefDescription" class="font-style text-capitalize">Brief description</label>
+                    <textarea class="form-control" cols="30" rows="5" placeholder="Enter a brief description..."
+                    formControlName="briefDescription" *ngIf="!isView" id="briefDescription">
+                </textarea>
+                <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.briefDescription}}</h6>
                 </div>
-                <div class="col-8">
-                    <select class="form-control" formControlName="studyTypeId" *ngIf="!isView">
+                <div class="col-md-6">
+                    <label for="studyTypeId" class="font-style text-capitalize">Study type</label>
+                    <select class="form-control" id="studyTypeId" formControlName="studyTypeId" *ngIf="!isView">
                         <option selected disabled value="">Select an option...</option>
                         <option [value]=type.id *ngFor="let type of studyTypes">{{type.name}}</option>
                     </select>
                     <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyTypeView?.name}}</h6>
                 </div>
             </div>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-4 text-center">
-                    <h6 class="pt-4">Study status</h6>
-                </div>
-                <div class="col-8">
-                    <select class="form-control" formControlName="studyStatusId" *ngIf="!isView">
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <label for="studyStatusId" class="font-style text-capitalize">Study status</label>
+                    <select class="form-control" id="studyStatusId" formControlName="studyStatusId" *ngIf="!isView">
                         <option selected disabled value="">Select an option...</option>
                         <option [value]=status.id *ngFor="let status of studyStatuses">{{status.name}}</option>
                     </select>
                     <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyStatusView?.name}}</h6>
                 </div>
-            </div>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-4 text-center">
-                    <h6 class="pt-4">Study enrollment</h6>
-                </div>
-                <div class="col-8">
+                <div class="col-md-6">
+                    <label for="studyEnrolment" class="font-style text-capitalize">Study enrollment</label>
                     <input type="text" class="form-control" placeholder="Enter study enrollment..."
-                        formControlName="studyEnrolment" *ngIf="!isView"/>
+                        formControlName="studyEnrolment" *ngIf="!isView" id="studyEnrolment" />
                     <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.studyEnrolment}}</h6>   
                 </div>
             </div>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-4 text-center">
-                    <h6 class="pt-4">Study gender eligibility</h6>
-                </div>
-                <div class="col-8">
-                    <select class="form-control" formControlName="studyGenderEligId" *ngIf="!isView">
-                        <option selected disabled value="">Select an option...</option>
-                        <option [value]=gender.id *ngFor="let gender of genderEligibility">{{gender.name}}</option>
-                    </select>
-                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyGenderView?.name}}</h6> 
-                </div>
-            </div>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-4 text-center">
-                    <h6 class="pt-4">Min age</h6>
-                </div>
-                <div class="col-8">
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <label for="" class="font-style text-capitalize">Min age</label>
                     <div class="row" *ngIf="!isView">
                         <div class="col-8">
                             <input type="text" class="form-control" placeholder="Enter a min age value..."
@@ -134,15 +81,8 @@
                     </div>
                     <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.minAge}}&nbsp;{{studyMinAgeView?.name}}</h6> 
                 </div>
-            </div>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-4 text-center">
-                    <h6 class="pt-4">Max age</h6>
-                </div>
-                <div class="col-8">
+                <div class="col-md-6">
+                    <label for="" class="font-style text-capitalize">Max age</label>
                     <div class="row" *ngIf="!isView">
                         <div class="col-8">
                             <input type="text" class="form-control" placeholder="Enter a max age value..."
@@ -158,12 +98,22 @@
                     <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.maxAge}}&nbsp;{{studyMaxAgeView?.name}}</h6> 
                 </div>
             </div>
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <label for="studyGenderEligId" class="font-style text-capitalize">Study gender eligibility</label>
+                    <select class="form-control" id="studyGenderEligId" formControlName="studyGenderEligId" *ngIf="!isView">
+                        <option selected disabled value="">Select an option...</option>
+                        <option [value]=gender.id *ngFor="let gender of genderEligibility">{{gender.name}}</option>
+                    </select>
+                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyGenderView?.name}}</h6> 
+                </div>
+            </div>
 
             <hr />
 
             <div class="row" >
                 <div class="col-12 text-center">
-                    <h6 class="pt-3">Study identifier(s)</h6>
+                    <h6 class="pt-3 font-style">Study identifier(s)</h6>
                 </div>
             </div>
             <br />
@@ -174,16 +124,16 @@
 
             <div class="row">
                 <div class="col-12 text-center">
-                    <h6 class="pt-3">Study title(s)</h6>
+                    <h6 class="pt-3 font-style">Study title(s)</h6>
                 </div>
             </div>
             <br />
-            <app-study-title [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitTitle)="getTitle($event)"></app-study-title>
+            <app-study-title [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" [publicTitle]="publicTitle" (emitTitle)="getTitle($event)"></app-study-title>
             <hr />
 
             <div class="row">
                 <div class="col-12 text-center">
-                    <h6 class="pt-3">Study feature(s)</h6>
+                    <h6 class="pt-3 font-style">Study feature(s)</h6>
                 </div>
             </div>
             <br />
@@ -195,7 +145,7 @@
 
             <div class="row">
                 <div class="col-12 text-center">
-                    <h6 class="pt-3">Study topic(s)</h6>
+                    <h6 class="pt-3 font-style">Study topic(s)</h6>
                 </div>
             </div>
             <br />
@@ -204,11 +154,19 @@
 
             <div class="row">
                 <div class="col-12 text-center">
-                    <h6 class="pt-3">Study relationship(s)</h6>
+                    <h6 class="pt-3 font-style">Study relationship(s)</h6>
                 </div>
             </div>
             <br />
             <app-study-relationship [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitRelation)="getRelation($event)"></app-study-relationship>
+            <hr />
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h6 class="pt-3 font-style">Study contributor(s)</h6>
+                </div>
+            </div>
+            <br />
+            <app-study-contributor [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitContributor)="getContributor($event)"></app-study-contributor>
             <hr />
 
             <div class="row">

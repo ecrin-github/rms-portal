@@ -9,57 +9,41 @@
 
     <ng-template [ngIf]="studyTitles().length > 0">
         <div formArrayName="studyTitles">
-            <div class="row" *ngFor="let studyTitle of studyTitles().controls;
-           let i = index" [formGroupName]="i">
+            <div class="row" *ngFor="let studyTitle of studyTitles().controls;let i = index" [formGroupName]="i">
                 <div class="col-12 mb-5">
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
                             {{studyTitle.value.titleText}}
                         </mat-expansion-panel-header>
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Title type</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <select class="form-control" formControlName="titleTypeId" *ngIf="!isView">
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="titleTypeId" class="font-style text-capitalize">Title type</label>
+                                <select class="form-control" id="titleTypeId" formControlName="titleTypeId" *ngIf="!isView">
                                     <option disabled selected value="">Select an option...</option>
                                     <option [value]="title.id" *ngFor="let title of titleType">{{title.name}}</option>
                                 </select>
-                                <span *ngIf="isView">{{findTitleType(studyTitle.value.titleTypeId)}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{findTitleType(studyTitle.value.titleTypeId)}}</h6>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="titleText" class="font-style text-capitalize">Title text</label>
+                                <textarea id="titleText" class="form-control" placeholder="Enter a parameter..."
+                                formControlName="titleText" *ngIf="!isView" cols="30" rows="5"></textarea>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyTitle.value.titleText}}</h6>
                             </div>
                         </div>
-                        <br />
                         <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Title text</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="titleText" *ngIf="!isView"/>
-                                    <span *ngIf="isView">{{studyTitle.value.titleText}}</span>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Language code</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <select class="form-control" formControlName="langCode" *ngIf="!isView">
+                            <div class="col-md-6">
+                                <label for="langCode" class="font-style text-capitalize">Language code</label>
+                                <select class="form-control" id="langCode" formControlName="langCode" *ngIf="!isView">
                                     <option disabled selected value=""></option>
                                     <option [value]=language.code *ngFor="let language of languageCodes">{{language.code}}</option>
                                 </select>
-                                <span *ngIf="isView">{{studyTitle.value.langCode}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyTitle.value.langCode}}</h6>
                             </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Comments</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <textarea class="form-control" cols="30" rows="10" formControlName="comments" *ngIf="!isView"></textarea>
-                                <span *ngIf="isView">{{studyTitle.value.comments}}</span>
+                            <div class="col-md-6">
+                                <label for="comments" class="font-style text-capitalize">Comments</label>
+                                <textarea class="form-control" id="comments" cols="30" rows="10" formControlName="comments" *ngIf="!isView"></textarea>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyTitle.value.comments}}</h6>
                             </div>
                         </div>
                         <mat-action-row *ngIf="!isView">

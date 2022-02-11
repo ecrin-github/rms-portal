@@ -46,6 +46,7 @@ import { ObjectDescriptionComponent } from './object/upsert/object-description/o
 import { ObjectRightComponent } from './object/upsert/object-right/object-right.component';
 import { ObjectRelationshipComponent } from './object/upsert/object-relationship/object-relationship.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { StudyContributorComponent } from './study/upsert/study-contributor/study-contributor.component';
 
 
 @NgModule({
@@ -87,7 +88,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
         ObjectIdentifierComponent,
         ObjectDescriptionComponent,
         ObjectRightComponent,
-        ObjectRelationshipComponent
+        ObjectRelationshipComponent,
+        StudyContributorComponent
     ],
     schemas: [NO_ERRORS_SCHEMA],
     imports: [

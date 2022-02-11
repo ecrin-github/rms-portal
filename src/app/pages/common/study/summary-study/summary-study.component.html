@@ -54,10 +54,10 @@
             <ng-container matColumnDef="actions">
                 <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                 <mat-cell *matCellDef="let row">
-                    <a [routerLink]="['/studies', row.id, 'view']" target="_blank">
+                    <a [routerLink]="['/studies', row.sdSid, 'view']" target="_blank">
                         <i class="fa fa-eye mr-5" style="color:#0688fa;"></i>
                     </a>
-                    <a [routerLink]="['/studies', row.id, 'edit']" target="_blank">
+                    <a [routerLink]="['/studies', row.sdSid, 'edit']" target="_blank">
                         <i class="fa fa-edit mr-5" style="color:#0688fa;"></i>
                     </a>
                     <i class="fa fa-trash mr-5" style="color:#f24437;">

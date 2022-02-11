@@ -1,0 +1,94 @@
+<form [formGroup]="form">
+    <ng-template [ngIf]="studyContributors().length <= 0">
+        <div class="row">
+            <div class="col-12 mb-3 mt-3 text-center justify-content-center">
+                <p>No study contributors yet</p>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template [ngIf]="studyContributors().length > 0">
+        <div formArrayName="studyContributors">
+            <div class="row" *ngFor="let studyContributor of studyContributors().controls; let i = index;"
+                [formGroupName]="i">
+                <div class="col-12 mb-5">
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            {{findContributorType(studyContributor.value.contribTypeId)}}
+                        </mat-expansion-panel-header>
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="contribTypeId" class="font-style text-capitalize">Contributor type</label>
+                                <select class="form-control" id="contribTypeId" formControlName="contribTypeId" *ngIf="!isView">
+                                    <option selected disabled value="">Select an option...</option>
+                                    <option [value]=contributor.id *ngFor="let contributor of contributorType">
+                                        {{contributor.name}}</option>
+                                </select>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{findContributorType(studyContributor.value.contribTypeId)}}</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="isIndividual" class="font-style text-capitalize">Is individual?</label>
+                                <select class="form-control" id="isIndividual" formControlName="isIndividual" *ngIf="!isView">
+                                    <option selected disabled value="">Select an option...</option>
+                                    <option value=false>No</option>
+                                    <option value=true>Yes</option>
+                                </select>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.isIndividual}}</h6>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="organisationName" class="font-style text-capitalize">Organisation</label>
+                                <input type="text" id="organisationName" class="form-control" placeholder="Enter a parameter..."
+                                    formControlName="organisationName" *ngIf="!isView" />
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.organisationName}}</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="personFamilyName" class="font-style text-capitalize">Person: Family name</label>
+                                <input type="text" id="personFamilyName" class="form-control" placeholder="Enter a parameter..."
+                                    formControlName="personFamilyName" *ngIf="!isView">
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.personFamilyName}}</h6>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="personGivenName" class="font-style text-capitalize">Person: Given name</label>
+                                <input type="text" id="personGivenName" class="form-control" placeholder="Enter a parameter..."
+                                    formControlName="personGivenName" *ngIf="!isView">
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.personGivenName}}</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="orcidId" class="font-style text-capitalize">Person: ORCID</label>
+                                <input type="text" id="orcidId" class="form-control" placeholder="Enter a parameter..."
+                                    formControlName="orcidId" *ngIf="!isView">
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.orcidId}}</h6>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="personAffiliation" class="font-style text-capitalize">Person: Affiliation</label>
+                                <input type="text" id="personAffiliation" class="form-control" placeholder="Enter a parameter..."
+                                    formControlName="personAffiliation" *ngIf="!isView">
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.personAffiliation}}</h6>
+                            </div>
+                        </div>
+                        <mat-action-row *ngIf="!isView">
+                            <button mat-button color="primary"
+                                (click)="studyContributor.value.alreadyExist ? editContributor(studyContributor) : addContributor(i)">Save</button>
+                            <button mat-button color="warn" (click)="removeStudyContributor(i)">Remove</button>
+                        </mat-action-row>
+                    </mat-expansion-panel>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</form>
+
+<div class="row" *ngIf="!isView">
+    <div class="col-12 text-center mt-5 justify-content-center">
+        <button class="btn btn-primary" (click)="addStudyContributor()">
+            <i class="fa fa-plus"></i>
+            Add new study contributor
+        </button>
+    </div>
+</div>

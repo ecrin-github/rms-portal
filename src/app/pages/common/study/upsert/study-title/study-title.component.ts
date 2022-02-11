@@ -24,6 +24,14 @@ export class StudyTitleComponent implements OnInit {
       this.emitData();
     }
   }
+  titleAdded = false;
+  @Input() set publicTitle(title: any) {
+    if (title) {
+      this.createPublicTitle(title);
+      this.titleAdded = true;
+    }
+  }
+
   @Output() emitTitle: EventEmitter<any> = new EventEmitter();
   studyTitle: StudyTitleInterface
 
@@ -52,7 +60,8 @@ export class StudyTitleComponent implements OnInit {
       titleText: '',
       langCode: '',
       comments: '',
-      alreadyExist: false
+      alreadyExist: false,
+      isTitleLinked: false
     });
   }
 
@@ -62,6 +71,29 @@ export class StudyTitleComponent implements OnInit {
 
   removeStudyTitle(i: number) {
     this.studyTitles().removeAt(i);
+  }
+  createPublicTitle(title) {
+    if (!this.isEdit && !this.isView) {
+      if (!this.titleAdded) {
+        const publicType: any = this.titleType.filter((item: any) => item.name === 'Public title');
+        this.studyTitles().push(this.fb.group({
+          id: '',
+          sdSid: '',
+          titleTypeId: publicType && publicType.length ? publicType[0].id : '',
+          titleText: title,
+          langCode: '',
+          comments: '',
+          alreadyExist: false,
+          isTitleLinked: true
+        }))
+      } 
+      if (this.titleAdded) {
+        let titleArr = <FormArray>this.form.controls["studyTitles"];
+        titleArr.controls[0].patchValue({
+          titleText: title
+        });
+      }
+    }
   }
   getTitleType() {
     setTimeout(() => {

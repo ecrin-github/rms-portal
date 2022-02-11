@@ -50,8 +50,6 @@ export class StudyTopicComponent implements OnInit {
       meshCoded: false,
       meshCode: '',
       meshValue: '',
-      meshQualcode: '',
-      meshQualvalue: '',
       originalValue: '',
       alreadyExist: false
     });
@@ -99,8 +97,6 @@ export class StudyTopicComponent implements OnInit {
         meshCoded: topic.meshCoded,
         meshCode: topic.meshCode,
         meshValue: topic.meshValue,
-        meshQualcode: topic.meshQualcode,
-        meshQualvalue: topic.meshQualvalue,
         originalValue: topic.originalValue,
         alreadyExist: true
       }))

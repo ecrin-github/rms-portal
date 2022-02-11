@@ -14,6 +14,7 @@ import { StudyService } from 'src/app/_rms/services/entities/study/study.service
 export class StudyRelationshipComponent implements OnInit {
   form: FormGroup;
   relationshipType: [] = [];
+  studyType:[] = [];
   subscription: Subscription = new Subscription();
   @Input() isView: boolean;
   @Input() isEdit: boolean;
@@ -34,6 +35,7 @@ export class StudyRelationshipComponent implements OnInit {
 
   ngOnInit(): void {
     this.getRelationshipType();
+    this.getStudyList();
     if (this.isEdit || this.isView) {
       this.getStudyRelationship()
     }
@@ -68,6 +70,20 @@ export class StudyRelationshipComponent implements OnInit {
       this.toastr.error(error.error.title);
     });
     this.subscription.add(getRelationshipType$);
+  }
+  getStudyList() {
+    setTimeout(() => {
+      this.spinner.show();
+    });
+    this.studyService.getStudy().subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.studyType = res.data.length ? res.data : [];;
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
   }
   getStudyRelationship() {
     this.spinner.show();
@@ -149,5 +165,9 @@ export class StudyRelationshipComponent implements OnInit {
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+  customSearchFn(term: string, item) {
+    term = term.toLocaleLowerCase();
+    return item.sdSid.toLocaleLowerCase().indexOf(term) > -1 || item.displayTitle.toLocaleLowerCase().indexOf(term) > -1;
   }
 }

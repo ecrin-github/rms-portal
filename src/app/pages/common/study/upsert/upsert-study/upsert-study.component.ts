@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -32,6 +32,8 @@ export class UpsertStudyComponent implements OnInit {
   studyMaxAgeView: any;
   initiateEmit: boolean = false;
   count = 0;
+  publicTitle: string = '';
+
   constructor(private fb: FormBuilder, private router: Router, private studyService: StudyService, private activatedRoute: ActivatedRoute,
     private spinner: NgxSpinnerService, private toastr: ToastrService) {
     this.studyForm = this.fb.group({
@@ -51,6 +53,7 @@ export class UpsertStudyComponent implements OnInit {
       studyFeatures: [],
       studyTopics: [],
       studyRelationships: [],
+      studyContributors: []
     });
   }
 
@@ -133,6 +136,13 @@ export class UpsertStudyComponent implements OnInit {
       if(res.data) {
         this.timeUnits = res.data;
       }
+      if(!this.isView || !this.isEdit) {
+        const defaultArray: any = this.timeUnits.filter((type: any) => type.name === 'Years');
+        this.studyForm.patchValue({
+          maxAgeUnitsId: defaultArray && defaultArray.length ? defaultArray[0].id : '',
+          minAgeUnitsId: defaultArray && defaultArray.length ? defaultArray[0].id : '',
+        })
+      }
       if(this.isView) {
         const minAgeArray = this.timeUnits.filter((type: any) => type.id === this.studyForm.value.minAgeUnitsId);
         this.studyMinAgeView = minAgeArray && minAgeArray.length ? minAgeArray[0] : {name: ''};
@@ -178,6 +188,7 @@ export class UpsertStudyComponent implements OnInit {
       studyFeatures: this.studyData.studyFeatures ? this.studyData.studyFeatures : [],
       studyTopics: this.studyData.studyTopics ? this.studyData.studyTopics : [],
       studyRelationships: this.studyData.studyRelationships ? this.studyData.studyRelationships : [],
+      studyContributors: this.studyData.studyContributors ? this.studyData.studyContributors : [],
 
     });
     this.getStudyType();
@@ -193,7 +204,7 @@ export class UpsertStudyComponent implements OnInit {
     setTimeout(() => {
       this.initiateEmit = event.isEmit;
     });
-    if (this.count === 5) {
+    if (this.count === 6) {
       this.onSave();
     }
   }
@@ -202,7 +213,7 @@ export class UpsertStudyComponent implements OnInit {
       studyTitles: event.data
     })
     this.count += 1;
-    if (this.count === 5) {
+    if (this.count === 6) {
       this.onSave();
     }
   }
@@ -211,7 +222,7 @@ export class UpsertStudyComponent implements OnInit {
       studyFeatures: event.data
     })
     this.count += 1;
-    if (this.count === 5) {
+    if (this.count === 6) {
       this.onSave();
     }
   }
@@ -220,7 +231,7 @@ export class UpsertStudyComponent implements OnInit {
       studyTopics: event.data
     })
     this.count += 1;
-    if (this.count === 5) {
+    if (this.count === 6) {
       this.onSave();
     }
   }
@@ -229,8 +240,17 @@ export class UpsertStudyComponent implements OnInit {
       studyRelationships: event.data
     })
     this.count += 1;
-    if (this.count === 5) {
+    if (this.count === 6) {
       this.onSave();
+    }
+  }
+  getContributor(event) {
+    this.studyForm.patchValue({
+      studyContributors: event.data
+    })
+    this.count += 1;
+    if (this.count === 6) {
+      this.onSave();;
     }
   }
   onClick() {
@@ -242,7 +262,7 @@ export class UpsertStudyComponent implements OnInit {
       const payload = JSON.parse(JSON.stringify(this.studyForm.value));
       this.spinner.show();
       if (this.isEdit) {
-        payload.id = this.id;
+        payload.id = this.studyData.id;
         payload.sdSid = this.id;
         this.studyService.editStudy(this.id, payload).subscribe((res: any) => {
           this.spinner.hide();
@@ -278,5 +298,9 @@ export class UpsertStudyComponent implements OnInit {
   }
   close() {
     window.close();
+  }
+  onChange() {
+    console.log(this.studyForm.value.displayTitle);
+    this.publicTitle = this.studyForm.value.displayTitle;
   }
 }

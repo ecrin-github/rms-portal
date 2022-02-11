@@ -102,6 +102,16 @@ export class StudyService {
   editStudyRelationship(id, sdSid, payload) {
     return this.http.put(`${studyUrl}/${sdSid}/relationships/${id}`, payload);
   }
+  getStudyContributor(id) {
+    return this.http.get(`${studyUrl}/${id}/contributors`);
+  }
+  addStudyContributor(id, payload) {
+    return this.http.post(`${studyUrl}/${id}/contributors`, payload);
+  }
+  editStudyContributor(id, sdSid, payload) {
+    return this.http.put(`${studyUrl}/${sdSid}/contributors/${id}`, payload);
+  }
+
   filterByTitle(payload) {
     return this.http.post(`${filterUrl}/filter/studies/by-title`, payload);
   }

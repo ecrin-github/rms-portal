@@ -17,28 +17,21 @@
                             {{findFeatureType(studyFeature.value.featureTypeId)}}
                         </mat-expansion-panel-header>
                         <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Feature type</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <select class="form-control" formControlName="featureTypeId" *ngIf="!isView">
+                            <div class="col-md-6">
+                                <label for="featureTypeId" class="font-style text-capitalize">Feature type</label>
+                                <select class="form-control" id="featureTypeId" formControlName="featureTypeId" *ngIf="!isView" (change)="onFeatureChange($event, i)">
                                     <option disabled selected value="">Select an option...</option>
                                     <option [value]="feature.id" *ngFor="let feature of featureTypes">{{feature.name}}</option>
                                 </select>
-                                <span *ngIf="isView">{{findFeatureType(studyFeature.value.featureTypeId)}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{findFeatureType(studyFeature.value.featureTypeId)}}</h6>
                             </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Feature value</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <select class="form-control" formControlName="featureValueId" *ngIf="!isView">
+                            <div class="col-md-6">
+                                <label for="featureValueId" class="font-style text-capitalize">Feature value</label>
+                                <select class="form-control" id="featureValueId" formControlName="featureValueId" *ngIf="!isView">
                                     <option disabled selected value="">Select an option...</option>
-                                    <option [value]="feature.id" *ngFor="let feature of featureValues">{{feature.name}}</option>
+                                    <option [value]="feature.id" *ngFor="let feature of featureValues[i]">{{feature.name}}</option>
                                 </select>
-                                <span *ngIf="isView">{{findFeatureValue(studyFeature.value.featureValueId)}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{findFeatureValue(studyFeature.value.featureValueId)}}</h6>
                             </div>
                         </div>
                         <mat-action-row *ngIf="!isView">

@@ -17,48 +17,32 @@
                             {{studyIdentifier.value.identifierValue}}
                         </mat-expansion-panel-header>
 
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Identifier type</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <select class="form-control" formControlName="identifierTypeId" *ngIf="!isView">
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="identifierTypeId" class="font-style text-capitalize">Identifier type</label>
+                                <select class="form-control" formControlName="identifierTypeId" *ngIf="!isView" id="identifierTypeId">
                                     <option disabled selected value="">Select an option...</option>
                                     <option [value]=identifier.id *ngFor="let identifier of identifierTypes">{{identifier.name}}</option>
                                 </select>
-                                <span *ngIf="isView">{{findIdentifierType(studyIdentifier.value.identifierTypeId)}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{findIdentifierType(studyIdentifier.value.identifierTypeId)}}</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="identifierValue" class="font-style text-capitalize">Identifier value</label>
+                                <input type="text" id="identifierValue" class="form-control" placeholder="Enter a parameter..."
+                                formControlName="identifierValue" *ngIf="!isView"/>
+                            <h6 style="font-weight: 100;" *ngIf="isView">{{studyIdentifier.value.identifierValue}}</h6>
                             </div>
                         </div>
-                        <br />
                         <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Identifier value</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="identifierValue" *ngIf="!isView"/>
-                                <span *ngIf="isView">{{studyIdentifier.value.identifierValue}}</span>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Identifier organisation</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" placeholder="Enter a parameter..."
+                            <div class="col-md-6">
+                                <label for="identifierOrg" class="font-style text-capitalize">Identifier organisation</label>
+                                <input type="text" id="identifierOrg" class="form-control" placeholder="Enter a parameter..."
                                     formControlName="identifierOrg" *ngIf="!isView"/>
-                                <span *ngIf="isView">{{studyIdentifier.value.identifierOrg}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyIdentifier.value.identifierOrg}}</h6>
                             </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Identifier date</strong>
-                            </div>
-                            <div class="col-md-8">
+                            <div class="col-md-6">
+                                <label for="identifierDate" class="font-style text-capitalize">Identifier date</label>
                                 <div *ngIf="!isView">
-                                    <!-- <form class="form-inline"> -->
                                     <div class="form-group">
                                         <div class="input-group">
                                             <input class="form-control" placeholder="yyyy-mm-dd" name="identifierDate"
@@ -72,20 +56,16 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- </form> -->
                                 </div>
-                                <span *ngIf="isView">{{dateToString(studyIdentifier.value.identifierDate)}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{dateToString(studyIdentifier.value.identifierDate)}}</h6>
                             </div>
                         </div>
-                        <br />
                         <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Identifier link</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" placeholder="Enter a parameter..."
+                            <div class="col-md-6">
+                                <label for="identifierLink" class="font-style text-capitalize">Identifier link</label>
+                                <input type="text" id="identifierLink" class="form-control" placeholder="Enter a parameter..."
                                     formControlName="identifierLink" *ngIf="!isView"/>
-                                <span *ngIf="isView">{{studyIdentifier.value.identifierLink}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyIdentifier.value.identifierLink}}</h6>
                             </div>
                         </div>
                         <mat-action-row *ngIf="!isView">

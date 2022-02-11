@@ -14,7 +14,8 @@ import { StudyService } from 'src/app/_rms/services/entities/study/study.service
 export class StudyFeatureComponent implements OnInit {
   form: FormGroup;
   featureTypes: [] = [];
-  featureValues: []= [];
+  featureValues = [];
+  featureValuesAll: [] = [];
   subscription: Subscription = new Subscription();
   @Input() isView: boolean;
   @Input() isEdit: boolean;
@@ -28,7 +29,7 @@ export class StudyFeatureComponent implements OnInit {
   studyFeature: StudyFeatureInterface;
 
 
-  constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService) { 
+  constructor(private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService) {
     this.form = this.fb.group({
       studyFeatures: this.fb.array([])
     });
@@ -41,7 +42,7 @@ export class StudyFeatureComponent implements OnInit {
       this.getStudyFeature()
     }
   }
-  
+
   studyFeatures(): FormArray {
     return this.form.get('studyFeatures') as FormArray;
   }
@@ -58,30 +59,36 @@ export class StudyFeatureComponent implements OnInit {
 
   addStudyFeature() {
     this.studyFeatures().push(this.newStudyFeature());
+    this.featureValues.push([]);
   }
 
   removeStudyFeature(i: number) {
     this.studyFeatures().removeAt(i);
+    this.featureValues.splice(i, 1);
   }
   getFeatureType() {
     const getFeatureType$ = this.studyService.getFeatureType().subscribe((res: any) => {
-      if(res.data) {
+      if (res.data) {
         this.featureTypes = res.data;
       }
     }, error => {
       this.toastr.error(error.error.title);
-});
+    });
     this.subscription.add(getFeatureType$);
   }
   getFeaturValue() {
     const getFeaturValue$ = this.studyService.getFeatureValue().subscribe((res: any) => {
       if (res.data) {
-        this.featureValues = res.data;
+        this.featureValuesAll = res.data;
       }
     }, error => {
       this.toastr.error(error.error.title);
-});
+    });
     this.subscription.add(getFeaturValue$);
+  }
+  onFeatureChange(event, id) {
+    const featureVal= this.featureValuesAll.filter((item:any) => item.featureTypeId === parseInt(event.target.value));
+    this.featureValues[id] = featureVal;
   }
   getStudyFeature() {
     this.spinner.show();
@@ -102,7 +109,7 @@ export class StudyFeatureComponent implements OnInit {
   }
   patchArray(features): FormArray {
     const formArray = new FormArray([]);
-    features.forEach(feature => {
+    features.forEach( (feature, index) => {
       formArray.push(this.fb.group({
         id: feature.id,
         sdSid: feature.sdSid,
@@ -110,6 +117,8 @@ export class StudyFeatureComponent implements OnInit {
         featureValueId: feature.featureValueId,
         alreadyExist: true
       }))
+      const featureVal= this.featureValuesAll.filter((item:any) => item.featureTypeId === parseInt(feature.featureTypeId));
+      this.featureValues[index] = featureVal;
     });
     return formArray;
   }
@@ -146,11 +155,11 @@ export class StudyFeatureComponent implements OnInit {
       this.toastr.error(error.error.title);
     })
   }
-  findFeatureType(id){
+  findFeatureType(id) {
     const featureTypeArray: any = this.featureTypes.filter((type: any) => type.id === id);
     return featureTypeArray && featureTypeArray.length ? featureTypeArray[0].name : '';
   }
-  findFeatureValue(id){
+  findFeatureValue(id) {
     const featureValueArray: any = this.featureValues.filter((type: any) => type.id === id);
     return featureValueArray && featureValueArray.length ? featureValueArray[0].name : '';
   }
@@ -159,12 +168,12 @@ export class StudyFeatureComponent implements OnInit {
       if (!item.id) {
         delete item.id;
       }
-      if(this.sdSid) {
+      if (this.sdSid) {
         item.sdSid = this.sdSid;
       }
       return item;
     })
-    this.emitFeature.emit({data: payload, isEmit: false});
+    this.emitFeature.emit({ data: payload, isEmit: false });
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

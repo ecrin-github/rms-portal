@@ -68,7 +68,7 @@ export class StudyIdentifierComponent implements OnInit {
     });
     const getIdentifierType$ = this.studyService.getIdentifierType().subscribe((res: any) => {
       if(res.data) {
-        this.identifierTypes = res.data;
+        this.identifierTypes = res.data.filter(item => item.appliesTo === 'Study' || item.appliesTo === 'All');
       }
       this.spinner.hide();
     }, error => {

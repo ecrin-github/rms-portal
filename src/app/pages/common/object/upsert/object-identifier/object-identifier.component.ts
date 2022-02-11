@@ -65,7 +65,7 @@ export class ObjectIdentifierComponent implements OnInit {
   getIdentifierType() {
     const getIdentifierType$ = this.studyService.getIdentifierType().subscribe((res:any) => {
       if(res.data) {
-        this.identifierType = res.data;
+        this.identifierType = res.data.filter(item => item.appliesTo === 'Data Object' || item.appliesTo === 'All');
       }
     }, error => {
       console.log('error', error);
