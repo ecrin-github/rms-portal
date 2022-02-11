@@ -53,9 +53,9 @@
                 <ng-container matColumnDef="actions">
                     <mat-header-cell *matHeaderCellDef> </mat-header-cell>
                     <mat-cell *matCellDef="let row">
-                        <a [routerLink]="['/studies', row.id, 'view']" target="_blank"
+                        <a [routerLink]="['/studies', row.sdSid, 'view']" target="_blank"
                                 class="btn btn-light-primary font-weight-bolder font-size-sm mr-3">View</a>
-                        <a [routerLink]="['/studies', row.id, 'edit']" target="_blank"
+                        <a [routerLink]="['/studies', row.sdSid, 'edit']" target="_blank"
                                 class="btn btn-light-success font-weight-bolder font-size-sm">Edit</a>
                     </mat-cell>
                 </ng-container>
