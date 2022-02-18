@@ -20,6 +20,7 @@ export class StudyContributorComponent implements OnInit {
   @Input() isView: boolean;
   @Input() isEdit: boolean;
   studyContributor: StudyContributorInterface;
+  isIndividual: boolean;
   @Input() set initiateEmit(initiateEmit: any) {
     if (initiateEmit) {
       this.emitData();
@@ -160,6 +161,10 @@ export class StudyContributorComponent implements OnInit {
       return item;
     })
     this.emitContributor.emit({data: payload, isEmit: false});
+  }
+  onChange(index) {
+    this.isIndividual = this.form.value.studyContributors[index].isIndividual === 'true' ? true : false;
+    console.log(this.isIndividual)
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

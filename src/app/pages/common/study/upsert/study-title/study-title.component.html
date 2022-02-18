@@ -24,14 +24,6 @@
                                 </select>
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{findTitleType(studyTitle.value.titleTypeId)}}</h6>
                             </div>
-                            <div class="col-md-6 form-group">
-                                <label for="titleText" class="font-style text-capitalize">Title text</label>
-                                <textarea id="titleText" class="form-control" placeholder="Enter a parameter..."
-                                formControlName="titleText" *ngIf="!isView" cols="30" rows="5"></textarea>
-                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyTitle.value.titleText}}</h6>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-6">
                                 <label for="langCode" class="font-style text-capitalize">Language code</label>
                                 <select class="form-control" id="langCode" formControlName="langCode" *ngIf="!isView">
@@ -40,10 +32,13 @@
                                 </select>
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{studyTitle.value.langCode}}</h6>
                             </div>
-                            <div class="col-md-6">
-                                <label for="comments" class="font-style text-capitalize">Comments</label>
-                                <textarea class="form-control" id="comments" cols="30" rows="10" formControlName="comments" *ngIf="!isView"></textarea>
-                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyTitle.value.comments}}</h6>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <label for="titleText" class="font-style text-capitalize">Title text</label>
+                                <textarea id="titleText" class="form-control" placeholder="Enter a parameter..."
+                                formControlName="titleText" *ngIf="!isView" cols="30" rows="3"></textarea>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyTitle.value.titleText}}</h6>
                             </div>
                         </div>
                         <mat-action-row *ngIf="!isView">

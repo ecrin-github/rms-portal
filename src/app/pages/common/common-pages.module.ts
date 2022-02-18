@@ -9,6 +9,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {RouterModule} from '@angular/router';
+import {CalendarModule} from 'primeng/calendar';
 
 // Pages
 import {ContextPageComponent} from './context-page/context-page.component';
@@ -154,7 +155,8 @@ import { StudyContributorComponent } from './study/upsert/study-contributor/stud
         ReactiveFormsModule,
         MatTabsModule,
         MatExpansionModule,
-        NgSelectModule
+        NgSelectModule,
+        CalendarModule
     ],
     exports: [ SummaryDtpComponent, SummaryDupComponent, SummaryStudyComponent, SummaryObjectComponent]
 })

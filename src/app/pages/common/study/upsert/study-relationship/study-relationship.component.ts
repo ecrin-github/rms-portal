@@ -151,6 +151,10 @@ export class StudyRelationshipComponent implements OnInit {
     const relationArray: any = this.relationshipType.filter((type: any) => type.id === id);
     return relationArray && relationArray.length ? relationArray[0].name : '';
   }
+  findStudyTitle(id) {
+    const studyArray: any = this.studyType.filter((type: any) => type.sdSid === id);
+    return studyArray && studyArray.length ? studyArray[0].displayTitle : ''
+  }
   emitData() {
     const payload = this.form.value.studyRelationships.map(item => {
       if (!item.id) {

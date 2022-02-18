@@ -13,39 +13,19 @@
                 <i class="fa fa-code"></i> JSON
             </button>
         </div>
+        <div id="navbar">
+            <h6>{{studyData?.displayTitle}}</h6>
+        </div>
     </div>
 
-    <div class="card-body" >
+    <div class="card-body" id="content">
         <form [formGroup]="studyForm">
             <div class="row form-group">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label for="displayTitle" class="font-style text-capitalize">Public title</label>
-                    <textarea cols="30" rows="5" class="form-control" placeholder="Enter study display title..." 
+                    <textarea cols="30" rows="3" class="form-control" placeholder="Enter study display title..." 
                     formControlName="displayTitle" *ngIf="!isView" id="displayTitle" (change)="onChange()"></textarea>
                     <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.displayTitle}}</h6>
-                </div>
-                <div class="col-md-6">
-                    <label for="dataSharingStatement" class="font-style text-capitalize">Data sharing statement</label>
-                    <textarea class="form-control" cols="30" rows="5" placeholder="Enter a data sharing statement"
-                        formControlName="dataSharingStatement" *ngIf="!isView" id="dataSharingStatement" ></textarea>
-                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.dataSharingStatement}}</h6>
-                </div>
-            </div>
-            <div class="row form-group">
-                <div class="col-md-6">
-                    <label for="briefDescription" class="font-style text-capitalize">Brief description</label>
-                    <textarea class="form-control" cols="30" rows="5" placeholder="Enter a brief description..."
-                    formControlName="briefDescription" *ngIf="!isView" id="briefDescription">
-                </textarea>
-                <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.briefDescription}}</h6>
-                </div>
-                <div class="col-md-6">
-                    <label for="studyTypeId" class="font-style text-capitalize">Study type</label>
-                    <select class="form-control" id="studyTypeId" formControlName="studyTypeId" *ngIf="!isView">
-                        <option selected disabled value="">Select an option...</option>
-                        <option [value]=type.id *ngFor="let type of studyTypes">{{type.name}}</option>
-                    </select>
-                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyTypeView?.name}}</h6>
                 </div>
             </div>
             <div class="row form-group">
@@ -58,6 +38,44 @@
                     <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyStatusView?.name}}</h6>
                 </div>
                 <div class="col-md-6">
+                    <label for="studyTypeId" class="font-style text-capitalize">Study type</label>
+                    <select class="form-control" id="studyTypeId" formControlName="studyTypeId" *ngIf="!isView">
+                        <option selected disabled value="">Select an option...</option>
+                        <option [value]=type.id *ngFor="let type of studyTypes">{{type.name}}</option>
+                    </select>
+                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyTypeView?.name}}</h6>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <label for="briefDescription" class="font-style text-capitalize">Brief description</label>
+                    <textarea class="form-control" cols="30" rows="5" placeholder="Enter a brief description..."
+                    formControlName="briefDescription" *ngIf="!isView" id="briefDescription">
+                </textarea>
+                <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.briefDescription}}</h6>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <label for="" class="font-style text-capitalize">Study Start Month</label>
+                    <input type="text" class="form-control" placeholder="Enter a min age value..."
+                    formControlName="studyStartMonth">
+                </div>
+                <div class="col-md-6">
+                    <label for="" class="font-style text-capitalize">Study Start Year</label>
+                    <!-- <input type="text" class="form-control" placeholder="Enter a min age value..."
+                    formControlName="studyStartYear"> -->
+                    <p-calendar formControlName="studyStartYear" view="year" dateFormat="yy"></p-calendar>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <label for="dataSharingStatement" class="font-style text-capitalize">Data sharing statement</label>
+                    <textarea class="form-control" cols="30" rows="5" placeholder="Enter a data sharing statement"
+                        formControlName="dataSharingStatement" *ngIf="!isView" id="dataSharingStatement" ></textarea>
+                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.dataSharingStatement}}</h6>
+                </div>
+                <div class="col-md-6">
                     <label for="studyEnrolment" class="font-style text-capitalize">Study enrollment</label>
                     <input type="text" class="form-control" placeholder="Enter study enrollment..."
                         formControlName="studyEnrolment" *ngIf="!isView" id="studyEnrolment" />
@@ -65,7 +83,7 @@
                 </div>
             </div>
             <div class="row form-group">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="" class="font-style text-capitalize">Min age</label>
                     <div class="row" *ngIf="!isView">
                         <div class="col-8">
@@ -81,7 +99,7 @@
                     </div>
                     <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.minAge}}&nbsp;{{studyMinAgeView?.name}}</h6> 
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="" class="font-style text-capitalize">Max age</label>
                     <div class="row" *ngIf="!isView">
                         <div class="col-8">
@@ -97,9 +115,7 @@
                     </div>
                     <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.maxAge}}&nbsp;{{studyMaxAgeView?.name}}</h6> 
                 </div>
-            </div>
-            <div class="row form-group">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="studyGenderEligId" class="font-style text-capitalize">Study gender eligibility</label>
                     <select class="form-control" id="studyGenderEligId" formControlName="studyGenderEligId" *ngIf="!isView">
                         <option selected disabled value="">Select an option...</option>

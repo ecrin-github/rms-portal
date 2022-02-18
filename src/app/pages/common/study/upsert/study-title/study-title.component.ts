@@ -58,7 +58,7 @@ export class StudyTitleComponent implements OnInit {
       sdSid: '',
       titleTypeId: '',
       titleText: '',
-      langCode: '',
+      langCode: 'en',
       comments: '',
       alreadyExist: false,
       isTitleLinked: false

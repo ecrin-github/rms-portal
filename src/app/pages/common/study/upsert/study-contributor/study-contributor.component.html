@@ -18,6 +18,17 @@
                         </mat-expansion-panel-header>
                         <div class="row form-group">
                             <div class="col-md-6">
+                                <label for="isIndividual" class="font-style text-capitalize">Is individual?</label>
+                                <select class="form-control" id="isIndividual" formControlName="isIndividual" *ngIf="!isView" (change)="onChange(i)">
+                                    <option selected disabled value="">Select an option...</option>
+                                    <option value=false>No</option>
+                                    <option value=true>Yes</option>
+                                </select>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.isIndividual}}</h6>
+                            </div>
+                        </div>
+                        <div class="row form-group" *ngIf="!isIndividual || !studyContributor.value.isIndividual">
+                            <div class="col-md-6">
                                 <label for="contribTypeId" class="font-style text-capitalize">Contributor type</label>
                                 <select class="form-control" id="contribTypeId" formControlName="contribTypeId" *ngIf="!isView">
                                     <option selected disabled value="">Select an option...</option>
@@ -27,49 +38,55 @@
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{findContributorType(studyContributor.value.contribTypeId)}}</h6>
                             </div>
                             <div class="col-md-6">
-                                <label for="isIndividual" class="font-style text-capitalize">Is individual?</label>
-                                <select class="form-control" id="isIndividual" formControlName="isIndividual" *ngIf="!isView">
-                                    <option selected disabled value="">Select an option...</option>
-                                    <option value=false>No</option>
-                                    <option value=true>Yes</option>
-                                </select>
-                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.isIndividual}}</h6>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-6">
                                 <label for="organisationName" class="font-style text-capitalize">Organisation</label>
                                 <input type="text" id="organisationName" class="form-control" placeholder="Enter a parameter..."
                                     formControlName="organisationName" *ngIf="!isView" />
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.organisationName}}</h6>
                             </div>
+                        </div>
+                        <div class="row form-group" *ngIf="isIndividual || studyContributor.value.isIndividual">
                             <div class="col-md-6">
-                                <label for="personFamilyName" class="font-style text-capitalize">Person: Family name</label>
-                                <input type="text" id="personFamilyName" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="personFamilyName" *ngIf="!isView">
-                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.personFamilyName}}</h6>
+                                <label for="contribTypeId" class="font-style text-capitalize">Contributor type</label>
+                                <select class="form-control" id="contribTypeId" formControlName="contribTypeId" *ngIf="!isView">
+                                    <option selected disabled value="">Select an option...</option>
+                                    <option [value]=contributor.id *ngFor="let contributor of contributorType">
+                                        {{contributor.name}}</option>
+                                </select>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{findContributorType(studyContributor.value.contribTypeId)}}</h6>
                             </div>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-6">
+                        <div class="row form-group"*ngIf="isIndividual || studyContributor.value.isIndividual">
+                            <div class="col-md-4">
                                 <label for="personGivenName" class="font-style text-capitalize">Person: Given name</label>
                                 <input type="text" id="personGivenName" class="form-control" placeholder="Enter a parameter..."
                                     formControlName="personGivenName" *ngIf="!isView">
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.personGivenName}}</h6>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <label for="personFamilyName" class="font-style text-capitalize">Person: First name</label>
+                                <input type="text" id="personFamilyName" class="form-control" placeholder="Enter a parameter..."
+                                    formControlName="personFamilyName" *ngIf="!isView">
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.personFamilyName}}</h6>
+                            </div>
+                            <div class="col-md-4">
                                 <label for="orcidId" class="font-style text-capitalize">Person: ORCID</label>
                                 <input type="text" id="orcidId" class="form-control" placeholder="Enter a parameter..."
                                     formControlName="orcidId" *ngIf="!isView">
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.orcidId}}</h6>
                             </div>
                         </div>
-                        <div class="row form-group">
+                        <div class="row form-group" *ngIf="isIndividual || studyContributor.value.isIndividual">
                             <div class="col-md-6">
-                                <label for="personAffiliation" class="font-style text-capitalize">Person: Affiliation</label>
+                                <label for="personAffiliation" class="font-style text-capitalize">Department</label>
                                 <input type="text" id="personAffiliation" class="form-control" placeholder="Enter a parameter..."
                                     formControlName="personAffiliation" *ngIf="!isView">
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.personAffiliation}}</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="organisationName" class="font-style text-capitalize">Organisation</label>
+                                <input type="text" id="organisationName" class="form-control" placeholder="Enter a parameter..."
+                                    formControlName="organisationName" *ngIf="!isView" />
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.organisationName}}</h6>
                             </div>
                         </div>
                         <mat-action-row *ngIf="!isView">

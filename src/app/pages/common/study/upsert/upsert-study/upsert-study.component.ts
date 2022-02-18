@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -44,6 +44,8 @@ export class UpsertStudyComponent implements OnInit {
       studyStatusId: '',
       studyGenderEligId: '',
       studyEnrolment: 0,
+      studyStartMonth: '',
+      studyStartYear: '',
       minAge: '',
       minAgeUnitsId: '',
       maxAge: '',
@@ -56,6 +58,19 @@ export class UpsertStudyComponent implements OnInit {
       studyContributors: []
     });
   }
+  @HostListener('window:scroll', ['$event'])
+  onScroll() {
+    const navbar = document.getElementById('navbar');
+    const sticky = navbar.offsetTop;
+    if (window.pageYOffset >= sticky) {
+      navbar.classList.add('sticky');
+      // this.sticky = true;
+    } else {
+      navbar.classList.remove('sticky');
+      // this.sticky = false;
+    }
+  }
+
 
   ngOnInit(): void {
     this.isEdit = this.router.url.includes('edit') ? true : false;
@@ -136,13 +151,6 @@ export class UpsertStudyComponent implements OnInit {
       if(res.data) {
         this.timeUnits = res.data;
       }
-      if(!this.isView || !this.isEdit) {
-        const defaultArray: any = this.timeUnits.filter((type: any) => type.name === 'Years');
-        this.studyForm.patchValue({
-          maxAgeUnitsId: defaultArray && defaultArray.length ? defaultArray[0].id : '',
-          minAgeUnitsId: defaultArray && defaultArray.length ? defaultArray[0].id : '',
-        })
-      }
       if(this.isView) {
         const minAgeArray = this.timeUnits.filter((type: any) => type.id === this.studyForm.value.minAgeUnitsId);
         this.studyMinAgeView = minAgeArray && minAgeArray.length ? minAgeArray[0] : {name: ''};
@@ -179,6 +187,8 @@ export class UpsertStudyComponent implements OnInit {
       studyStatusId: this.studyData.studyStatusId,
       studyGenderEligId: this.studyData.studyGenderEligId,
       studyEnrolment: this.studyData.studyEnrolment,
+      studyStartYear: this.studyData.studyStartYear,
+      studyStartMonth: this.studyData.studyStartMonth,
       minAge: this.studyData.minAge,
       minAgeUnitsId: this.studyData.minAgeUnitsId,
       maxAge: this.studyData.maxAge,

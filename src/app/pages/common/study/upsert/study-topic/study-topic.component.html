@@ -13,7 +13,7 @@
                 <div class="col-12 mb-5">
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
-                            {{findTopicType(studyTopic.value.topicTypeId)}}
+                            {{findTopicType(studyTopic.value.topicTypeId)}}:{{studyTopic.value.originalValue}}
                         </mat-expansion-panel-header>
 
                         <div class="row form-group">
@@ -26,6 +26,26 @@
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{findTopicType(studyTopic.value.topicTypeId)}}</h6>
                             </div>
                             <div class="col-md-6">
+                                <label for="meshValue" class="font-style text-capitalize">Topic value</label>
+                                <input type="text" id="meshValue" class="form-control" placeholder="Enter a parameter..."
+                                formControlName="meshValue" *ngIf="!isView"/>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyTopic.value.meshValue}}</h6>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="originalValue" class="font-style text-capitalize">Controlled Terminology</label>
+                                <input type="text" id="originalValue" class="form-control" placeholder="Enter a parameter..." formControlName="originalValue"
+                                    *ngIf="!isView" />
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyTopic.value.originalValue}}</h6>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="meshCode" class="font-style text-capitalize">CT code</label>
+                                <input type="text" id="meshCode" class="form-control" placeholder="Enter a parameter..."
+                                formControlName="meshCode" *ngIf="!isView"/>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyTopic.value.meshCode}}</h6>
+                            </div>
+                            <div class="col-md-4">
                                 <label for="meshCoded" class="font-style text-capitalize">Mesh coded</label>
                                 <select class="form-control" id="meshCoded" formControlName="meshCoded" *ngIf="!isView">
                                     <option disabled selected value=""></option>
@@ -35,29 +55,6 @@
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{studyTopic.value.meshCoded}}</h6>
                             </div>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-6">
-                                <label for="meshCode" class="font-style text-capitalize">Topic code</label>
-                                <input type="text" id="meshCode" class="form-control" placeholder="Enter a parameter..."
-                                formControlName="meshCode" *ngIf="!isView"/>
-                            <h6 style="font-weight: 100;" *ngIf="isView">{{studyTopic.value.meshCode}}</h6>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="meshValue" class="font-style text-capitalize">Topic value</label>
-                                <input type="text" id="meshValue" class="form-control" placeholder="Enter a parameter..."
-                                formControlName="meshValue" *ngIf="!isView"/>
-                            <h6 style="font-weight: 100;" *ngIf="isView">{{studyTopic.value.meshValue}}</h6>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-6">
-                                <label for="originalValue" class="font-style text-capitalize">Original value</label>
-                                <input type="text" id="originalValue" class="form-control" placeholder="Enter a parameter..." formControlName="originalValue"
-                                    *ngIf="!isView" />
-                                <h6 style="font-weight: 100;" *ngIf="isView">{{studyTopic.value.originalValue}}</h6>
-                            </div>
-                        </div>
-
                         <mat-action-row *ngIf="!isView">
                             <button mat-button color="primary" (click)="studyTopic.value.alreadyExist ? editTopic(studyTopic) : addTopic(i)">Save</button>
                             <button mat-button color="warn" (click)="removeStudyTopic(i)">Remove</button>
