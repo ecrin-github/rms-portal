@@ -1,0 +1,17 @@
+.sticky {
+    position: fixed;
+    top: 65px;
+    width: 80%;
+    padding: 25px;
+    z-index: 5;
+    background-color: white;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+.sticky+.content {
+    padding-top: 100px;
+}
+@media (max-width: 1025px) {
+    .sticky {
+        top: 0 !important;
+    }
+}

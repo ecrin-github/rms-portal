@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -75,6 +75,19 @@ export class UpsertObjectComponent implements OnInit {
       objectRelationships: [],
     });
   }
+  @HostListener('window:scroll', ['$event'])
+  onScroll() {
+    const navbar = document.getElementById('navbar');
+    const sticky = navbar.offsetTop;
+    if (window.pageYOffset >= sticky) {
+      navbar.classList.add('sticky');
+      // this.sticky = true;
+    } else {
+      navbar.classList.remove('sticky');
+      // this.sticky = false;
+    }
+  }
+
 
   ngOnInit(): void {
     this.isEdit = this.router.url.includes('edit') ? true : false;
