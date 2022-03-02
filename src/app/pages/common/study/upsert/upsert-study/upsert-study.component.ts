@@ -33,6 +33,7 @@ export class UpsertStudyComponent implements OnInit {
   initiateEmit: boolean = false;
   count = 0;
   publicTitle: string = '';
+  monthValues = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
 
   constructor(private fb: FormBuilder, private router: Router, private studyService: StudyService, private activatedRoute: ActivatedRoute,
     private spinner: NgxSpinnerService, private toastr: ToastrService) {
@@ -187,7 +188,7 @@ export class UpsertStudyComponent implements OnInit {
       studyStatusId: this.studyData.studyStatusId,
       studyGenderEligId: this.studyData.studyGenderEligId,
       studyEnrolment: this.studyData.studyEnrolment,
-      studyStartYear: this.studyData.studyStartYear,
+      studyStartYear: this.studyData.studyStartYear ? new Date(`01/01/${this.studyData.studyStartYear}`) : '',
       studyStartMonth: this.studyData.studyStartMonth,
       minAge: this.studyData.minAge,
       minAgeUnitsId: this.studyData.minAgeUnitsId,
@@ -274,6 +275,7 @@ export class UpsertStudyComponent implements OnInit {
       if (this.isEdit) {
         payload.id = this.studyData.id;
         payload.sdSid = this.id;
+        payload.studyStartYear = this.studyForm.value.studyStartYear ? this.studyForm.value.studyStartYear.getFullYear() : null;
         this.studyService.editStudy(this.id, payload).subscribe((res: any) => {
           this.spinner.hide();
           if (res.statusCode === 200) {
@@ -287,6 +289,7 @@ export class UpsertStudyComponent implements OnInit {
           this.toastr.error(error.error.title);
         })
       } else {
+        payload.studyStartYear = this.studyForm.value.studyStartYear ? this.studyForm.value.studyStartYear.getFullYear() : null;
         this.studyService.addStudy(payload).subscribe((res: any) => {
           this.spinner.hide();
           if (res.statusCode === 200) {

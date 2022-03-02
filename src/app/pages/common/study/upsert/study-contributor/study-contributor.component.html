@@ -14,7 +14,7 @@
                 <div class="col-12 mb-5">
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
-                            {{findContributorType(studyContributor.value.contribTypeId)}}
+                            {{findContributorType(studyContributor.value.contribTypeId)}}: {{studyContributor.value.isIndividual ? studyContributor.value.personGivenName : studyContributor.value.organisationName}}
                         </mat-expansion-panel-header>
                         <div class="row form-group">
                             <div class="col-md-6">
@@ -27,7 +27,7 @@
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.isIndividual}}</h6>
                             </div>
                         </div>
-                        <div class="row form-group" *ngIf="!isIndividual || !studyContributor.value.isIndividual">
+                        <div class="row form-group" *ngIf="!isIndividual && studyContributor.value.isIndividual">
                             <div class="col-md-6">
                                 <label for="contribTypeId" class="font-style text-capitalize">Contributor type</label>
                                 <select class="form-control" id="contribTypeId" formControlName="contribTypeId" *ngIf="!isView">
@@ -44,7 +44,7 @@
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.organisationName}}</h6>
                             </div>
                         </div>
-                        <div class="row form-group" *ngIf="isIndividual || studyContributor.value.isIndividual">
+                        <div class="row form-group" *ngIf="isIndividual">
                             <div class="col-md-6">
                                 <label for="contribTypeId" class="font-style text-capitalize">Contributor type</label>
                                 <select class="form-control" id="contribTypeId" formControlName="contribTypeId" *ngIf="!isView">
@@ -55,7 +55,7 @@
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{findContributorType(studyContributor.value.contribTypeId)}}</h6>
                             </div>
                         </div>
-                        <div class="row form-group"*ngIf="isIndividual || studyContributor.value.isIndividual">
+                        <div class="row form-group"*ngIf="isIndividual">
                             <div class="col-md-4">
                                 <label for="personGivenName" class="font-style text-capitalize">Person: Given name</label>
                                 <input type="text" id="personGivenName" class="form-control" placeholder="Enter a parameter..."
@@ -75,7 +75,7 @@
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.orcidId}}</h6>
                             </div>
                         </div>
-                        <div class="row form-group" *ngIf="isIndividual || studyContributor.value.isIndividual">
+                        <div class="row form-group" *ngIf="isIndividual">
                             <div class="col-md-6">
                                 <label for="personAffiliation" class="font-style text-capitalize">Department</label>
                                 <input type="text" id="personAffiliation" class="form-control" placeholder="Enter a parameter..."

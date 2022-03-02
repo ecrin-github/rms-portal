@@ -51,7 +51,7 @@ export class ObjectTitleComponent implements OnInit {
       sdOid: '',
       titleTypeId: '',
       titleText: '',
-      langCode: '',
+      langCode: 'en',
       comments: '',
       alreadyExist: false
     });

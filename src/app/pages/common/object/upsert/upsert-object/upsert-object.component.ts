@@ -29,6 +29,7 @@ export class UpsertObjectComponent implements OnInit {
   subscription: Subscription = new Subscription();
   initiateEmit: boolean = false;
   count = 0;
+  showDatasetKey: boolean = false;
 
   constructor(private fb: FormBuilder, private router: Router, private objectService: DataObjectService, private spinner: NgxSpinnerService,
     private toastr: ToastrService, private activatedRoute: ActivatedRoute) {
@@ -78,10 +79,6 @@ export class UpsertObjectComponent implements OnInit {
   ngOnInit(): void {
     this.isEdit = this.router.url.includes('edit') ? true : false;
     this.isView = this.router.url.includes('view') ? true : false;
-    if (this.isView || this.isEdit) {
-      this.id = this.activatedRoute.snapshot.params.id;
-      this.getObjectById(this.id);
-    }
     this.getObjectClass();
     this.getObjectType();
     this.getAccessType();
@@ -89,6 +86,10 @@ export class UpsertObjectComponent implements OnInit {
     this.getDeidentificationType();
     this.getConsentType();
     this.getLanguageCode();
+    if (this.isView || this.isEdit) {
+      this.id = this.activatedRoute.snapshot.params.id;
+      this.getObjectById(this.id);
+    }
   }
   getObjectClass() {
     setTimeout(() => {
@@ -210,6 +211,8 @@ export class UpsertObjectComponent implements OnInit {
     })
   }
   patchObjectForm() {
+    const arr: any = this.objectClass.filter((item:any) => item.name === 'Dataset');
+    this.showDatasetKey = this.objectData.objectClassId === arr[0].id ? true : false;
     this.objectForm.patchValue({
       doi: this.objectData.doi,
       displayTitle: this.objectData.displayTitle,
@@ -352,8 +355,15 @@ export class UpsertObjectComponent implements OnInit {
       payload.objectDatasets.consentResearchType = payload.objectDatasets.consentResearchType === 'true' ? true : false;
       payload.objectDatasets.consentGeneticOnly = payload.objectDatasets.consentGeneticOnly === 'true' ? true : false;
       payload.objectDatasets.consentNoMethods = payload.objectDatasets.consentNoMethods === 'true' ? true : false;
+      payload.objectTypeId = payload.objectTypeId ? payload.objectTypeId : null;
+      payload.objectClassId = payload.objectClassId ? payload.objectClassId : null;
+      payload.accessTypeId = payload.accessTypeId ? payload.accessTypeId : null;
+      payload.accessTypeId = payload.accessTypeId ? payload.accessTypeId : null;
+      payload.objectDatasets.recordKeysTypeId = payload.objectDatasets.recordKeysTypeId ? payload.objectDatasets.recordKeysTypeId : null;
+      payload.objectDatasets.deidentTypeId = payload.objectDatasets.deidentTypeId ? payload.objectDatasets.deidentTypeId : null;
+      payload.objectDatasets.consentTypeId = payload.objectDatasets.consentTypeId ? payload.objectDatasets.consentTypeId : null;
       if (this.isEdit) {
-        payload.id = this.id;
+        payload.id = this.objectData.id;
         payload.sdOid = this.id;
         if (this.objectData.objectDatasets) {
           payload.objectDatasets['id'] = this.objectData.objectDatasets['id'];
@@ -419,5 +429,9 @@ export class UpsertObjectComponent implements OnInit {
   }
   close() {
     window.close();
+  }
+  onChange() {
+    const arr: any = this.objectClass.filter((item:any) => item.name === 'Dataset');
+    this.showDatasetKey = parseInt(this.objectForm.value.objectClassId) === arr[0].id ? true : false;
   }
 }

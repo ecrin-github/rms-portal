@@ -17,84 +17,43 @@
                         </mat-expansion-panel-header>
 
                         <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Topic type</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <select class="form-control" formControlName="topicTypeId" *ngIf="!isView">
+                            <div class="col-md-6">
+                                <label for="topicTypeId" class="font-style text-capitalize">Topic type</label>
+                                <select id="topicTypeId" class="form-control" formControlName="topicTypeId" *ngIf="!isView">
                                     <option selected disabled value="">Select an option...</option>
                                     <option [value]=topic.id *ngFor="let topic of topicType">{{topic.name}}</option>
                                 </select>
-                                <span *ngIf="isView">{{findTopicType(objectTopic.value.topicTypeId)}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{findTopicType(objectTopic.value.topicTypeId)}}</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="meshValue" class="font-style text-capitalize">Topic value</label>
+                                <input id="meshValue" type="text" class="form-control" placeholder="Enter a parameter..."
+                                formControlName="meshValue" *ngIf="!isView">
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectTopic.value.meshValue}}</h6>
                             </div>
                         </div>
                         <br />
                         <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>MESH coded</strong>
+                            <div class="col-md-4">
+                                <label for="originalValue" class="font-style text-capitalize">Controlled Terminology</label>
+                                <input id="originalValue" type="text" class="form-control" placeholder="Enter a parameter..."
+                                formControlName="originalValue" *ngIf="!isView">
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectTopic.value.originalValue}}</h6>
                             </div>
-                            <div class="col-md-8">
-                                <select class="form-control" formControlName="meshCoded" *ngIf="!isView">
+                            <div class="col-md-4">
+                                <label for="meshCode" class="font-style text-capitalize">CT Code</label>
+                                <input id="meshCode" type="text" class="form-control" placeholder="Enter a parameter..."
+                                formControlName="meshCode" *ngIf="!isView">
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectTopic.value.meshCode}}</h6>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="meshCoded" class="font-style text-capitalize">Mesh Coded</label>
+                                <select id="meshCoded" class="form-control" formControlName="meshCoded" *ngIf="!isView">
                                     <option selected disabled value="">Select an option...</option>
                                     <option value=false>No</option>
                                     <option value=true>Yes</option>
                                 </select>
-                                <span *ngIf="isView">{{objectTopic.value.meshCoded}}</span>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Topic code</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="meshCode" *ngIf="!isView">
-                                <span *ngIf="isView">{{objectTopic.value.meshCode}}</span>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Topic value</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="meshValue" *ngIf="!isView">
-                                <span *ngIf="isView">{{objectTopic.value.meshValue}}</span>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Topic qualified code</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="meshQualcode" *ngIf="!isView">
-                                <span *ngIf="isView">{{objectTopic.value.meshQualcode}}</span>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Topic qualified code value</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="meshQualvalue" *ngIf="!isView">
-                                <span *ngIf="isView">{{objectTopic.value.meshQualvalue}}</span>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Original value</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="originalValue" *ngIf="!isView">
-                                <span *ngIf="isView">{{objectTopic.value.originalValue}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectTopic.value.meshCoded}}</h6>
                             </div>
                         </div>
 

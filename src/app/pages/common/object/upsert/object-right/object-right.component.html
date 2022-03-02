@@ -17,35 +17,25 @@
                         </mat-expansion-panel-header>
 
                         <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Rights name</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" placeholder="Enter a parameter..."
+                            <div class="col-md-6">
+                                <label for="rightsName" class="font-style text-capitalize">Rights name</label>
+                                <input id="rightsName" type="text" class="form-control" placeholder="Enter a parameter..."
                                     formControlName="rightsName" *ngIf="!isView">
-                                <span *ngIf="isView">{{objectRight.value.rightsName}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectRight.value.rightsName}}</h6>
                             </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Rights URL</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" placeholder="Enter a parameter..."
+                            <div class="col-md-6">
+                                <label for="rightsUri" class="font-style text-capitalize">Rights URL</label>
+                                <input id="rightsUri" type="text" class="form-control" placeholder="Enter a parameter..."
                                     formControlName="rightsUri" *ngIf="!isView">
-                                <span *ngIf="isView">{{objectRight.value.rightsUri}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectRight.value.rightsUri}}</h6>
                             </div>
                         </div>
-                        <br />
                         <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Comments</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <textarea cols="30" rows="10" placeholder="Enter a parameter..." class="form-control"
-                                    formControlName="comments" *ngIf="!isView"></textarea>
-                                <span *ngIf="isView">{{objectRight.value.comments}}</span>
+                            <div class="col-md-6">
+                                <label for="comments" class="font-style text-capitalize">Comments</label>
+                                <textarea id="comments" cols="30" rows="5" placeholder="Enter a parameter..." class="form-control"
+                                formControlName="comments" *ngIf="!isView"></textarea>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectRight.value.comments}}</h6>
                             </div>
                         </div>
 

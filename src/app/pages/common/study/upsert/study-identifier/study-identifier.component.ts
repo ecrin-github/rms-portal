@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { StudyIdentifierInterface } from 'src/app/_rms/interfaces/study/study-identifiers.interface';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-study-identifier',
@@ -68,7 +69,8 @@ export class StudyIdentifierComponent implements OnInit {
     });
     const getIdentifierType$ = this.studyService.getIdentifierType().subscribe((res: any) => {
       if(res.data) {
-        this.identifierTypes = res.data.filter(item => item.appliesTo === 'Study' || item.appliesTo === 'All');
+        const temp = res.data.filter(item => item.appliesTo === 'Study' || item.appliesTo === 'All');
+        this.identifierTypes = _.sortBy(temp, ['listOrder']);
       }
       this.spinner.hide();
     }, error => {

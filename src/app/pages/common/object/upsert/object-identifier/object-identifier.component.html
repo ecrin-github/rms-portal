@@ -18,68 +18,47 @@
                         </mat-expansion-panel-header>
 
 
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Identifier type</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <select class="form-control" formControlName="identifierTypeId" *ngIf="!isView">
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="identifierTypeId" class="font-style text-capitalize">Identifier type</label>
+                                <select id="identifierTypeId" class="form-control" formControlName="identifierTypeId" *ngIf="!isView">
                                     <option disabled selected value="">Select an option...</option>
                                     <option [value]=identifier.id *ngFor="let identifier of identifierType">{{identifier.name}}</option>
                                 </select>
-                                <span *ngIf="isView">{{findIdentifierTyepe(objectIdentifier.value.identifierTypeId)}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{findIdentifierTyepe(objectIdentifier.value.identifierTypeId)}}</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="identifierValue" class="font-style text-capitalize">Identifier value</label>
+                                <input id="identifierValue" type="text" class="form-control" placeholder="Enter a parameter..."
+                                formControlName="identifierValue" *ngIf="!isView" />
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectIdentifier.value.identifierValue}}</h6>
                             </div>
                         </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Identifier value</strong>
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="identifierOrg" class="font-style text-capitalize">Identifier organisation</label>
+                                <input id="identifierOrg" type="text" class="form-control" placeholder="Enter a parameter..."
+                                formControlName="identifierOrg" *ngIf="!isView" />
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectIdentifier.value.identifierOrg}}</h6>
                             </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="identifierValue" *ngIf="!isView" />
-                                <span *ngIf="isView">{{objectIdentifier.value.identifierValue}}</span>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Identifier organisation</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="identifierOrg" *ngIf="!isView" />
-                                <span *ngIf="isView">{{objectIdentifier.value.identifierOrg}}</span>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Identifier date</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <!-- <div> -->
-                                    <!-- <form class="form-inline"> -->
-                                        <div class="form-group" *ngIf="!isView">
-                                            <div class="input-group">
-                                                <input class="form-control" placeholder="yyyy-mm-dd"
-                                                    name="identifierDate" formControlName="identifierDate" ngbDatepicker
-                                                    #identifierDate="ngbDatepicker">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-primary" (click)="identifierDate.toggle()"
-                                                        type="button">
-                                                        <i class="fa fa-calendar"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
+                            <div class="col-md-6">
+                                <label for="identifierDate" class="font-style text-capitalize">Identifier date</label>
+                                <div class="form-group" *ngIf="!isView">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="yyyy-mm-dd"
+                                            name="identifierDate" formControlName="identifierDate" ngbDatepicker
+                                            #identifierDate="ngbDatepicker">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" (click)="identifierDate.toggle()"
+                                                type="button">
+                                                <i class="fa fa-calendar"></i>
+                                            </button>
                                         </div>
-                                        <span *ngIf="isView">{{dateToString(objectIdentifier.value.identifierDate)}}</span>
-                                    <!-- </form> -->
-                                <!-- </div> -->
+                                    </div>
+                                </div>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{dateToString(objectIdentifier.value.identifierDate)}}</h6>
                             </div>
                         </div>
-
-
                         <mat-action-row *ngIf="!isView">
                             <button mat-button color="primary" (click)="objectIdentifier.value.alreadyExist ? editIdentifier(objectIdentifier) : addIdentifier(i)">Save</button>
                             <button mat-button color="warn" (click)="removeObjectIdentifier(i)">Remove</button>

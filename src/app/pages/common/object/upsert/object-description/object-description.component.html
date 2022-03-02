@@ -17,51 +17,36 @@
                             {{findDescriptionType(objectDescription.value.descriptionTypeId)}}
                         </mat-expansion-panel-header>
 
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Description type</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <select class="form-control" *ngIf="!isView" formControlName="descriptionTypeId">
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="descriptionTypeId" class="font-style text-capitalize">Description type</label>
+                                <select id="descriptionTypeId" class="form-control" *ngIf="!isView" formControlName="descriptionTypeId">
                                     <option disabled selected value="">Select an option...</option>
                                     <option [value]=description.id *ngFor="let description of descriptionType">{{description.name}}</option>
                                 </select>
-                                <span *ngIf="isView">{{findDescriptionType(objectDescription.value.descriptionTypeId)}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{findDescriptionType(objectDescription.value.descriptionTypeId)}}</h6>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="label" class="font-style text-capitalize">Description label</label>
+                                <input id="label" type="text" class="form-control" placeholder="Enter a parameter..."
+                                formControlName="label" *ngIf="!isView" />
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectDescription.value.label}}</h6>
                             </div>
                         </div>
-                        <br />
                         <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Description label</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                    formControlName="label" *ngIf="!isView" />
-                                <span *ngIf="isView">{{objectDescription.value.label}}</span>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Description text</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <textarea cols="30" rows="10" placeholder="Enter a parameter..."
+                            <div class="col-md-6">
+                                <label for="descriptionText" class="font-style text-capitalize">Description text</label>
+                                <textarea id="descriptionText" cols="30" rows="5" placeholder="Enter a parameter..."
                                     formControlName="descriptionText" class="form-control" *ngIf="!isView"></textarea>
-                                <span *ngIf="isView">{{objectDescription.value.descriptionText}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectDescription.value.descriptionText}}</h6>
                             </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Language code</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <select class="form-control" formControlName="langCode" *ngIf="!isView">
+                            <div class="col-md-6">
+                                <label for="langCode" class="font-style text-capitalize">Language code</label>
+                                <select id="langCode" class="form-control" formControlName="langCode" *ngIf="!isView">
                                     <option disabled selected value=""></option>
                                     <option [value]="language.code" *ngFor="let language of languageCode">{{language.code}}</option>
                                 </select>
-                                <span *ngIf="isView">{{objectDescription.value.langCode}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectDescription.value.langCode}}</h6>
                             </div>
                         </div>
 

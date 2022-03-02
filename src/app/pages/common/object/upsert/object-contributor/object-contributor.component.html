@@ -17,91 +17,79 @@
                             {{findContributorType(objectContributor.value.contribTypeId)}}
                         </mat-expansion-panel-header>
 
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Contributor type</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <select class="form-control" formControlName="contribTypeId" *ngIf="!isView">
-                                    <option selected disabled value="">Select an option...</option>
-                                    <option [value]=contributor.id *ngFor="let contributor of contributorType">{{contributor.name}}</option>
-                                </select>
-                                <span *ngIf="isView">{{findContributorType(objectContributor.value.contribTypeId)}}</span>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Is individual?</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <select class="form-control" formControlName="isIndividual" *ngIf="!isView">
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="isIndividual" class="font-style text-capitalize">Is individual?</label>
+                                <select class="form-control" id="isIndividual" formControlName="isIndividual" *ngIf="!isView" (change)="onChange(i)">
                                     <option selected disabled value="">Select an option...</option>
                                     <option value=false>No</option>
                                     <option value=true>Yes</option>
                                 </select>
-                                <span *ngIf="isView">{{objectContributor.value.isIndividual}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectContributor.value.isIndividual}}</h6>
                             </div>
                         </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Organisation</strong>
+                        <div class="row form-group" *ngIf="!isIndividual && objectContributor.value.isIndividual">
+                            <div class="col-md-6">
+                                <label for="contribTypeId" class="font-style text-capitalize">Contributor type</label>
+                                <select class="form-control" id="contribTypeId" formControlName="contribTypeId" *ngIf="!isView">
+                                    <option selected disabled value="">Select an option...</option>
+                                    <option [value]=contributor.id *ngFor="let contributor of contributorType">
+                                        {{contributor.name}}</option>
+                                </select>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{findContributorType(objectContributor.value.contribTypeId)}}</h6>
                             </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" placeholder="Enter a parameter..."
+                            <div class="col-md-6">
+                                <label for="organisationName" class="font-style text-capitalize">Organisation</label>
+                                <input type="text" id="organisationName" class="form-control" placeholder="Enter a parameter..."
                                     formControlName="organisationName" *ngIf="!isView" />
-                                <span *ngIf="isView">{{objectContributor.value.organisationName}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectContributor.value.organisationName}}</h6>
                             </div>
                         </div>
-                        <br />
-
-                        <!-- <div formGroupName="person"> -->
-                            <div class="row">
-                                <div class="col-md-4 text-center">
-                                    <strong>Person: Family name</strong>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                        formControlName="personFamilyName" *ngIf="!isView">
-                                    <span *ngIf="isView">{{objectContributor.value.personFamilyName}}</span>
-                                </div>
+                        <div class="row form-group" *ngIf="isIndividual">
+                            <div class="col-md-6">
+                                <label for="contribTypeId" class="font-style text-capitalize">Contributor type</label>
+                                <select class="form-control" id="contribTypeId" formControlName="contribTypeId" *ngIf="!isView">
+                                    <option selected disabled value="">Select an option...</option>
+                                    <option [value]=contributor.id *ngFor="let contributor of contributorType">
+                                        {{contributor.name}}</option>
+                                </select>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{findContributorType(objectContributor.value.contribTypeId)}}</h6>
                             </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-4 text-center">
-                                    <strong>Person: Given name</strong>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                        formControlName="personGivenName" *ngIf="!isView">
-                                    <span *ngIf="isView">{{objectContributor.value.personGivenName}}</span>
-                                </div>
+                        </div>
+                        <div class="row form-group"*ngIf="isIndividual">
+                            <div class="col-md-4">
+                                <label for="personGivenName" class="font-style text-capitalize">Person: Given name</label>
+                                <input type="text" id="personGivenName" class="form-control" placeholder="Enter a parameter..."
+                                    formControlName="personGivenName" *ngIf="!isView">
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectContributor.value.personGivenName}}</h6>
                             </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-4 text-center">
-                                    <strong>Person: ORCID</strong>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                        formControlName="orcidId" *ngIf="!isView">
-                                    <span *ngIf="isView">{{objectContributor.value.orcidId}}</span>
-                                </div>
+                            <div class="col-md-4">
+                                <label for="personFamilyName" class="font-style text-capitalize">Person: First name</label>
+                                <input type="text" id="personFamilyName" class="form-control" placeholder="Enter a parameter..."
+                                    formControlName="personFamilyName" *ngIf="!isView">
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectContributor.value.personFamilyName}}</h6>
                             </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-4 text-center">
-                                    <strong>Person: Affiliation</strong>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control" placeholder="Enter a parameter..."
-                                        formControlName="personAffiliation" *ngIf="!isView">
-                                    <span *ngIf="isView">{{objectContributor.value.personAffiliation}}</span>
-                                </div>
+                            <div class="col-md-4">
+                                <label for="orcidId" class="font-style text-capitalize">Person: ORCID</label>
+                                <input type="text" id="orcidId" class="form-control" placeholder="Enter a parameter..."
+                                    formControlName="orcidId" *ngIf="!isView">
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectContributor.value.orcidId}}</h6>
                             </div>
-                        <!-- </div> -->
-
+                        </div>
+                        <div class="row form-group" *ngIf="isIndividual">
+                            <div class="col-md-6">
+                                <label for="personAffiliation" class="font-style text-capitalize">Department</label>
+                                <input type="text" id="personAffiliation" class="form-control" placeholder="Enter a parameter..."
+                                    formControlName="personAffiliation" *ngIf="!isView">
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectContributor.value.personAffiliation}}</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="organisationName" class="font-style text-capitalize">Organisation</label>
+                                <input type="text" id="organisationName" class="form-control" placeholder="Enter a parameter..."
+                                    formControlName="organisationName" *ngIf="!isView" />
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectContributor.value.organisationName}}</h6>
+                            </div>
+                        </div>
                         <mat-action-row *ngIf="!isView">
                             <button mat-button color="primary" (click)="objectContributor.value.alreadyExist ? editContributor(objectContributor) : addContributor(i)">Save</button>
                             <button mat-button color="warn" (click)="removeObjectContributor(i)">Remove</button>

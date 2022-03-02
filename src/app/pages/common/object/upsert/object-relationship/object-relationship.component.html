@@ -17,27 +17,20 @@
                             {{findRelationType(objectRelation.value.relationshipTypeId)}}
                         </mat-expansion-panel-header>
 
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Relationship type</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <select class="form-control" formControlName="relationshipTypeId" *ngIf="!isView">
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="relationshipTypeId" class="font-style text-capitalize">Relationship type</label>
+                                <select id="relationshipTypeId" class="form-control" formControlName="relationshipTypeId" *ngIf="!isView">
                                     <option disabled selected value="">Select an option...</option>
                                     <option [value]=relationship.id *ngFor="let relationship of relationshipType">{{relationship.name}}</option>
                                 </select>
-                                <span *ngIf="isView">{{findRelationType(objectRelation.value.relationshipTypeId)}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{findRelationType(objectRelation.value.relationshipTypeId)}}</h6>
                             </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Target data object</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" formControlName="targetSdOid"
+                            <div class="col-md-6">
+                                <label for="targetSdOid" class="font-style text-capitalize">Target data object</label>
+                                <input id="targetSdOid" type="text" class="form-control" formControlName="targetSdOid"
                                     placeholder="Enter a parameter..." *ngIf="!isView" />
-                                <span *ngIf="isView">{{objectRelation.value.targetSdOid}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectRelation.value.targetSdOid}}</h6>
                             </div>
                         </div>
 

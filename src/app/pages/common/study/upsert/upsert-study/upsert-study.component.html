@@ -57,15 +57,15 @@
             </div>
             <div class="row form-group">
                 <div class="col-md-6">
-                    <label for="" class="font-style text-capitalize">Study Start Month</label>
-                    <input type="text" class="form-control" placeholder="Enter a min age value..."
-                    formControlName="studyStartMonth">
+                    <label for="studyStartMonth" class="font-style text-capitalize">Study Start Month</label>
+                    <select id="studyStartMonth" class="form-control" formControlName="studyStartMonth">
+                        <option selected disabled value="">Select an option...</option>
+                        <option [value]="month" *ngFor="let month of monthValues">{{month}}</option>
+                    </select>
                 </div>
                 <div class="col-md-6">
-                    <label for="" class="font-style text-capitalize">Study Start Year</label>
-                    <!-- <input type="text" class="form-control" placeholder="Enter a min age value..."
-                    formControlName="studyStartYear"> -->
-                    <p-calendar formControlName="studyStartYear" view="year" dateFormat="yy"></p-calendar>
+                    <label for="studyStartYear" class="font-style text-capitalize">Study Start Year</label>
+                    <p-calendar id="studyStartYear" formControlName="studyStartYear" view="year" dateFormat="yy"></p-calendar>
                 </div>
             </div>
             <div class="row form-group">

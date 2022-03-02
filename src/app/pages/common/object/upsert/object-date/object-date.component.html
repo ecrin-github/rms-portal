@@ -16,95 +16,73 @@
                             {{findDateType(objectDate.value.dateTypeId)}}
                         </mat-expansion-panel-header>
 
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Date type</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <select class="form-control" formControlName="dateTypeId" *ngIf="!isView">
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="dateTypeId" class="font-style text-capitalize">Date type</label>
+                                <select id="dateTypeId" class="form-control" formControlName="dateTypeId" *ngIf="!isView">
                                     <option disabled selected value="">Select an option...</option>
                                     <option [value]=date.id *ngFor="let date of dateType">{{date.name}}</option>
                                 </select>
-                                <span *ngIf="isView">{{findDateType(objectDate.value.dateTypeId)}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{findDateType(objectDate.value.dateTypeId)}}</h6>
                             </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Is date range?</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <select class="form-control" formControlName="isDateRange" *ngIf="!isView">
+                            <div class="col-md-6">
+                                <label for="isDateRange" class="font-style text-capitalize">Is date range?</label>
+                                <select id="isDateRange" class="form-control" formControlName="isDateRange" *ngIf="!isView">
                                     <option disabled selected value="">Select an option...</option>
                                     <option value=false>No</option>
                                     <option value=true>Yes</option>
                                 </select>
-                                <span *ngIf="isView">{{objectDate.value.isDateRange}}</span>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectDate.value.isDateRange}}</h6>
                             </div>
                         </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Start date</strong>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="startDay" class="font-style text-capitalize">Start date</label>
+                                <select id="startDay" class="form-control" formControlName="startDay" *ngIf="!isView">
+                                    <option selected disabled value="">Select an option...</option>
+                                    <option [value]="day" *ngFor="let day of dayValues">{{day}}</option>
+                                </select>
+                                <!-- <p-calendar appendTo="body" id="startDay" formControlName="startDay" view="date" dateFormat="dd"></p-calendar> -->
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectDate.value.startDay}}</h6>
                             </div>
-                            <div class="col-md-8">
-                                <!-- <div> -->
-                                    <!-- <form class="form-inline"> -->
-                                        <div class="form-group" *ngIf="!isView">
-                                            <div class="input-group">
-                                                <input class="form-control" placeholder="yyyy-mm-dd" name="startDate"
-                                                    ngbDatepicker #startDate="ngbDatepicker"
-                                                    formControlName="startDate">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-primary" (click)="startDate.toggle()"
-                                                        type="button">
-                                                        <i class="fa fa-calendar"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <span *ngIf="isView">{{dateToString1(objectDate.value.startDate)}}</span>
-                                    <!-- </form> -->
-                                <!-- </div> -->
+                            <div class="col-md-4">
+                                <label for="startMonth" class="font-style text-capitalize">Start Month</label>
+                                <select id="startMonth" class="form-control" formControlName="startMonth" *ngIf="!isView">
+                                    <option selected disabled value="">Select an option...</option>
+                                    <option [value]="month" *ngFor="let month of monthValues">{{month}}</option>
+                                </select>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectDate.value.startMonth}}</h6>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="startYear" class="font-style text-capitalize">Start Year</label>
+                                <p-calendar appendTo="body" id="startYear" formControlName="startYear" view="year" dateFormat="yy" *ngIf="!isView"></p-calendar>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectDate.value.startYear}}</h6>
                             </div>
                         </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>End date</strong>
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label for="endDay" class="font-style text-capitalize">End Date</label>
+                                <select id="endDay" class="form-control" formControlName="endDay" *ngIf="!isView">
+                                    <option selected disabled value="">Select an option...</option>
+                                    <option [value]="day" *ngFor="let day of dayValues">{{day}}</option>
+                                </select>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectDate.value.endDay}}</h6>
+                                <!-- <p-calendar appendTo="body" id="endDay" formControlName="endDay" view="date" dateFormat="dd"></p-calendar> -->
                             </div>
-                            <div class="col-md-8">
-                                <!-- <div> -->
-                                    <!-- <form class="form-inline"> -->
-                                        <div class="form-group" *ngIf="!isView">
-                                            <div class="input-group">
-                                                <input class="form-control" placeholder="yyyy-mm-dd" name="endDate"
-                                                    ngbDatepicker #endDate="ngbDatepicker" formControlName="endDate">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-primary" (click)="endDate.toggle()"
-                                                        type="button">
-                                                        <i class="fa fa-calendar"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <span *ngIf="isView">{{dateToString1(objectDate.value.endDate)}}</span>
-                                    <!-- </form> -->
-                                <!-- </div> -->
+                            <div class="col-md-4">
+                                <label for="endMonth" class="font-style text-capitalize">End Month</label>
+                                <select id="endMonth" class="form-control" formControlName="endMonth" *ngIf="!isView">
+                                    <option selected disabled value="">Select an option...</option>
+                                    <option [value]="month" *ngFor="let month of monthValues">{{month}}</option>
+                                </select>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectDate.value.endMonth}}</h6>
                             </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <strong>Comments</strong>
-                            </div>
-                            <div class="col-md-8">
-                                <textarea class="form-control" cols="30" rows="10"
-                                    formControlName="details" *ngIf="!isView"></textarea>
-                                <span *ngIf="isView">{{objectDate.value.details}}</span>
+                            <div class="col-md-4">
+                                <label for="endYear" class="font-style text-capitalize">End Year</label>
+                                <p-calendar appendTo="body" id="endYear" formControlName="endYear" view="year" dateFormat="yy" *ngIf="!isView"></p-calendar>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectDate.value.endYear}}</h6>
                             </div>
                         </div>
-
                         <mat-action-row *ngIf="!isView">
                             <button mat-button color="primary" (click)="objectDate.value.alreadyExist ? editDate(objectDate) : addDate(i)">Save</button>
                             <button mat-button color="warn" (click)="removeObjectDate(i)">Remove</button>

@@ -15,511 +15,391 @@
     </div>
 
     <div class="card-body">
-        <form [formGroup]="objectForm" >
-            <div class="row">
-                <div class="col-md-4 text-center">
-                    <h6 class="pt-4">Display title</h6>
-                </div>
-                <div class="col-md-8">
-                    <input type="text" class="form-control" placeholder="Enter display title..."
-                        formControlName="displayTitle" *ngIf="!isView"/>
-                    <span *ngIf="isView">{{objectData.displayTitle}}</span>
+        <form [formGroup]="objectForm">
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <label for="displayTitle" class="font-style text-capitalize">Display title</label>
+                    <textarea id="displayTitle" cols="30" rows="3" class="form-control" placeholder="Enter display title..."
+                    formControlName="displayTitle" *ngIf="!isView" ></textarea>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.displayTitle}}</h6>
                 </div>
             </div>
 
-            <hr />
-
-            <div class="row">
-                <div class="col-md-4 text-center">
-                    <h6 class="pt-4">DOI</h6>
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <label for="doi" class="font-style text-capitalize">DOI</label>
+                    <input id="doi" type="text" class="form-control" placeholder="Enter DOI..." formControlName="doi"
+                        *ngIf="!isView" />
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.doi}}</h6>
                 </div>
-                <div class="col-md-8">
-                    <input type="text" class="form-control" placeholder="Enter DOI..." formControlName="doi" *ngIf="!isView"/>
-                    <span *ngIf="isView">{{objectData.doi}}</span>
-                </div>
-            </div>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-md-4 text-center">
-                    <h6 class="pt-4">Version</h6>
-                </div>
-                <div class="col-md-8">
-                    <input type="text" class="form-control" placeholder="Enter version..." formControlName="version" *ngIf="!isView"/>
-                    <span *ngIf="isView">{{objectData.version}}</span>
+                <div class="col-md-6">
+                    <label for="version" class="font-style text-capitalize">Version</label>
+                    <input type="text" id="version" class="form-control" placeholder="Enter version..." formControlName="version"
+                        *ngIf="!isView" />
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.version}}</h6>
                 </div>
             </div>
 
-            <hr />
-
-            <div class="row">
-                <div class="col-md-4 text-center">
-                    <h6 class="pt-4">Object class</h6>
-                </div>
-                <div class="col-md-8">
-                    <select class="form-control" formControlName="objectClassId" *ngIf="!isView">
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <label for="objectClassId" class="font-style text-capitalize">Object class</label>
+                    <select id="objectClassId" class="form-control" formControlName="objectClassId" *ngIf="!isView" (change)="onChange()">
                         <option selected disabled value="">Select an option...</option>
                         <option [value]=class.id *ngFor="let class of objectClass">{{class.name}}</option>
                     </select>
-                    <span *ngIf="isView">{{findObjectClass(objectData.objectClassId)}}</span>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{findObjectClass(objectData.objectClassId)}}</h6>
                 </div>
-            </div>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-md-4 text-center">
-                    <h6 class="pt-4">Object type</h6>
-                </div>
-                <div class="col-md-8">
-                    <select class="form-control" formControlName="objectTypeId" *ngIf="!isView">
+                <div class="col-md-6">
+                    <label for="objectTypeId" class="font-style text-capitalize">Object type</label>
+                    <select id="objectTypeId" class="form-control" formControlName="objectTypeId" *ngIf="!isView">
                         <option selected disabled value="">Select an option...</option>
                         <option [value]=type.id *ngFor="let type of objectType">{{type.name}}</option>
                     </select>
-                    <span *ngIf="isView">{{findobjectType(objectData.objectTypeId)}}</span>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{findobjectType(objectData.objectTypeId)}}</h6>
                 </div>
             </div>
 
-            <hr />
-
-            <div class="row">
-                <div class="col-md-4 text-center">
-                    <h6 class="pt-4">Publication year</h6>
-                </div>
-                <div class="col-md-8">
-                    <input type="text" class="form-control" placeholder="Enter publication year..."
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <label for="publicationYear" class="font-style text-capitalize">Publication year</label>
+                    <input id="publicationYear" type="text" class="form-control" placeholder="Enter publication year..."
                         formControlName="publicationYear" *ngIf="!isView" />
-                    <span *ngIf="isView">{{objectData.publicationYear}}</span>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.publicationYear}}</h6>
                 </div>
-            </div>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-md-4 text-center">
-                    <h6 class="pt-4">Language</h6>
-                </div>
-                <div class="col-md-8">
-                    <select class="form-control" formControlName="langCode" *ngIf="!isView">
+                <div class="col-md-6">
+                    <label for="langCode" class="font-style text-capitalize">Language</label>
+                    <select id="langCode" class="form-control" formControlName="langCode" *ngIf="!isView">
                         <option selected disabled value="">Select an option...</option>
                         <option [value]="language.code" *ngFor="let language of languageCode">{{language.code}}</option>
                     </select>
-                    <span *ngIf="isView">{{objectData.langCode}}</span>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.langCode}}</h6>
                 </div>
             </div>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-md-4 text-center">
-                    <h6 class="pt-4">Managing organisation</h6>
-                </div>
-                <div class="col-md-8">
-                    <input type="text" class="form-control" placeholder="Enter managing organisation..."
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <label for="managingOrg" class="font-style text-capitalize">Managing organisation</label>
+                    <input id="managingOrg" type="text" class="form-control" placeholder="Enter managing organisation..."
                         formControlName="managingOrg" *ngIf="!isView" />
-                    <span *ngIf="isView">{{objectData.managingOrg}}</span>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.managingOrg}}</h6>
                 </div>
-            </div>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-md-4 text-center">
-                    <h6 class="pt-4">Access type</h6>
-                </div>
-                <div class="col-8">
-                    <select class="form-control" formControlName="accessTypeId" *ngIf="!isView">
+                <div class="col-md-6">
+                    <label for="accessTypeId" class="font-style text-capitalize">Access type</label>
+                    <select id="accessTypeId" class="form-control" formControlName="accessTypeId" *ngIf="!isView">
                         <option selected disabled value="">Select an option...</option>
                         <option [value]=access.id *ngFor="let access of accessType">{{access.name}}</option>
                     </select>
-                    <span *ngIf="isView">{{findAccessType(objectData.accessTypeId)}}</span>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{findAccessType(objectData.accessTypeId)}}</h6>
                 </div>
             </div>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h6 class="pt-3">Access details</h6>
-                </div>
-            </div>
-            <br />
-            <!-- <div formGroupName="accessDetails"> -->
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <strong>Description</strong>
-                    </div>
-                    <div class="col-md-8">
-                        <textarea class="form-control" cols="30" rows="5" placeholder="Enter description..."
-                            formControlName="accessDetails" *ngIf="!isView"></textarea>
-                        <span *ngIf="isView">{{objectData.accessDetails}}</span>
-                    </div>
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <strong>URL</strong>
-                    </div>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" placeholder="Enter a parameter..."
-                            formControlName="accessDetailsUrl" *ngIf="!isView" />
-                        <span *ngIf="isView">{{objectData.accessDetailsUrl}}</span>
-                    </div>
-                </div>
-            <!-- </div> -->
-
-
-            <hr />
-
-            <div class="row">
-                <div class="col-md-4 text-center">
-                    <h6 class="pt-4">EOSC category</h6>
-                </div>
-                <div class="col-8">
-                    <select class="form-control" formControlName="eoscCategory" *ngIf="!isView">
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <label for="eoscCategory" class="font-style text-capitalize">EOSC category</label>
+                    <select id="eoscCategory" class="form-control" formControlName="eoscCategory" *ngIf="!isView">
                         <option selected disabled value="0">Select an option...</option>
                         <option value="0">No</option>
                         <option value="1">Yes</option>
                     </select>
-                    <span *ngIf="isView">{{objectData.eoscCategory}}</span>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.eoscCategory}}</h6>
                 </div>
             </div>
-
             <hr />
-            <div formGroupName="objectDatasets">
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <h6 class="pt-3">Dataset record keys</h6>
+                    <h6 style="font-weight: 100;" class="pt-3 font-style">Access details</h6>
                 </div>
             </div>
             <br />
-            <!-- <div formGroupName="datasetRecordKeys"> -->
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <label for="accessDetails" class="font-style text-capitalize">Description</label>
+                    <textarea id="accessDetails" class="form-control" cols="30" rows="5" placeholder="Enter description..."
+                        formControlName="accessDetails" *ngIf="!isView"></textarea>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.accessDetails}}</h6>
+                </div>
+                <div class="col-md-6">
+                    <label for="accessDetailsUrl" class="font-style text-capitalize">URL</label>
+                    <input id="accessDetailsUrl" type="text" class="form-control" placeholder="Enter a parameter..."
+                        formControlName="accessDetailsUrl" *ngIf="!isView" />
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.accessDetailsUrl}}</h6>
+                </div>
+            </div>
+            <hr />
+            <div formGroupName="objectDatasets" *ngIf="showDatasetKey">
                 <div class="row">
-                    <div class="col-md-4 text-center">
-                        <strong>Keys type</strong>
+                    <div class="col-md-12 text-center">
+                        <span class="pt-3 font-style">Dataset record keys</span>
                     </div>
-                    <div class="col-8">
-                        <select class="form-control" formControlName="recordKeysTypeId" *ngIf="!isView">
+                </div>
+                <br />
+                <div class="row form-group">
+                    <div class="col-md-6">
+                        <label for="recordKeysDetails" class="font-style text-capitalize">Keys details</label>
+                        <textarea id="recordKeysDetails" class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
+                            formControlName="recordKeysDetails" *ngIf="!isView"></textarea>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.recordKeysDetails}}</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="recordKeysTypeId" class="font-style text-capitalize">Keys type</label>
+                        <select id="recordKeysTypeId" class="form-control" formControlName="recordKeysTypeId" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
                             <option [value]=key.id *ngFor="let key of keyType">{{key.name}}</option>
                         </select>
-                        <span *ngIf="isView">{{findKeyType(objectData.objectDatasets?.recordKeysTypeId)}}</span>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{findKeyType(objectData.objectDatasets?.recordKeysTypeId)}}</h6>
                     </div>
                 </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <strong>Keys details</strong>
-                    </div>
-                    <div class="col-md-8">
-                        <textarea class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
-                            formControlName="recordKeysDetails" *ngIf="!isView"></textarea>
-                        <span *ngIf="isView">{{objectData.objectDatasets?.recordKeysDetails}}</span>
-                    </div>
-                </div>
-            <!-- </div> -->
+                <hr />
 
-
-            <hr />
-
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h6 class="pt-3">Dataset deidentification level</h6>
-                </div>
-            </div>
-            <br />
-            <!-- <div formGroupName="datasetDeidentLevel"> -->
                 <div class="row">
-                    <div class="col-md-4 text-center">
-                        <strong>Deidentification type</strong>
-                    </div>
-                    <div class="col-md-8">
-                        <select class="form-control" formControlName="deidentTypeId" *ngIf="!isView">
-                            <option selected disabled value="">Select an option...</option>
-                            <option [value]=identification.id *ngFor="let identification of deidentificationType">{{identification.name}}</option>
-                        </select>
-                        <span *ngIf="isView">{{findDeidentificationType(objectData.objectDatasets?.deidentTypeId)}}</span>
+                    <div class="col-md-12 text-center">
+                        <span class="pt-3 font-style">Dataset deidentification level</span>
                     </div>
                 </div>
                 <br />
-                
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <strong>Deidentification direct</strong>
+                <div class="row form-group">
+                    <div class="col-md-6">
+                        <label for="deidentTypeId" class="font-style text-capitalize">Deidentification type</label>
+                        <select id="deidentTypeId" class="form-control" formControlName="deidentTypeId" *ngIf="!isView">
+                            <option selected disabled value="">Select an option...</option>
+                            <option [value]=identification.id *ngFor="let identification of deidentificationType">
+                                {{identification.name}}</option>
+                        </select>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{findDeidentificationType(objectData.objectDatasets?.deidentTypeId)}}</h6>
                     </div>
-                    <div class="col-8">
-                        <select class="form-control" formControlName="deidentDirect" *ngIf="!isView">
+                    <div class="col-md-6">
+                        <label for="deidentDirect" class="font-style text-capitalize">Deidentification direct</label>
+                        <select id="deidentDirect" class="form-control" formControlName="deidentDirect" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
                             <option value=false>No</option>
                             <option value=true>Yes</option>
                         </select>
-                        <span *ngIf="isView">{{objectData.objectDatasets?.deidentDirect}}</span>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.deidentDirect}}</h6>
                     </div>
                 </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <strong>Deidentification HIPAA</strong>
-                    </div>
-                    <div class="col-8">
-                        <select class="form-control" formControlName="deidentHipaa" *ngIf="!isView">
+                <div class="row form-group">
+                    <div class="col-md-6">
+                        <label for="deidentHipaa" class="font-style text-capitalize">Deidentification HIPAA</label>
+                        <select id="deidentHipaa" class="form-control" formControlName="deidentHipaa" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
                             <option value=false>No</option>
                             <option value=true>Yes</option>
                         </select>
-                        <span *ngIf="isView">{{objectData.objectDatasets?.deidentHipaa}}</span>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.deidentHipaa}}</h6>
                     </div>
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <strong>Deidentification dates</strong>
-                    </div>
-                    <div class="col-8">
-                        <select class="form-control" formControlName="deidentDates" *ngIf="!isView">
+                    <div class="col-md-6">
+                        <label for="deidentDates" class="font-style text-capitalize">Deidentification dates</label>
+                        <select id="deidentDates" class="form-control" formControlName="deidentDates" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
                             <option value=false>No</option>
                             <option value=true>Yes</option>
                         </select>
-                        <span *ngIf="isView">{{objectData.objectDatasets?.deidentDates}}</span>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.deidentDates}}</h6>
                     </div>
                 </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <strong>Deidentification NOARR</strong>
-                    </div>
-                    <div class="col-8">
-                        <select class="form-control" formControlName="deidentNonarr" *ngIf="!isView">
+                <div class="row form-group">
+                    <div class="col-md-6">
+                        <label for="deidentNonarr" class="font-style text-capitalize">Deidentification NOARR</label>
+                        <select id="deidentNonarr" class="form-control" formControlName="deidentNonarr" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
                             <option value=false>No</option>
                             <option value=true>Yes</option>
                         </select>
-                        <span *ngIf="isView">{{objectData.objectDatasets?.deidentNonarr}}</span>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.deidentNonarr}}</h6>
                     </div>
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <strong>Deidentification KANON</strong>
-                    </div>
-                    <div class="col-8">
-                        <select class="form-control" formControlName="deidentKanon" *ngIf="!isView">
+                    <div class="col-md-6">
+                        <label for="deidentKanon" class="font-style text-capitalize">Deidentification KANON</label>
+                        <select id="deidentKanon" class="form-control" formControlName="deidentKanon" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
                             <option value=false>No</option>
                             <option value=true>Yes</option>
                         </select>
-                        <span *ngIf="isView">{{objectData.objectDatasets?.deidentKanon}}</span>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.deidentKanon}}</h6>
                     </div>
                 </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <strong>Deidentification details</strong>
-                    </div>
-                    <div class="col-md-8">
-                        <textarea class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
+                <div class="row form-group">
+                    <div class="col-md-6">
+                        <label for="deidentDetails" class="font-style text-capitalize">Deidentification details</label>
+                        <textarea id="deidentDetails" class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
                             formControlName="deidentDetails" *ngIf="!isView"></textarea>
-                        <span *ngIf="isView">{{objectData.objectDatasets?.deidentDetails}}</span>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.deidentDetails}}</h6>
                     </div>
                 </div>
-            <!-- </div> -->
 
 
-            <hr />
+                <hr />
 
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h6 class="pt-3">Dataset consent</h6>
-                </div>
-            </div>
-            <br />
-            <!-- <div formGroupName="datasetConsent"> -->
                 <div class="row">
-                    <div class="col-md-4 text-center">
-                        <strong>Consent type</strong>
+                    <div class="col-md-12 text-center">
+                        <span class="pt-3 font-style">Dataset consent</span>
                     </div>
-                    <div class="col-8">
-                        <select class="form-control" formControlName="consentTypeId" *ngIf="!isView">
+                </div>
+                <br />
+                <div class="row form-group">
+                    <div class="col-md-6">
+                        <label for="consentTypeId" class="font-style text-capitalize">Consent type</label>
+                        <select id="consentTypeId" class="form-control" formControlName="consentTypeId" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
                             <option [value]=consent.id *ngFor="let consent of consentType">{{consent.name}}</option>
                         </select>
-                        <span *ngIf="isView">{{findConsentType(objectData.objectDatasets?.consentTypeId)}}</span>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{findConsentType(objectData.objectDatasets?.consentTypeId)}}</h6>
                     </div>
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <strong>Consent noncommercial</strong>
-                    </div>
-                    <div class="col-8">
-                        <select class="form-control" formControlName="consentNoncommercial" *ngIf="!isView">
+                    <div class="col-md-6">
+                        <label for="consentNoncommercial" class="font-style text-capitalize">Consent noncommercial</label>
+                        <select id="consentNoncommercial" class="form-control" formControlName="consentNoncommercial" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
                             <option value=false>No</option>
                             <option value=true>Yes</option>
                         </select>
-                        <span *ngIf="isView">{{objectData.objectDatasets?.consentNoncommercial}}</span>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.consentNoncommercial}}</h6>
                     </div>
                 </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <strong>Consent geographical restrict</strong>
-                    </div>
-                    <div class="col-8">
-                        <select class="form-control" formControlName="consentGeogRestrict" *ngIf="!isView">
+                <div class="row form-group">
+                    <div class="col-md-6">
+                        <label for="consentGeogRestrict" class="font-style text-capitalize">Consent geographical restrict</label>
+                        <select id="consentGeogRestrict" class="form-control" formControlName="consentGeogRestrict" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
                             <option value=false>No</option>
                             <option value=true>Yes</option>
                         </select>
-                        <span *ngIf="isView">{{objectData.objectDatasets?.consentGeogRestrict}}</span>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.consentGeogRestrict}}</h6>
                     </div>
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <strong>Consent research type</strong>
-                    </div>
-                    <div class="col-8">
-                        <select class="form-control" formControlName="consentResearchType" *ngIf="!isView">
+                    <div class="col-md-6">
+                        <label for="consentResearchType" class="font-style text-capitalize">Consent research type</label>
+                        <select id="consentResearchType" class="form-control" formControlName="consentResearchType" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
                             <option value=false>No</option>
                             <option value=true>Yes</option>
                         </select>
-                        <span *ngIf="isView">{{objectData.objectDatasets?.consentResearchType}}</span>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.consentResearchType}}</h6>
                     </div>
                 </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <strong>Consent genetic only</strong>
-                    </div>
-                    <div class="col-8">
-                        <select class="form-control" formControlName="consentGeneticOnly" *ngIf="!isView">
+                <div class="row form-group">
+                    <div class="col-md-6">
+                        <label for="consentGeneticOnly" class="font-style text-capitalize">Consent genetic only</label>
+                        <select id="consentGeneticOnly" class="form-control" formControlName="consentGeneticOnly" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
                             <option value=false>No</option>
                             <option value=true>Yes</option>
                         </select>
-                        <span *ngIf="isView">{{objectData.objectDatasets?.consentGeneticOnly}}</span>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.consentGeneticOnly}}</h6>
                     </div>
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <strong>Consent no methods</strong>
-                    </div>
-                    <div class="col-8">
-                        <select class="form-control" formControlName="consentNoMethods" *ngIf="!isView">
+                    <div class="col-md-6">
+                        <label for="consentNoMethods" class="font-style text-capitalize">Consent no methods</label>
+                        <select id="consentNoMethods" class="form-control" formControlName="consentNoMethods" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
                             <option value=false>No</option>
                             <option value=true>Yes</option>
                         </select>
-                        <span *ngIf="isView">{{objectData.objectDatasets?.consentNoMethods}}</span>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.consentNoMethods}}</h6>
                     </div>
                 </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <strong>Consent details</strong>
-                    </div>
-                    <div class="col-md-8">
-                        <textarea class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
+                <div class="row form-group">
+                    <div class="col-md-6">
+                        <label for="consentDetails" class="font-style text-capitalize">Consent details</label>
+                        <textarea id="consentDetails" class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
                             formControlName="consentDetails" *ngIf="!isView"></textarea>
-                        <span *ngIf="isView">{{objectData.objectDatasets?.consentDetails}}</span>
+                        <h6  style="font-weight: 100;"*ngIf="isView">{{objectData.objectDatasets?.consentDetails}}</h6>
                     </div>
                 </div>
-            <!-- </div> -->
-        </div>
+            </div>
             <hr />
 
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <h6 class="pt-3">Object instance(s)</h6>
+                    <span class="pt-3 font-style">Object instance(s)</span>
                 </div>
             </div>
             <br />
-            <app-object-instance [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitInstance)="getInstance($event)"></app-object-instance>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h6 class="pt-3">Object title(s)</h6>
-                </div>
-            </div>
-            <br />
-            <app-object-title [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitTitle)="getTitle($event)"></app-object-title>
-            <hr />
-
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h6 class="pt-3">Object date(s)</h6>
-                </div>
-            </div>
-            <br />
-            <app-object-date [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitDate)="getDate($event)"></app-object-date>
-            <hr />
-
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h6 class="pt-3">Object contributor(s)</h6>
-                </div>
-            </div>
-            <br />
-            <app-object-contributor [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitContributor)="getContributor($event)"></app-object-contributor>
-            <hr />
-
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h6 class="pt-3">Object topic(s)</h6>
-                </div>
-            </div>
-            <br />
-
-            <app-object-topic [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitTopic)="getTopic($event)"></app-object-topic>
-            <hr />
-
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h6 class="pt-3">Object identifier(s)</h6>
-                </div>
-            </div>
-            <br />
-            <app-object-identifier [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitIdentifier)="getIdentifier($event)"></app-object-identifier>
+            <app-object-instance [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                (emitInstance)="getInstance($event)"></app-object-instance>
 
             <hr />
 
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <h6 class="pt-3">Object descriptions(s)</h6>
+                    <span class="pt-3 font-style">Object title(s)</span>
                 </div>
             </div>
             <br />
-            <app-object-description [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitDescription)="getDescription($event)"></app-object-description>
+            <app-object-title [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                (emitTitle)="getTitle($event)"></app-object-title>
             <hr />
 
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <h6 class="pt-3">Object right(s)</h6>
+                    <span class="pt-3 font-style">Object date(s)</span>
                 </div>
             </div>
             <br />
-            <app-object-right [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitRight)="getRight($event)"></app-object-right>
+            <app-object-date [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                (emitDate)="getDate($event)"></app-object-date>
             <hr />
 
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <h6 class="pt-3">Object relationship(s)</h6>
+                    <span class="pt-3 font-style">Object contributor(s)</span>
                 </div>
             </div>
             <br />
-            <app-object-relationship [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitRelation)="getRelation($event)"></app-object-relationship>
+            <app-object-contributor [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                (emitContributor)="getContributor($event)"></app-object-contributor>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <span class="pt-3 font-style">Object topic(s)</span>
+                </div>
+            </div>
+            <br />
+
+            <app-object-topic [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                (emitTopic)="getTopic($event)"></app-object-topic>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <span class="pt-3 font-style">Object identifier(s)</span>
+                </div>
+            </div>
+            <br />
+            <app-object-identifier [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                (emitIdentifier)="getIdentifier($event)"></app-object-identifier>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <span class="pt-3 font-style">Object descriptions(s)</span>
+                </div>
+            </div>
+            <br />
+            <app-object-description [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                (emitDescription)="getDescription($event)"></app-object-description>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <span class="pt-3 font-style">Object right(s)</span>
+                </div>
+            </div>
+            <br />
+            <app-object-right [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                (emitRight)="getRight($event)"></app-object-right>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <span class="pt-3 font-style">Object relationship(s)</span>
+                </div>
+            </div>
+            <br />
+            <app-object-relationship [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                (emitRelation)="getRelation($event)"></app-object-relationship>
             <hr />
 
             <div class="row">
                 <div class="col-md-12 justify-content-center text-center">
-                    <button class="btn btn-success mr-5" *ngIf="!isView" (click)="onClick()">{{isEdit ? 'Apply Changes' : 'Save'}}</button>
+                    <button class="btn btn-success mr-5" *ngIf="!isView" (click)="onClick()">{{isEdit ? 'Apply Changes'
+                        : 'Save'}}</button>
                     <button class="btn btn-danger" (click)="close()"> {{isView ? 'Back' : 'Cancel'}}</button>
                 </div>
             </div>

@@ -25,6 +25,8 @@ export class ObjectDateComponent implements OnInit {
     }
   }
   @Output() emitDate: EventEmitter<any> = new EventEmitter();
+  monthValues = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+  dayValues = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13','14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
 
   constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService) {
     this.form = this.fb.group({
@@ -49,8 +51,12 @@ export class ObjectDateComponent implements OnInit {
       dateTypeId: '',
       isDateRange: false,
       dateAsString: '',
-      startDate: '',
-      endDate: '',
+      startDay: '',
+      startMonth: '',
+      startYear:'',
+      endDay: '',
+      endMonth:'',
+      endYear: '',
       details: '',
       alreadyExist: false
     });
@@ -98,8 +104,12 @@ export class ObjectDateComponent implements OnInit {
         dateTypeId: date.dateTypeId,
         isDateRange: false,
         dateAsString: date.dateAsString,
-        startDate: date.startDay ? this.stringTodate(date.startDay, date.startMonth, date.startYear) : '',
-        endDate: date.endDay ? this.stringTodate(date.endDay, date.endMonth, date.endYear) : '',
+        startDay: date.startDay,
+        startMonth: date.startMonth,
+        startYear: date.startYear ? new Date(`01/01/${date.startYear}`) : '',
+        endDay: date.endDay,
+        endMonth: date.endMonth,
+        endYear: date.endYear ? new Date(`01/01/${date.endYear}`) : '',
         details: date.details,
         alreadyExist: true
       }))
@@ -110,14 +120,8 @@ export class ObjectDateComponent implements OnInit {
     this.spinner.show();
     const payload = this.form.value.objectDates[index];
     payload.sdOid = this.sdOid;
-    const startDate = this.dateToString(payload.startDate);
-    const endDate = this.dateToString(payload.endDate);
-    payload.startDay = startDate.day;
-    payload.startMonth = startDate.month;
-    payload.startYear = startDate.year;
-    payload.endDay = endDate.day;
-    payload.endMonth = endDate.month;
-    payload.endYear = endDate.year;
+    payload.startYear = payload.startYear ? payload.startYear.getFullYear() : null;
+    payload.endYear = payload.endYear ? payload.endYear.getFullYear() : null;
     payload.isDateRange = payload.isDateRange === 'true' ? true : false 
     delete payload.id;
 
@@ -135,14 +139,8 @@ export class ObjectDateComponent implements OnInit {
   }
   editDate(dateObject) {
     const payload = dateObject.value;
-    const startDate = this.dateToString(payload.startDate);
-    const endDate = this.dateToString(payload.endDate);
-    payload.startDay = startDate.day;
-    payload.startMonth = startDate.month;
-    payload.startYear = startDate.year;
-    payload.endDay = endDate.day;
-    payload.endMonth = endDate.month;
-    payload.endYear = endDate.year;
+    payload.startYear = payload.startYear ? payload.startYear.getFullYear() : null;
+    payload.endYear = payload.endYear ? payload.endYear.getFullYear() : null;
     payload.isDateRange = payload.isDateRange === 'true' ? true : false 
     this.spinner.show();
     this.objectService.editObjectDate(payload.id, payload.sdOid, payload).subscribe((res: any) => {
@@ -161,25 +159,10 @@ export class ObjectDateComponent implements OnInit {
     const dateTypeArray: any = this.dateType.filter((type: any) => type.id === id);
     return dateTypeArray && dateTypeArray.length ? dateTypeArray[0].name : '';
   }
-  dateToString(date) {
-    return {day: date.day, month: date.month, year: date.year}
-  }
-  stringTodate(day, month, year) {
-    return { year: year, month: month, day: day};
-  }
-  dateToString1(date) {
-    return date ? date.day + '/' + date.month + '/' + date.year : '';
-  }
   emitData() {
     const payload = this.form.value.objectDates.map(item => {
-      const startDate = this.dateToString(item.startDate);
-      const endDate = this.dateToString(item.endDate);
-      item.startDay = startDate.day;
-      item.startMonth = startDate.month;
-      item.startYear = startDate.year;
-      item.endDay = endDate.day;
-      item.endMonth = endDate.month;
-      item.endYear = endDate.year;
+      item.startYear = item.startYear ? item.startYear.getFullYear() : null;
+      item.endYear = item.endYear ? item.endYear.getFullYear() : null;  
       item.isDateRange = item.isDateRange === 'true' ? true : false 
       if (!item.id) {
         delete item.id;
