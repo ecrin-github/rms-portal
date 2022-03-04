@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { DtpInterface } from 'src/app/_rms/interfaces/dtp/dtp.interface';
 import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
+import KTWizard from '../../../../../assets/js/components/wizard'
 
 @Component({
   selector: 'app-upsert-dtp',
@@ -19,6 +20,9 @@ export class UpsertDtpComponent implements OnInit {
   statusList:[] = [];
   id: any;
   dtpData: DtpInterface;
+  @ViewChild('wizard', { static: true }) el: ElementRef;
+  wizard: any;
+  currentStatus: number = 1;
 
   constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute) { 
@@ -42,14 +46,20 @@ export class UpsertDtpComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getOrganization();
+    this.getStatus();
     this.isEdit = this.router.url.includes('edit') ? true : false;
     this.isView = this.router.url.includes('view') ? true : false;
     if (this.isEdit || this.isView) {
       this.id = this.activatedRoute.snapshot.params.id;
       this.getDtpById(this.id);
     }
-    this.getOrganization();
-    this.getStatus();
+  }
+  ngAfterViewInit() {
+    this.wizard = new KTWizard(this.el.nativeElement, {
+      startStep: 1,
+      clickableSteps: true
+    });
   }
   getOrganization() {
     this.spinner.show();
@@ -172,6 +182,11 @@ export class UpsertDtpComponent implements OnInit {
       availabilityRequested: this.stringTodate(data.availabilityRequested),
       availabilityConfirmed: this.stringTodate(data.availabilityConfirmed),
     });
+    const arr: any = this.statusList.filter((item: any) => item.id === this.dtpData.statusId);
+    if (arr && arr.length) {
+      this.currentStatus = arr[0].name.toLowerCase() === 'creation' ? 1 : arr[0].name.toLowerCase() === 'set up' ? 2 : arr[0].name.toLowerCase() === 'preparation' ? 3 : arr[0].name.toLowerCase() === 'transfer' ? 4 : arr[0].name.toLowerCase() === 'checking' ? 5 : arr[0].name.toLowerCase() === 'complete' ? 6 : 1;
+      this.wizard.goTo(this.currentStatus);
+    }
   }
   findOrganization(id) {
     const organizationArray: any = this.organizationList.filter((type: any) => type.id === id);
