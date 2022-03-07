@@ -56,7 +56,7 @@
                             <div class="col-md-4">
                                 <label for="startYear" class="font-style text-capitalize">Start Year</label>
                                 <p-calendar appendTo="body" id="startYear" formControlName="startYear" view="year" dateFormat="yy" *ngIf="!isView"></p-calendar>
-                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectDate.value.startYear}}</h6>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{getYear(objectDate.value.startYear)}}</h6>
                             </div>
                         </div>
                         <div class="row form-group">
@@ -80,7 +80,7 @@
                             <div class="col-md-4">
                                 <label for="endYear" class="font-style text-capitalize">End Year</label>
                                 <p-calendar appendTo="body" id="endYear" formControlName="endYear" view="year" dateFormat="yy" *ngIf="!isView"></p-calendar>
-                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectDate.value.endYear}}</h6>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{getYear(objectDate.value.endYear)}}</h6>
                             </div>
                         </div>
                         <mat-action-row *ngIf="!isView">

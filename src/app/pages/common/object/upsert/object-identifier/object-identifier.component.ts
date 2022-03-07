@@ -143,11 +143,12 @@ export class ObjectIdentifierComponent implements OnInit {
     return identifierTypeArray && identifierTypeArray.length ? identifierTypeArray[0].name : '';
   }
   dateToString(date) {
-    return date.day ? date.day + '/' + date.month + '/' + date.year : '';
+    const monthArr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return date ? date.year+' '+monthArr[date.month-1]+' '+date.day : '';
   }
   stringTodate(date) {
-    const dateArray = date.split('/');
-    return { year: parseInt(dateArray[2]), month: parseInt(dateArray[1]), day: parseInt(dateArray[0])};
+    const dateArray = new Date(date);
+    return date ? {year: dateArray.getFullYear(), month: dateArray.getMonth() + 1, day: dateArray.getDate()} : null
   }
   emitData() {
     const payload = this.form.value.objectIdentifiers.map(item => {

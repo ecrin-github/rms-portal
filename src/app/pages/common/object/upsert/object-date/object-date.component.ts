@@ -155,6 +155,9 @@ export class ObjectDateComponent implements OnInit {
       this.toastr.error(error.error.title);
     })
   }
+  getYear(date) {
+    return date ? date.getFullYear() : ''
+  }
   findDateType(id) {
     const dateTypeArray: any = this.dateType.filter((type: any) => type.id === id);
     return dateTypeArray && dateTypeArray.length ? dateTypeArray[0].name : '';

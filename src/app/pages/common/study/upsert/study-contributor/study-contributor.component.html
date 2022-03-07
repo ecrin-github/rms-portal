@@ -27,7 +27,7 @@
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.isIndividual}}</h6>
                             </div>
                         </div>
-                        <div class="row form-group" *ngIf="!isIndividual && studyContributor.value.isIndividual">
+                        <div class="row form-group" *ngIf="!isIndividual">
                             <div class="col-md-6">
                                 <label for="contribTypeId" class="font-style text-capitalize">Contributor type</label>
                                 <select class="form-control" id="contribTypeId" formControlName="contribTypeId" *ngIf="!isView">
