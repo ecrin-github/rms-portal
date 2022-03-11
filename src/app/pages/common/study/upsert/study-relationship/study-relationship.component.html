@@ -29,7 +29,7 @@
                                 <label for="targetSdSid" class="font-style text-capitalize">Target study</label>
                                 <ng-select [items]="studyType" bindLabel="sdSid" bindValue="sdSid" formControlName="targetSdSid"
                                 [multiple]="false" [virtualScroll]="true" class="custom" notFoundText="No members found"
-                                    placeholder="Select email" *ngIf="!isView" [searchFn]="customSearchFn">
+                                    placeholder="Select target study" *ngIf="!isView" [searchFn]="customSearchFn">
                                     <ng-template ng-label-tmp let-item="item">
                                         {{item.sdSid}}
                                     </ng-template>

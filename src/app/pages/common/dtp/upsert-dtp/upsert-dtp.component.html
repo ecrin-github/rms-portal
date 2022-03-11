@@ -13,6 +13,11 @@
                 <i class="fa fa-code"></i> JSON
             </button>
         </div>
+        <div style="float: right; margin-top: -40px;" *ngIf="!isView">
+            <button class="btn btn-primary mr-5" (click)="addStudy()">Add Study</button>
+            <button class="btn btn-primary mr-5" (click)="addDataObject()"> Add Data Object</button>
+            <button class="btn btn-primary" (click)="addUser()">Add User</button>
+        </div>
     </div>
     <form [formGroup]="form">
         <div class="card-body">

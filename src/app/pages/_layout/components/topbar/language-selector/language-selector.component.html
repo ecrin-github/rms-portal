@@ -8,11 +8,8 @@
     data-offset="10px,0px"
   >
     <div class="btn btn-icon btn-clean btn-dropdown btn-lg mr-1">
-      <img
-        class="h-25px w-25px rounded"
-        src="{{ language?.flag }}"
-        alt="language"
-      />
+      <span class="text-capitalize">{{language?.lang}}</span>
+      <!-- <img class="h-25px w-25px rounded" src="{{ language?.flag }}" alt="language" /> -->
     </div>
   </div>
   <!--end::Toggle-->
@@ -32,7 +29,7 @@
             class="navi-link"
           >
             <span class="symbol symbol-20 mr-3">
-              <img src="{{ language.flag }}" />
+              <!-- <img src="{{ language.flag }}" /> -->
             </span>
             <span class="navi-text">{{ language.name }}</span>
           </a>

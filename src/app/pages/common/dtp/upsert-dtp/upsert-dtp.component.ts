@@ -1,11 +1,13 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { DtpInterface } from 'src/app/_rms/interfaces/dtp/dtp.interface';
 import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
 import KTWizard from '../../../../../assets/js/components/wizard'
+import { CommonModalComponent } from '../../common-modal/common-modal.component';
 
 @Component({
   selector: 'app-upsert-dtp',
@@ -25,7 +27,7 @@ export class UpsertDtpComponent implements OnInit {
   currentStatus: number = 1;
 
   constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
-    private activatedRoute: ActivatedRoute) { 
+    private activatedRoute: ActivatedRoute, private modalService: NgbModal) { 
     this.form = this.fb.group({
       orgId: '',
       displayName: '',
@@ -198,5 +200,20 @@ export class UpsertDtpComponent implements OnInit {
   }
   close() {
     window.close();
+  }
+  addStudy() {
+    const studyModal = this.modalService.open(CommonModalComponent, { size: 'xl', backdrop: 'static' });
+    studyModal.componentInstance.title = 'Add Study';
+    studyModal.componentInstance.type = 'study';
+  }
+  addDataObject() {
+    const dataModal = this.modalService.open(CommonModalComponent, {size: 'xl', backdrop: 'static'});
+    dataModal.componentInstance.title = 'Add Data Object';
+    dataModal.componentInstance.type = 'dataObject';
+  }
+  addUser() {
+    const userModal = this.modalService.open(CommonModalComponent, {size: 'xl', backdrop: 'static'});
+    userModal.componentInstance.title = 'Add User';
+    userModal.componentInstance.type = 'user';
   }
 }

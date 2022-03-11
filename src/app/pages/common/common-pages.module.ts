@@ -4,7 +4,7 @@ import {CommonModule} from '@angular/common';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatButtonModule} from '@angular/material/button';
-import {NgbDatepickerModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbDatepickerModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatExpansionModule} from '@angular/material/expansion';
@@ -48,6 +48,7 @@ import { ObjectRightComponent } from './object/upsert/object-right/object-right.
 import { ObjectRelationshipComponent } from './object/upsert/object-relationship/object-relationship.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { StudyContributorComponent } from './study/upsert/study-contributor/study-contributor.component';
+import { CommonModalComponent } from './common-modal/common-modal.component';
 
 
 @NgModule({
@@ -90,7 +91,8 @@ import { StudyContributorComponent } from './study/upsert/study-contributor/stud
         ObjectDescriptionComponent,
         ObjectRightComponent,
         ObjectRelationshipComponent,
-        StudyContributorComponent
+        StudyContributorComponent,
+        CommonModalComponent
     ],
     schemas: [NO_ERRORS_SCHEMA],
     imports: [
@@ -156,7 +158,8 @@ import { StudyContributorComponent } from './study/upsert/study-contributor/stud
         MatTabsModule,
         MatExpansionModule,
         NgSelectModule,
-        CalendarModule
+        CalendarModule,
+        NgbModule
     ],
     exports: [ SummaryDtpComponent, SummaryDupComponent, SummaryStudyComponent, SummaryObjectComponent]
 })

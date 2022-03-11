@@ -1,11 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { DupInterface } from 'src/app/_rms/interfaces/dup/dup.interface';
 import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
 import { DupService } from 'src/app/_rms/services/entities/dup/dup.service';
+import KTWizard from '../../../../../assets/js/components/wizard'
+import { CommonModalComponent } from '../../common-modal/common-modal.component';
 
 @Component({
   selector: 'app-upsert-dup',
@@ -20,9 +23,12 @@ export class UpsertDupComponent implements OnInit {
   statusList:[] = [];
   id: any;
   dupData: DupInterface;
+  @ViewChild('wizard', { static: true }) el: ElementRef;
+  wizard: any;
+  currentStatus: number = 1;
 
   constructor( private router: Router, private fb: FormBuilder, private dupService: DupService, private spinner: NgxSpinnerService, private toastr: ToastrService,
-    private activatedRoute: ActivatedRoute, private dtpService: DtpService) { 
+    private activatedRoute: ActivatedRoute, private dtpService: DtpService, private modalService: NgbModal) { 
       this.form = this.fb.group({
         orgId: '',
         displayName: '',
@@ -46,6 +52,12 @@ export class UpsertDupComponent implements OnInit {
     }
     this.getOrganization();
     this.getStatus();
+  }
+  ngAfterViewInit() {
+    this.wizard = new KTWizard(this.el.nativeElement, {
+      startStep: 1,
+      clickableSteps: true
+    });
   }
   getOrganization() {
     this.spinner.show();
@@ -157,6 +169,11 @@ export class UpsertDupComponent implements OnInit {
       availabilityConfirmed: this.stringTodate(data.availabilityConfirmed),
       accessConfirmed: this.stringTodate(data.accessConfirmed),
     });
+    const arr: any = this.statusList.filter((item: any) => item.id === this.dupData.statusId);
+    if (arr && arr.length) {
+      this.currentStatus = arr[0].name.toLowerCase() === 'creation' ? 1 : arr[0].name.toLowerCase() === 'set up' ? 2 : arr[0].name.toLowerCase() === 'preparation' ? 3 : arr[0].name.toLowerCase() === 'transfer' ? 4 : arr[0].name.toLowerCase() === 'checking' ? 5 : arr[0].name.toLowerCase() === 'complete' ? 6 : 1;
+      this.wizard.goTo(this.currentStatus);
+    }
   }
   findOrganization(id) {
     const organizationArray: any = this.organizationList.filter((type: any) => type.id === id);
@@ -168,5 +185,20 @@ export class UpsertDupComponent implements OnInit {
   }
   close() {
     window.close();
+  }
+  addStudy() {
+    const studyModal = this.modalService.open(CommonModalComponent, { size: 'xl', backdrop: 'static' });
+    studyModal.componentInstance.title = 'Add Study';
+    studyModal.componentInstance.type = 'study';
+  }
+  addDataObject() {
+    const dataModal = this.modalService.open(CommonModalComponent, {size: 'xl', backdrop: 'static'});
+    dataModal.componentInstance.title = 'Add Data Object';
+    dataModal.componentInstance.type = 'dataObject';
+  }
+  addUser() {
+    const userModal = this.modalService.open(CommonModalComponent, {size: 'xl', backdrop: 'static'});
+    userModal.componentInstance.title = 'Add User';
+    userModal.componentInstance.type = 'user';
   }
 }

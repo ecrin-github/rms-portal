@@ -54,7 +54,7 @@
                 </div>
                 <div class="col-md-6">
                     <label for="objectTypeId" class="font-style text-capitalize">Object type</label>
-                    <select id="objectTypeId" class="form-control" formControlName="objectTypeId" *ngIf="!isView">
+                    <select id="objectTypeId" class="form-control" formControlName="objectTypeId" *ngIf="!isView" (change)="onTypeChange()">
                         <option selected disabled value="">Select an option...</option>
                         <option [value]=type.id *ngFor="let type of objectType">{{type.name}}</option>
                     </select>
@@ -336,27 +336,28 @@
             <app-object-date [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
                 (emitDate)="getDate($event)"></app-object-date>
             <hr />
-
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <span class="pt-3 font-style">Object contributor(s)</span>
+            <ng-container *ngIf="showContributor">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <span class="pt-3 font-style">Object contributor(s)</span>
+                    </div>
                 </div>
-            </div>
-            <br />
-            <app-object-contributor [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
-                (emitContributor)="getContributor($event)"></app-object-contributor>
-            <hr />
-
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <span class="pt-3 font-style">Object topic(s)</span>
+                <br />
+                <app-object-contributor [sdOid]="id" [isView]="isView" [isEdit]="isEdit"
+                    [initiateEmit]="initiateEmit" (emitContributor)="getContributor($event)"></app-object-contributor>
+                <hr />
+            </ng-container>
+            <ng-container *ngIf="showTopic">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <span class="pt-3 font-style">Object topic(s)</span>
+                    </div>
                 </div>
-            </div>
-            <br />
-
-            <app-object-topic [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
-                (emitTopic)="getTopic($event)"></app-object-topic>
-            <hr />
+                <br />
+                <app-object-topic [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                    (emitTopic)="getTopic($event)"></app-object-topic>
+                <hr />
+            </ng-container>
 
             <div class="row">
                 <div class="col-md-12 text-center">

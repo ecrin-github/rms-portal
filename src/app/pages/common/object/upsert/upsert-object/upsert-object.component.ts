@@ -30,6 +30,10 @@ export class UpsertObjectComponent implements OnInit {
   initiateEmit: boolean = false;
   count = 0;
   showDatasetKey: boolean = false;
+  showTopic: boolean = false;
+  showContributor: boolean = false;
+  showIdentifier: boolean = false;
+  showDescription: boolean = false;
 
   constructor(private fb: FormBuilder, private router: Router, private objectService: DataObjectService, private spinner: NgxSpinnerService,
     private toastr: ToastrService, private activatedRoute: ActivatedRoute) {
@@ -226,6 +230,17 @@ export class UpsertObjectComponent implements OnInit {
   patchObjectForm() {
     const arr: any = this.objectClass.filter((item:any) => item.name === 'Dataset');
     this.showDatasetKey = this.objectData.objectClassId === arr[0].id ? true : false;
+    const arrType: any = this.objectType.filter((item: any) => item.name.toLowerCase() === 'publication list');
+    // this.showDescription = this.objectData.objectTypeId === arrType[0].id ? true : false;
+    this.showTopic = this.objectData.objectTypeId === arrType[0].id ? true : false;
+    this.showContributor = this.objectData.objectTypeId === arrType[0].id ? true : false;
+    // this.showIdentifier = this.objectData.objectTypeId === arrType[0].id ? true : false;
+    const arrType1: any = this.objectType.filter((item: any) => item.name.toLowerCase() === 'journal article' || item.name.toLowerCase() === 'working paper / pre-print');
+    this.showTopic = this.objectData.objectTypeId === arrType1[0].id ? true : false;
+    this.showContributor = this.objectData.objectTypeId === arrType1[0].id ? true : false;
+    const arrType2: any = this.objectType.filter((item: any) => item.name.toLowerCase() === 'working paper / pre-print');
+    this.showTopic = this.objectData.objectTypeId === arrType2[0].id ? true : false;
+    this.showContributor = this.objectData.objectTypeId === arrType2[0].id ? true : false;
     this.objectForm.patchValue({
       doi: this.objectData.doi,
       displayTitle: this.objectData.displayTitle,
@@ -444,7 +459,18 @@ export class UpsertObjectComponent implements OnInit {
     window.close();
   }
   onChange() {
-    const arr: any = this.objectClass.filter((item:any) => item.name === 'Dataset');
+    const arr: any = this.objectClass.filter((item:any) => item.name.toLowerCase() === 'dataset');
     this.showDatasetKey = parseInt(this.objectForm.value.objectClassId) === arr[0].id ? true : false;
+  }
+  onTypeChange() {
+    const arrType: any = this.objectType.filter((item: any) => item.name.toLowerCase() === 'publication list');
+    this.showTopic = parseInt(this.objectForm.value.objectTypeId) === arrType[0].id ? true : false;
+    this.showContributor = parseInt(this.objectForm.value.objectTypeId) === arrType[0].id ? true : false;
+    const arrType1: any = this.objectType.filter((item: any) => item.name.toLowerCase() === 'journal article');
+    this.showTopic = parseInt(this.objectForm.value.objectTypeId) === arrType1[0].id ? true : false;
+    this.showContributor = parseInt(this.objectForm.value.objectTypeId) === arrType1[0].id ? true : false;
+    const arrType2: any = this.objectType.filter((item: any) => item.name.toLowerCase() === 'working paper / pre-print');
+    this.showTopic = parseInt(this.objectForm.value.objectTypeId) === arrType2[0].id ? true : false;
+    this.showContributor = parseInt(this.objectForm.value.objectTypeId) === arrType2[0].id ? true : false;
   }
 }

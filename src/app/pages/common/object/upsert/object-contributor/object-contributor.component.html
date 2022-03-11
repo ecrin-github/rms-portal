@@ -28,7 +28,7 @@
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{objectContributor.value.isIndividual}}</h6>
                             </div>
                         </div>
-                        <div class="row form-group" *ngIf="!isIndividual && objectContributor.value.isIndividual">
+                        <div class="row form-group" *ngIf="isIndividual[i] ? !isIndividual[i] : (objectContributor.value.isIndividual==='false' || objectContributor.value.isIndividual===false)">
                             <div class="col-md-6">
                                 <label for="contribTypeId" class="font-style text-capitalize">Contributor type</label>
                                 <select class="form-control" id="contribTypeId" formControlName="contribTypeId" *ngIf="!isView">
@@ -45,7 +45,7 @@
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{objectContributor.value.organisationName}}</h6>
                             </div>
                         </div>
-                        <div class="row form-group" *ngIf="isIndividual">
+                        <div class="row form-group" *ngIf="isIndividual[i] ? isIndividual[i] : ( objectContributor.value.isIndividual==='true' || objectContributor.value.isIndividual===true)">
                             <div class="col-md-6">
                                 <label for="contribTypeId" class="font-style text-capitalize">Contributor type</label>
                                 <select class="form-control" id="contribTypeId" formControlName="contribTypeId" *ngIf="!isView">
@@ -56,7 +56,7 @@
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{findContributorType(objectContributor.value.contribTypeId)}}</h6>
                             </div>
                         </div>
-                        <div class="row form-group"*ngIf="isIndividual">
+                        <div class="row form-group"*ngIf="isIndividual[i] ? isIndividual[i] : ( objectContributor.value.isIndividual==='true' || objectContributor.value.isIndividual===true)">
                             <div class="col-md-4">
                                 <label for="personGivenName" class="font-style text-capitalize">Person: Given name</label>
                                 <input type="text" id="personGivenName" class="form-control" placeholder="Enter a parameter..."
@@ -76,7 +76,7 @@
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{objectContributor.value.orcidId}}</h6>
                             </div>
                         </div>
-                        <div class="row form-group" *ngIf="isIndividual">
+                        <div class="row form-group" *ngIf="isIndividual[i] ? isIndividual[i] : ( objectContributor.value.isIndividual==='true' || objectContributor.value.isIndividual===true)">
                             <div class="col-md-6">
                                 <label for="personAffiliation" class="font-style text-capitalize">Department</label>
                                 <input type="text" id="personAffiliation" class="form-control" placeholder="Enter a parameter..."
