@@ -1,9 +1,11 @@
 import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
+import { ConfirmationWindowComponent } from '../../confirmation-window/confirmation-window.component';
 export interface StudyRecord {
   id: number;
   title: string;
@@ -29,7 +31,7 @@ export class SummaryStudyComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor( private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService) {
+  constructor( private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
   }
 
 
@@ -124,5 +126,15 @@ export class SummaryStudyComponent implements OnInit {
     console.log('event triggered', event)
     this.getStudyList();
     localStorage.removeItem('updateStudyList');
+  }
+  deleteRecord(id) {
+    const deleteModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
+    deleteModal.componentInstance.type = 'study';
+    deleteModal.componentInstance.id = id;
+    deleteModal.result.then((data: any) => {
+      if(data) {
+        this.getStudyList();
+      }
+    }, error => {});
   }
 }

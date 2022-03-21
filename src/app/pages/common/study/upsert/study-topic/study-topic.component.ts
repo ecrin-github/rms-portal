@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { StudyTopicInterface } from 'src/app/_rms/interfaces/study/study-topic.interface';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
+import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
 @Component({
   selector: 'app-study-topic',
@@ -26,7 +28,7 @@ export class StudyTopicComponent implements OnInit {
   @Output() emitTopic: EventEmitter<any> = new EventEmitter();
   studyTopic: StudyTopicInterface;
 
-  constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService) { 
+  constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
       studyTopics: this.fb.array([])
     })
@@ -60,7 +62,19 @@ export class StudyTopicComponent implements OnInit {
   }
 
   removeStudyTopic(i: number) {
-    this.studyTopics().removeAt(i);
+    if (!this.studyTopics().value[i].alreadyExist) {
+      this.studyTopics().removeAt(i);
+    } else {
+      const removeModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
+      removeModal.componentInstance.type = 'studyTopic';
+      removeModal.componentInstance.id = this.studyTopics().value[i].id;
+      removeModal.componentInstance.sdSid = this.studyTopics().value[i].sdSid;
+      removeModal.result.then((data) => {
+        if (data) {
+          this.studyTopics().removeAt(i);
+        }
+      }, error => {});
+    }
   }
   getTopicType() {
     const getTopicType$ = this.studyService.getTopicType().subscribe((res: any) => {

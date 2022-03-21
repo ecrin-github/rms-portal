@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { StudyFeatureInterface } from 'src/app/_rms/interfaces/study/study-feature.interface';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
+import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
 @Component({
   selector: 'app-study-feature',
@@ -29,7 +31,7 @@ export class StudyFeatureComponent implements OnInit {
   studyFeature: StudyFeatureInterface;
 
 
-  constructor(private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService) {
+  constructor(private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       studyFeatures: this.fb.array([])
     });
@@ -63,8 +65,21 @@ export class StudyFeatureComponent implements OnInit {
   }
 
   removeStudyFeature(i: number) {
-    this.studyFeatures().removeAt(i);
-    this.featureValues.splice(i, 1);
+    if (!this.studyFeatures().value[i].alreadyExist) {
+      this.studyFeatures().removeAt(i);
+      this.featureValues.splice(i, 1);
+    } else {
+      const removeModal = this.modalService.open(ConfirmationWindowComponent, { size: 'lg', backdrop: 'static' });
+      removeModal.componentInstance.type = 'studyFeature';
+      removeModal.componentInstance.id = this.studyFeatures().value[i].id;
+      removeModal.componentInstance.sdSid = this.studyFeatures().value[i].sdSid;
+      removeModal.result.then((data) => {
+        if (data) {
+          this.studyFeatures().removeAt(i);
+          this.featureValues.splice(i, 1);
+        }
+      }, error => {});
+    }
   }
   getFeatureType() {
     const getFeatureType$ = this.studyService.getFeatureType().subscribe((res: any) => {

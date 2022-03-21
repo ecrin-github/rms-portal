@@ -268,6 +268,9 @@ export class UpsertStudyComponent implements OnInit {
     this.initiateEmit = true;
   }
   onSave() {
+    if (localStorage.getItem('updateStudyList')) {
+      localStorage.removeItem('updateStudyList');
+    }
     this.isSubmitted = true;
     if (this.studyForm.valid) {
       const payload = JSON.parse(JSON.stringify(this.studyForm.value));
@@ -281,6 +284,7 @@ export class UpsertStudyComponent implements OnInit {
           if (res.statusCode === 200) {
             this.toastr.success('Study Details updated successfully');
             localStorage.setItem('updateStudyList', 'true');
+            this.getStudyById(this.id);
           } else {
             this.toastr.error(res.messages[0]);
           }

@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { StudyTitleInterface } from 'src/app/_rms/interfaces/study/study-title.interface';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
+import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
 @Component({
   selector: 'app-study-title',
@@ -35,7 +37,7 @@ export class StudyTitleComponent implements OnInit {
   @Output() emitTitle: EventEmitter<any> = new EventEmitter();
   studyTitle: StudyTitleInterface
 
-  constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService) {
+  constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       studyTitles: this.fb.array([])
     });
@@ -70,7 +72,19 @@ export class StudyTitleComponent implements OnInit {
   }
 
   removeStudyTitle(i: number) {
-    this.studyTitles().removeAt(i);
+    if (!this.studyTitles().value[i].alreadyExist) {
+      this.studyTitles().removeAt(i);
+    } else {
+      const removeModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
+      removeModal.componentInstance.type = 'studyTitle';
+      removeModal.componentInstance.id = this.studyTitles().value[i].id;
+      removeModal.componentInstance.sdSid = this.studyTitles().value[i].sdSid;
+      removeModal.result.then((data) => {
+        if (data) {
+          this.studyTitles().removeAt(i);
+        }
+      }, error => {})
+    }
   }
   createPublicTitle(title) {
     if (!this.isEdit && !this.isView) {

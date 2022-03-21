@@ -1,11 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { StudyContributorInterface } from 'src/app/_rms/interfaces/study/study-contributor.interface';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
+import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
 @Component({
   selector: 'app-study-contributor',
@@ -28,7 +30,7 @@ export class StudyContributorComponent implements OnInit {
   }
   @Output() emitContributor: EventEmitter<any> = new EventEmitter();
 
-  constructor( private fb: FormBuilder, private objectService: DataObjectService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService) { 
+  constructor( private fb: FormBuilder, private objectService: DataObjectService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
       studyContributors: this.fb.array([])
     });
@@ -64,7 +66,19 @@ export class StudyContributorComponent implements OnInit {
   }
 
   removeStudyContributor(i: number) {
-    this.studyContributors().removeAt(i);
+    if (!this.studyContributors().value[i].alreadyExist) {
+      this.studyContributors().removeAt(i);
+    } else {
+      const removeModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
+      removeModal.componentInstance.type = 'studyContributor';
+      removeModal.componentInstance.id = this.studyContributors().value[i].id;
+      removeModal.componentInstance.sdSid = this.studyContributors().value[i].sdSid;
+      removeModal.result.then((data) => {
+        if (data) {
+          this.studyContributors().removeAt(i);
+        }
+      }, error => {});
+    }
   }
   getContributorType() {
     const getContributorType$ = this.objectService.getContributorType().subscribe((res:any) => {

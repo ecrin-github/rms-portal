@@ -58,14 +58,16 @@
             <div class="row form-group">
                 <div class="col-md-6">
                     <label for="studyStartMonth" class="font-style text-capitalize">Study Start Month</label>
-                    <select id="studyStartMonth" class="form-control" formControlName="studyStartMonth">
+                    <select id="studyStartMonth" class="form-control" formControlName="studyStartMonth" *ngIf="!isView">
                         <option selected disabled value="">Select an option...</option>
                         <option [value]="month" *ngFor="let month of monthValues">{{month}}</option>
                     </select>
+                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.studyStartMonth}}</h6>
                 </div>
                 <div class="col-md-6">
                     <label for="studyStartYear" class="font-style text-capitalize">Study Start Year</label>
-                    <p-calendar id="studyStartYear" formControlName="studyStartYear" view="year" dateFormat="yy"></p-calendar>
+                    <p-calendar id="studyStartYear" formControlName="studyStartYear" view="year" dateFormat="yy" *ngIf="!isView"></p-calendar>
+                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.studyStartYear}}</h6>
                 </div>
             </div>
             <div class="row form-group">

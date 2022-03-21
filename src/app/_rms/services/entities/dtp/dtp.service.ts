@@ -32,4 +32,7 @@ export class DtpService {
   filterByTitle(payload) {
     return this.http.post(`${filterUrl}/filter/dtp/by-title`, payload);
   }
+  deleteDtpById(id) {
+    return this.http.delete(`${url}/processes/${id}`);
+  }
 }

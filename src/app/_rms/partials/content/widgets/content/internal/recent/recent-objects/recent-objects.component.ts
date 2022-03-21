@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { DashboardService } from 'src/app/_rms/services/entities/dashboard/dashboard.service';
@@ -73,5 +73,10 @@ export class RecentObjectsComponent {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+  }
+  @HostListener('window:storage', ['$event'])
+  refreshList(event) {
+    console.log('event triggered', event)
+    this.getObjectList();
   }
 }

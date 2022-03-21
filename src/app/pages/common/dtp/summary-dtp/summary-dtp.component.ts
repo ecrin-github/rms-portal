@@ -1,9 +1,11 @@
 import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
+import { ConfirmationWindowComponent } from '../../confirmation-window/confirmation-window.component';
 export interface DataTransfer {
   id: string;
   organisation: string;
@@ -31,7 +33,7 @@ export class SummaryDtpComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor( private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService) {
+  constructor( private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
   }
 
   ngOnInit() {
@@ -124,5 +126,15 @@ export class SummaryDtpComponent implements OnInit {
     this.getDtpList();
     localStorage.removeItem('updateDtpList');
   }
-
+  deleteRecord(id) {
+    const deleteModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
+    deleteModal.componentInstance.type = 'dtp';
+    deleteModal.componentInstance.id = id;
+    deleteModal.result.then((data: any) => {
+      console.log('data', data)
+      if (data) {
+        this.getDtpList();
+      }
+    }, error => {});
+  }
 }

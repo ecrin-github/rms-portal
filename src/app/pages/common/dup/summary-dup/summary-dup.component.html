@@ -68,7 +68,7 @@
                     <a [routerLink]="['/data-use', row.id, 'edit']" target="_blank">
                         <i class="fa fa-edit mr-5" style="color:#0688fa;"></i>
                     </a>
-                    <i class="fa fa-trash mr-5" style="color:#f24437;">
+                    <i class="fa fa-trash mr-5" style="color:#f24437; cursor: pointer;" (click)="deleteRecord(row.id)">
 
                     </i>
                 </mat-cell>

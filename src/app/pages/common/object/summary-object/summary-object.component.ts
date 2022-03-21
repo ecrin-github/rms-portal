@@ -1,10 +1,12 @@
 import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
+import { ConfirmationWindowComponent } from '../../confirmation-window/confirmation-window.component';
 export interface ObjectRecord {
   id: number;
   title: string;
@@ -31,7 +33,7 @@ export class SummaryObjectComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor( private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private studyService: StudyService) {
+  constructor( private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private studyService: StudyService, private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -123,5 +125,14 @@ export class SummaryObjectComponent implements OnInit {
     this.getObjectList();
     localStorage.removeItem('updateObjectList');
   }
-
+  deleteRecord(id) {
+    const deleteModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
+    deleteModal.componentInstance.type = 'dataObject';
+    deleteModal.componentInstance.id = id;
+    deleteModal.result.then((data: any) => {
+      if (data) {
+        this.getObjectList();
+      }
+    }, error => {});
+  }
 }

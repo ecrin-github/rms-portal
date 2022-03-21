@@ -68,8 +68,11 @@ export class DataObjectService {
   addObjectInstance(id, payload) {
     return this.http.post(`${objectUrl}/${id}/instances`, payload);
   }
-  editObjectInstance(id, sdSid, payload) {
-    return this.http.put(`${objectUrl}/${sdSid}/instances/${id}`, payload);
+  editObjectInstance(id, sdOid, payload) {
+    return this.http.put(`${objectUrl}/${sdOid}/instances/${id}`, payload);
+  }
+  deleteObjectInstance(id, sdOid) {
+    return this.http.delete(`${objectUrl}/${sdOid}/instances/${id}`);
   }
   getObjectTitle(id) {
     return this.http.get(`${objectUrl}/${id}/titles`);
@@ -77,8 +80,11 @@ export class DataObjectService {
   addObjectTitle(id, payload) {
     return this.http.post(`${objectUrl}/${id}/titles`, payload);
   }
-  editObjectTitle(id, sdSid, payload) {
-    return this.http.put(`${objectUrl}/${sdSid}/titles/${id}`, payload);
+  editObjectTitle(id, sdOid, payload) {
+    return this.http.put(`${objectUrl}/${sdOid}/titles/${id}`, payload);
+  }
+  deleteObjectTitle(id, sdOid) {
+    return this.http.delete(`${objectUrl}/${sdOid}/titles/${id}`);
   }
   getObjectDate(id) {
     return this.http.get(`${objectUrl}/${id}/dates`);
@@ -86,8 +92,11 @@ export class DataObjectService {
   addObjectDate(id, payload) {
     return this.http.post(`${objectUrl}/${id}/dates`, payload);
   }
-  editObjectDate(id, sdSid, payload) {
-    return this.http.put(`${objectUrl}/${sdSid}/dates/${id}`, payload);
+  editObjectDate(id, sdOid, payload) {
+    return this.http.put(`${objectUrl}/${sdOid}/dates/${id}`, payload);
+  }
+  deleteObjectDate(id, sdOid) {
+    return this.http.delete(`${objectUrl}/${sdOid}/dates/${id}`);
   }
   getObjectContributor(id) {
     return this.http.get(`${objectUrl}/${id}/contributors`);
@@ -95,8 +104,11 @@ export class DataObjectService {
   addObjectContributor(id, payload) {
     return this.http.post(`${objectUrl}/${id}/contributors`, payload);
   }
-  editObjectContributor(id, sdSid, payload) {
-    return this.http.put(`${objectUrl}/${sdSid}/contributors/${id}`, payload);
+  editObjectContributor(id, sdOid, payload) {
+    return this.http.put(`${objectUrl}/${sdOid}/contributors/${id}`, payload);
+  }
+  deleteObjectContributor(id, sdOid) {
+    return this.http.delete(`${objectUrl}/${sdOid}/contributors/${id}`);
   }
   getObjectTopic(id) {
     return this.http.get(`${objectUrl}/${id}/topics`);
@@ -104,8 +116,8 @@ export class DataObjectService {
   addObjectTopic(id, payload) {
     return this.http.post(`${objectUrl}/${id}/topics`, payload);
   }
-  editObjectTopic(id, sdSid, payload) {
-    return this.http.put(`${objectUrl}/${sdSid}/topics/${id}`, payload);
+  editObjectTopic(id, sdOid, payload) {
+    return this.http.put(`${objectUrl}/${sdOid}/topics/${id}`, payload);
   }
   getObjectIdentifier(id) {
     return this.http.get(`${objectUrl}/${id}/identifiers`);
@@ -113,8 +125,8 @@ export class DataObjectService {
   addObjectIdentifier(id, payload) {
     return this.http.post(`${objectUrl}/${id}/identifiers`, payload);
   }
-  editObjectIdentifier(id, sdSid, payload) {
-    return this.http.put(`${objectUrl}/${sdSid}/identifiers/${id}`, payload);
+  editObjectIdentifier(id, sdOid, payload) {
+    return this.http.put(`${objectUrl}/${sdOid}/identifiers/${id}`, payload);
   }
   getObjectRight(id) {
     return this.http.get(`${objectUrl}/${id}/rights`);
@@ -122,8 +134,8 @@ export class DataObjectService {
   addObjectRight(id, payload) {
     return this.http.post(`${objectUrl}/${id}/rights`, payload);
   }
-  editObjectRight(id, sdSid, payload) {
-    return this.http.put(`${objectUrl}/${sdSid}/rights/${id}`, payload);
+  editObjectRight(id, sdOid, payload) {
+    return this.http.put(`${objectUrl}/${sdOid}/rights/${id}`, payload);
   }
   getObjectDescription(id) {
     return this.http.get(`${objectUrl}/${id}/descriptions`);
@@ -131,8 +143,8 @@ export class DataObjectService {
   addObjectDescription(id, payload) {
     return this.http.post(`${objectUrl}/${id}/descriptions`, payload);
   }
-  editObjectDescription(id, sdSid, payload) {
-    return this.http.put(`${objectUrl}/${sdSid}/descriptions/${id}`, payload);
+  editObjectDescription(id, sdOid, payload) {
+    return this.http.put(`${objectUrl}/${sdOid}/descriptions/${id}`, payload);
   }
   getObjectRelationship(id) {
     return this.http.get(`${objectUrl}/${id}/relationships`);
@@ -140,10 +152,13 @@ export class DataObjectService {
   addObjectRelationship(id, payload) {
     return this.http.post(`${objectUrl}/${id}/relationships`, payload);
   }
-  editObjectRelationship(id, sdSid, payload) {
-    return this.http.put(`${objectUrl}/${sdSid}/relationships/${id}`, payload);
+  editObjectRelationship(id, sdOid, payload) {
+    return this.http.put(`${objectUrl}/${sdOid}/relationships/${id}`, payload);
   }
   filterByTitle(payload) {
     return this.http.post(`${filterUrl}/filter/data-objects/by-title`, payload);
   }
-}
+  deleteDataObjectById(id) {
+    return this.http.delete(`${objectUrl}/${id}`);
+  }
+ }

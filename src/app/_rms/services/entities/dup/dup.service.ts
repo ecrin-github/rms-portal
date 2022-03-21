@@ -25,4 +25,7 @@ export class DupService {
   editDup(id, payload) {
     return this.http.put(`${url}/processes/${id}`, payload);
   }
+  deleteDupById(id) {
+    return this.http.delete(`${url}/processes/${id}`);
+  }
 }

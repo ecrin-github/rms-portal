@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
@@ -73,5 +73,9 @@ export class RecentDupComponent {
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
-
+  @HostListener('window:storage', ['$event'])
+  refreshList(event) {
+    console.log('event triggered', event)
+    this.getDupList();
+  }
 }

@@ -66,6 +66,9 @@ export class StudyService {
   editStudyIdentifier(id, sdSid, payload) {
     return this.http.put(`${studyUrl}/${sdSid}/identifiers/${id}`, payload);
   }
+  deleteStudyIdentifier(id, sdSid) {
+    return this.http.delete(`${studyUrl}/${sdSid}/identifiers/${id}`);
+  }
   getStudyTitle(id) {
     return this.http.get(`${studyUrl}/${id}/titles`);
   }
@@ -74,6 +77,9 @@ export class StudyService {
   }
   editStudyTitle(id, sdSid, payload) {
     return this.http.put(`${studyUrl}/${sdSid}/titles/${id}`, payload);
+  }
+  deleteStudyTitle(id, sdSid) {
+    return this.http.delete(`${studyUrl}/${sdSid}/titles/${id}`);
   }
   getStudyFeature(id) {
     return this.http.get(`${studyUrl}/${id}/features`);
@@ -84,6 +90,9 @@ export class StudyService {
   editStudyFeature(id, sdSid, payload) {
     return this.http.put(`${studyUrl}/${sdSid}/features/${id}`, payload);
   }
+  deleteStudyFeature(id, sdSid) {
+    return this.http.delete(`${studyUrl}/${sdSid}/features/${id}`);
+  }
   getStudyTopic(id) {
     return this.http.get(`${studyUrl}/${id}/topics`);
   }
@@ -92,6 +101,9 @@ export class StudyService {
   }
   editStudyTopic(id, sdSid, payload) {
     return this.http.put(`${studyUrl}/${sdSid}/topics/${id}`, payload);
+  }
+  deleteStudyTopic(id, sdSid) {
+    return this.http.delete(`${studyUrl}/${sdSid}/topics/${id}`);
   }
   getStudyRelationship(id) {
     return this.http.get(`${studyUrl}/${id}/relationships`);
@@ -102,6 +114,9 @@ export class StudyService {
   editStudyRelationship(id, sdSid, payload) {
     return this.http.put(`${studyUrl}/${sdSid}/relationships/${id}`, payload);
   }
+  deleteStudyRelationshi(id, sdSid) {
+    return this.http.delete(`${studyUrl}/${sdSid}/relationships/${id}`);
+  }
   getStudyContributor(id) {
     return this.http.get(`${studyUrl}/${id}/contributors`);
   }
@@ -111,8 +126,13 @@ export class StudyService {
   editStudyContributor(id, sdSid, payload) {
     return this.http.put(`${studyUrl}/${sdSid}/contributors/${id}`, payload);
   }
-
+  deleteStudyContributor(id, sdSid) {
+    return this.http.delete(`${studyUrl}/${sdSid}/contributors/${id}`);
+  }
   filterByTitle(payload) {
     return this.http.post(`${filterUrl}/filter/studies/by-title`, payload);
+  }
+  deleteStudyById(id) {
+    return this.http.delete(`${studyUrl}/${id}`);
   }
 }

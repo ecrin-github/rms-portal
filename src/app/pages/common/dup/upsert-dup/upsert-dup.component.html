@@ -1,8 +1,8 @@
 <div class="card">
     <div class="card-header">
-        <h2>{{ isView ? 'View new data use process' : isEdit ? 'Edit new data use process' : 'Add new data use process'}}</h2>
+        <h2>{{ isView ? 'View data use process' : isEdit ? 'Edit data use process' : 'Add new data use process'}}</h2>
         <div style="float: right; margin-top: -40px;" *ngIf="isView">
-            <a [routerLink]="['/data-transfers', '1', 'edit']"
+            <a [routerLink]="['/data-use', id, 'edit']"
                class="btn btn-primary mr-5" target="_blank">
                 <i class="fa fa-edit"></i> Edit
             </a>
@@ -28,12 +28,12 @@
                         [multiple]="false" [virtualScroll]="true" class="custom" notFoundText="No members found"
                         placeholder="Select email" *ngIf="!isView">
                     </ng-select>
-                    <span *ngIf="isView">{{findOrganization(dupData.orgId)}}</span>
+                    <h6 *ngIf="isView" style="font-weight: 100;">{{findOrganization(dupData.orgId)}}</h6>
                 </div>
                 <div class="col-md-6">
                     <label for="" class="font-style text-capitalize">Display Name</label>
                     <input type="text" class="form-control" formControlName="displayName" *ngIf="!isView">
-                    <span *ngIf="isView">{{dupData.displayName}}</span>
+                    <h6 *ngIf="isView" style="font-weight: 100;">{{dupData.displayName}}</h6>
                 </div>
             </div>
             <div class="row form-group">
@@ -43,7 +43,7 @@
                         <option disabled selected value="">Select an option...</option>
                         <option [value]=status.id *ngFor="let status of statusList">{{status.name}}</option>
                     </select>
-                    <span *ngIf="isView">{{findStatus(dupData.statusId)}}</span>
+                    <h6 *ngIf="isView" style="font-weight: 100;">{{findStatus(dupData.statusId)}}</h6>
                 </div>
             </div>    
             <div #wizard class="wizard wizard-1" id="kt_wizard_v1" data-wizard-state="step-first" data-wizard-clickable="true">
@@ -103,7 +103,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span *ngIf="isView">{{viewDate(dupData.initialContactDate)}}</span>            
+                                <h6 *ngIf="isView" style="font-weight: 100;">{{viewDate(dupData.initialContactDate)}}</h6>            
                             </div>
                         </div>
                     </div>
@@ -122,7 +122,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span *ngIf="isView">{{viewDate(dupData.setUpCompleted)}}</span>            
+                                <h6 *ngIf="isView" style="font-weight: 100;">{{viewDate(dupData.setUpCompleted)}}</h6>            
                             </div>
                         </div>
                     </div>
@@ -141,7 +141,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span *ngIf="isView">{{viewDate(dupData.prereqsMet)}}</span>            
+                                <h6 *ngIf="isView" style="font-weight: 100;">{{viewDate(dupData.prereqsMet)}}</h6>            
                             </div>
                             <div class="col-md-6">
                                 <label for="" class="font-style text-capitalize">DUA Agreed Date</label>
@@ -156,7 +156,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span *ngIf="isView">{{viewDate(dupData.duaAgreedDate)}}</span>            
+                                <h6 *ngIf="isView" style="font-weight: 100;">{{viewDate(dupData.duaAgreedDate)}}</h6>            
                             </div>
                         </div>
                     </div>
@@ -175,7 +175,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span *ngIf="isView">{{viewDate(dupData.availabilityRequested)}}</span>
+                                <h6 *ngIf="isView" style="font-weight: 100;">{{viewDate(dupData.availabilityRequested)}}</h6>
                             </div>
                         </div>
                     </div>
@@ -194,7 +194,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span *ngIf="isView">{{viewDate(dupData.availabilityConfirmed)}}</span>            
+                                <h6 *ngIf="isView" style="font-weight: 100;">{{viewDate(dupData.availabilityConfirmed)}}</h6>            
                             </div>
                         </div>
                     </div>
@@ -213,7 +213,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span *ngIf="isView">{{viewDate(dupData.accessConfirmed)}}</span>            
+                                <h6 *ngIf="isView" style="font-weight: 100;">{{viewDate(dupData.accessConfirmed)}}</h6>            
                             </div>
                         </div>
                     </div>

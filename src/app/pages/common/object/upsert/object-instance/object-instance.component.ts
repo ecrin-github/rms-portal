@@ -5,6 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ObjectInstanceInterface } from 'src/app/_rms/interfaces/data-object/object-instance.interface';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
 @Component({
   selector: 'app-object-instance',
@@ -27,7 +29,7 @@ export class ObjectInstanceComponent implements OnInit {
   }
   @Output() emitInstance: EventEmitter<any> = new EventEmitter();
 
-  constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService) { 
+  constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
       objectInstances: this.fb.array([])
     });
@@ -64,7 +66,19 @@ export class ObjectInstanceComponent implements OnInit {
   }
 
   removeObjectInstance(i: number) {
-    this.objectInstances().removeAt(i);
+    if (!this.objectInstances().value[i].alreadyExist) {
+      this.objectInstances().removeAt(i);
+    } else {
+      const deleteModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop:'static'});
+      deleteModal.componentInstance.type = 'objectInstance';
+      deleteModal.componentInstance.id = this.objectInstances().value[i].id;
+      deleteModal.componentInstance.sdOid = this.objectInstances().value[i].sdOid;
+      deleteModal.result.then((data) => {
+        if (data) {
+          this.objectInstances().removeAt(i);
+        }
+      }, error => {})
+    }
   }
   getSizeUnit() {
     const getSizeUnit$ = this.objectService.getSizeUnit().subscribe((res: any) => {

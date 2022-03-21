@@ -106,6 +106,9 @@ export class UpsertDtpComponent implements OnInit {
     return date ? dateArray.getFullYear() + '/' + (dateArray.getMonth()+1) + '/' + (dateArray.getDate()+1) : '';
   }
   onSave() {
+    if (localStorage.getItem('updateDtpList')) {
+      localStorage.removeItem('updateDtpList');
+    }
     const payload = JSON.parse(JSON.stringify(this.form.value));
     payload.initialContactDate = this.dateToString(payload.initialContactDate);
     payload.setUpCompleted = this.dateToString(payload.setUpCompleted);
@@ -127,6 +130,7 @@ export class UpsertDtpComponent implements OnInit {
         if (res.statusCode === 200) {
           this.toastr.success('DTP updated successfully');
           localStorage.setItem('updateDtpList', 'true');
+          this.getDtpById(this.id);
         } else {
           this.toastr.error(res.messages[0]);
         }

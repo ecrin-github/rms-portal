@@ -1,10 +1,12 @@
 import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
 import { DupService } from 'src/app/_rms/services/entities/dup/dup.service';
+import { ConfirmationWindowComponent } from '../../confirmation-window/confirmation-window.component';
 export interface DataUseProcess {
   id: string;
   organisation: string;
@@ -32,7 +34,7 @@ export class SummaryDupComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor( private dtpService: DtpService, private dupService:DupService, private spinner: NgxSpinnerService, private toastr: ToastrService) {
+  constructor( private dtpService: DtpService, private dupService:DupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
   }
 
   ngOnInit() {
@@ -125,5 +127,15 @@ export class SummaryDupComponent implements OnInit {
     console.log('event triggered', event)
     this.getDupList();
     localStorage.removeItem('updateDupList');
+  }
+  deleteRecord(id) {
+    const deleteModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
+    deleteModal.componentInstance.type = 'dup';
+    deleteModal.componentInstance.id = id;
+    deleteModal.result.then((data: any) => {
+      if (data) {
+        this.getDupList();
+      }
+    }, error => {});
   }
 }

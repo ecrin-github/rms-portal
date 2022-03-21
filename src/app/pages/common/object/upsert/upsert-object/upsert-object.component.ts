@@ -371,6 +371,9 @@ export class UpsertObjectComponent implements OnInit {
     this.initiateEmit = true;
   }
   onSave() {
+    if (localStorage.getItem('updateObjectList')) {
+      localStorage.removeItem('updateObjectList');
+    }
     if (this.objectForm.valid) {
       const payload = JSON.parse(JSON.stringify(this.objectForm.value));
       payload.objectDatasets.deidentDirect = payload.objectDatasets.deidentDirect === 'true' ? true : false;
@@ -403,6 +406,7 @@ export class UpsertObjectComponent implements OnInit {
           if (res.statusCode === 200) {
             this.toastr.success('Data Object updated successfully');
             localStorage.setItem('updateObjectList', 'true');
+            this.getObjectById(this.id);
           } else {
             this.toastr.error(res.messages[0]);
           }

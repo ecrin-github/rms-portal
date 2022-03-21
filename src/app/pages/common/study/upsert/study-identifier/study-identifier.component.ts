@@ -6,6 +6,8 @@ import { Subscription } from 'rxjs';
 import { StudyIdentifierInterface } from 'src/app/_rms/interfaces/study/study-identifiers.interface';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 import * as _ from 'lodash';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
 @Component({
   selector: 'app-study-identifier',
@@ -27,7 +29,7 @@ export class StudyIdentifierComponent implements OnInit {
   }
   @Output() emitIdentifier: EventEmitter<any> = new EventEmitter();
 
-  constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService) { 
+  constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
       studyIdentifiers: this.fb.array([])
     });
@@ -61,7 +63,19 @@ export class StudyIdentifierComponent implements OnInit {
   }
 
   removeStudyIdentifier(i: number) {
-    this.studyIdentifiers().removeAt(i);
+    if (!this.studyIdentifiers().value[i].alreadyExist) {
+      this.studyIdentifiers().removeAt(i);
+    } else {
+      const removeModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
+      removeModal.componentInstance.type = 'studyIdentifier';
+      removeModal.componentInstance.id = this.studyIdentifiers().value[i].id;
+      removeModal.componentInstance.sdSid = this.studyIdentifiers().value[i].sdSid;
+      removeModal.result.then((data) => {
+        if (data) {
+          this.studyIdentifiers().removeAt(i);
+        }
+      }, error => {})
+    }
   }
   getIdentifierType() {
     setTimeout(() => {

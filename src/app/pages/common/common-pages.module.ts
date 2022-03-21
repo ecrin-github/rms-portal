@@ -49,6 +49,7 @@ import { ObjectRelationshipComponent } from './object/upsert/object-relationship
 import { NgSelectModule } from '@ng-select/ng-select';
 import { StudyContributorComponent } from './study/upsert/study-contributor/study-contributor.component';
 import { CommonModalComponent } from './common-modal/common-modal.component';
+import { ConfirmationWindowComponent } from './confirmation-window/confirmation-window.component';
 
 
 @NgModule({
@@ -92,7 +93,8 @@ import { CommonModalComponent } from './common-modal/common-modal.component';
         ObjectRightComponent,
         ObjectRelationshipComponent,
         StudyContributorComponent,
-        CommonModalComponent
+        CommonModalComponent,
+        ConfirmationWindowComponent
     ],
     schemas: [NO_ERRORS_SCHEMA],
     imports: [

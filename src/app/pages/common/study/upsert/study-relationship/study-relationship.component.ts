@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { StudyRelationshipInterface } from 'src/app/_rms/interfaces/study/study-relationship.interface';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
+import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
 @Component({
   selector: 'app-study-relationship',
@@ -27,7 +29,7 @@ export class StudyRelationshipComponent implements OnInit {
   @Output() emitRelation: EventEmitter<any> = new EventEmitter();
   studyRelationship: StudyRelationshipInterface;
 
-  constructor( private fb: FormBuilder, private studyService: StudyService, private toastr: ToastrService, private spinner: NgxSpinnerService) {
+  constructor( private fb: FormBuilder, private studyService: StudyService, private toastr: ToastrService, private spinner: NgxSpinnerService, private modalService: NgbModal) {
     this.form = this.fb.group({
       studyRelationships: this.fb.array([])
     });
@@ -59,7 +61,19 @@ export class StudyRelationshipComponent implements OnInit {
   }
 
   removeStudyRelation(i: number) {
-    this.studyRelationships().removeAt(i);
+    if(!this.studyRelationships().value[i].alreadyExist) {
+      this.studyRelationships().removeAt(i);
+    } else {
+      const removeModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
+      removeModal.componentInstance.type = 'studyRelationship';
+      removeModal.componentInstance.id = this.studyRelationships().value[i].id;
+      removeModal.componentInstance.sdSid = this.studyRelationships().value[i].sdSid;
+      removeModal.result.then((data) => {
+        if (data) {
+          this.studyRelationships().removeAt(i);
+        }
+      }, error => {})
+    }
   }
   getRelationshipType() {
     const getRelationshipType$ = this.studyService.getReleationshiType().subscribe((res: any) => {
