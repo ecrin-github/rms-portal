@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ObjectContributorInterface } from 'src/app/_rms/interfaces/data-object/object-contributor.interface';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
+import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
 @Component({
   selector: 'app-object-contributor',
@@ -27,7 +29,7 @@ export class ObjectContributorComponent implements OnInit {
   }
   @Output() emitContributor: EventEmitter<any> = new EventEmitter();
 
-  constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService) { 
+  constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
       objectContributors: this.fb.array([])
     });
@@ -59,11 +61,32 @@ export class ObjectContributorComponent implements OnInit {
   }
 
   addObjectContributor() {
-    this.objectContributors().push(this.newObjectContributor());
+    const len = this.objectContributors().value.length;
+    if (len) {
+      if (this.objectContributors().value[len-1].contribTypeId) {
+        this.objectContributors().push(this.newObjectContributor());
+      } else {
+        this.toastr.info('Please provide the Contributor type in the previously added Object Contributor');
+      }
+    } else {
+      this.objectContributors().push(this.newObjectContributor());
+    }
   }
 
   removeObjectContributor(i: number) {
-    this.objectContributors().removeAt(i);
+    if (!this.objectContributors().value[i].alreadyExist) {
+      this.objectContributors().removeAt(i);
+    } else {
+      const removeModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
+      removeModal.componentInstance.type = 'objectContributor';
+      removeModal.componentInstance.id = this.objectContributors().value[i].id;
+      removeModal.componentInstance.sdOid = this.objectContributors().value[i].sdOid;
+      removeModal.result.then((data) => {
+        if (data) {
+          this.objectContributors().removeAt(i);
+        }
+      }, error => {})
+    }
   }
   getContributorType() {
     const getContributorType$ = this.objectService.getContributorType().subscribe((res:any) => {

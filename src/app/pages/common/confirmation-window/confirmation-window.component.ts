@@ -57,6 +57,30 @@ export class ConfirmationWindowComponent implements OnInit {
       case 'objectInstance':
         this.deleteObjectInstance();
         break;
+      case 'objectTitle':
+        this.deleteObjectTitle();
+        break;
+      case 'objectDate':
+        this.deleteObjectDate();
+        break;
+      case 'objectIdentifier':
+        this.deleteObjectIdentifier();
+        break;
+      case 'objectDescription':
+        this.deleteObjectDescription();
+        break;
+      case 'objectRight':
+        this.deleteObjectRight();
+        break;
+      case 'objectRelationship':
+        this.deleteObjectRelationship();
+        break;
+      case 'objectTopic':
+        this.deleteObjectTopic();
+        break;
+      case 'objectContributor':
+        this.deleteObjectContributor();
+        break;
       default:
         break;
     }
@@ -200,7 +224,103 @@ export class ConfirmationWindowComponent implements OnInit {
   deleteObjectInstance() {
     this.objectService.deleteObjectInstance(this.id, this.sdOid).subscribe((res: any) => {
       if (res.statusCode === 200) {
-        this.toastr.success('Object Instance is deleted successfully');
+        this.toastr.success('Object Instance deleted successfully');
+        this.activeModal.close('data');
+      } else {
+        this.toastr.error(res.messages[0]);
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  deleteObjectTitle() {
+    this.objectService.deleteObjectTitle(this.id, this.sdOid).subscribe((res: any) => {
+      if (res.statusCode === 200) {
+        this.toastr.success('Object Title deleted successfully');
+        this.activeModal.close('data');
+      } else {
+        this.toastr.error(res.messages[0]);
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  deleteObjectDate() {
+    this.objectService.deleteObjectDate(this.id, this.sdOid).subscribe((res: any) => {
+      if (res.statusCode === 200) {
+        this.toastr.success('Object Date deleted successfully');
+        this.activeModal.close('data')
+      } else {
+        this.toastr.error(res.messages[0]);
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  deleteObjectIdentifier() {
+    this.objectService.deleteObjectIdentifier(this.id, this.sdOid).subscribe((res: any) => {
+      if (res.statusCode === 200) {
+        this.toastr.success('Object Identifier deleted successfully');
+        this.activeModal.close('data');
+      } else {
+        this.toastr.error(res.messages[0]);
+      }
+    }, error => {
+      this.toastr.error(error.error.title)
+    })
+  }
+  deleteObjectDescription() {
+    this.objectService.deleteObjectDescription(this.id, this.sdOid).subscribe((res: any) => {
+      if (res.statusCode === 200) {
+        this.toastr.success('Object Description deleted successfully');
+        this.activeModal.close('data');
+      } else {
+        this.toastr.error(res.messages[0]);
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  deleteObjectRight() {
+    this.objectService.deleteObjectRight(this.id, this.sdOid).subscribe((res:any) => {
+      if (res.statusCode === 200) {
+        this.toastr.success('Object Right deleted successfully');
+        this.activeModal.close('data');
+      } else {
+        this.toastr.error(res.messages[0]);
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  deleteObjectRelationship() {
+    this.objectService.deleteObjectRelationship(this.id, this.sdOid).subscribe((res: any) => {
+      if (res.statusCode === 200) {
+        this.toastr.success('Object Relationship deleted successfully');
+        this.activeModal.close('data');
+      } else {
+        this.toastr.error(res.messages[0]);
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  deleteObjectTopic() {
+    this.objectService.deleteObjectTopic(this.id, this.sdOid).subscribe((res: any) => {
+      if (res.statusCode === 200) {
+        this.toastr.success('Object Topic deleted successfully');
+        this.activeModal.close('data');
+      } else {
+        this.toastr.error(res.messages[0]);
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  deleteObjectContributor() {
+    this.objectService.deleteObjectContributor(this.id, this.sdOid).subscribe((res: any) => {
+      if (res.statusCode === 200) {
+        this.toastr.success('Object Contributor deleted successfully');
         this.activeModal.close('data');
       } else {
         this.toastr.error(res.messages[0]);

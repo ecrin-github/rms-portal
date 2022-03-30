@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ObjectRelationshipInterface } from 'src/app/_rms/interfaces/data-object/object-relationship.interface';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
+import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
 @Component({
   selector: 'app-object-relationship',
@@ -14,6 +16,7 @@ import { DataObjectService } from 'src/app/_rms/services/entities/data-object/da
 export class ObjectRelationshipComponent implements OnInit {
   form: FormGroup;
   relationshipType: [] = [];
+  objectList: [] = [];
   subscription: Subscription = new Subscription();
   @Input() isView: boolean;
   @Input() isEdit: boolean;
@@ -26,7 +29,7 @@ export class ObjectRelationshipComponent implements OnInit {
   }
   @Output() emitRelation: EventEmitter<any> = new EventEmitter();
 
-  constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService) {
+  constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectRelationships: this.fb.array([])
     });
@@ -34,6 +37,7 @@ export class ObjectRelationshipComponent implements OnInit {
 
   ngOnInit(): void {
     this.getRelationshipType();
+    this.getObjectList();
     if (this.isView || this.isEdit) {
       this.getObjectRelation();
     }
@@ -53,11 +57,32 @@ export class ObjectRelationshipComponent implements OnInit {
   }
 
   addObjectRelation() {
-    this.objectRelationships().push(this.newObjectRelation());
+    const len = this.objectRelationships().value.length;
+    if (len) {
+      if (this.objectRelationships().value[len-1].relationshipTypeId && this.objectRelationships().value[len-1].targetSdOid) {
+        this.objectRelationships().push(this.newObjectRelation());
+      } else {
+        this.toastr.info('Please provide the Relationship Type and Target Data Object in the previously added Object Relation');
+      }
+    } else {
+      this.objectRelationships().push(this.newObjectRelation());
+    }
   }
 
   removeObjectRelation(i: number) {
-    this.objectRelationships().removeAt(i);
+    if (!this.objectRelationships().value[i].alreadyExist) {
+      this.objectRelationships().removeAt(i);
+    } else {
+      const removeModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop:'static'});
+      removeModal.componentInstance.type = 'objectRelationship';
+      removeModal.componentInstance.id = this.objectRelationships().value[i].id;
+      removeModal.componentInstance.sdOid = this.objectRelationships().value[i].sdOid;
+      removeModal.result.then((data) => {
+        if (data) {
+          this.objectRelationships().removeAt(i);
+        }
+      }, error => {})
+    }
   }
   getRelationshipType() {
     const getRelationshipType$ = this.objectService.getRelationshipType().subscribe((res:any) => {
@@ -76,6 +101,20 @@ export class ObjectRelationshipComponent implements OnInit {
       if (res && res.data) {
         this.objectRelation = res.data.length ? res.data : [];
         this.patchForm(this.objectRelation);
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
+  getObjectList() {
+    setTimeout(() => {
+      this.spinner.show();
+    });
+    this.objectService.getObject().subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.objectList = res.data.length ? res.data : [];
       }
     }, error => {
       this.spinner.hide();
@@ -150,5 +189,8 @@ export class ObjectRelationshipComponent implements OnInit {
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
+  customSearchFn(term: string, item) {
+    term = term.toLocaleLowerCase();
+    return item.sdOid.toLocaleLowerCase().indexOf(term) > -1 || item.displayTitle.toLocaleLowerCase().indexOf(term) > -1;
+  }
 }

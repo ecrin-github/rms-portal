@@ -62,7 +62,16 @@ export class StudyContributorComponent implements OnInit {
   }
 
   addStudyContributor() {
-    this.studyContributors().push(this.newStudyContributor());
+    const len = this.studyContributors().value.length;
+    if (len) {
+      if (this.studyContributors().value[len-1].contribTypeId) {
+        this.studyContributors().push(this.newStudyContributor());
+      } else {
+        this.toastr.info('Please provide Contributor Type in the previously added Study Contibutor');
+      }
+    } else {
+      this.studyContributors().push(this.newStudyContributor());
+    }
   }
 
   removeStudyContributor(i: number) {

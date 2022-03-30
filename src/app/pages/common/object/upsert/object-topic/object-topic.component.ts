@@ -1,11 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ObjectTopicInterface } from 'src/app/_rms/interfaces/data-object/object-topic.interface';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
+import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
 @Component({
   selector: 'app-object-topic',
@@ -27,7 +29,7 @@ export class ObjectTopicComponent implements OnInit {
   }
   @Output() emitTopic: EventEmitter<any> = new EventEmitter();
 
-  constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private objectService: DataObjectService) {
+  constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private objectService: DataObjectService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectTopics: this.fb.array([])
     });
@@ -59,11 +61,32 @@ export class ObjectTopicComponent implements OnInit {
   }
 
   addObjectTopic() {
-    this.objectTopics().push(this.newObjectTopic());
+    const len = this.objectTopics().value.length;
+    if (len) {
+      if (this.objectTopics().value[len-1].topicTypeId && this.objectTopics().value[len-1].meshValue) {
+        this.objectTopics().push(this.newObjectTopic());
+      } else {
+        this.toastr.info('Please provide the Topic Type and Topic Value in the previously added Object Topic');
+      }
+    } else {
+      this.objectTopics().push(this.newObjectTopic());
+    }
   }
 
   removeObjectTopic(i: number) {
-    this.objectTopics().removeAt(i);
+    if (!this.objectTopics().value[i].alreadyExist) {
+      this.objectTopics().removeAt(i);
+    } else {
+      const removeModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
+      removeModal.componentInstance.type = 'objectTopic';
+      removeModal.componentInstance.id = this.objectTopics().value[i].id;
+      removeModal.componentInstance.sdOid = this.objectTopics().value[i].sdOid;
+      removeModal.result.then((data) => {
+        if (data) {
+          this.objectTopics().removeAt(i);
+        }
+      }, error => {})
+    }
   }
   getTopicType() {
     const getTopicType$ = this.studyService.getTopicType().subscribe((res: any) => {

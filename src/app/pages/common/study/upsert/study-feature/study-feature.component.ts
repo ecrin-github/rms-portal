@@ -60,8 +60,18 @@ export class StudyFeatureComponent implements OnInit {
   }
 
   addStudyFeature() {
-    this.studyFeatures().push(this.newStudyFeature());
-    this.featureValues.push([]);
+    const len = this.studyFeatures().value.length;
+    if (len) {
+      if (this.studyFeatures().value[len - 1].featureTypeId && this.studyFeatures().value[len - 1].featureValueId) {
+        this.studyFeatures().push(this.newStudyFeature());
+        this.featureValues.push([]);
+      } else {
+        this.toastr.info('Please provide the Feature Type and Feature Value in the previously added Study Feature');
+      }
+    } else {
+      this.studyFeatures().push(this.newStudyFeature());
+      this.featureValues.push([]);
+    }
   }
 
   removeStudyFeature(i: number) {

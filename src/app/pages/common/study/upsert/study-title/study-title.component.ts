@@ -68,7 +68,16 @@ export class StudyTitleComponent implements OnInit {
   }
 
   addStudyTitle() {
-    this.studyTitles().push(this.newStudyTitle());
+    const len = this.studyTitles().value.length;
+    if (len) {
+      if (this.studyTitles().value[len-1].titleTypeId && this.studyTitles().value[len-1].titleText) {
+        this.studyTitles().push(this.newStudyTitle());
+      } else {
+        this.toastr.info('Please provide the Title Type and Title Value in the previously added Study Title');
+      }
+    } else {
+      this.studyTitles().push(this.newStudyTitle());
+    }
   }
 
   removeStudyTitle(i: number) {

@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ObjectDateInterface } from 'src/app/_rms/interfaces/data-object/object-date.interface';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
+import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
 @Component({
   selector: 'app-object-date',
@@ -28,7 +30,7 @@ export class ObjectDateComponent implements OnInit {
   monthValues = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
   dayValues = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13','14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
 
-  constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService) {
+  constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectDates: this.fb.array([])
     })
@@ -63,11 +65,32 @@ export class ObjectDateComponent implements OnInit {
   }
 
   addObjectDate() {
-    this.objectDates().push(this.newObjectDate());
+    const len = this.objectDates().value.length;
+    if (len) {
+      if (this.objectDates().value[len-1].dateTypeId) {
+        this.objectDates().push(this.newObjectDate());
+      } else {
+        this.toastr.info('Please provide the Date Type in the previously added Object Date');
+      }
+    } else {
+      this.objectDates().push(this.newObjectDate());
+    }
   }
 
   removeObjectDate(i: number) {
-    this.objectDates().removeAt(i);
+    if (!this.objectDates().value[i].alreadyExist) {
+      this.objectDates().removeAt(i);
+    } else {
+      const deleteModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
+      deleteModal.componentInstance.type = 'objectDate';
+      deleteModal.componentInstance.id = this.objectDates().value[i].id;
+      deleteModal.componentInstance.sdOid = this.objectDates().value[i].sdOid;
+      deleteModal.result.then((data) => {
+        if (data) {
+          this.objectDates().removeAt(i);
+        }
+      }, error => {})
+    }
   }
   getDateType() {
     const getDateType$ = this.objectService.getDateType().subscribe((res: any) => {

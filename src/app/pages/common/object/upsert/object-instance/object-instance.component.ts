@@ -62,7 +62,16 @@ export class ObjectInstanceComponent implements OnInit {
   }
 
   addObjectInstance() {
-    this.objectInstances().push(this.newObjectInstance());
+    const len = this.objectInstances().value.length;
+    if (len) {
+      if (this.objectInstances().value[len-1].repositoryOrg) {
+        this.objectInstances().push(this.newObjectInstance());
+      } else {
+        this.toastr.info('Please provide the Repository Organistion in the previously added Object Instance');
+      }
+    } else {
+      this.objectInstances().push(this.newObjectInstance());
+    }
   }
 
   removeObjectInstance(i: number) {

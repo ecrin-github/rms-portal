@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ObjectDescriptionInterface } from 'src/app/_rms/interfaces/data-object/object-description.interface';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
+import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
 @Component({
   selector: 'app-object-description',
@@ -27,7 +29,7 @@ export class ObjectDescriptionComponent implements OnInit {
   }
   @Output() emitDescription: EventEmitter<any> = new EventEmitter();
   
-  constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService) {
+  constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectDescriptions: this.fb.array([])
     })
@@ -57,11 +59,32 @@ export class ObjectDescriptionComponent implements OnInit {
   }
 
   addObjectDescription() {
-    this.objectDescriptions().push(this.newObjectDescription());
+    const len = this.objectDescriptions().value.length;
+    if (len) {
+      if (this.objectDescriptions().value[len-1].descriptionTypeId && this.objectDescriptions().value[len-1].label) {
+        this.objectDescriptions().push(this.newObjectDescription());
+      } else {
+        this.toastr.info('Please provide the Description Type and Description label in the previously added Object Description');
+      }
+    } else {
+      this.objectDescriptions().push(this.newObjectDescription());
+    }
   }
 
   removeObjectDescription(i: number) {
-    this.objectDescriptions().removeAt(i);
+    if(!this.objectDescriptions().value[i].alreadyExist) {
+      this.objectDescriptions().removeAt(i);
+    } else {
+      const removeModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
+      removeModal.componentInstance.type = 'objectDescription';
+      removeModal.componentInstance.id = this.objectDescriptions().value[i].id;
+      removeModal.componentInstance.sdOid = this.objectDescriptions().value[i].sdOid;
+      removeModal.result.then((data) => {
+        if (data) {
+          this.objectDescriptions().removeAt(i);
+        }
+      }, error => {})
+    }
   }
   getDescriptionType() {
     const getDescriptionType$ = this.objectService.getDescriptionType().subscribe((res: any) => {

@@ -50,7 +50,7 @@ export class StudyIdentifierComponent implements OnInit {
       id: '',
       sdSid: '',
       identifierValue: '',
-      identifierTypeId: '',
+      identifierTypeId: null,
       identifierDate: '',
       identifierLink: '',
       identifierOrg: '',
@@ -59,7 +59,16 @@ export class StudyIdentifierComponent implements OnInit {
   }
 
   addStudyIdentifier() {
-    this.studyIdentifiers().push(this.newStudyIdentifier());
+    const len = this.studyIdentifiers().value.length;
+    if (len) {
+      if (this.studyIdentifiers().value[len - 1].identifierValue && this.studyIdentifiers().value[len - 1].identifierTypeId) {
+        this.studyIdentifiers().push(this.newStudyIdentifier());
+      } else {
+        this.toastr.info('Please provide the Identifier Value and Identifier Type in the previously added Study Identifier');
+      }
+    } else {
+      this.studyIdentifiers().push(this.newStudyIdentifier());
+    }
   }
 
   removeStudyIdentifier(i: number) {

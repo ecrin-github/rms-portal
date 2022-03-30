@@ -1,11 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ObjectTitleInterface } from 'src/app/_rms/interfaces/data-object/object-title.interface';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
+import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
 @Component({
   selector: 'app-object-title',
@@ -28,7 +30,7 @@ export class ObjectTitleComponent implements OnInit {
   }
   @Output() emitTitle: EventEmitter<any> = new EventEmitter();
 
-  constructor( private fb: FormBuilder, private objectService: DataObjectService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService) {
+  constructor( private fb: FormBuilder, private objectService: DataObjectService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectTitles: this.fb.array([])
     });
@@ -58,11 +60,32 @@ export class ObjectTitleComponent implements OnInit {
   }
 
   addObjectTitle() {
-    this.objectTitles().push(this.newObjectTitle());
+    const len = this.objectTitles().value.length;
+    if (len) {
+      if (this.objectTitles().value[len-1].titleTypeId && this.objectTitles().value[len-1].titleText) {
+        this.objectTitles().push(this.newObjectTitle());
+      } else {
+        this.toastr.info('Please provide the Title Type and Title text in the previously added Object Title');
+      }
+    } else {
+      this.objectTitles().push(this.newObjectTitle());
+    }
   }
 
   removeObjectTitle(i: number) {
-    this.objectTitles().removeAt(i);
+    if (!this.objectTitles().value[i].alreadyExist) {
+      this.objectTitles().removeAt(i);
+    } else {
+      const removeModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
+      removeModal.componentInstance.type = 'objectTitle';
+      removeModal.componentInstance.id = this.objectTitles().value[i].id;
+      removeModal.componentInstance.sdOid = this.objectTitles().value[i].sdOid;
+      removeModal.result.then((data) => {
+        if (data) {
+          this.objectTitles().removeAt(i);
+        }
+      }, error => {})
+    }
   }
   getLanguageCode() {
     const getLanguageCode$ = this.objectService.getLanguageCode().subscribe((res:any) => {

@@ -57,7 +57,16 @@ export class StudyRelationshipComponent implements OnInit {
   }
 
   addStudyRelation() {
-    this.studyRelationships().push(this.newStudyRelation());
+    const len = this.studyRelationships().value.length;
+    if (len) {
+      if (this.studyRelationships().value[len-1].relationshipTypeId && this.studyRelationships().value[len-1].targetSdSid) {
+        this.studyRelationships().push(this.newStudyRelation());
+      } else {
+        this.toastr.info('Please provide the Relationship Type and Target study in the previously added Study Relationship');
+      }
+    } else {
+      this.studyRelationships().push(this.newStudyRelation());
+    }
   }
 
   removeStudyRelation(i: number) {
@@ -92,7 +101,7 @@ export class StudyRelationshipComponent implements OnInit {
     this.studyService.getStudy().subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
-        this.studyType = res.data.length ? res.data : [];;
+        this.studyType = res.data.length ? res.data : [];
       }
     }, error => {
       this.spinner.hide();

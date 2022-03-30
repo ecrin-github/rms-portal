@@ -58,7 +58,16 @@ export class StudyTopicComponent implements OnInit {
   }
 
   addStudyTopic() {
-    this.studyTopics().push(this.newStudyTopic());
+    const len = this.studyTopics().value.length;
+    if (len) {
+      if (this.studyTopics().value[len-1].topicTypeId && this.studyTopics().value[len-1].meshValue) {
+        this.studyTopics().push(this.newStudyTopic());
+      } else {
+        this.toastr.info('Please provide the Topic Type and Topic Value in the previously added Study Topic');
+      }
+    } else {
+      this.studyTopics().push(this.newStudyTopic());
+    }
   }
 
   removeStudyTopic(i: number) {

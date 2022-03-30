@@ -6,6 +6,10 @@ import { Subscription } from 'rxjs';
 import { ObjectIdentifierInterface } from 'src/app/_rms/interfaces/data-object/object-identifier.interface';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
+
+
 
 @Component({
   selector: 'app-object-identifier',
@@ -27,7 +31,7 @@ export class ObjectIdentifierComponent implements OnInit {
   }
   @Output() emitIdentifier: EventEmitter<any> = new EventEmitter();
 
-  constructor( private fb: FormBuilder, private studyService: StudyService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService) {
+  constructor( private fb: FormBuilder, private studyService: StudyService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectIdentifiers: this.fb.array([])
     });
@@ -56,11 +60,32 @@ export class ObjectIdentifierComponent implements OnInit {
   }
 
   addObjectIdentifier() {
-    this.objectIdentifiers().push(this.newObjectIdentifier());
+    const len = this.objectIdentifiers().value.length;
+    if (len) {
+      if (this.objectIdentifiers().value[len-1].identifierTypeId && this.objectIdentifiers().value[len-1].identifierValue) {
+        this.objectIdentifiers().push(this.newObjectIdentifier());
+      } else {
+        this.toastr.info('Please provide the Identifier Type and Identifier Value in the previously added Object Identifier');
+      }
+    } else {
+      this.objectIdentifiers().push(this.newObjectIdentifier());
+    }
   }
 
   removeObjectIdentifier(i: number) {
-    this.objectIdentifiers().removeAt(i);
+    if (!this.objectIdentifiers().value[i].alreadyExist) {
+      this.objectIdentifiers().removeAt(i);
+    } else {
+      const removeModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
+      removeModal.componentInstance.type = 'objectIdentifier';
+      removeModal.componentInstance.id = this.objectIdentifiers().value[i].id;
+      removeModal.componentInstance.sdOid = this.objectIdentifiers().value[i].sdOid;
+      removeModal.result.then((data) => {
+        if (data) {
+          this.objectIdentifiers().removeAt(i);
+        }
+      }, error => {})
+    }
   }
   getIdentifierType() {
     const getIdentifierType$ = this.studyService.getIdentifierType().subscribe((res:any) => {

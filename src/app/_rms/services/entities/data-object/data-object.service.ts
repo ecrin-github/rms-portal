@@ -119,6 +119,9 @@ export class DataObjectService {
   editObjectTopic(id, sdOid, payload) {
     return this.http.put(`${objectUrl}/${sdOid}/topics/${id}`, payload);
   }
+  deleteObjectTopic(id, sdOid) {
+    return this.http.delete(`${objectUrl}/${sdOid}/topics/${id}`);
+  }
   getObjectIdentifier(id) {
     return this.http.get(`${objectUrl}/${id}/identifiers`);
   }
@@ -127,6 +130,9 @@ export class DataObjectService {
   }
   editObjectIdentifier(id, sdOid, payload) {
     return this.http.put(`${objectUrl}/${sdOid}/identifiers/${id}`, payload);
+  }
+  deleteObjectIdentifier(id, sdOid) {
+    return this.http.delete(`${objectUrl}/${sdOid}/identifiers/${id}`);
   }
   getObjectRight(id) {
     return this.http.get(`${objectUrl}/${id}/rights`);
@@ -137,6 +143,9 @@ export class DataObjectService {
   editObjectRight(id, sdOid, payload) {
     return this.http.put(`${objectUrl}/${sdOid}/rights/${id}`, payload);
   }
+  deleteObjectRight(id, sdOid) {
+    return this.http.delete(`${objectUrl}/${sdOid}/rights/${id}`);
+  }
   getObjectDescription(id) {
     return this.http.get(`${objectUrl}/${id}/descriptions`);
   }
@@ -146,6 +155,9 @@ export class DataObjectService {
   editObjectDescription(id, sdOid, payload) {
     return this.http.put(`${objectUrl}/${sdOid}/descriptions/${id}`, payload);
   }
+  deleteObjectDescription(id, sdOid) {
+    return this.http.delete(`${objectUrl}/${sdOid}/descriptions/${id}`);
+  }
   getObjectRelationship(id) {
     return this.http.get(`${objectUrl}/${id}/relationships`);
   }
@@ -154,6 +166,9 @@ export class DataObjectService {
   }
   editObjectRelationship(id, sdOid, payload) {
     return this.http.put(`${objectUrl}/${sdOid}/relationships/${id}`, payload);
+  }
+  deleteObjectRelationship(id, sdOid) {
+    return this.http.delete(`${objectUrl}/${sdOid}/relationships/${id}`);
   }
   filterByTitle(payload) {
     return this.http.post(`${filterUrl}/filter/data-objects/by-title`, payload);
