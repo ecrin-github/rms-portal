@@ -7,19 +7,19 @@
       <div class="d-flex flex-column-auto flex-column pt-lg-40 pt-15">
         <!--begin::Aside header-->
         <div style="margin: auto; line-height: 100px;">
-          <a href="https://ecrin.org/" class="text-center mb-10 mr-5">
+          <a href="https://ecrin.org/" class="text-center mb-10 mr-5" target="_blank">
             <img src="./assets/media/logos/ECRIN-for-web.jpg"
               class="max-h-60px mr-5" alt=""
               style="height: 60px; width: 170px; vertical-align: middle;"
             />
           </a>
-          <a href="https://www.uio.no/english/services/it/research/sensitive-data/" class="text-center mb-10 mr-5">
+          <a href="https://www.uio.no/english/services/it/research/sensitive-data/" class="text-center mb-10 mr-5" target="_blank">
             <img src="./assets/media/logos/tsd-logo-small.png"
               class="max-h-70px" alt=""
               style="height: 70px; width: 60px; vertical-align: middle;"
             />
           </a>
-          <a href="https://www.eosc-life.eu/" class="text-center mb-10 mr-5">
+          <a href="https://www.eosc-life.eu/" class="text-center mb-10 mr-5" target="_blank">
             <img src="./assets/media/logos/Logo-EOSC-Life.png"
               class="max-h-90px mr-5" alt=""
               style="height: 90px; width: 115px; vertical-align: middle;"
@@ -47,10 +47,10 @@
       <!--end::Content body-->
 
       <!--begin::Content footer-->
-      <div class="d-flex justify-content-lg-start justify-content-center align-items-end py-7 py-lg-0">
-        <a href="#" class="text-primary font-weight-bolder font-size-h5" target="_blank">Terms</a>
+      <div class="d-flex justify-content-lg-start justify-content-center align-items-end py-7 py-lg-0" *ngIf="showFooter">
+        <!-- <a href="#" class="text-primary font-weight-bolder font-size-h5" target="_blank">Terms</a> -->
         <a href="http://crmdr.org/" class="text-primary ml-10 font-weight-bolder font-size-h5" target="_blank">MDR</a>
-        <a href="http://ecrin-mdr.online/index.php/Contact_us" class="text-primary ml-10 font-weight-bolder font-size-h5" target="_blank">Contact Us</a>
+        <a href="javascript:void(0)" class="text-primary ml-10 font-weight-bolder font-size-h5" (click)="goToContact()">Contact Us</a>
       </div>
       <!--end::Content footer-->
     </div>

@@ -27,6 +27,7 @@ export class StudyTopicComponent implements OnInit {
   }
   @Output() emitTopic: EventEmitter<any> = new EventEmitter();
   studyTopic: StudyTopicInterface;
+  controlledTerminology = [];
 
   constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({

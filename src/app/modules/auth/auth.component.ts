@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -8,10 +9,16 @@ import { Component, OnInit } from '@angular/core';
 export class AuthComponent implements OnInit {
 
   today: Date = new Date();
+  showFooter: boolean = true;
 
-  constructor() { }
+  constructor( private router: Router) { }
 
   ngOnInit(): void {
+    this.showFooter = this.router.url.includes('contactUs') ? false : true;
   }
+  goToContact() {
+    this.router.navigate([])
+    .then(result => { window.open('/contactUs', '_blank'); });
+}
 
 }

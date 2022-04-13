@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 const url = environment.baseUrl + '/rms/data-transfers';
-const contetUrl = environment.baseUrl + '/context';
+const context = environment.baseUrl + '/context';
 const filterUrl = environment.baseUrl + '/rms';
 
 @Injectable({
@@ -12,10 +12,10 @@ export class DtpService {
 
   constructor( private http: HttpClient) { }
   getOrganizationList() {
-    return this.http.get(`${contetUrl}/organisations`);
+    return this.http.get(`${context}/organisations`);
   }
   getStatusList() {
-    return this.http.get(`${contetUrl}/rms/dtp-status-types`);
+    return this.http.get(`${context}/rms/dtp-status-types`);
   }
   getDtpList() {
     return this.http.get(`${url}/processes`);

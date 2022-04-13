@@ -34,6 +34,7 @@ import { SummaryStudyComponent } from '../common/study/summary-study/summary-stu
 import { UpsertStudyComponent } from '../common/study/upsert/upsert-study/upsert-study.component';
 import { SummaryObjectComponent } from '../common/object/summary-object/summary-object.component';
 import { UpsertObjectComponent } from '../common/object/upsert/upsert-object/upsert-object.component';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 
 @NgModule({
@@ -121,7 +122,8 @@ import { UpsertObjectComponent } from '../common/object/upsert/upsert-object/ups
         ReactiveFormsModule,
         MatExpansionModule,
         MatFormFieldModule,
-        MatButtonModule
+        MatButtonModule,
+        NgApexchartsModule
     ]
 })
 export class InternalPagesModule {}

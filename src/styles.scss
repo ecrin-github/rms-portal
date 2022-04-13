@@ -72,6 +72,14 @@
 .dropdown-toggle::after {
   display: none !important;
 }
+.form-control {
+  // border: 1px solid #758092 !important;
+  box-shadow: 0 0.25rem 0.75rem 0.15rem rgb(0 0 0 / 8%) !important;
+}
+// .form-control:focus {
+//   border-color: #3e6ab8 !important;
+//   box-shadow: 0 0.5rem 1.5rem 0.5rem rgb(0 0 0 / 8%) !important;
+// }
 
 .angular-bootstrap-table {
   overflow-x: auto;

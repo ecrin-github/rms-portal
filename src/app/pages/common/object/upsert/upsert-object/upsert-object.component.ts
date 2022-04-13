@@ -34,6 +34,7 @@ export class UpsertObjectComponent implements OnInit {
   showContributor: boolean = false;
   showIdentifier: boolean = false;
   showDescription: boolean = false;
+  sticky: boolean = false;
 
   constructor(private fb: FormBuilder, private router: Router, private objectService: DataObjectService, private spinner: NgxSpinnerService,
     private toastr: ToastrService, private activatedRoute: ActivatedRoute) {
@@ -85,10 +86,10 @@ export class UpsertObjectComponent implements OnInit {
     const sticky = navbar.offsetTop;
     if (window.pageYOffset >= sticky) {
       navbar.classList.add('sticky');
-      // this.sticky = true;
+      this.sticky = true;
     } else {
       navbar.classList.remove('sticky');
-      // this.sticky = false;
+      this.sticky = false;
     }
   }
 

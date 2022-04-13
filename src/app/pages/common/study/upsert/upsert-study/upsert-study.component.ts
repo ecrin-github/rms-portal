@@ -34,6 +34,8 @@ export class UpsertStudyComponent implements OnInit {
   count = 0;
   publicTitle: string = '';
   monthValues = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+  sticky: boolean = false;
+  studyType: string = '';
 
   constructor(private fb: FormBuilder, private router: Router, private studyService: StudyService, private activatedRoute: ActivatedRoute,
     private spinner: NgxSpinnerService, private toastr: ToastrService) {
@@ -65,10 +67,10 @@ export class UpsertStudyComponent implements OnInit {
     const sticky = navbar.offsetTop;
     if (window.pageYOffset >= sticky) {
       navbar.classList.add('sticky');
-      // this.sticky = true;
+      this.sticky = true;
     } else {
       navbar.classList.remove('sticky');
-      // this.sticky = false;
+      this.sticky = false;
     }
   }
 
@@ -98,6 +100,9 @@ export class UpsertStudyComponent implements OnInit {
       if(this.isView) {
         const studyArray = this.studyTypes.filter((type: any) => type.id === this.studyForm.value.studyTypeId);
         this.studyTypeView = studyArray && studyArray.length ? studyArray[0] : {name: ''};
+      }
+      if(this.isView || this.isEdit) {
+        this.studyTypeChange();
       }
     }, error => {
       this.spinner.hide();
@@ -317,7 +322,11 @@ export class UpsertStudyComponent implements OnInit {
     window.close();
   }
   onChange() {
-    console.log(this.studyForm.value.displayTitle);
     this.publicTitle = this.studyForm.value.displayTitle;
+  }
+  studyTypeChange() {
+    const arrInterventional:any = this.studyTypes.filter((item: any) => item.name.toLowerCase() === 'interventional');
+    const arrObservational:any = this.studyTypes.filter((item: any) => item.name.toLowerCase() === 'observational');
+    this.studyType = parseInt(this.studyForm.value.studyTypeId) === arrInterventional[0].id ? 'interventional' : parseInt(this.studyForm.value.studyTypeId) === arrObservational[0].id ? 'observational': ''
   }
 }

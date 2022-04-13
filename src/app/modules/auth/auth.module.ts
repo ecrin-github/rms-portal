@@ -7,12 +7,14 @@ import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { AuthComponent } from './auth.component';
 import {TranslationModule} from '../i18n/translation.module';
+import { ContactUsComponent } from './contact-us/contact-us.component';
 
 @NgModule({
   declarations: [
     LoginComponent,
     LogoutComponent,
     AuthComponent,
+    ContactUsComponent,
   ],
   imports: [
     CommonModule,

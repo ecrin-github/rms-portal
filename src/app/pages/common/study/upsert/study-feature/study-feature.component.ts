@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { StudyFeatureInterface } from 'src/app/_rms/interfaces/study/study-feature.interface';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
@@ -17,7 +17,12 @@ export class StudyFeatureComponent implements OnInit {
   form: FormGroup;
   featureTypes: [] = [];
   featureValues = [];
+  featureValInter = [];
+  featureValObe = [];
   featureValuesAll: [] = [];
+  featureInterventional = [];
+  featureObservational = [];
+  selectedStudyType: any;
   subscription: Subscription = new Subscription();
   @Input() isView: boolean;
   @Input() isEdit: boolean;
@@ -27,8 +32,14 @@ export class StudyFeatureComponent implements OnInit {
       this.emitData();
     }
   }
+  @Input() set studyType(studyType: any) {
+    this.selectedStudyType = studyType;
+    console.log(this.selectedStudyType);
+    this.studyTypeChange();
+  }
   @Output() emitFeature: EventEmitter<any> = new EventEmitter();
-  studyFeature: StudyFeatureInterface;
+  studyFeature = [];
+  showAll: boolean = true;
 
 
   constructor(private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
@@ -38,8 +49,7 @@ export class StudyFeatureComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getFeatureType();
-    this.getFeaturValue();
+    this.getFeature();
     if (this.isEdit || this.isView) {
       this.getStudyFeature()
     }
@@ -49,71 +59,14 @@ export class StudyFeatureComponent implements OnInit {
     return this.form.get('studyFeatures') as FormArray;
   }
 
-  newStudyFeature(): FormGroup {
+  newStudyFeature(featureTypeId): FormGroup {
     return this.fb.group({
       id: '',
       sdSid: '',
-      featureTypeId: '',
+      featureTypeId: featureTypeId,
       featureValueId: '',
       alreadyExist: false
     });
-  }
-
-  addStudyFeature() {
-    const len = this.studyFeatures().value.length;
-    if (len) {
-      if (this.studyFeatures().value[len - 1].featureTypeId && this.studyFeatures().value[len - 1].featureValueId) {
-        this.studyFeatures().push(this.newStudyFeature());
-        this.featureValues.push([]);
-      } else {
-        this.toastr.info('Please provide the Feature Type and Feature Value in the previously added Study Feature');
-      }
-    } else {
-      this.studyFeatures().push(this.newStudyFeature());
-      this.featureValues.push([]);
-    }
-  }
-
-  removeStudyFeature(i: number) {
-    if (!this.studyFeatures().value[i].alreadyExist) {
-      this.studyFeatures().removeAt(i);
-      this.featureValues.splice(i, 1);
-    } else {
-      const removeModal = this.modalService.open(ConfirmationWindowComponent, { size: 'lg', backdrop: 'static' });
-      removeModal.componentInstance.type = 'studyFeature';
-      removeModal.componentInstance.id = this.studyFeatures().value[i].id;
-      removeModal.componentInstance.sdSid = this.studyFeatures().value[i].sdSid;
-      removeModal.result.then((data) => {
-        if (data) {
-          this.studyFeatures().removeAt(i);
-          this.featureValues.splice(i, 1);
-        }
-      }, error => {});
-    }
-  }
-  getFeatureType() {
-    const getFeatureType$ = this.studyService.getFeatureType().subscribe((res: any) => {
-      if (res.data) {
-        this.featureTypes = res.data;
-      }
-    }, error => {
-      this.toastr.error(error.error.title);
-    });
-    this.subscription.add(getFeatureType$);
-  }
-  getFeaturValue() {
-    const getFeaturValue$ = this.studyService.getFeatureValue().subscribe((res: any) => {
-      if (res.data) {
-        this.featureValuesAll = res.data;
-      }
-    }, error => {
-      this.toastr.error(error.error.title);
-    });
-    this.subscription.add(getFeaturValue$);
-  }
-  onFeatureChange(event, id) {
-    const featureVal= this.featureValuesAll.filter((item:any) => item.featureTypeId === parseInt(event.target.value));
-    this.featureValues[id] = featureVal;
   }
   getStudyFeature() {
     this.spinner.show();
@@ -121,7 +74,14 @@ export class StudyFeatureComponent implements OnInit {
       this.spinner.hide();
       if (res && res.data) {
         this.studyFeature = res.data.length ? res.data : [];
-        this.patchForm(this.studyFeature);
+        if (this.isEdit || this.isView) {
+          this.form.value.studyFeatures.map((item1, index) => {
+            const arr = this.studyFeature.filter((item:any) => item1.featureTypeId === item.featureTypeId);
+            this.studyFeatures().at(index).patchValue({
+              featureValueId: arr[0].featureValueId
+            })
+          })
+        }    
       }
       this.spinner.hide();
     }, error => {
@@ -129,41 +89,65 @@ export class StudyFeatureComponent implements OnInit {
       this.toastr.error(error.error.title);
     })
   }
-  patchForm(features) {
-    this.form.setControl('studyFeatures', this.patchArray(features));
-  }
-  patchArray(features): FormArray {
-    const formArray = new FormArray([]);
-    features.forEach( (feature, index) => {
-      formArray.push(this.fb.group({
-        id: feature.id,
-        sdSid: feature.sdSid,
-        featureTypeId: feature.featureTypeId,
-        featureValueId: feature.featureValueId,
-        alreadyExist: true
-      }))
-      const featureVal= this.featureValuesAll.filter((item:any) => item.featureTypeId === parseInt(feature.featureTypeId));
-      this.featureValues[index] = featureVal;
-    });
-    return formArray;
-  }
-  addFeature(index) {
+  getFeature() {
+    const getFeatureType$ = this.studyService.getFeatureType();
+    const getFeatureValue$ = this.studyService.getFeatureValue();
     this.spinner.show();
-    const payload = this.form.value.studyFeatures[index];
-    payload.sdSid = this.sdSid;
-    delete payload.id;
-
-    this.studyService.addStudyFeature(this.sdSid, payload).subscribe((res: any) => {
+    const combine$ = combineLatest([getFeatureType$, getFeatureValue$]).subscribe(([featureType, featureValue] : [any, any]) => {
       this.spinner.hide();
-      if (res.statusCode === 200) {
-        this.toastr.success('Study Feature added successfully');
-      } else {
-        this.toastr.error(res.messages[0]);
+      if (featureType.data) {
+        this.featureTypes = featureType.data;
       }
+      if (featureValue.data) {
+        this.featureValuesAll = featureValue.data;
+      }
+      this.featureArrayFormation();
     }, error => {
       this.spinner.hide();
       this.toastr.error(error.error.title);
+    })
+  }
+  featureArrayFormation() {
+    this.featureInterventional = this.featureTypes.filter((item: any) => item.context === 'interventional');
+    this.featureObservational = this.featureTypes.filter((item: any) => item.context === 'observational');
+    if (this.form.value.studyFeatures) {
+      (this.form.get('studyFeatures') as FormArray).clear()
+    }
+    console.log(this.form.get('studyFeatures') as FormArray);
+    if (this.selectedStudyType === 'interventional') {
+      this.featureInterventional.map((item1, index) => {
+        this.featureValInter[index] = this.featureValuesAll.filter((item: any) => item.featureTypeId === item1.id);
+        this.studyFeatures().push(this.newStudyFeature(item1.id));
+      });
+    }
+    if (this.selectedStudyType === 'observational') {
+      this.featureObservational.map((item2, index) => {
+        this.featureValObe[index] = this.featureValuesAll.filter((item:any) => item.featureTypeId === item2.id);
+        this.studyFeatures().push(this.newStudyFeature(item2.id));
+      })
+    }
+  }
+  addFeature() {
+    this.spinner.show();
+    const payload = JSON.parse(JSON.stringify(this.form.value.studyFeatures)).map(item =>{
+      item.sdSid = this.sdSid;
+      delete item.id;
+      return item;
     });
+    console.log('payload ', payload);
+    payload.map((item: any) => {
+      this.studyService.addStudyFeature(this.sdSid, item).subscribe((res: any) => {
+        this.spinner.hide();
+        if (res.statusCode === 200) {
+          this.toastr.success('Study Feature added successfully');
+        } else {
+          this.toastr.error(res.messages[0]);
+        }
+      }, error => {
+        this.spinner.hide();
+        this.toastr.error(error.error.title);
+      });
+    })
   }
   editFeature(featureObject) {
     const payload = featureObject.value;
@@ -199,6 +183,10 @@ export class StudyFeatureComponent implements OnInit {
       return item;
     })
     this.emitFeature.emit({ data: payload, isEmit: false });
+  }
+  studyTypeChange() {
+    this.featureArrayFormation();
+    this.showAll = this.selectedStudyType === 'interventional' ? true : this.selectedStudyType === 'observational' ? false : true;
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

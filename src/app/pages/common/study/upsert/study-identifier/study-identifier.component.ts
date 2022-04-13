@@ -8,6 +8,7 @@ import { StudyService } from 'src/app/_rms/services/entities/study/study.service
 import * as _ from 'lodash';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
+import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
 
 @Component({
   selector: 'app-study-identifier',
@@ -19,6 +20,8 @@ export class StudyIdentifierComponent implements OnInit {
   identifierTypes: [] = [];
   subscription: Subscription = new Subscription();
   studyIdentifier: StudyIdentifierInterface;
+  showIdentifierLinks = [];
+  organizationList:[] = [];
   @Input() isView: boolean;
   @Input() isEdit: boolean;
   @Input() sdSid: string;
@@ -29,7 +32,7 @@ export class StudyIdentifierComponent implements OnInit {
   }
   @Output() emitIdentifier: EventEmitter<any> = new EventEmitter();
 
-  constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
+  constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private dtpService: DtpService) { 
     this.form = this.fb.group({
       studyIdentifiers: this.fb.array([])
     });
@@ -37,6 +40,7 @@ export class StudyIdentifierComponent implements OnInit {
 
   ngOnInit(): void {
     this.getIdentifierType();
+    this.getOrganization();
     if(this.isEdit || this.isView) {
       this.getStudyIdentifier();
     }
@@ -53,7 +57,7 @@ export class StudyIdentifierComponent implements OnInit {
       identifierTypeId: null,
       identifierDate: '',
       identifierLink: '',
-      identifierOrg: '',
+      identifierOrgId: '',
       alreadyExist: false
     });
   }
@@ -61,19 +65,22 @@ export class StudyIdentifierComponent implements OnInit {
   addStudyIdentifier() {
     const len = this.studyIdentifiers().value.length;
     if (len) {
-      if (this.studyIdentifiers().value[len - 1].identifierValue && this.studyIdentifiers().value[len - 1].identifierTypeId) {
+      if (this.studyIdentifiers().value[len - 1].identifierValue && this.studyIdentifiers().value[len - 1].identifierTypeId && this.studyIdentifiers().value[len - 1].identifierOrgId) {
         this.studyIdentifiers().push(this.newStudyIdentifier());
+        this.showIdentifierLinks.push(false);
       } else {
         this.toastr.info('Please provide the Identifier Value and Identifier Type in the previously added Study Identifier');
       }
     } else {
       this.studyIdentifiers().push(this.newStudyIdentifier());
+      this.showIdentifierLinks.push(false);
     }
   }
 
   removeStudyIdentifier(i: number) {
     if (!this.studyIdentifiers().value[i].alreadyExist) {
       this.studyIdentifiers().removeAt(i);
+      this.showIdentifierLinks.slice(i, 1);
     } else {
       const removeModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
       removeModal.componentInstance.type = 'studyIdentifier';
@@ -82,9 +89,22 @@ export class StudyIdentifierComponent implements OnInit {
       removeModal.result.then((data) => {
         if (data) {
           this.studyIdentifiers().removeAt(i);
+          this.showIdentifierLinks.slice(i, 1);
         }
       }, error => {})
     }
+  }
+  getOrganization() {
+    this.spinner.show();
+    this.dtpService.getOrganizationList().subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.organizationList = res.data;
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
   }
   getIdentifierType() {
     setTimeout(() => {
@@ -120,7 +140,7 @@ export class StudyIdentifierComponent implements OnInit {
   }
   patchArray(identifiers): FormArray {
     const formArray = new FormArray([]);
-    identifiers.forEach(identifier => {
+    identifiers.forEach((identifier, index) => {
       formArray.push(this.fb.group({
         id: identifier.id,
         sdSid: identifier.sdSid,
@@ -128,9 +148,11 @@ export class StudyIdentifierComponent implements OnInit {
         identifierTypeId: identifier.identifierTypeId,
         identifierDate: identifier.identifierDate ? this.stringTodate(identifier.identifierDate) : '',
         identifierLink: identifier.identifierLink,
-        identifierOrg: identifier.identifierOrg,
+        identifierOrgId: identifier.identifierOrgId,
         alreadyExist: true
       }))
+      const arr: any = this.identifierTypes.filter((item: any) => item.name.includes('Funder'));
+      this.showIdentifierLinks[index] = arr && arr.length ? identifier.identifierTypeId === arr[0].id ? true : false : false;
     });
     return formArray;
   }
@@ -193,6 +215,10 @@ export class StudyIdentifierComponent implements OnInit {
       return item;
     })
     this.emitIdentifier.emit({data:payload, isEmit: false});
+  }
+  onChange(index) {
+    const arr: any = this.identifierTypes.filter((item: any) => item.name.includes('Funder'));
+    this.showIdentifierLinks[index] = arr && arr.length ? parseInt(this.form.value.studyIdentifiers[index].identifierTypeId) === arr[0].id ? true : false : false
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

@@ -2,9 +2,12 @@
 <div class="login-form login-signin">
   <!--begin::Title-->
   <div class="pb-13 pt-lg-0 pt-5">
-    <h3 class="font-weight-bolder text-dark font-size-h4 font-size-h1-lg">
-      The Repository Management System
-    </h3>
+    <h1 class="font-weight-bolder text-dark font-size-h4 font-size-h1-lg text-uppercase">
+      Clinical Research Repository
+    </h1>
+    <span>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi bibendum efficitur interdum.
+    </span>
   </div>
   <!--end::Title-->
 
@@ -30,10 +33,13 @@
           style="width: 20px !important; height: 20px !important;"
         />
       </span>
-      Sign in with Elixir (External)
+      Sign in
     </button>
     <br />
-    <button
+    <div style="padding-top: 3px;">
+      <a href="javascript:void(0)" class="text-primary font-weight-bolder font-size-h6" (click)="login()">ECRIN or TSD member? Sign in here</a>
+    </div>
+    <!-- <button
             type="button"
             class="btn btn-light-primary font-weight-bolder px-8 py-4 my-3 font-size-lg mr-3"
             (click)="login()"
@@ -44,7 +50,7 @@
         />
       </span>
       Sign in with Elixir (Internal)
-    </button>
+    </button> -->
 
     <ng-container *ngIf="isLoading$ | async">
       <span class="spinner spinner-primary ml-5"></span>
