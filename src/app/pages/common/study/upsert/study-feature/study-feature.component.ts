@@ -77,9 +77,11 @@ export class StudyFeatureComponent implements OnInit {
         if (this.isEdit || this.isView) {
           this.form.value.studyFeatures.map((item1, index) => {
             const arr = this.studyFeature.filter((item:any) => item1.featureTypeId === item.featureTypeId);
-            this.studyFeatures().at(index).patchValue({
-              featureValueId: arr[0].featureValueId
-            })
+            if (arr && arr.length) {
+              this.studyFeatures().at(index).patchValue({
+                featureValueId: arr[0].featureValueId
+              })
+            }
           })
         }    
       }

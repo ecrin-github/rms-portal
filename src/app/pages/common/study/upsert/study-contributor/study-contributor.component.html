@@ -90,8 +90,8 @@
                             </div>
                         </div>
                         <mat-action-row *ngIf="!isView">
-                            <button mat-button color="primary"
-                                (click)="studyContributor.value.alreadyExist ? editContributor(studyContributor) : addContributor(i)">Save</button>
+                            <button mat-button class="text-info" *ngIf="arrLength === i" (click)="sameAsAbove()">Same as Above</button>
+                            <button mat-button color="primary" (click)="studyContributor.value.alreadyExist ? editContributor(studyContributor) : addContributor(i)">Save</button>
                             <button mat-button color="warn" (click)="removeStudyContributor(i)">Remove</button>
                         </mat-action-row>
                     </mat-expansion-panel>

@@ -29,6 +29,7 @@ export class StudyContributorComponent implements OnInit {
     }
   }
   @Output() emitContributor: EventEmitter<any> = new EventEmitter();
+  arrLength = 0;
 
   constructor( private fb: FormBuilder, private objectService: DataObjectService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
@@ -64,12 +65,18 @@ export class StudyContributorComponent implements OnInit {
   addStudyContributor() {
     const len = this.studyContributors().value.length;
     if (len) {
-      if (this.studyContributors().value[len-1].contribTypeId) {
+      if (this.studyContributors().value[len-1].isIndividual === 'true' || this.studyContributors().value[len-1].isIndividual === true ? this.studyContributors().value[len-1].contribTypeId && this.studyContributors().value[len-1].organisationName && this.studyContributors().value[len-1].personFamilyName && this.studyContributors().value[len-1].personGivenName : this.studyContributors().value[len-1].contribTypeId && this.studyContributors().value[len-1].organisationName) {
+        this.arrLength = this.studyContributors().value.length;
         this.studyContributors().push(this.newStudyContributor());
       } else {
-        this.toastr.info('Please provide Contributor Type in the previously added Study Contibutor');
+        if (this.studyContributors().value[len-1].isIndividual === 'true' || this.studyContributors().value[len-1].isIndividual === true) {
+          this.toastr.info('Please provide Contributor Type, Organization, Persons First Name and Family Name in the previously added Study Contibutor');
+        } else {
+          this.toastr.info('Please provide Contributor Type and Organization in the previously added Study Contibutor');
+        }
       }
     } else {
+      this.arrLength = this.studyContributors().value.length;
       this.studyContributors().push(this.newStudyContributor());
     }
   }
@@ -187,6 +194,23 @@ export class StudyContributorComponent implements OnInit {
   }
   onChange(index) {
     this.isIndividual[index] = this.form.value.studyContributors[index].isIndividual === 'true' ? true : false;
+    this.studyContributors().at(index).patchValue({
+      contribTypeId: '',
+      organisationName: '',
+      personGivenName: '',
+      personFamilyName: '',
+      orcidId: '',
+      personAffiliation: '',
+    })
+  }
+  sameAsAbove() {
+    const preValue = this.studyContributors().at(this.arrLength-1).value;
+    this.studyContributors().at(this.arrLength).patchValue({
+      organisationName: preValue.organisationName,
+      personAffiliation: preValue.personAffiliation,
+      personFamilyName: preValue.personFamilyName,
+      personGivenName: preValue.personGivenName
+    })
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

@@ -35,7 +35,7 @@
                         <div class="row form-group">
                             <div class="col-md-6">
                                 <label for="originalValue" class="font-style text-capitalize">Controlled Terminology</label>
-                                <ng-select [items]="controlledTerminology" bindLabel="sdSid" bindValue="sdSid" formControlName="targetSdSid" [multiple]="true"
+                                <ng-select [items]="controlledTerminology" bindLabel="sdSid" bindValue="sdSid" formControlName="originalValue" [multiple]="true"
                                     [virtualScroll]="true" class="custom" notFoundText="No terminology found" placeholder="Select Terminology">
                                     <ng-template ng-label-tmp let-item="item">
                                         {{item.sdSid}}
