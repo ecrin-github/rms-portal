@@ -25,7 +25,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="urlAccessible" class="font-style text-capitalize">Access details: Direct access</label>
-                                <select id="urlAccessible" class="form-control" formControlName="urlAccessible" *ngIf="!isView">
+                                <select id="urlAccessible" class="form-control" formControlName="urlAccessible" *ngIf="!isView" (change)="onChange(i)">
                                     <option selected disabled value="">Select an option...</option>
                                     <option value=false>No</option>
                                     <option value=true>Yes</option>

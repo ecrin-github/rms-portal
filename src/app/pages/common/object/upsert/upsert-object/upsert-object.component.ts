@@ -35,6 +35,7 @@ export class UpsertObjectComponent implements OnInit {
   showIdentifier: boolean = false;
   showDescription: boolean = false;
   sticky: boolean = false;
+  EoscCategory = ['0', '1', '2', '3'];
 
   constructor(private fb: FormBuilder, private router: Router, private objectService: DataObjectService, private spinner: NgxSpinnerService,
     private toastr: ToastrService, private activatedRoute: ActivatedRoute) {
@@ -292,7 +293,7 @@ export class UpsertObjectComponent implements OnInit {
     setTimeout(() => {
      this.initiateEmit = event.isEmit; 
     });
-    if (this.count === 9) {
+    if (this.showContributor || this.showTopic ? this.count === 9 : this.count === 7) {
       this.onSave();
     }
   }
@@ -301,7 +302,7 @@ export class UpsertObjectComponent implements OnInit {
       objectTitles: event.data
     })
     this.count += 1;
-    if (this.count === 9) {
+    if (this.showContributor || this.showTopic ? this.count === 9 : this.count === 7) {
       this.onSave();
     }
   }
@@ -310,7 +311,7 @@ export class UpsertObjectComponent implements OnInit {
       objectDates: event.data
     })
     this.count += 1;
-    if (this.count === 9) {
+    if (this.showContributor || this.showTopic ? this.count === 9 : this.count === 7) {
       this.onSave();
     }
   }
@@ -319,7 +320,7 @@ export class UpsertObjectComponent implements OnInit {
       objectContributors: event.data
     })
     this.count += 1;
-    if (this.count === 9) {
+    if (this.showContributor || this.showTopic ? this.count === 9 : this.count === 7) {
       this.onSave();
     }
   }
@@ -328,7 +329,7 @@ export class UpsertObjectComponent implements OnInit {
       objectTopics: event.data
     })
     this.count += 1;
-    if (this.count === 9) {
+    if (this.showContributor || this.showTopic ? this.count === 9 : this.count === 7) {
       this.onSave();
     }
   }
@@ -337,7 +338,7 @@ export class UpsertObjectComponent implements OnInit {
       objectIdentifiers: event.data
     })
     this.count += 1;
-    if (this.count === 9) {
+    if (this.showContributor || this.showTopic ? this.count === 9 : this.count === 7) {
       this.onSave();
     }
   }
@@ -346,7 +347,7 @@ export class UpsertObjectComponent implements OnInit {
       objectDescriptions: event.data
     })
     this.count += 1;
-    if (this.count === 9) {
+    if (this.showContributor || this.showTopic ? this.count === 9 : this.count === 7) {
       this.onSave();
     }
   }
@@ -355,7 +356,7 @@ export class UpsertObjectComponent implements OnInit {
       objectRights: event.data
     })
     this.count += 1;
-    if (this.count === 9) {
+    if (this.showContributor || this.showTopic ? this.count === 9 : this.count === 7) {
       this.onSave();
     }
   }
@@ -364,7 +365,7 @@ export class UpsertObjectComponent implements OnInit {
       objectRelationships: event.data
     })
     this.count += 1;
-    if (this.count === 9) {
+    if (this.showContributor || this.showTopic ? this.count === 9 : this.count === 7) {
       this.onSave();
     }
   }
@@ -377,16 +378,16 @@ export class UpsertObjectComponent implements OnInit {
     }
     if (this.objectForm.valid) {
       const payload = JSON.parse(JSON.stringify(this.objectForm.value));
-      payload.objectDatasets.deidentDirect = payload.objectDatasets.deidentDirect === 'true' ? true : false;
-      payload.objectDatasets.deidentHipaa = payload.objectDatasets.deidentHipaa === 'true' ? true : false;
-      payload.objectDatasets.deidentDates = payload.objectDatasets.deidentDates === 'true' ? true : false;
-      payload.objectDatasets.deidentNonarr = payload.objectDatasets.deidentNonarr === 'true' ? true : false;
-      payload.objectDatasets.deidentKanon = payload.objectDatasets.deidentKanon === 'true' ? true : false;
-      payload.objectDatasets.consentNoncommercial = payload.objectDatasets.consentNoncommercial === 'true' ? true : false;
-      payload.objectDatasets.consentGeogRestrict = payload.objectDatasets.consentGeogRestrict === 'true' ? true : false;
-      payload.objectDatasets.consentResearchType = payload.objectDatasets.consentResearchType === 'true' ? true : false;
-      payload.objectDatasets.consentGeneticOnly = payload.objectDatasets.consentGeneticOnly === 'true' ? true : false;
-      payload.objectDatasets.consentNoMethods = payload.objectDatasets.consentNoMethods === 'true' ? true : false;
+      payload.objectDatasets.deidentDirect = payload.objectDatasets.deidentDirect;
+      payload.objectDatasets.deidentHipaa = payload.objectDatasets.deidentHipaa;
+      payload.objectDatasets.deidentDates = payload.objectDatasets.deidentDates;
+      payload.objectDatasets.deidentNonarr = payload.objectDatasets.deidentNonarr;
+      payload.objectDatasets.deidentKanon = payload.objectDatasets.deidentKanon;
+      payload.objectDatasets.consentNoncommercial = payload.objectDatasets.consentNoncommercial;
+      payload.objectDatasets.consentGeogRestrict = payload.objectDatasets.consentGeogRestrict;
+      payload.objectDatasets.consentResearchType = payload.objectDatasets.consentResearchType;
+      payload.objectDatasets.consentGeneticOnly = payload.objectDatasets.consentGeneticOnly;
+      payload.objectDatasets.consentNoMethods = payload.objectDatasets.consentNoMethods;
       payload.objectTypeId = payload.objectTypeId ? payload.objectTypeId : null;
       payload.objectClassId = payload.objectClassId ? payload.objectClassId : null;
       payload.accessTypeId = payload.accessTypeId ? payload.accessTypeId : null;

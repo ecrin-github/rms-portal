@@ -9,7 +9,7 @@
         <div class="row" style="margin: 0 auto;">
             <div class="col-md-3 text-center" (click)="scrollToElement(dtp)">
                 <ng-container *ngIf="dtpCompleted">
-                    <apx-chart [series]="dtpChartOptions.series" [chart]="dtpChartOptions.chart" [xaxis]="dtpChartOptions.xaxis"
+                    <apx-chart style="cursor: pointer;" [series]="dtpChartOptions.series" [chart]="dtpChartOptions.chart" [xaxis]="dtpChartOptions.xaxis"
                         [yaxis]="dtpChartOptions.yaxis" [dataLabels]="dtpChartOptions.dataLabels"
                         [stroke]="dtpChartOptions.stroke" [legend]="dtpChartOptions.legend" [fill]="dtpChartOptions.fill"
                         [states]="dtpChartOptions.states" [tooltip]="dtpChartOptions.tooltip" [colors]="dtpChartOptions.colors"
@@ -19,7 +19,7 @@
             </div>
             <div class="col-md-3 text-center" (click)="scrollToElement(dup)">
                 <ng-container *ngIf="dupCompleted">
-                    <apx-chart [series]="dupChartOptions.series" [chart]="dupChartOptions.chart" [xaxis]="dupChartOptions.xaxis"
+                    <apx-chart style="cursor: pointer;" [series]="dupChartOptions.series" [chart]="dupChartOptions.chart" [xaxis]="dupChartOptions.xaxis"
                         [yaxis]="dupChartOptions.yaxis" [dataLabels]="dupChartOptions.dataLabels"
                         [stroke]="dupChartOptions.stroke" [legend]="dupChartOptions.legend" [fill]="dupChartOptions.fill"
                         [states]="dupChartOptions.states" [tooltip]="dupChartOptions.tooltip" [colors]="dupChartOptions.colors"
@@ -29,7 +29,7 @@
             </div>
             <div class="col-md-3 text-center" (click)="scrollToElement(study)">
                 <ng-container *ngIf="studyCompleted">
-                    <apx-chart [series]="studyChartOptions.series" [chart]="studyChartOptions.chart" [xaxis]="studyChartOptions.xaxis"
+                    <apx-chart style="cursor: pointer;" [series]="studyChartOptions.series" [chart]="studyChartOptions.chart" [xaxis]="studyChartOptions.xaxis"
                         [yaxis]="studyChartOptions.yaxis" [dataLabels]="studyChartOptions.dataLabels"
                         [stroke]="studyChartOptions.stroke" [legend]="studyChartOptions.legend" [fill]="studyChartOptions.fill"
                         [states]="studyChartOptions.states" [tooltip]="studyChartOptions.tooltip" [colors]="studyChartOptions.colors"
@@ -39,7 +39,7 @@
             </div>
             <div class="col-md-3 text-center" (click)="scrollToElement(dataObject)">
                 <ng-container *ngIf="objectCompleted">
-                    <apx-chart [series]="objectChartOptions.series" [chart]="objectChartOptions.chart" [xaxis]="objectChartOptions.xaxis"
+                    <apx-chart style="cursor: pointer;" [series]="objectChartOptions.series" [chart]="objectChartOptions.chart" [xaxis]="objectChartOptions.xaxis"
                         [yaxis]="objectChartOptions.yaxis" [dataLabels]="objectChartOptions.dataLabels"
                         [stroke]="objectChartOptions.stroke" [legend]="objectChartOptions.legend" [fill]="objectChartOptions.fill"
                         [states]="objectChartOptions.states" [tooltip]="objectChartOptions.tooltip" [colors]="objectChartOptions.colors"

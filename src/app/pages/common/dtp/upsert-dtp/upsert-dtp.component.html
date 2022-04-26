@@ -21,7 +21,28 @@
     </div>
     <form [formGroup]="form">
         <div class="card-body">
-    
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <span class="font-style">Associated Studies</span>
+                    <ng-container *ngIf="associatedStudies.length <= 0">
+                        <p>No Associate Study</p>
+                    </ng-container>
+                    <br>
+                    <ng-container *ngIf="associatedStudies.length > 0">
+                        <ul>
+                            <li *ngFor="let study of associatedStudies; let i = index" class="pl-4">
+                                {{study.displayTitle}}({{study.sdSid}})
+                                <i class="fa fa-times pl-3" (click)="removeStudy(i)"></i>
+                                <!-- <button type="button" class="btn btn-outline-primary">Add Object
+                                </button>
+                                <button type="button" class="btn btn-outline-danger" (click)="removeStudy(i)">Remove study
+                                </button> -->
+                            </li>
+                        </ul>
+                    </ng-container>
+                </div>
+            </div>
+            <hr />
             <div class="row form-group">
                 <div class="col-md-6">
                     <label for="" class="font-style text-capitalize">organization</label>

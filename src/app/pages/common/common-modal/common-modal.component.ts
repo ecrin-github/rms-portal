@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -11,13 +12,22 @@ import { StudyService } from 'src/app/_rms/services/entities/study/study.service
   styleUrls: ['./common-modal.component.scss']
 })
 export class CommonModalComponent implements OnInit {
+  studyForm: FormGroup;
+  objectForm: FormGroup;
   title: any;
   type: any;
   studyType: [] = [];
   objectType: [] = [];
 
   constructor( private activeModal: NgbActiveModal, private studyService: StudyService, private spinner: NgxSpinnerService, 
-    private toastr: ToastrService, private objectService: DataObjectService) { }
+    private toastr: ToastrService, private objectService: DataObjectService, private fb: FormBuilder) { 
+      this.studyForm = this.fb.group({
+        targetSdSid: ''
+      });
+      this.objectForm = this.fb.group({
+        targetsdOid: ''
+      });
+    }
 
   ngOnInit(): void {
     if(this.type === 'study') {
@@ -27,11 +37,24 @@ export class CommonModalComponent implements OnInit {
       this.getObjectList();
     }
   }
-  closeModal() {
-    this.activeModal.close();
+  closeModal(data) {
+    this.activeModal.close(data);
   }
   save() {
+    if (this.type === 'study') {
+      const payload = this.studyForm.value.targetSdSid;
+      let selectedStudy = [];
+      payload.map ((item: any) => {
+        const arr =  this.studyType.filter((item1: any) => item1.sdSid === item);
+        if (arr && arr.length) {
+          selectedStudy.push(arr[0]);
+        }
+      })
+      this.closeModal(selectedStudy);
+    }
+    if (this.type === 'dataObject') {
 
+    }
   }
   getStudyList() {
     this.spinner.show();

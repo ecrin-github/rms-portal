@@ -4,7 +4,7 @@
     </div>
     <div class="modal-body">
         <div class="row ml-3">
-            <div class="col-md-12" *ngIf="type === 'study'">
+            <div class="col-md-12" *ngIf="type === 'study'" [formGroup]="studyForm">
                 <ng-select [items]="studyType" bindLabel="sdSid" bindValue="sdSid" formControlName="targetSdSid"
                 [multiple]="true" [virtualScroll]="true" class="custom" notFoundText="No members found"
                     placeholder="Select study" [searchFn]="customSearchFn">
@@ -21,8 +21,8 @@
                     </ng-template>
                 </ng-select>
             </div>
-            <div class="col-md-12" *ngIf="type === 'dataObject'">
-                <ng-select [items]="objectType" bindLabel="sdOid" bindValue="sdOid" formControlName="targetSdSid"
+            <div class="col-md-12" *ngIf="type === 'dataObject'" [formGroup]="objectForm">
+                <ng-select [items]="objectType" bindLabel="sdOid" bindValue="sdOid" formControlName="targetsdOid"
                 [multiple]="true" [virtualScroll]="true" class="custom" notFoundText="No members found"
                     placeholder="Select object" [searchFn]="customSearchFn">
                     <ng-template ng-label-tmp let-item="item">
@@ -42,7 +42,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="save()">Add</button>
-        <button type="button" class="btn btn-danger" (click)="closeModal()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="closeModal('')">Cancel</button>
 
     </div>
 </div>

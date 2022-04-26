@@ -25,6 +25,7 @@ export class UpsertDtpComponent implements OnInit {
   @ViewChild('wizard', { static: true }) el: ElementRef;
   wizard: any;
   currentStatus: number = 1;
+  associatedStudies = [];
 
   constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal) { 
@@ -209,6 +210,15 @@ export class UpsertDtpComponent implements OnInit {
     const studyModal = this.modalService.open(CommonModalComponent, { size: 'xl', backdrop: 'static' });
     studyModal.componentInstance.title = 'Add Study';
     studyModal.componentInstance.type = 'study';
+    studyModal.result.then((data) => {
+      if (data) {
+        this.associatedStudies = data;
+      }
+      console.log('studyPayload', data);
+    }, error => {})
+  }
+  removeStudy(index) {
+    this.associatedStudies.splice(index, 1);
   }
   addDataObject() {
     const dataModal = this.modalService.open(CommonModalComponent, {size: 'xl', backdrop: 'static'});

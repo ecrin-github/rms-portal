@@ -52,7 +52,7 @@ export class ObjectInstanceComponent implements OnInit {
       sdOid: '',
       repositoryOrg: '',
       urlAccessible: false,
-      url: '',
+      url: [{value: '', disabled: true}],
       resourceTypeId: '',
       resourceSize: '',
       resourceSizeUnits: '',
@@ -64,10 +64,14 @@ export class ObjectInstanceComponent implements OnInit {
   addObjectInstance() {
     const len = this.objectInstances().value.length;
     if (len) {
-      if (this.objectInstances().value[len-1].repositoryOrg) {
+      if (this.objectInstances().value[len-1].urlAccessible === true || this.objectInstances().value[len-1].urlAccessible === 'true' ? this.objectInstances().value[len-1].repositoryOrg && this.objectInstances().value[len-1].url : this.objectInstances().value[len-1].repositoryOrg) {
         this.objectInstances().push(this.newObjectInstance());
       } else {
-        this.toastr.info('Please provide the Repository Organistion in the previously added Object Instance');
+        if (this.objectInstances().value[len-1].urlAccessible === true || this.objectInstances().value[len-1].urlAccessible === 'true') {
+          this.toastr.info('Please provide the Repository Organistion and URL in the previously added Object Instance');
+        } else {
+          this.toastr.info('Please provide the Repository Organistion in the previously added Object Instance');
+        }
       }
     } else {
       this.objectInstances().push(this.newObjectInstance());
@@ -133,7 +137,7 @@ export class ObjectInstanceComponent implements OnInit {
         sdOid: instance.sdOid,
         repositoryOrg: instance.repositoryOrg,
         urlAccessible: instance.urlAccessible,
-        url: instance.url,
+        url: [{value: instance.url, disabled: instance.urlAccessible === 'true' || instance.urlAccessible === true ? false : true}],
         resourceTypeId: instance.resourceTypeId,
         resourceSize: instance.resourceSize,
         resourceSizeUnits: instance.resourceSizeUnits,
@@ -198,6 +202,13 @@ export class ObjectInstanceComponent implements OnInit {
       return item;
     })
     this.emitInstance.emit({data: payload, isEmit: false});
+  }
+  onChange(index) {
+    if (this.objectInstances().value[index].urlAccessible === 'true' || this.objectInstances().value[index].urlAccessible === true) {
+      this.objectInstances().controls[index].get('url').enable();
+    } else {
+      this.objectInstances().controls[index].get('url').disable();
+    }
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

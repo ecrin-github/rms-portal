@@ -80,7 +80,7 @@ export class StudyIdentifierComponent implements OnInit {
   removeStudyIdentifier(i: number) {
     if (!this.studyIdentifiers().value[i].alreadyExist) {
       this.studyIdentifiers().removeAt(i);
-      this.showIdentifierLinks.slice(i, 1);
+      this.showIdentifierLinks.splice(i, 1);
     } else {
       const removeModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
       removeModal.componentInstance.type = 'studyIdentifier';
@@ -89,7 +89,7 @@ export class StudyIdentifierComponent implements OnInit {
       removeModal.result.then((data) => {
         if (data) {
           this.studyIdentifiers().removeAt(i);
-          this.showIdentifierLinks.slice(i, 1);
+          this.showIdentifierLinks.splice(i, 1);
         }
       }, error => {})
     }

@@ -29,6 +29,7 @@ export class ObjectDateComponent implements OnInit {
   @Output() emitDate: EventEmitter<any> = new EventEmitter();
   monthValues = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
   dayValues = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13','14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
+  showEndday = [];
 
   constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
@@ -51,7 +52,7 @@ export class ObjectDateComponent implements OnInit {
       id: '',
       sdOid: '',
       dateTypeId: '',
-      isDateRange: false,
+      dateIsRange: false,
       dateAsString: '',
       startDay: '',
       startMonth: '',
@@ -67,19 +68,22 @@ export class ObjectDateComponent implements OnInit {
   addObjectDate() {
     const len = this.objectDates().value.length;
     if (len) {
-      if (this.objectDates().value[len-1].dateTypeId) {
+      if (this.objectDates().value[len-1].dateTypeId && this.objectDates().value[len-1].startYear) {
         this.objectDates().push(this.newObjectDate());
+        this.showEndday.push(false);
       } else {
         this.toastr.info('Please provide the Date Type in the previously added Object Date');
       }
     } else {
       this.objectDates().push(this.newObjectDate());
+      this.showEndday.push(false);
     }
   }
 
   removeObjectDate(i: number) {
     if (!this.objectDates().value[i].alreadyExist) {
       this.objectDates().removeAt(i);
+      this.showEndday.splice(i, 1);
     } else {
       const deleteModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
       deleteModal.componentInstance.type = 'objectDate';
@@ -88,6 +92,7 @@ export class ObjectDateComponent implements OnInit {
       deleteModal.result.then((data) => {
         if (data) {
           this.objectDates().removeAt(i);
+          this.showEndday.splice(i, 1);
         }
       }, error => {})
     }
@@ -120,12 +125,12 @@ export class ObjectDateComponent implements OnInit {
   }
   patchArray(dates): FormArray {
     const formArray = new FormArray([]);
-    dates.forEach(date => {
+    dates.forEach((date, index) => {
       formArray.push(this.fb.group({
         id: date.id,
         sdOid: date.sdOid,
         dateTypeId: date.dateTypeId,
-        isDateRange: false,
+        dateIsRange: date.dateIsRange,
         dateAsString: date.dateAsString,
         startDay: date.startDay,
         startMonth: date.startMonth,
@@ -136,6 +141,7 @@ export class ObjectDateComponent implements OnInit {
         details: date.details,
         alreadyExist: true
       }))
+      this.showEndday[index] = date.dateIsRange ? true : false;
     });
     return formArray;
   }
@@ -145,7 +151,7 @@ export class ObjectDateComponent implements OnInit {
     payload.sdOid = this.sdOid;
     payload.startYear = payload.startYear ? payload.startYear.getFullYear() : null;
     payload.endYear = payload.endYear ? payload.endYear.getFullYear() : null;
-    payload.isDateRange = payload.isDateRange === 'true' ? true : false 
+    payload.dateIsRange = payload.dateIsRange === 'true' ? true : false 
     delete payload.id;
 
     this.objectService.addObjectDate(this.sdOid, payload).subscribe((res: any) => {
@@ -160,11 +166,11 @@ export class ObjectDateComponent implements OnInit {
       this.toastr.error(error.error.title);
     })
   }
-  editDate(dateObject) {
+  editDate(dateObject, index) {
     const payload = dateObject.value;
     payload.startYear = payload.startYear ? payload.startYear.getFullYear() : null;
     payload.endYear = payload.endYear ? payload.endYear.getFullYear() : null;
-    payload.isDateRange = payload.isDateRange === 'true' ? true : false 
+    payload.dateIsRange = payload.dateIsRange === 'true' ? true : false 
     this.spinner.show();
     this.objectService.editObjectDate(payload.id, payload.sdOid, payload).subscribe((res: any) => {
       this.spinner.hide();
@@ -176,6 +182,10 @@ export class ObjectDateComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.toastr.error(error.error.title);
+    })
+    this.objectDates().at(index).patchValue({
+      startYear: payload.startYear ? new Date(`01/01/${payload.startYear}`) : '',
+      endYear: payload.endYear ? new Date(`01/01/${payload.endYear}`) : '',
     })
   }
   getYear(date) {
@@ -189,7 +199,7 @@ export class ObjectDateComponent implements OnInit {
     const payload = this.form.value.objectDates.map(item => {
       item.startYear = item.startYear ? item.startYear.getFullYear() : null;
       item.endYear = item.endYear ? item.endYear.getFullYear() : null;  
-      item.isDateRange = item.isDateRange === 'true' ? true : false 
+      item.dateIsRange = item.dateIsRange === 'true' ? true : false 
       if (!item.id) {
         delete item.id;
       }
@@ -199,6 +209,15 @@ export class ObjectDateComponent implements OnInit {
       return item;
     })
     this.emitDate.emit({data: payload, isEmit: false});
+    this.form.value.objectDates.map((item1, index) => {
+      this.objectDates().at(index).patchValue({
+        startYear: item1.startYear ? new Date(`01/01/${item1.startYear}`) : '',
+        endYear: item1.endYear ? new Date(`01/01/${item1.endYear}`) : '',
+      })
+    })
+  }
+  onChange(index) {
+    this.showEndday[index] = this.form.value.objectDates[index].dateIsRange === true || this.form.value.objectDates[index].dateIsRange === 'true' ? true : false;
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

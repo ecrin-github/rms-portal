@@ -73,12 +73,12 @@
                               <h3 class="wizard-title">Transfer</h3>
                             </div>
                           </a>
-                          <a class="wizard-step" href="javascript:;" data-wizard-type="step">
+                          <!-- <a class="wizard-step" href="javascript:;" data-wizard-type="step">
                             <div class="wizard-label">
                               <i class="wizard-icon flaticon-globe"></i>
                               <h3 class="wizard-title">Checking</h3>
                             </div>
-                          </a>
+                          </a> -->
                           <a class="wizard-step" href="javascript:;" data-wizard-type="step">
                             <div class="wizard-label">
                               <i class="wizard-icon flaticon2-open-text-book"></i>
@@ -177,10 +177,6 @@
                                 </div>
                                 <h6 *ngIf="isView" style="font-weight: 100;">{{viewDate(dupData.availabilityRequested)}}</h6>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12" data-wizard-type="step-content">
-                        <div class="row">
                             <div class="col-md-6">
                                 <label for="" class="font-style text-capitalize">Availability Confirmed</label>
                                 <div class="form-group" *ngIf="!isView">
@@ -198,6 +194,10 @@
                             </div>
                         </div>
                     </div>
+                    <!-- <div class="col-md-12" data-wizard-type="step-content">
+                        <div class="row">
+                        </div>
+                    </div> -->
                     <div class="col-md-12" data-wizard-type="step-content">
                         <div class="row">
                             <div class="col-md-6">

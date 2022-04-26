@@ -26,13 +26,13 @@
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{findDateType(objectDate.value.dateTypeId)}}</h6>
                             </div>
                             <div class="col-md-6">
-                                <label for="isDateRange" class="font-style text-capitalize">Is date range?</label>
-                                <select id="isDateRange" class="form-control" formControlName="isDateRange" *ngIf="!isView">
+                                <label for="dateIsRange" class="font-style text-capitalize">Is date range?</label>
+                                <select id="dateIsRange" class="form-control" formControlName="dateIsRange" *ngIf="!isView" (change)="onChange(i)">
                                     <option disabled selected value="">Select an option...</option>
                                     <option value=false>No</option>
                                     <option value=true>Yes</option>
                                 </select>
-                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectDate.value.isDateRange}}</h6>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{objectDate.value.dateIsRange}}</h6>
                             </div>
                         </div>
                         <div class="row form-group">
@@ -59,7 +59,7 @@
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{getYear(objectDate.value.startYear)}}</h6>
                             </div>
                         </div>
-                        <div class="row form-group">
+                        <div class="row form-group" *ngIf="showEndday[i]">
                             <div class="col-md-4">
                                 <label for="endDay" class="font-style text-capitalize">End Date</label>
                                 <select id="endDay" class="form-control" formControlName="endDay" *ngIf="!isView">
@@ -84,7 +84,7 @@
                             </div>
                         </div>
                         <mat-action-row *ngIf="!isView">
-                            <button mat-button color="primary" (click)="objectDate.value.alreadyExist ? editDate(objectDate) : addDate(i)">Save</button>
+                            <button mat-button color="primary" (click)="objectDate.value.alreadyExist ? editDate(objectDate, i) : addDate(i)">Save</button>
                             <button mat-button color="warn" (click)="removeObjectDate(i)">Remove</button>
                         </mat-action-row>
                     </mat-expansion-panel>
