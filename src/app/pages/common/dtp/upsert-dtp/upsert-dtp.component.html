@@ -6,7 +6,7 @@
                class="btn btn-primary mr-5" target="_blank">
                 <i class="fa fa-edit"></i> Edit
             </a>
-            <button class="btn btn-primary mr-1">
+            <button class="btn btn-primary mr-5" (click)="printDocument()">
                 <i class="fa fa-print"></i> Print
             </button>
             <button class="btn btn-primary">
@@ -15,8 +15,11 @@
         </div>
         <div style="float: right; margin-top: -40px;" *ngIf="!isView">
             <button class="btn btn-primary mr-5" (click)="addStudy()">Add Study</button>
-            <button class="btn btn-primary mr-5" (click)="addDataObject()"> Add Data Object</button>
+            <!-- <button class="btn btn-primary mr-5" (click)="addDataObject()"> Add Data Object</button> -->
             <button class="btn btn-primary" (click)="addUser()">Add User</button>
+        </div>
+        <div>
+            <h6>{{dtpData?.displayName}}</h6>
         </div>
     </div>
     <form [formGroup]="form">
@@ -27,7 +30,6 @@
                     <ng-container *ngIf="associatedStudies.length <= 0">
                         <p>No Associate Study</p>
                     </ng-container>
-                    <br>
                     <ng-container *ngIf="associatedStudies.length > 0">
                         <ul>
                             <li *ngFor="let study of associatedStudies; let i = index" class="pl-4">
@@ -40,6 +42,19 @@
                             </li>
                         </ul>
                     </ng-container>
+                    <br>
+                    <hr>
+                    <span class="font-style">Associated Data Objects</span>
+                    <ng-container *ngIf="associatedStudies.length <= 0">
+                        <p>No Associate Study</p>
+                    </ng-container>
+                    <br>
+                    <hr>
+                    <span class="font-style">Associated Users</span>
+                    <ng-container *ngIf="associatedStudies.length <= 0">
+                        <p>No Associate Study</p>
+                    </ng-container>
+                    <br>
                 </div>
             </div>
             <hr />
@@ -60,7 +75,7 @@
             </div>
             <div class="row form-group">
                 <div class="col-md-6">
-                    <label for="" class="font-style text-capitalize">Status type</label>
+                    <label for="" class="font-style text-capitalize">Status</label>
                     <select class="form-control" formControlName="statusId" *ngIf="!isView">
                         <option disabled selected value="">Select an option...</option>
                         <option [value]=status.id *ngFor="let status of statusList">{{status.name}}</option>
@@ -71,7 +86,7 @@
             <div #wizard class="wizard wizard-1" id="kt_wizard_v1" data-wizard-state="step-first" data-wizard-clickable="true">
                 <div class="wizard-nav border-bottom">
                     <div class="wizard-steps p-8 p-lg-10">
-                        <a class="wizard-step" href="javascript:;" data-wizard-type="step" >
+                        <a class="wizard-step" href="javascript:;" data-wizard-type="step">
                             <div class="wizard-label">
                                 <i class="wizard-icon flaticon2-browser-1"></i>
                                 <h3 class="wizard-title">Creation</h3>

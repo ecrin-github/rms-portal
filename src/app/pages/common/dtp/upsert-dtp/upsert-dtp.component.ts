@@ -230,4 +230,7 @@ export class UpsertDtpComponent implements OnInit {
     userModal.componentInstance.title = 'Add User';
     userModal.componentInstance.type = 'user';
   }
+  printDocument() {
+    window.print();
+  }
 }

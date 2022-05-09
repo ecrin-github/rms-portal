@@ -3,9 +3,10 @@
         <h5 class="modal-title">{{title}}</h5>
     </div>
     <div class="modal-body">
-        <div class="row ml-3">
+        <div class="row ml-3 form-group">
             <div class="col-md-12" *ngIf="type === 'study'" [formGroup]="studyForm">
-                <ng-select [items]="studyType" bindLabel="sdSid" bindValue="sdSid" formControlName="targetSdSid"
+                <label for="study" class="font-style text-capitalize">Study</label>
+                <ng-select id="study" [items]="studyType" bindLabel="sdSid" bindValue="sdSid" formControlName="targetSdSid"
                 [multiple]="true" [virtualScroll]="true" class="custom" notFoundText="No members found"
                     placeholder="Select study" [searchFn]="customSearchFn">
                     <ng-template ng-label-tmp let-item="item">
@@ -21,7 +22,10 @@
                     </ng-template>
                 </ng-select>
             </div>
-            <div class="col-md-12" *ngIf="type === 'dataObject'" [formGroup]="objectForm">
+        </div>
+        <div class="row ml-3 form-group">
+            <div class="col-md-12" *ngIf="type === 'study'" [formGroup]="objectForm">
+                <label for="study" class="font-style text-capitalize">Object</label>
                 <ng-select [items]="objectType" bindLabel="sdOid" bindValue="sdOid" formControlName="targetsdOid"
                 [multiple]="true" [virtualScroll]="true" class="custom" notFoundText="No members found"
                     placeholder="Select object" [searchFn]="customSearchFn">
