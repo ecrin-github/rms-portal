@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { DtpInterface } from 'src/app/_rms/interfaces/dtp/dtp.interface';
@@ -26,29 +26,33 @@ export class UpsertDtpComponent implements OnInit {
   wizard: any;
   currentStatus: number = 1;
   associatedStudies = [];
+  todayDate: any;
+  submitted:boolean = false;
 
   constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal) { 
     this.form = this.fb.group({
-      orgId: '',
-      displayName: '',
+      orgId: ['', Validators.required],
+      displayName: ['', Validators.required],
       statusId: '',
-      initialContactDate: '',
-      setUpCompleted: '',
-      mdAccessGranted: '',
-      mdCompleteDate: '',
-      dtaAgreedDate: '',
-      uploadAccessRequested: '',
-      uploadAccessConfirmed: '',
-      uploadsComplete: '',
-      qcChecksCompleted: '',
-      mdIntegratedWithMdr: '',
-      availabilityRequested: '',
-      availabilityConfirmed: '',
+      initialContactDate: null,
+      setUpCompleted: null,
+      mdAccessGranted: null,
+      mdCompleteDate: null,
+      dtaAgreedDate: null,
+      uploadAccessRequested: null,
+      uploadAccessConfirmed: null,
+      uploadsComplete: null,
+      qcChecksCompleted: null,
+      mdIntegratedWithMdr: null,
+      availabilityRequested: null,
+      availabilityConfirmed: null,
     })
   }
 
   ngOnInit(): void {
+    const todayDate = new Date()
+    this.todayDate = {year: todayDate.getFullYear(), month: todayDate.getMonth()+1, day: todayDate.getDate()};
     this.getOrganization();
     this.getStatus();
     this.isEdit = this.router.url.includes('edit') ? true : false;
@@ -57,13 +61,20 @@ export class UpsertDtpComponent implements OnInit {
       this.id = this.activatedRoute.snapshot.params.id;
       this.getDtpById(this.id);
     }
+    if (this.router.url.includes('add')) {
+      this.form.patchValue({
+        initialContactDate: this.todayDate
+      })
+    }
   }
   ngAfterViewInit() {
     this.wizard = new KTWizard(this.el.nativeElement, {
-      startStep: 1,
-      clickableSteps: true
+      startStep: 2,
+      clickableSteps: false,
+      navigation:true
     });
   }
+  get g() { return this.form.controls; }
   getOrganization() {
     this.spinner.show();
     this.dtpService.getOrganizationList().subscribe((res: any) => {
@@ -84,6 +95,12 @@ export class UpsertDtpComponent implements OnInit {
       this.spinner.hide();
       if (res && res.data) {
         this.statusList = res.data;
+        const arr: any = this.statusList.filter((item: any) => item.name === 'Set up');
+        if (arr && arr.length) {
+          this.form.patchValue({
+            statusId: arr[0].id
+          })
+        }
       }
     }, error => {
       this.spinner.hide();
@@ -123,37 +140,86 @@ export class UpsertDtpComponent implements OnInit {
     payload.mdIntegratedWithMdr = this.dateToString(payload.mdIntegratedWithMdr);
     payload.availabilityRequested = this.dateToString(payload.availabilityRequested);
     payload.availabilityConfirmed = this.dateToString(payload.availabilityConfirmed);
-    if (this.isEdit) {
-      this.spinner.show();
-      payload.id = this.id;
-      this.dtpService.editDtp(this.id, payload).subscribe((res: any) => {
-        this.spinner.hide();
-        if (res.statusCode === 200) {
-          this.toastr.success('DTP updated successfully');
-          localStorage.setItem('updateDtpList', 'true');
-          this.getDtpById(this.id);
-        } else {
-          this.toastr.error(res.messages[0]);
-        }
-      }, error => {
-        this.spinner.hide();
-        this.toastr.error(error.error.title);
-      })
+    if (payload.initialContactDate > payload.setUpCompleted) {
+      this.toastr.error('Initial contact date cannot be greater than Set Up completed date. Dates entered in one phase should not normally be before dtes in an earlier phase');
+      return
+    }
+    if (payload.setUpCompleted > payload.mdAccessGranted) {
+      this.toastr.error('set Up completed date cannot be greater than MD Access Granted date. Dates entered in one phase should not normally be before dtes in an earlier phase');
+      return
+    }
+    if (payload.mdAccessGranted > payload.mdCompleteDate) {
+      this.toastr.error('MD Access Granted date cannot be greater than MD Completed date. Dates entered in one phase should not normally be before dtes in an earlier phase');
+      return
+    }
+    if (payload.mdCompleteDate > payload.dtaAgreedDate) {
+      this.toastr.error('MD Completed date cannot be greater than DTA agreed date. Dates entered in one phase should not normally be before dtes in an earlier phase');
+      return
+    }
+    if (payload.dtaAgreedDate > payload.uploadAccessRequested) {
+      this.toastr.error('DTA Agreed date cannot be greater than Upload Access Requested date. Dates entered in one phase should not normally be before dtes in an earlier phase');
+      return
+    }
+    if (payload.uploadAccessRequested > payload.uploadAccessConfirmed) {
+      this.toastr.error('Upload Access Requested date cannot be greater than Upload Access Confirmed date. Dates entered in one phase should not normally be before dtes in an earlier phase');
+      return
+    }
+    if (payload.uploadAccessConfirmed > payload.uploadsComplete) {
+      this.toastr.error('Upload Confirmed date cannot be greater than Upload Completed date. Dates entered in one phase should not normally be before dtes in an earlier phase');
+      return
+    }
+    if (payload.uploadsComplete > payload.qcChecksCompleted) {
+      this.toastr.error('Upload completed date cannot be greater than QC Checks Completed date. Dates entered in one phase should not normally be before dtes in an earlier phase');
+      return
+    }
+    if (payload.qcChecksCompleted > payload.mdIntegratedWithMdr) {
+      this.toastr.error('QC Checks completed date cannot be greater than MD integrated with MDR date. Dates entered in one phase should not normally be before dtes in an earlier phase');
+      return
+    }
+    if (payload.mdIntegratedWithMdr > payload.availabilityRequested) {
+      this.toastr.error('MD integrated with MDR date cannot be greater than availability requested date. Dates entered in one phase should not normally be before dtes in an earlier phase');
+      return
+    }
+    if (payload.availabilityRequested > payload.availabilityConfirmed) {
+      this.toastr.error('Availability Reuested date cannot be greater than Availability Confirmed date. Dates entered in one phase should not normally be before dtes in an earlier phase');
+      return
+    }
+    this.submitted = true;
+    if (this.form.valid) {
+      if (this.isEdit) {
+        this.spinner.show();
+        payload.id = this.id;
+        this.dtpService.editDtp(this.id, payload).subscribe((res: any) => {
+          this.spinner.hide();
+          if (res.statusCode === 200) {
+            this.toastr.success('DTP updated successfully');
+            localStorage.setItem('updateDtpList', 'true');
+            this.getDtpById(this.id);
+          } else {
+            this.toastr.error(res.messages[0]);
+          }
+        }, error => {
+          this.spinner.hide();
+          this.toastr.error(error.error.title);
+        })
 
-    } else {
-      this.spinner.show();
-      this.dtpService.addDtp(payload).subscribe((res: any) => {
-        this.spinner.hide();
-        if (res.statusCode === 200) {
-          this.toastr.success('DTP added successfully');
-          localStorage.setItem('updateDtpList', 'true');
-        } else {
-          this.toastr.error(res.messages[0]);
-        }
-      }, error => {
-        this.spinner.hide();
-        this.toastr.error(error.error.title);
-      })
+      } else {
+        this.spinner.show();
+        this.dtpService.addDtp(payload).subscribe((res: any) => {
+          this.spinner.hide();
+          if (res.statusCode === 200) {
+            this.toastr.success('DTP added successfully');
+            localStorage.setItem('updateDtpList', 'true');
+            this.form.reset();
+            this.submitted = false;
+          } else {
+            this.toastr.error(res.messages[0]);
+          }
+        }, error => {
+          this.spinner.hide();
+          this.toastr.error(error.error.title);
+        })
+      }
     }
   }
   getDtpById(id) {

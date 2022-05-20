@@ -25,7 +25,7 @@ export class CommonModalComponent implements OnInit {
         targetSdSid: ''
       });
       this.objectForm = this.fb.group({
-        targetsdOid: ''
+        targetsdOid: {value: '', disabled: true}
       });
     }
 
@@ -83,5 +83,12 @@ export class CommonModalComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title);
     })
+  }
+  studyDropdownClose() {
+    if (this.studyForm.value.targetSdSid.length) {
+      this.objectForm.controls.targetsdOid.enable();
+    } else {
+      this.objectForm.controls.targetsdOid.disable();
+    }
   }
 }

@@ -63,13 +63,19 @@
                     <label for="" class="font-style text-capitalize">organization</label>
                     <ng-select [items]="organizationList" bindLabel="defaultName" bindValue="id" formControlName="orgId"
                     [multiple]="false" [virtualScroll]="true" class="custom" notFoundText="No members found"
-                        placeholder="Select email" *ngIf="!isView">
+                        placeholder="Select email" *ngIf="!isView" [ngClass]="{ 'is-invalid': submitted && g.orgId.errors }">
                     </ng-select>
+                    <div class="col-md-12 invalid-feedback" *ngIf="submitted && g.orgId.errors">
+                        <p *ngIf="submitted && g.orgId.errors.required"> Please select Organization</p>
+                    </div>    
                     <h6 style="font-weight: 100;" *ngIf="isView">{{findOrganization(dtpData?.orgId)}}</h6>
                 </div>
                 <div class="col-md-6">
                     <label for="" class="font-style text-capitalize">display name</label>
-                    <input type="text" class="form-control" formControlName="displayName" *ngIf="!isView">
+                    <input type="text" class="form-control" formControlName="displayName" *ngIf="!isView" [ngClass]="{ 'is-invalid': submitted && g.displayName.errors }">
+                    <div class="col-md-12 invalid-feedback" *ngIf="submitted && g.displayName.errors">
+                        <p *ngIf="submitted && g.displayName.errors.required"> Please enter the Display Name</p>
+                    </div>    
                     <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData?.displayName}}</h6>
                 </div>
             </div>
@@ -132,7 +138,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="initialContactDate" ngbDatepicker
-                                            #initialContactDate="ngbDatepicker" formControlName="initialContactDate">
+                                            #initialContactDate="ngbDatepicker" formControlName="initialContactDate" [maxDate]="todayDate" readonly="readonly">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="initialContactDate.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -151,7 +157,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="setUpCompleted" ngbDatepicker
-                                            #setUpCompleted="ngbDatepicker" formControlName="setUpCompleted">
+                                            #setUpCompleted="ngbDatepicker" formControlName="setUpCompleted" readonly="readonly" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="setUpCompleted.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -170,7 +176,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="mdAccessGranted" ngbDatepicker
-                                            #mdAccessGranted="ngbDatepicker" formControlName="mdAccessGranted">
+                                            #mdAccessGranted="ngbDatepicker" formControlName="mdAccessGranted" readonly="readonly" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="mdAccessGranted.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -185,7 +191,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="mdCompleteDate" ngbDatepicker
-                                            #mdCompleteDate="ngbDatepicker" formControlName="mdCompleteDate">
+                                            #mdCompleteDate="ngbDatepicker" formControlName="mdCompleteDate" readonly="readonly" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="mdCompleteDate.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -204,7 +210,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="dtaAgreedDate" ngbDatepicker
-                                            #dtaAgreedDate="ngbDatepicker" formControlName="dtaAgreedDate">
+                                            #dtaAgreedDate="ngbDatepicker" formControlName="dtaAgreedDate" readonly="readonly" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="dtaAgreedDate.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -219,7 +225,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="uploadAccessRequested" ngbDatepicker
-                                            #uploadAccessRequested="ngbDatepicker" formControlName="uploadAccessRequested">
+                                            #uploadAccessRequested="ngbDatepicker" formControlName="uploadAccessRequested" readonly="readonly" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="uploadAccessRequested.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -236,7 +242,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="uploadAccessConfirmed" ngbDatepicker
-                                            #uploadAccessConfirmed="ngbDatepicker" formControlName="uploadAccessConfirmed">
+                                            #uploadAccessConfirmed="ngbDatepicker" formControlName="uploadAccessConfirmed" readonly="readonly" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="uploadAccessConfirmed.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -251,7 +257,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="uploadsComplete" ngbDatepicker
-                                            #uploadsComplete="ngbDatepicker" formControlName="uploadsComplete">
+                                            #uploadsComplete="ngbDatepicker" formControlName="uploadsComplete" readonly="readonly" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="uploadsComplete.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -270,7 +276,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="qcChecksCompleted" ngbDatepicker
-                                            #qcChecksCompleted="ngbDatepicker" formControlName="qcChecksCompleted">
+                                            #qcChecksCompleted="ngbDatepicker" formControlName="qcChecksCompleted" readonly="readonly" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="qcChecksCompleted.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -285,7 +291,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="mdIntegratedWithMdr" ngbDatepicker
-                                            #mdIntegratedWithMdr="ngbDatepicker" formControlName="mdIntegratedWithMdr">
+                                            #mdIntegratedWithMdr="ngbDatepicker" formControlName="mdIntegratedWithMdr" readonly="readonly" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="mdIntegratedWithMdr.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -303,7 +309,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="availabilityRequested" ngbDatepicker
-                                            #availabilityRequested="ngbDatepicker" formControlName="availabilityRequested">
+                                            #availabilityRequested="ngbDatepicker" formControlName="availabilityRequested" readonly="readonly" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="availabilityRequested.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -322,7 +328,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="availabilityConfirmed" ngbDatepicker
-                                            #availabilityConfirmed="ngbDatepicker" formControlName="availabilityConfirmed">
+                                            #availabilityConfirmed="ngbDatepicker" formControlName="availabilityConfirmed" readonly="readonly" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="availabilityConfirmed.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
