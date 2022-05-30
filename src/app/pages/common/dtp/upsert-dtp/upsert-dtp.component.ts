@@ -24,10 +24,12 @@ export class UpsertDtpComponent implements OnInit {
   dtpData: DtpInterface;
   @ViewChild('wizard', { static: true }) el: ElementRef;
   wizard: any;
-  currentStatus: number = 1;
+  currentStatus: number = 2;
   associatedStudies = [];
   todayDate: any;
   submitted:boolean = false;
+  nextStep: number;
+  buttonClick: any;
 
   constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal) { 
@@ -72,6 +74,43 @@ export class UpsertDtpComponent implements OnInit {
       startStep: 2,
       clickableSteps: false,
       navigation:true
+    });
+    this.wizard.on('change', (wizardObj) => {
+      this.nextStep = this.buttonClick === 'next' ? wizardObj.getStep() + 1 : wizardObj.getStep() - 1;
+      if (!this.isView && this.buttonClick === 'next') {
+        if (this.nextStep - 1 === 1) {
+          if (this.form.value.initialContactDate === null || this.form.value.initialContactDate === '') {
+            this.wizard.stop();
+            this.toastr.error('Complete all the fields to go to the next phase')
+          }
+        }
+        if (this.nextStep - 1 === 2) {
+          if (this.form.value.setUpCompleted === null || this.form.value.setUpCompleted === '') {
+            this.wizard.stop();
+            this.toastr.error('Complete all the fields to go to the next phase')
+          }
+        }
+        if (this.nextStep - 1 === 3) {
+          if (this.form.value.mdAccessGranted === null || this.form.value.mdAccessGranted === '' || this.form.value.mdCompleteDate === null || this.form.value.mdCompleteDate === '') {
+            this.wizard.stop();
+            this.toastr.error('Complete all the fields to go to the next phase')
+          }
+        }
+        if (this.nextStep - 1 === 4) {
+          if (this.form.value.dtaAgreedDate === null || this.form.value.dtaAgreedDate === '' || this.form.value.uploadAccessRequested === null || this.form.value.uploadAccessRequested === '' ||
+            this.form.value.uploadAccessConfirmed === null || this.form.value.uploadAccessConfirmed === '' || this.form.value.uploadsComplete === null || this.form.value.uploadsComplete === '') {
+            this.wizard.stop();
+            this.toastr.error('Complete all the fields to go to the next phase')
+          }
+        }
+        if (this.nextStep - 1 === 5) {
+          if (this.form.value.qcChecksCompleted === null || this.form.value.qcChecksCompleted === '' || this.form.value.mdIntegratedWithMdr === null || this.form.value.mdIntegratedWithMdr === ''
+            || this.form.value.availabilityRequested === '' || this.form.value.availabilityRequested === null) {
+            this.wizard.stop();
+            this.toastr.error('Complete all the fields to go to the next phase')
+          }
+        }
+      }
     });
   }
   get g() { return this.form.controls; }
@@ -140,6 +179,101 @@ export class UpsertDtpComponent implements OnInit {
     payload.mdIntegratedWithMdr = this.dateToString(payload.mdIntegratedWithMdr);
     payload.availabilityRequested = this.dateToString(payload.availabilityRequested);
     payload.availabilityConfirmed = this.dateToString(payload.availabilityConfirmed);
+    payload.statusId = this.wizard.getStep() === 1 ? this.getStatusByName('creation') : this.wizard.getStep() === 2 ? this.getStatusByName('set up') : this.wizard.getStep() === 3 ? this.getStatusByName('preparation') : this.wizard.getStep() === 4 ? this.getStatusByName('transfer') : this.wizard.getStep() === 5 ? this.getStatusByName('checking') : this.wizard.getStep() === 6 ? this.getStatusByName('complete') : this.getStatusByName('creation');
+    if (this.wizard.getStep() === 1) {
+      this.form.controls['initialContactDate'].setValidators(Validators.required);
+      this.form.controls['initialContactDate'].updateValueAndValidity();
+
+    }
+    if (this.wizard.getStep() === 2) {
+      this.form.controls['initialContactDate'].setValidators(Validators.required);
+      this.form.controls['setUpCompleted'].setValidators(Validators.required);
+      this.form.controls['initialContactDate'].updateValueAndValidity();
+      this.form.controls['setUpCompleted'].updateValueAndValidity();
+
+    }
+    if (this.wizard.getStep() === 3) {
+      this.form.controls['initialContactDate'].setValidators(Validators.required);
+      this.form.controls['setUpCompleted'].setValidators(Validators.required);
+      this.form.controls['mdAccessGranted'].setValidators(Validators.required);
+      this.form.controls['mdCompleteDate'].setValidators(Validators.required);
+      this.form.controls['initialContactDate'].updateValueAndValidity();
+      this.form.controls['setUpCompleted'].updateValueAndValidity();
+      this.form.controls['mdAccessGranted'].updateValueAndValidity();
+      this.form.controls['mdCompleteDate'].updateValueAndValidity();
+
+    }
+    if (this.wizard.getStep() === 4) {
+      this.form.controls['initialContactDate'].setValidators(Validators.required);
+      this.form.controls['setUpCompleted'].setValidators(Validators.required);
+      this.form.controls['mdAccessGranted'].setValidators(Validators.required);
+      this.form.controls['mdCompleteDate'].setValidators(Validators.required);
+      this.form.controls['dtaAgreedDate'].setValidators(Validators.required);
+      this.form.controls['uploadAccessRequested'].setValidators(Validators.required);
+      this.form.controls['uploadAccessConfirmed'].setValidators(Validators.required);
+      this.form.controls['uploadsComplete'].setValidators(Validators.required);
+      this.form.controls['initialContactDate'].updateValueAndValidity();
+      this.form.controls['setUpCompleted'].updateValueAndValidity();
+      this.form.controls['mdAccessGranted'].updateValueAndValidity();
+      this.form.controls['mdCompleteDate'].updateValueAndValidity();
+      this.form.controls['dtaAgreedDate'].updateValueAndValidity();
+      this.form.controls['uploadAccessRequested'].updateValueAndValidity();
+      this.form.controls['uploadAccessConfirmed'].updateValueAndValidity();
+      this.form.controls['uploadsComplete'].updateValueAndValidity();
+
+    }
+    if (this.wizard.getStep() === 5) {
+      this.form.controls['initialContactDate'].setValidators(Validators.required);
+      this.form.controls['setUpCompleted'].setValidators(Validators.required);
+      this.form.controls['mdAccessGranted'].setValidators(Validators.required);
+      this.form.controls['mdCompleteDate'].setValidators(Validators.required);
+      this.form.controls['dtaAgreedDate'].setValidators(Validators.required);
+      this.form.controls['uploadAccessRequested'].setValidators(Validators.required);
+      this.form.controls['uploadAccessConfirmed'].setValidators(Validators.required);
+      this.form.controls['uploadsComplete'].setValidators(Validators.required);
+      this.form.controls['qcChecksCompleted'].setValidators(Validators.required);
+      this.form.controls['mdIntegratedWithMdr'].setValidators(Validators.required);
+      this.form.controls['availabilityRequested'].setValidators(Validators.required);
+      this.form.controls['initialContactDate'].updateValueAndValidity();
+      this.form.controls['setUpCompleted'].updateValueAndValidity();
+      this.form.controls['mdAccessGranted'].updateValueAndValidity();
+      this.form.controls['mdCompleteDate'].updateValueAndValidity();
+      this.form.controls['dtaAgreedDate'].updateValueAndValidity();
+      this.form.controls['uploadAccessRequested'].updateValueAndValidity();
+      this.form.controls['uploadAccessConfirmed'].updateValueAndValidity();
+      this.form.controls['uploadsComplete'].updateValueAndValidity();
+      this.form.controls['qcChecksCompleted'].updateValueAndValidity();
+      this.form.controls['mdIntegratedWithMdr'].updateValueAndValidity();
+      this.form.controls['availabilityRequested'].updateValueAndValidity();
+
+    }
+    if (this.wizard.getStep() === 6) {
+      this.form.controls['initialContactDate'].setValidators(Validators.required);
+      this.form.controls['setUpCompleted'].setValidators(Validators.required);
+      this.form.controls['mdAccessGranted'].setValidators(Validators.required);
+      this.form.controls['mdCompleteDate'].setValidators(Validators.required);
+      this.form.controls['dtaAgreedDate'].setValidators(Validators.required);
+      this.form.controls['uploadAccessRequested'].setValidators(Validators.required);
+      this.form.controls['uploadAccessConfirmed'].setValidators(Validators.required);
+      this.form.controls['uploadsComplete'].setValidators(Validators.required);
+      this.form.controls['qcChecksCompleted'].setValidators(Validators.required);
+      this.form.controls['mdIntegratedWithMdr'].setValidators(Validators.required);
+      this.form.controls['availabilityRequested'].setValidators(Validators.required);
+      this.form.controls['availabilityConfirmed'].setValidators(Validators.required);
+      this.form.controls['initialContactDate'].updateValueAndValidity();
+      this.form.controls['setUpCompleted'].updateValueAndValidity();
+      this.form.controls['mdAccessGranted'].updateValueAndValidity();
+      this.form.controls['mdCompleteDate'].updateValueAndValidity();
+      this.form.controls['dtaAgreedDate'].updateValueAndValidity();
+      this.form.controls['uploadAccessRequested'].updateValueAndValidity();
+      this.form.controls['uploadAccessConfirmed'].updateValueAndValidity();
+      this.form.controls['uploadsComplete'].updateValueAndValidity();
+      this.form.controls['qcChecksCompleted'].updateValueAndValidity();
+      this.form.controls['mdIntegratedWithMdr'].updateValueAndValidity();
+      this.form.controls['availabilityRequested'].updateValueAndValidity();
+      this.form.controls['availabilityConfirmed'].updateValueAndValidity();
+
+    }
     if (payload.initialContactDate > payload.setUpCompleted) {
       this.toastr.error('Initial contact date cannot be greater than Set Up completed date. Dates entered in one phase should not normally be before dtes in an earlier phase');
       return
@@ -210,8 +344,9 @@ export class UpsertDtpComponent implements OnInit {
           if (res.statusCode === 200) {
             this.toastr.success('DTP added successfully');
             localStorage.setItem('updateDtpList', 'true');
-            this.form.reset();
-            this.submitted = false;
+            setTimeout(() => {
+              window.close();
+            }, 1000);
           } else {
             this.toastr.error(res.messages[0]);
           }
@@ -221,6 +356,10 @@ export class UpsertDtpComponent implements OnInit {
         })
       }
     }
+  }
+  getStatusByName(name) {
+    const arr: any = this.statusList.filter((item: any) => item.name.toLowerCase() === name);
+    return arr[0].id;
   }
   getDtpById(id) {
     setTimeout(() => {
