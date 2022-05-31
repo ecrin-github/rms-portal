@@ -45,7 +45,7 @@ export class InternalMainPageComponent implements OnInit {
   }
   getDtpStatistics() {
     this.dashboardService.getDtpStatistics().subscribe((res: any) => {
-      this.dtpCompleted = ((res.total-res.uncompleted)/res.total)*100;
+      this.dtpCompleted = Math.round((((res.total-res.uncompleted)/res.total)*100)*100)/100 ;
       this.dtpChartOptions = this.getChartOptions(this.dtpCompleted, 'Completed DTs', true);
     }, error => {
       this.toastr.error(error.error.title);
@@ -53,7 +53,7 @@ export class InternalMainPageComponent implements OnInit {
   }
   getDupStatistics() {
     this.dashboardService.getDupStatistics().subscribe((res: any) => {
-      this.dupCompleted = ((res.total-res.uncompleted)/res.total)*100;
+      this.dupCompleted = Math.round((((res.total-res.uncompleted)/res.total)*100)*100)/100;
       this.dupChartOptions = this.getChartOptions(this.dupCompleted, 'Completed DTs', true);
     }, error => {
       this.toastr.error(error.error.title);

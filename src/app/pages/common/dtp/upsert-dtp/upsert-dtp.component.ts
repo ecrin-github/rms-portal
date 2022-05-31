@@ -53,7 +53,7 @@ export class UpsertDtpComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const todayDate = new Date()
+    const todayDate = new Date();
     this.todayDate = {year: todayDate.getFullYear(), month: todayDate.getMonth()+1, day: todayDate.getDate()};
     this.getOrganization();
     this.getStatus();

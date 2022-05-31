@@ -2,7 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 const url = environment.baseUrl + '/rms/data-uses';
-const contetUrl = environment.baseUrl + '/context'
+const contetUrl = environment.baseUrl + '/context';
+const filterUrl = environment.baseUrl + '/rms';
+
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +29,8 @@ export class DupService {
   }
   deleteDupById(id) {
     return this.http.delete(`${url}/processes/${id}`);
+  }
+  filterByTitle(payload) {
+    return this.http.post(`${filterUrl}/filter/dup/by-title`, payload);
   }
 }

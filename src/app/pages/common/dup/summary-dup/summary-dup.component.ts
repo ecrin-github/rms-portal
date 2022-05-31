@@ -108,7 +108,7 @@ export class SummaryDupComponent implements OnInit {
     }
     if (this.filterOption === 'title' && this.searchText !== '') {
       this.spinner.show();
-      this.dtpService.filterByTitle(payload).subscribe((res: any) => {
+      this.dupService.filterByTitle(payload).subscribe((res: any) => {
         this.spinner.hide()
         if (res && res.data) {
           this.dataSource = res.data;
