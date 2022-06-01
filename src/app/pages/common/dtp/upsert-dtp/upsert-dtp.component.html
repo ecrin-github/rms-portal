@@ -63,7 +63,7 @@
                     <label for="" class="font-style text-capitalize">organization</label>
                     <ng-select [items]="organizationList" bindLabel="defaultName" bindValue="id" formControlName="orgId"
                     [multiple]="false" [virtualScroll]="true" class="custom" notFoundText="No members found"
-                        placeholder="Select email" *ngIf="!isView" [ngClass]="{ 'is-invalid': submitted && g.orgId.errors }">
+                        placeholder="Select Organisation" *ngIf="!isView" [ngClass]="{ 'is-invalid': submitted && g.orgId.errors }">
                     </ng-select>
                     <div class="col-md-12 invalid-feedback" *ngIf="submitted && g.orgId.errors">
                         <p *ngIf="submitted && g.orgId.errors.required"> Please select Organization</p>
