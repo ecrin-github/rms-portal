@@ -37,6 +37,7 @@ export class StudyTopicComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTopicType();
+    this.getTopicVocabulary();
     if (this.isEdit || this.isView) {
       this.getStudyTopic();
     }
@@ -49,11 +50,11 @@ export class StudyTopicComponent implements OnInit {
     return this.fb.group({
       id: '',
       sdSid: '',
-      topicTypeId: '',
+      topicTypeId: null,
       meshCoded: false,
       meshCode: '',
       meshValue: '',
-      originalValue: '',
+      originalCtId: null,
       alreadyExist: false
     });
   }
@@ -96,6 +97,20 @@ export class StudyTopicComponent implements OnInit {
     });
     this.subscription.add(getTopicType$);
   }
+  getTopicVocabulary() {
+    setTimeout(() => {
+     this.spinner.show(); 
+    });
+    this.studyService.getTopicVocabulary().subscribe((res: any) => {
+      this.spinner.hide();
+      if (res.data) {
+        this.controlledTerminology = res.data;
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
   getStudyTopic() {
     this.spinner.show();
     this.studyService.getStudyTopic(this.sdSid).subscribe((res: any) => {
@@ -121,7 +136,7 @@ export class StudyTopicComponent implements OnInit {
         meshCoded: topic.meshCoded,
         meshCode: topic.meshCode,
         meshValue: topic.meshValue,
-        originalValue: topic.originalValue,
+        originalCtId: topic.originalCtId,
         alreadyExist: true
       }))
     });
@@ -165,6 +180,10 @@ export class StudyTopicComponent implements OnInit {
   findTopicType(id) {
     const topicArray: any = this.topicTypes.filter((type: any) => type.id === id);
     return topicArray && topicArray.length ? topicArray[0].name : '';
+  }
+  findTopicVocabulary(id) {
+    const vocabularyArray: any = this.controlledTerminology.filter((type: any) => type.id === id);
+    return vocabularyArray && vocabularyArray.length ? vocabularyArray[0].name : '';
   }
   emitData() {
     const payload = this.form.value.studyTopics.map(item => {

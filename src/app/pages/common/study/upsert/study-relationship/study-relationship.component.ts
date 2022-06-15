@@ -50,8 +50,8 @@ export class StudyRelationshipComponent implements OnInit {
     return this.fb.group({
       id: '',
       sdSid: '',
-      relationshipTypeId: '',
-      targetSdSid: '',
+      relationshipTypeId: null,
+      targetSdSid: null,
       alreadyExist: false
     });
   }

@@ -45,6 +45,9 @@ export class StudyService {
   getLanguageCode() {
     return this.http.get(`${url}/lang-codes`);
   }
+  getTopicVocabulary() {
+    return this.http.get(`${url}/topic-vocabularies`);
+  }
   getStudy() {
     return this.http.get(`${studyUrl}`);
   }

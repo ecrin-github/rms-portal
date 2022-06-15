@@ -55,9 +55,9 @@ export class StudyIdentifierComponent implements OnInit {
       sdSid: '',
       identifierValue: '',
       identifierTypeId: null,
-      identifierDate: '',
+      identifierDate: null,
       identifierLink: '',
-      identifierOrgId: '',
+      identifierOrgId: null,
       alreadyExist: false
     });
   }
@@ -202,6 +202,10 @@ export class StudyIdentifierComponent implements OnInit {
   findIdentifierType(id) {
     const identifierTypeArray:any = this.identifierTypes.filter((type: any) => type.id === id);
     return identifierTypeArray && identifierTypeArray.length ? identifierTypeArray[0].name : ''
+  }
+  findOrganization(id) {
+    const organizationArray: any = this.organizationList.filter((type: any) => type.id === id);
+    return organizationArray && organizationArray.length ? organizationArray[0].defaultName : ''
   }
   emitData() {
     const payload = this.form.value.studyIdentifiers.map(item => {

@@ -43,16 +43,16 @@ export class UpsertStudyComponent implements OnInit {
       displayTitle: '',
       briefDescription: '',
       dataSharingStatement: '',
-      studyTypeId: '',
-      studyStatusId: '',
-      studyGenderEligId: '',
-      studyEnrolment: 0,
-      studyStartMonth: '',
-      studyStartYear: '',
-      minAge: '',
-      minAgeUnitsId: '',
-      maxAge: '',
-      maxAgeUnitsId: '',
+      studyTypeId: null,
+      studyStatusId: null,
+      studyGenderEligId: null,
+      studyEnrolment: '',
+      studyStartMonth: null,
+      studyStartYear: null,
+      minAge: null,
+      minAgeUnitsId: null,
+      maxAge: null,
+      maxAgeUnitsId: null,
       studyIdentifiers: [],
       studyTitles: [],
       studyFeatures: [],
@@ -220,7 +220,7 @@ export class UpsertStudyComponent implements OnInit {
     setTimeout(() => {
       this.initiateEmit = event.isEmit;
     });
-    if (this.count === 6) {
+    if (this.studyType === 'interventional' ? this.count === 6 : this.count === 5) {
       this.onSave();
     }
   }
@@ -229,7 +229,7 @@ export class UpsertStudyComponent implements OnInit {
       studyTitles: event.data
     })
     this.count += 1;
-    if (this.count === 6) {
+    if (this.studyType === 'interventional' ? this.count === 6 : this.count === 5) {
       this.onSave();
     }
   }
@@ -238,7 +238,7 @@ export class UpsertStudyComponent implements OnInit {
       studyFeatures: event.data
     })
     this.count += 1;
-    if (this.count === 6) {
+    if (this.studyType === 'interventional' ? this.count === 6 : this.count === 5) {
       this.onSave();
     }
   }
@@ -247,7 +247,7 @@ export class UpsertStudyComponent implements OnInit {
       studyTopics: event.data
     })
     this.count += 1;
-    if (this.count === 6) {
+    if (this.studyType === 'interventional' ? this.count === 6 : this.count === 5) {
       this.onSave();
     }
   }
@@ -256,7 +256,7 @@ export class UpsertStudyComponent implements OnInit {
       studyRelationships: event.data
     })
     this.count += 1;
-    if (this.count === 6) {
+    if (this.studyType === 'interventional' ? this.count === 6 : this.count === 5) {
       this.onSave();
     }
   }
@@ -265,8 +265,8 @@ export class UpsertStudyComponent implements OnInit {
       studyContributors: event.data
     })
     this.count += 1;
-    if (this.count === 6) {
-      this.onSave();;
+    if (this.studyType === 'interventional' ? this.count === 6 : this.count === 5) {
+      this.onSave();
     }
   }
   onClick() {

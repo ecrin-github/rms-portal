@@ -64,7 +64,7 @@ export class StudyFeatureComponent implements OnInit {
       id: '',
       sdSid: '',
       featureTypeId: featureTypeId,
-      featureValueId: '',
+      featureValueId: null,
       alreadyExist: false
     });
   }
@@ -171,7 +171,7 @@ export class StudyFeatureComponent implements OnInit {
     return featureTypeArray && featureTypeArray.length ? featureTypeArray[0].name : '';
   }
   findFeatureValue(id) {
-    const featureValueArray: any = this.featureValues.filter((type: any) => type.id === id);
+    const featureValueArray: any = this.featureValuesAll.filter((type: any) => type.id === id);
     return featureValueArray && featureValueArray.length ? featureValueArray[0].name : '';
   }
   emitData() {

@@ -51,12 +51,12 @@ export class StudyContributorComponent implements OnInit {
     return this.fb.group({
       id: '',
       sdSid: '',
-      contribTypeId: '',
+      contribTypeId: null,
       isIndividual: false,
       organisationName: '',
       personGivenName: '',
       personFamilyName: '',
-      orcidId: '',
+      orcidId: null,
       personAffiliation: '',
       alreadyExist: false
     });

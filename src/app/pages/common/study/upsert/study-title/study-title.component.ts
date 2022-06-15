@@ -58,7 +58,7 @@ export class StudyTitleComponent implements OnInit {
     return this.fb.group({
       id: '',
       sdSid: '',
-      titleTypeId: '',
+      titleTypeId: null,
       titleText: '',
       langCode: 'en',
       comments: '',

@@ -92,38 +92,40 @@
                     <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.studyEnrolment}}</h6>   
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                    <div class="row" *ngIf="!isView">
+                    <div class="row">
                         <div class="col-8">
                             <label for="minAge" class="font-style text-capitalize">Min age</label>
                             <input type="text" id="minAge" class="form-control" placeholder="Enter a min age value..."
-                                formControlName="minAge" />
+                                formControlName="minAge" *ngIf="!isView" />
+                            <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.minAge ? studyData?.minAge : 0}}</h6> 
                         </div>
                         <div class="col-4">
                             <label for="minAgeUnits" class="font-style text-capitalize">Units</label>
-                            <select id="minAgeUnits" class="form-control" formControlName="minAgeUnitsId">
+                            <select id="minAgeUnits" class="form-control" formControlName="minAgeUnitsId" *ngIf="!isView">
                                 <option selected disabled value="">Select an option...</option>
                                 <option [value]=unit.id *ngFor="let unit of timeUnits">{{unit.name}}</option>
                             </select>
+                            <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyMinAgeView?.name}}</h6> 
                         </div>
                     </div>
-                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.minAge}}&nbsp;{{studyMinAgeView?.name}}</h6> 
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                    <div class="row" *ngIf="!isView">
+                    <div class="row">
                         <div class="col-8">
                             <label for="maxAge" class="font-style text-capitalize">Max age</label>
                             <input id="maxAge" type="text" class="form-control" placeholder="Enter a max age value..."
-                                formControlName="maxAge" />
+                                formControlName="maxAge" *ngIf="!isView" />
+                            <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.maxAge ? studyData?.maxAge : 0}}</h6> 
                         </div>
                         <div class="col-4">
                             <label for="maxAgeUnits" class="font-style text-capitalize">Units</label>
-                            <select id="maxAgeUnits" class="form-control" formControlName="maxAgeUnitsId">
+                            <select id="maxAgeUnits" class="form-control" formControlName="maxAgeUnitsId" *ngIf="!isView">
                                 <option selected disabled value="">Select an option...</option>
                                 <option [value]=unit.id *ngFor="let unit of timeUnits">{{unit.name}}</option>
                             </select>
+                            <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyMaxAgeView?.name}}</h6> 
                         </div>
                     </div>
-                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.maxAge}}&nbsp;{{studyMaxAgeView?.name}}</h6> 
                 </div>
             </div>
 
