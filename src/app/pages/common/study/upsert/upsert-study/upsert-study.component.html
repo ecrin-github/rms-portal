@@ -21,6 +21,14 @@
     <div class="card-body" id="content">
         <form [formGroup]="studyForm">
             <div class="row form-group">
+                <div class="col-md-6">
+                    <label for="registryId" class="font-style text-capitalize">Trial Registry ID</label>
+                    <select id="registryId" class="form-control">
+                        <option selected disabled value="">Select an ID...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row form-group">
                 <div class="col-md-12">
                     <label for="displayTitle" class="font-style text-capitalize">Public title</label>
                     <textarea cols="30" rows="3" class="form-control" placeholder="Enter study display title..." 
@@ -130,71 +138,77 @@
             </div>
 
             <hr />
-
-            <div class="row" >
-                <div class="col-12 text-center">
-                    <h6 class="pt-3 font-style">Study identifier(s)</h6>
-                </div>
-            </div>
-            <br />
-
-           <app-study-identifier [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitIdentifier)="getIdentifier($event)"></app-study-identifier>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-12 text-center">
-                    <h6 class="pt-3 font-style">Study title(s)</h6>
-                </div>
-            </div>
-            <br />
-            <app-study-title [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" [publicTitle]="publicTitle" (emitTitle)="getTitle($event)"></app-study-title>
-            <hr />
-            <ng-container *ngIf="studyType">
-                <div class="row">
-                    <div class="col-12 text-center">
-                        <h6 class="pt-3 font-style">Study feature(s)</h6>
-                    </div>
-                </div>
-                <br />
-                <app-study-feature [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
-                    (emitFeature)="getFeature($event)" [studyType]="studyType" *ngIf="studyType"></app-study-feature>
-                <hr />
-            </ng-container>
-
-            <div class="row">
-                <div class="col-12 text-center">
-                    <h6 class="pt-3 font-style">Study topic(s)</h6>
-                </div>
-            </div>
-            <br />
-            <app-study-topic [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitTopic)="getTopic($event)"></app-study-topic>
-            <hr />
-
-            <div class="row">
-                <div class="col-12 text-center">
-                    <h6 class="pt-3 font-style">Study relationship(s)</h6>
-                </div>
-            </div>
-            <br />
-            <app-study-relationship [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitRelation)="getRelation($event)"></app-study-relationship>
-            <hr />
-            <div class="row">
-                <div class="col-12 text-center">
-                    <h6 class="pt-3 font-style">Study contributor(s)</h6>
-                </div>
-            </div>
-            <br />
-            <app-study-contributor [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit" (emitContributor)="getContributor($event)"></app-study-contributor>
-            <hr />
-
             <div class="row">
                 <div class="col-12 justify-content-center text-center">
-                    <button class="btn btn-success mr-5" *ngIf="!isView" (click)="onClick()">{{isEdit ? 'Apply Changes' : 'Save'}}</button>
+                    <button class="btn btn-success mr-5" *ngIf="!isView" (click)="isAdd ? onSave() : onClick()">{{isEdit ? 'Apply Changes' : 'Save'}}</button>
                     <button class="btn btn-danger" (click)="close()"> {{isView ? 'Back' : 'Cancel'}}</button>
                 </div>
             </div>
-
+            <hr />
+            <ng-container *ngIf="isEdit || isView">
+            
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h6 class="pt-3 font-style">Study identifier(s)</h6>
+                    </div>
+                </div>
+                <br />
+            
+                <app-study-identifier [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                    (emitIdentifier)="getIdentifier($event)"></app-study-identifier>
+            
+                <hr />
+            
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h6 class="pt-3 font-style">Study title(s)</h6>
+                    </div>
+                </div>
+                <br />
+                <app-study-title [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                    [publicTitle]="publicTitle" (emitTitle)="getTitle($event)"></app-study-title>
+                <hr />
+                <ng-container *ngIf="studyType">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <h6 class="pt-3 font-style">Study feature(s)</h6>
+                        </div>
+                    </div>
+                    <br />
+                    <app-study-feature [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                        (emitFeature)="getFeature($event)" [studyType]="studyType" *ngIf="studyType"></app-study-feature>
+                    <hr />
+                </ng-container>
+            
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h6 class="pt-3 font-style">Study topic(s)</h6>
+                    </div>
+                </div>
+                <br />
+                <app-study-topic [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                    (emitTopic)="getTopic($event)"></app-study-topic>
+                <hr />
+            
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h6 class="pt-3 font-style">Study relationship(s)</h6>
+                    </div>
+                </div>
+                <br />
+                <app-study-relationship [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                    (emitRelation)="getRelation($event)"></app-study-relationship>
+                <hr />
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h6 class="pt-3 font-style">Study contributor(s)</h6>
+                    </div>
+                </div>
+                <br />
+                <app-study-contributor [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                    (emitContributor)="getContributor($event)"></app-study-contributor>
+                <hr />
+            </ng-container>
         </form>
 
     </div>
