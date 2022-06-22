@@ -96,42 +96,48 @@
                             <div class="wizard-label">
                                 <i class="wizard-icon flaticon2-browser-1"></i>
                                 <h3 class="wizard-title">Creation</h3>
-                                <i class="fa fa-check-circle" style="color: green;" *ngIf="!(isEdit || isView) ? 1 < currentStatus : 1 <= currentStatus"></i>
+                                <i class="fa fa-check-circle" style="color: green;" *ngIf="!(isEdit || isView) ? 1 < currentStatus : 1 < currentStatus"></i>
+                                <i class="fa fa-check-circle" style="color: orange;" *ngIf="1 === currentStatus"></i>
                             </div>
                         </a>
                         <a class="wizard-step" href="javascript:;" data-wizard-type="step">
                             <div class="wizard-label">
                               <i class="wizard-icon flaticon2-setup"></i>
                               <h3 class="wizard-title">Set Up</h3>
-                              <i class="fa fa-check-circle" style="color: green;" *ngIf="!(isEdit || isView) ? 2 < currentStatus : 2 <= currentStatus"></i>
+                              <i class="fa fa-check-circle" style="color: green;" *ngIf="!(isEdit || isView) ? 2 < currentStatus : 2 < currentStatus"></i>
+                              <i class="fa fa-check-circle" style="color: orange;" *ngIf="2 === currentStatus"></i>
                             </div>
                           </a>
                           <a class="wizard-step" href="javascript:;" data-wizard-type="step">
                             <div class="wizard-label">
                               <i class="wizard-icon flaticon-responsive"></i>
                               <h3 class="wizard-title">Preparation</h3>
-                              <i class="fa fa-check-circle" style="color: green;" *ngIf="!(isEdit || isView) ? 3 < currentStatus : 3 <= currentStatus"></i>
+                              <i class="fa fa-check-circle" style="color: green;" *ngIf="!(isEdit || isView) ? 3 < currentStatus : 3 < currentStatus"></i>
+                              <i class="fa fa-check-circle" style="color: orange;" *ngIf="3 === currentStatus"></i>
                             </div>
                           </a>
                           <a class="wizard-step" href="javascript:;" data-wizard-type="step">
                             <div class="wizard-label">
                               <i class="wizard-icon flaticon-truck"></i>
                               <h3 class="wizard-title">Transfer</h3>
-                              <i class="fa fa-check-circle" style="color: green;" *ngIf="!(isEdit || isView) ? 4 < currentStatus : 4 <= currentStatus"></i>
+                              <i class="fa fa-check-circle" style="color: green;" *ngIf="!(isEdit || isView) ? 4 < currentStatus : 4 < currentStatus"></i>
+                              <i class="fa fa-check-circle" style="color: orange;" *ngIf="4 === currentStatus"></i>
                             </div>
                           </a>
                           <a class="wizard-step" href="javascript:;" data-wizard-type="step">
                             <div class="wizard-label">
                               <i class="wizard-icon flaticon-globe"></i>
                               <h3 class="wizard-title">Checking</h3>
-                              <i class="fa fa-check-circle" style="color: green;" *ngIf="!(isEdit || isView) ? 5 < currentStatus : 5 <= currentStatus"></i>
+                              <i class="fa fa-check-circle" style="color: green;" *ngIf="!(isEdit || isView) ? 5 < currentStatus : 5 < currentStatus"></i>
+                              <i class="fa fa-check-circle" style="color: orange;" *ngIf="5 === currentStatus"></i>
                             </div>
                           </a>
                           <a class="wizard-step" href="javascript:;" data-wizard-type="step">
                             <div class="wizard-label">
                               <i class="wizard-icon flaticon2-open-text-book"></i>
                               <h3 class="wizard-title">Complete</h3>
-                              <i class="fa fa-check-circle" style="color: green;" *ngIf="!(isEdit || isView) ? 6 < currentStatus : 6 <= currentStatus"></i>
+                              <i class="fa fa-check-circle" style="color: green;" *ngIf="!(isEdit || isView) ? 6 < currentStatus : 6 < currentStatus"></i>
+                              <i class="fa fa-check-circle" style="color: orange;" *ngIf="6 === currentStatus"></i>
                             </div>
                           </a>              
                     </div>

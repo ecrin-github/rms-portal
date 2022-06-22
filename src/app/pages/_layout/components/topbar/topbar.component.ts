@@ -132,9 +132,14 @@ export class TopbarComponent implements OnInit, AfterViewInit {
     //   console.log(this.oidcSecurityService.userData$)
     // });
     this.userService.getUser().subscribe((res: any) => {
-      if (res.data && res.data.length) {
-        this.userData = res.data[0];
+      console.log('res', res);
+      if (res) {
+        this.userData = res;
       }
+      // Elixir AAI
+      // if (res.data && res.data.length) {
+      //   this.userData = res.data[0];
+      // }
     }, error => {
       console.log('error', error);
     })

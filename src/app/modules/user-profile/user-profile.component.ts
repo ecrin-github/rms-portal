@@ -35,18 +35,26 @@ export class UserProfileComponent implements OnInit {
       lastName: this.user.family_name,
       email: this.user.email,
       phone: this.user.phone,
-      country: this.user.country
+      country: this.user.location
     });
   }
   getUserData() {
     this.userService.getUser().subscribe((res:any) => {
-      if (res.data && res.data.length) {
-        this.user = res.data[0];
+      if (res) {
+        this.user = res;
         this.user.pic = 'none';
         this.user.country = '';
         this.user.phone = '';
         this.patchForm();
       }
+      // Elixar AAI
+      // if (res.data && res.data.length) {
+      //   this.user = res.data[0];
+      //   this.user.pic = 'none';
+      //   this.user.country = '';
+      //   this.user.phone = '';
+      //   this.patchForm();
+      // }
     }, error => {
       console.log('error', error);
     });

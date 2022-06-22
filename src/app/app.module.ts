@@ -62,18 +62,18 @@ function appInitializer(authService: AuthService) {
     ToastrModule.forRoot(),
     AuthModule.forRoot({
       config: {
-        authority: 'https://login.elixir-czech.org/oidc',
+        authority: 'https://identity.ecrin-rms.org',
         redirectUrl: window.location.origin,
         postLogoutRedirectUri: window.location.origin,
-        clientId: '5262a0e9-a72c-4854-b23d-6cf31be724ce',
-        scope: 'openid profile email offline_access perun_api phone country address',
+        clientId: 'e87edd5d-16cd-45dc-8ffe-2307376d45c3',
+        scope: 'openid profile offline_access email phone roles organisations address locations people_id organisations_id',
         responseType: 'code',
         silentRenew: true,
         useRefreshToken: true,
         logLevel: LogLevel.Debug,
         storage: new CustomStorage(),
         renewTimeBeforeTokenExpiresInSeconds: 100,
-        ignoreNonceAfterRefresh: true
+        ignoreNonceAfterRefresh: true,
       },
     }),
   ],

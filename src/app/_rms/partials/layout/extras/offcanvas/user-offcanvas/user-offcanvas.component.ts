@@ -45,11 +45,17 @@ export class UserOffcanvasComponent implements OnInit {
   }
   getUserData() {
     this.userService.getUser().subscribe((res: any) => {
-      if (res.data && res.data.length) {
-        this.userData = res.data[0];
+      if (res) {
+        this.userData = res;
         this.userData.pic = './assets/media/svg/avatars/001-boy.svg';
         this.userData.occupation = '';
       }
+      // Elixir AAI
+      // if (res.data && res.data.length) {
+      //   this.userData = res.data[0];
+      //   this.userData.pic = './assets/media/svg/avatars/001-boy.svg';
+      //   this.userData.occupation = '';
+      // }
     }, error => {
       console.log('error', error);
     })
