@@ -8,6 +8,7 @@ import { DtpInterface } from 'src/app/_rms/interfaces/dtp/dtp.interface';
 import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
 import KTWizard from '../../../../../assets/js/components/wizard'
 import { CommonModalComponent } from '../../common-modal/common-modal.component';
+import { ConfirmationWindow1Component } from '../../confirmation-window1/confirmation-window1.component';
 
 @Component({
   selector: 'app-upsert-dtp',
@@ -30,6 +31,7 @@ export class UpsertDtpComponent implements OnInit {
   submitted:boolean = false;
   nextStep: number;
   buttonClick: any;
+  showStatus: boolean = false;
 
   constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal) { 
@@ -179,7 +181,25 @@ export class UpsertDtpComponent implements OnInit {
     payload.mdIntegratedWithMdr = this.dateToString(payload.mdIntegratedWithMdr);
     payload.availabilityRequested = this.dateToString(payload.availabilityRequested);
     payload.availabilityConfirmed = this.dateToString(payload.availabilityConfirmed);
-    payload.statusId = this.wizard.getStep() === 1 ? this.getStatusByName('creation') : this.wizard.getStep() === 2 ? this.getStatusByName('set up') : this.wizard.getStep() === 3 ? this.getStatusByName('preparation') : this.wizard.getStep() === 4 ? this.getStatusByName('transfer') : this.wizard.getStep() === 5 ? this.getStatusByName('checking') : this.wizard.getStep() === 6 ? this.getStatusByName('complete') : this.getStatusByName('creation');
+    let status = ''
+    if (this.form.value.initialContactDate !== null && this.form.value.initialContactDate !== '') {
+      status = 'set up';
+    }
+    if (this.form.value.initialContactDate !== null && this.form.value.initialContactDate !== '' && this.form.value.setUpCompleted !== null && this.form.value.setUpCompleted !== '') {
+      status = 'preparation';
+    }
+    if (this.form.value.initialContactDate !== null && this.form.value.initialContactDate !== '' && this.form.value.setUpCompleted !== null && this.form.value.setUpCompleted !== '' && this.form.value.mdAccessGranted !== null && this.form.value.mdAccessGranted !== '' && this.form.value.mdCompleteDate !== null && this.form.value.mdCompleteDate !== '') {
+      status = 'transfer';
+    }
+    if (this.form.value.initialContactDate !== null && this.form.value.initialContactDate !== '' && this.form.value.setUpCompleted !== null && this.form.value.setUpCompleted !== '' && this.form.value.mdAccessGranted !== null && this.form.value.mdAccessGranted !== '' && this.form.value.mdCompleteDate !== null && this.form.value.mdCompleteDate !== '' && this.form.value.dtaAgreedDate !== null && this.form.value.dtaAgreedDate !== '' && this.form.value.uploadAccessRequested !== null && this.form.value.uploadAccessRequested !== '' &&
+          this.form.value.uploadAccessConfirmed !== null && this.form.value.uploadAccessConfirmed !== '' && this.form.value.uploadsComplete !== null && this.form.value.uploadsComplete !== '') {
+      status = 'checking';
+    }
+    if (this.form.value.initialContactDate !== null && this.form.value.initialContactDate !== '' && this.form.value.setUpCompleted !== null && this.form.value.setUpCompleted !== '' && this.form.value.mdAccessGranted !== null && this.form.value.mdAccessGranted !== '' && this.form.value.mdCompleteDate !== null && this.form.value.mdCompleteDate !== '' && this.form.value.dtaAgreedDate !== null && this.form.value.dtaAgreedDate !== '' && this.form.value.uploadAccessRequested !== null && this.form.value.uploadAccessRequested !== '' &&
+      this.form.value.uploadAccessConfirmed !== null && this.form.value.uploadAccessConfirmed !== '' && this.form.value.uploadsComplete !== null && this.form.value.uploadsComplete !== '' && this.form.value.qcChecksCompleted !== null && this.form.value.qcChecksCompleted !== '' && this.form.value.mdIntegratedWithMdr !== null && this.form.value.mdIntegratedWithMdr !== '' && this.form.value.availabilityRequested !== '' && this.form.value.availabilityRequested !== null) {
+      status = 'complete';
+    }
+    payload.statusId = this.getStatusByName(status);
     if (payload.initialContactDate > payload.setUpCompleted) {
       this.toastr.error('Initial contact date cannot be greater than Set Up completed date. Dates entered in one phase should not normally be before dtes in an earlier phase');
       return
@@ -235,6 +255,7 @@ export class UpsertDtpComponent implements OnInit {
             this.toastr.success('DTP updated successfully');
             localStorage.setItem('updateDtpList', 'true');
             this.getDtpById(this.id);
+            this.showStatus = false;
           } else {
             this.toastr.error(res.messages[0]);
           }
@@ -253,6 +274,7 @@ export class UpsertDtpComponent implements OnInit {
             setTimeout(() => {
               window.close();
             }, 1000);
+            this.showStatus = false;
           } else {
             this.toastr.error(res.messages[0]);
           }
@@ -343,5 +365,87 @@ export class UpsertDtpComponent implements OnInit {
   }
   printDocument() {
     window.print();
+  }
+  resetAll() {
+    const modal = this.modalService.open(ConfirmationWindow1Component, {size: 'lg', backdrop:'static'});
+    modal.result.then((data) => {
+      if (data) {
+        this.showStatus = true;
+      }
+    }, error => {})
+  }
+  onChange() {
+    const status = this.findStatus(parseInt(this.form.value.statusId));
+    if (status.toLowerCase() === 'creation') {
+      this.form.patchValue({
+        setUpCompleted: null,
+        mdAccessGranted: null,
+        mdCompleteDate: null,
+        dtaAgreedDate: null,
+        uploadAccessRequested: null,
+        uploadAccessConfirmed: null,
+        uploadsComplete: null,
+        qcChecksCompleted: null,
+        mdIntegratedWithMdr: null,
+        availabilityRequested: null,
+        availabilityConfirmed: null,
+      })
+    }
+    if (status.toLowerCase() === 'set up') {
+      this.form.patchValue({
+        setUpCompleted: null,
+        mdAccessGranted: null,
+        mdCompleteDate: null,
+        dtaAgreedDate: null,
+        uploadAccessRequested: null,
+        uploadAccessConfirmed: null,
+        uploadsComplete: null,
+        qcChecksCompleted: null,
+        mdIntegratedWithMdr: null,
+        availabilityRequested: null,
+        availabilityConfirmed: null,
+      })
+    }
+    if (status.toLowerCase() === 'preparation') {
+      this.form.patchValue({
+        mdAccessGranted: null,
+        mdCompleteDate: null,
+        dtaAgreedDate: null,
+        uploadAccessRequested: null,
+        uploadAccessConfirmed: null,
+        uploadsComplete: null,
+        qcChecksCompleted: null,
+        mdIntegratedWithMdr: null,
+        availabilityRequested: null,
+        availabilityConfirmed: null,
+      })
+    }
+    if (status.toLowerCase() === 'transfer') {
+      this.form.patchValue({
+        dtaAgreedDate: null,
+        uploadAccessRequested: null,
+        uploadAccessConfirmed: null,
+        uploadsComplete: null,
+        qcChecksCompleted: null,
+        mdIntegratedWithMdr: null,
+        availabilityRequested: null,
+        availabilityConfirmed: null,
+      })
+    }
+    if (status.toLowerCase() === 'checking') {
+      this.form.patchValue({
+        qcChecksCompleted: null,
+        mdIntegratedWithMdr: null,
+        availabilityRequested: null,
+        availabilityConfirmed: null,
+      })
+    }
+    if (status.toLowerCase() === 'complete') {
+      this.form.patchValue({
+        availabilityConfirmed: null,
+      })
+    }
+    this.currentStatus = status.toLowerCase() === 'creation' ? 1 : status.toLowerCase() === 'set up' ? 2 : status.toLowerCase() === 'preparation' ? 3 : status.toLowerCase() === 'transfer' ? 4 : status.toLowerCase() === 'checking' ? 5 : status.toLowerCase() === 'complete' ? 6 : 1;
+    this.wizard.goTo(this.currentStatus);
   }
 }

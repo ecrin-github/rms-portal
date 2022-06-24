@@ -79,14 +79,15 @@
                     <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData?.displayName}}</h6>
                 </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group" *ngIf="isEdit || isView">
                 <div class="col-md-6">
-                    <label for="" class="font-style text-capitalize">Status</label>
-                    <select class="form-control" formControlName="statusId" *ngIf="!isView">
+                    <label for="" class="font-style text-capitalize pr-5">Status</label>
+                    <button class="btn btn-danger btn-sm" *ngIf="!isView" (click)="resetAll()">Reset</button>
+                    <select class="form-control" formControlName="statusId" *ngIf="showStatus" (change)="onChange()">
                         <option disabled selected value="">Select an option...</option>
                         <option [value]=status.id *ngFor="let status of statusList">{{status.name}}</option>
                     </select>
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{findStatus(dtpData?.statusId)}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="!showStatus || isView">{{findStatus(dtpData?.statusId)}}</h6>
                 </div>
             </div>
             <div #wizard class="wizard wizard-1" id="kt_wizard_v1" data-wizard-state="step-first" data-wizard-clickable="true">
@@ -97,7 +98,7 @@
                                 <i class="wizard-icon flaticon2-browser-1"></i>
                                 <h3 class="wizard-title">Creation</h3>
                                 <i class="fa fa-check-circle" style="color: green;" *ngIf="!(isEdit || isView) ? 1 < currentStatus : 1 < currentStatus"></i>
-                                <i class="fa fa-check-circle" style="color: orange;" *ngIf="1 === currentStatus"></i>
+                                <i class="fa fa-exclamation-circle" style="color: orange;" *ngIf="1 === currentStatus"></i>
                             </div>
                         </a>
                         <a class="wizard-step" href="javascript:;" data-wizard-type="step">
@@ -105,7 +106,7 @@
                               <i class="wizard-icon flaticon2-setup"></i>
                               <h3 class="wizard-title">Set Up</h3>
                               <i class="fa fa-check-circle" style="color: green;" *ngIf="!(isEdit || isView) ? 2 < currentStatus : 2 < currentStatus"></i>
-                              <i class="fa fa-check-circle" style="color: orange;" *ngIf="2 === currentStatus"></i>
+                              <i class="fa fa-exclamation-circle" style="color: orange;" *ngIf="2 === currentStatus"></i>
                             </div>
                           </a>
                           <a class="wizard-step" href="javascript:;" data-wizard-type="step">
@@ -113,7 +114,7 @@
                               <i class="wizard-icon flaticon-responsive"></i>
                               <h3 class="wizard-title">Preparation</h3>
                               <i class="fa fa-check-circle" style="color: green;" *ngIf="!(isEdit || isView) ? 3 < currentStatus : 3 < currentStatus"></i>
-                              <i class="fa fa-check-circle" style="color: orange;" *ngIf="3 === currentStatus"></i>
+                              <i class="fa fa-exclamation-circle" style="color: orange;" *ngIf="3 === currentStatus"></i>
                             </div>
                           </a>
                           <a class="wizard-step" href="javascript:;" data-wizard-type="step">
@@ -121,7 +122,7 @@
                               <i class="wizard-icon flaticon-truck"></i>
                               <h3 class="wizard-title">Transfer</h3>
                               <i class="fa fa-check-circle" style="color: green;" *ngIf="!(isEdit || isView) ? 4 < currentStatus : 4 < currentStatus"></i>
-                              <i class="fa fa-check-circle" style="color: orange;" *ngIf="4 === currentStatus"></i>
+                              <i class="fa fa-exclamation-circle" style="color: orange;" *ngIf="4 === currentStatus"></i>
                             </div>
                           </a>
                           <a class="wizard-step" href="javascript:;" data-wizard-type="step">
@@ -129,7 +130,7 @@
                               <i class="wizard-icon flaticon-globe"></i>
                               <h3 class="wizard-title">Checking</h3>
                               <i class="fa fa-check-circle" style="color: green;" *ngIf="!(isEdit || isView) ? 5 < currentStatus : 5 < currentStatus"></i>
-                              <i class="fa fa-check-circle" style="color: orange;" *ngIf="5 === currentStatus"></i>
+                              <i class="fa fa-exclamation-circle" style="color: orange;" *ngIf="5 === currentStatus"></i>
                             </div>
                           </a>
                           <a class="wizard-step" href="javascript:;" data-wizard-type="step">
@@ -137,7 +138,7 @@
                               <i class="wizard-icon flaticon2-open-text-book"></i>
                               <h3 class="wizard-title">Complete</h3>
                               <i class="fa fa-check-circle" style="color: green;" *ngIf="!(isEdit || isView) ? 6 < currentStatus : 6 < currentStatus"></i>
-                              <i class="fa fa-check-circle" style="color: orange;" *ngIf="6 === currentStatus"></i>
+                              <i class="fa fa-exclamation-circle" style="color: orange;" *ngIf="6 === currentStatus"></i>
                             </div>
                           </a>              
                     </div>
@@ -150,7 +151,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="initialContactDate" ngbDatepicker
-                                            #initialContactDate="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.initialContactDate.errors }" (click)="initialContactDate.toggle()" formControlName="initialContactDate" [maxDate]="todayDate" readonly="readonly">
+                                            #initialContactDate="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.initialContactDate.errors }" (click)="initialContactDate.toggle()" formControlName="initialContactDate" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="initialContactDate.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -158,9 +159,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12" *ngIf="submitted && g.initialContactDate.errors">
-                                    <p *ngIf="submitted && g.initialContactDate.errors.required"> Please select a date</p>
-                                </div>                
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{viewDate(dtpData?.initialContactDate)}}</h6>
                             </div>
                         </div>
@@ -172,7 +170,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="setUpCompleted" ngbDatepicker
-                                            #setUpCompleted="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.setUpCompleted.errors }" (click)="setUpCompleted.toggle()" formControlName="setUpCompleted" readonly="readonly" [maxDate]="todayDate">
+                                            #setUpCompleted="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.setUpCompleted.errors }" (click)="setUpCompleted.toggle()" formControlName="setUpCompleted" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="setUpCompleted.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -180,9 +178,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12" *ngIf="submitted && g.setUpCompleted.errors">
-                                    <p *ngIf="submitted && g.setUpCompleted.errors.required" style="color: #d0451b; font-size: 0.9rem; font-weight: 400;"> Please select a date</p>
-                                </div>                
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{viewDate(dtpData?.setUpCompleted)}}</h6>            
                             </div>
                         </div>
@@ -194,7 +189,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="mdAccessGranted" ngbDatepicker
-                                            #mdAccessGranted="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.mdAccessGranted.errors }" (click)="mdAccessGranted.toggle()" formControlName="mdAccessGranted" readonly="readonly" [maxDate]="todayDate">
+                                            #mdAccessGranted="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.mdAccessGranted.errors }" (click)="mdAccessGranted.toggle()" formControlName="mdAccessGranted" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="mdAccessGranted.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -202,9 +197,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12" *ngIf="submitted && g.mdAccessGranted.errors">
-                                    <p *ngIf="submitted && g.mdAccessGranted.errors.required" style="color: #d0451b; font-size: 0.9rem; font-weight: 400;"> Please select a date</p>
-                                </div>                
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{viewDate(dtpData?.mdAccessGranted)}}</h6>            
                             </div>
                             <div class="col-md-6">
@@ -212,7 +204,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="mdCompleteDate" ngbDatepicker
-                                            #mdCompleteDate="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.mdCompleteDate.errors }" (click)="mdCompleteDate.toggle()" formControlName="mdCompleteDate" readonly="readonly" [maxDate]="todayDate">
+                                            #mdCompleteDate="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.mdCompleteDate.errors }" (click)="mdCompleteDate.toggle()" formControlName="mdCompleteDate" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="mdCompleteDate.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -220,9 +212,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12" *ngIf="submitted && g.mdCompleteDate.errors">
-                                    <p *ngIf="submitted && g.mdCompleteDate.errors.required" style="color: #d0451b; font-size: 0.9rem; font-weight: 400;"> Please select a date</p>
-                                </div>                
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{viewDate(dtpData?.mdCompleteDate)}}</h6>            
                             </div>
                         </div>
@@ -234,7 +223,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="dtaAgreedDate" ngbDatepicker
-                                            #dtaAgreedDate="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.dtaAgreedDate.errors }" (click)="dtaAgreedDate.toggle()" formControlName="dtaAgreedDate" readonly="readonly" [maxDate]="todayDate">
+                                            #dtaAgreedDate="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.dtaAgreedDate.errors }" (click)="dtaAgreedDate.toggle()" formControlName="dtaAgreedDate" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="dtaAgreedDate.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -242,9 +231,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12" *ngIf="submitted && g.dtaAgreedDate.errors">
-                                    <p *ngIf="submitted && g.dtaAgreedDate.errors.required" style="color: #d0451b; font-size: 0.9rem; font-weight: 400;"> Please select a date</p>
-                                </div>                
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{viewDate(dtpData?.dtaAgreedDate)}}</h6>
                             </div>
                             <div class="col-md-6">
@@ -252,7 +238,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="uploadAccessRequested" ngbDatepicker
-                                            #uploadAccessRequested="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.uploadAccessRequested.errors }" (click)="uploadAccessRequested.toggle()" formControlName="uploadAccessRequested" readonly="readonly" [maxDate]="todayDate">
+                                            #uploadAccessRequested="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.uploadAccessRequested.errors }" (click)="uploadAccessRequested.toggle()" formControlName="uploadAccessRequested" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="uploadAccessRequested.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -260,9 +246,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12" *ngIf="submitted && g.uploadAccessRequested.errors">
-                                    <p *ngIf="submitted && g.uploadAccessRequested.errors.required" style="color: #d0451b; font-size: 0.9rem; font-weight: 400;"> Please select a date</p>
-                                </div>                
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{viewDate(dtpData?.uploadAccessRequested)}}</h6>            
                             </div>
                         </div>
@@ -272,7 +255,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="uploadAccessConfirmed" ngbDatepicker
-                                            #uploadAccessConfirmed="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.uploadAccessConfirmed.errors }" (click)="uploadAccessConfirmed.toggle()" formControlName="uploadAccessConfirmed" readonly="readonly" [maxDate]="todayDate">
+                                            #uploadAccessConfirmed="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.uploadAccessConfirmed.errors }" (click)="uploadAccessConfirmed.toggle()" formControlName="uploadAccessConfirmed" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="uploadAccessConfirmed.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -280,9 +263,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12" *ngIf="submitted && g.uploadAccessConfirmed.errors">
-                                    <p *ngIf="submitted && g.uploadAccessConfirmed.errors.required" style="color: #d0451b; font-size: 0.9rem; font-weight: 400;"> Please select a date</p>
-                                </div>                
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{viewDate(dtpData?.uploadAccessConfirmed)}}</h6>            
                             </div>
                             <div class="col-md-6">
@@ -290,7 +270,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="uploadsComplete" ngbDatepicker
-                                            #uploadsComplete="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.uploadsComplete.errors }" (click)="uploadsComplete.toggle()" formControlName="uploadsComplete" readonly="readonly" [maxDate]="todayDate">
+                                            #uploadsComplete="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.uploadsComplete.errors }" (click)="uploadsComplete.toggle()" formControlName="uploadsComplete" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="uploadsComplete.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -298,9 +278,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12" *ngIf="submitted && g.uploadsComplete.errors">
-                                    <p *ngIf="submitted && g.uploadsComplete.errors.required" style="color: #d0451b; font-size: 0.9rem; font-weight: 400;"> Please select a date</p>
-                                </div>                
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{viewDate(dtpData?.uploadsComplete)}}</h6>            
                             </div>
                         </div>
@@ -312,7 +289,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="qcChecksCompleted" ngbDatepicker
-                                            #qcChecksCompleted="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.qcChecksCompleted.errors }" (click)="qcChecksCompleted.toggle()" formControlName="qcChecksCompleted" readonly="readonly" [maxDate]="todayDate">
+                                            #qcChecksCompleted="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.qcChecksCompleted.errors }" (click)="qcChecksCompleted.toggle()" formControlName="qcChecksCompleted" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="qcChecksCompleted.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -320,9 +297,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12" *ngIf="submitted && g.qcChecksCompleted.errors">
-                                    <p *ngIf="submitted && g.qcChecksCompleted.errors.required" style="color: #d0451b; font-size: 0.9rem; font-weight: 400;"> Please select a date</p>
-                                </div>                
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{viewDate(dtpData?.qcChecksCompleted)}}</h6>            
                             </div>
                             <div class="col-md-6">
@@ -330,7 +304,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="mdIntegratedWithMdr" ngbDatepicker
-                                            #mdIntegratedWithMdr="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.mdIntegratedWithMdr.errors }" (click)="mdIntegratedWithMdr.toggle()" formControlName="mdIntegratedWithMdr" readonly="readonly" [maxDate]="todayDate">
+                                            #mdIntegratedWithMdr="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.mdIntegratedWithMdr.errors }" (click)="mdIntegratedWithMdr.toggle()" formControlName="mdIntegratedWithMdr" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="mdIntegratedWithMdr.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -338,9 +312,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12" *ngIf="submitted && g.mdIntegratedWithMdr.errors">
-                                    <p *ngIf="submitted && g.mdIntegratedWithMdr.errors.required" style="color: #d0451b; font-size: 0.9rem; font-weight: 400;"> Please select a date</p>
-                                </div>                
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{viewDate(dtpData?.mdIntegratedWithMdr)}}</h6>            
 
                             </div>
@@ -351,7 +322,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="availabilityRequested" ngbDatepicker
-                                            #availabilityRequested="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.availabilityRequested.errors }" (click)="availabilityRequested.toggle()" formControlName="availabilityRequested" readonly="readonly" [maxDate]="todayDate">
+                                            #availabilityRequested="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.availabilityRequested.errors }" (click)="availabilityRequested.toggle()" formControlName="availabilityRequested" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="availabilityRequested.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -359,9 +330,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12" *ngIf="submitted && g.availabilityRequested.errors">
-                                    <p *ngIf="submitted && g.availabilityRequested.errors.required" style="color: #d0451b; font-size: 0.9rem; font-weight: 400;"> Please select a date</p>
-                                </div>                
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{viewDate(dtpData?.availabilityRequested)}}</h6>            
                             </div>
                         </div>
@@ -373,7 +341,7 @@
                                 <div class="form-group" *ngIf="!isView">
                                     <div class="input-group">
                                         <input class="form-control" placeholder="yyyy-mm-dd" name="availabilityConfirmed" ngbDatepicker
-                                            #availabilityConfirmed="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.availabilityConfirmed.errors }" (click)="availabilityConfirmed.toggle()" formControlName="availabilityConfirmed" readonly="readonly" [maxDate]="todayDate">
+                                            #availabilityConfirmed="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && g.availabilityConfirmed.errors }" (click)="availabilityConfirmed.toggle()" formControlName="availabilityConfirmed" [maxDate]="todayDate">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" (click)="availabilityConfirmed.toggle()" type="button">
                                                 <i class="fa fa-calendar"></i>
@@ -381,9 +349,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12" *ngIf="submitted && g.availabilityConfirmed.errors">
-                                    <p *ngIf="submitted && g.availabilityConfirmed.errors.required" style="color: #d0451b; font-size: 0.9rem; font-weight: 400;"> Please select a date</p>
-                                </div>                
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{viewDate(dtpData?.availabilityConfirmed)}}</h6>            
                             </div>
                         </div>
