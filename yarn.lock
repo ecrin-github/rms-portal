@@ -213,7 +213,7 @@
   "resolved" "https://registry.npmjs.org/@angular/compiler/-/compiler-9.0.0.tgz"
   "version" "9.0.0"
 
-"@angular/core@^11.0.0", "@angular/core@^11.0.0 || ^12.0.0-0", "@angular/core@^13.0.0", "@angular/core@^9.0.0", "@angular/core@>=10.0.0", "@angular/core@>=12.0.0-0", "@angular/core@>=13.0.0 <14.0.0", "@angular/core@>=8.0.0", "@angular/core@>=9.0.0", "@angular/core@>=9.0.0 <13.0.0", "@angular/core@~12.2.13", "@angular/core@12.2.13":
+"@angular/core@^11.0.0", "@angular/core@^11.0.0 || ^12.0.0-0", "@angular/core@^13.0.0", "@angular/core@^9.0.0", "@angular/core@>=10.0.0", "@angular/core@>=12.0.0-0", "@angular/core@>=13 || >16", "@angular/core@>=13.0.0 <14.0.0", "@angular/core@>=8.0.0", "@angular/core@>=9.0.0", "@angular/core@>=9.0.0 <13.0.0", "@angular/core@~12.2.13", "@angular/core@12.2.13":
   "integrity" "sha512-tZ5nAnmOi418JDaJIFiiP9z2JrluMJZvUvXO4QDUs52BXaL2yuP7MJ2LczWOVJXrBLZXeZGfjDjZmaFPA24grg=="
   "resolved" "https://registry.npmjs.org/@angular/core/-/core-12.2.13.tgz"
   "version" "12.2.13"
@@ -269,7 +269,7 @@
   dependencies:
     "tslib" "^2.2.0"
 
-"@angular/router@^13.0.0", "@angular/router@~12.2.13":
+"@angular/router@^13.0.0", "@angular/router@>=13 || >16", "@angular/router@~12.2.13":
   "integrity" "sha512-HZL/Pzp6I7fQiMLrzfEzhnqhgNcGcFjBgMMOoLp5IA1IV26rp1NU6zYJzPrXtopBx7XLl8BECehAwFqrJsu/PQ=="
   "resolved" "https://registry.npmjs.org/@angular/router/-/router-12.2.13.tgz"
   "version" "12.2.13"
@@ -6674,6 +6674,13 @@
     "resize-observer-polyfill" "^1.5.0"
     "tslib" "^2.0.0"
 
+"ngx-permissions@^13.0.1":
+  "integrity" "sha512-KanBkK9v8aoQ9siSEmB69G+OPtF1i71Ie5ORuobOlKcpUMvmpcuCXG9eiu1j3k+8/Q+sv1jCbL9VviLiQF5PFA=="
+  "resolved" "https://registry.npmjs.org/ngx-permissions/-/ngx-permissions-13.0.1.tgz"
+  "version" "13.0.1"
+  dependencies:
+    "tslib" "^2.1.0"
+
 "ngx-spinner@^13.0.0":
   "integrity" "sha512-q37rOYpRu41+/aHqhfSazHUCz9GAY7+4o3POFC69dW1ew+qB4xyH850lAiCwiNbdhpEOPRShU1litkTxQZJC5A=="
   "resolved" "https://registry.npmjs.org/ngx-spinner/-/ngx-spinner-13.0.0.tgz"
@@ -8836,7 +8843,7 @@
   dependencies:
     "aproba" "^1.1.1"
 
-"rxjs@^6.0.0", "rxjs@^6.0.0 || ^7.0.0", "rxjs@^6.5.0", "rxjs@^6.5.3", "rxjs@^6.5.3 || ^7.0.0", "rxjs@^6.5.3 || ^7.4.0", "rxjs@^6.5.5", "rxjs@>=6.0.0", "rxjs@>=6.5.3", "rxjs@~6.6.0", "rxjs@6.6.7":
+"rxjs@^6.0.0", "rxjs@^6.0.0 || ^7.0.0", "rxjs@^6.5.0", "rxjs@^6.5.3", "rxjs@^6.5.3 || ^7.0.0", "rxjs@^6.5.3 || ^7.4.0", "rxjs@^6.5.5", "rxjs@>=6.0.0", "rxjs@>=6.5.3", "rxjs@>=7 || >9", "rxjs@~6.6.0", "rxjs@6.6.7":
   "integrity" "sha512-hTdwr+7yYNIT5n4AMYp85KA6yw2Va0FLa3Rguvbpa4W3I5xynaBZo41cM3XM+4Q6fRMj3sBYIR1VAmZMXYJvRQ=="
   "resolved" "https://registry.npmjs.org/rxjs/-/rxjs-6.6.7.tgz"
   "version" "6.6.7"
@@ -9970,7 +9977,7 @@
     "source-map-support" "^0.5.6"
     "yn" "^3.0.0"
 
-"tslib@^1.10.0", "tslib@^2.0.0", "tslib@^2.2.0":
+"tslib@^1.10.0", "tslib@^2.0.0", "tslib@^2.1.0", "tslib@^2.2.0":
   "integrity" "sha512-gS9GVHRU+RGn5KQM2rllAlR3dU6m7AcpJKdtH8gFvQiC4Otgk98XnmMU+nZenHt/+VhnBPWwgrJsyrdcw6i23w=="
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.2.0.tgz"
   "version" "2.2.0"
@@ -10813,7 +10820,7 @@
   "resolved" "https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz"
   "version" "0.1.0"
 
-"zone.js@^0.10.2 || ^0.11.0", "zone.js@~0.11.4":
+"zone.js@^0.10.2 || ^0.11.0", "zone.js@>=0.11.4 || >0.12", "zone.js@~0.11.4":
   "integrity" "sha512-DDh2Ab+A/B+9mJyajPjHFPWfYU1H+pdun4wnnk0OcQTNjem1XQSZ2CDW+rfZEUDjv5M19SBqAkjZi0x5wuB5Qw=="
   "resolved" "https://registry.npmjs.org/zone.js/-/zone.js-0.11.4.tgz"
   "version" "0.11.4"

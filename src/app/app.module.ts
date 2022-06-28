@@ -22,6 +22,7 @@ import { CustomStorage } from './custom-storage';
 import { MyinterceptorInterceptor } from './_rms/interceptor/myinterceptor.interceptor';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastrModule } from 'ngx-toastr';
+import { NgxPermissionsModule } from 'ngx-permissions';
 
 // #fake-end#
 
@@ -76,6 +77,7 @@ function appInitializer(authService: AuthService) {
         ignoreNonceAfterRefresh: true,
       },
     }),
+    NgxPermissionsModule.forRoot()
   ],
   providers: [
     AuthGuard,

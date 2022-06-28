@@ -7,18 +7,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatTabsModule} from '@angular/material/tabs';
 import {NgbDatepickerModule} from '@ng-bootstrap/ng-bootstrap';
 
-
 // Pages
 import {InternalMainPageComponent} from './main-page/internal-main-page.component';
-// import {DtpSummaryInternalComponent} from './dtp/summary/dtp-summary-internal.component';
-// import {DupSummaryInternalComponent} from './dup/summary/dup-summary-internal.component';
-// import {StudiesSummaryInternalComponent} from './studies/summary/studies-summary-internal.component';
-// import {ObjectsSummaryInternalComponent} from './objects/summary/objects-summary-internal.component';
 import {ReportsPageInternalComponent} from './reports/reports-page-internal.component';
-// import {AddDtpComponent} from './dtp/add/add-dtp.component';
-// import {AddDupComponent} from './dup/add/add-dup.component';
-// import {AddStudyComponent} from './studies/add/add-study.component';
-// import {AddObjectComponent} from './objects/add/add-object.component';
 
 // Additional modules
 import {WidgetsModule} from '../../_rms/partials/content/widgets/widgets.module';
@@ -35,28 +26,18 @@ import { UpsertStudyComponent } from '../common/study/upsert/upsert-study/upsert
 import { SummaryObjectComponent } from '../common/object/summary-object/summary-object.component';
 import { UpsertObjectComponent } from '../common/object/upsert/upsert-object/upsert-object.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { NgxPermissionsModule } from 'ngx-permissions';
+import { CommonPagesModule } from '../common/common-pages.module';
 
 
 @NgModule({
     declarations: [
         InternalMainPageComponent,
-
-        // AddDtpComponent,
-        // DtpSummaryInternalComponent,
-
-        // AddDupComponent,
-        // DupSummaryInternalComponent,
-
-        // AddStudyComponent,
-        // StudiesSummaryInternalComponent,
-
-        // AddObjectComponent,
-        // ObjectsSummaryInternalComponent,
-
-        ReportsPageInternalComponent
+        ReportsPageInternalComponent,
     ],
     imports: [
         CommonModule,
+        CommonPagesModule,
         WidgetsModule,
         RouterModule.forChild([
             {
@@ -123,7 +104,8 @@ import { NgApexchartsModule } from 'ng-apexcharts';
         MatExpansionModule,
         MatFormFieldModule,
         MatButtonModule,
-        NgApexchartsModule
+        NgApexchartsModule,
+        NgxPermissionsModule.forChild()
     ]
 })
 export class InternalPagesModule {}

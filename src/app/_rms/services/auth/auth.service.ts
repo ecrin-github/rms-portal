@@ -41,6 +41,10 @@ export class AuthService implements OnDestroy {
   isAuthenticUser() {
     this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData, accessToken, idToken }) => {
       this.isauthentic = isAuthenticated;
+      if (localStorage.getItem('role')) {
+        localStorage.removeItem('role');
+      }
+      localStorage.setItem('role', userData.role);
     });
     return this.isauthentic;
   }

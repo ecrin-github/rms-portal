@@ -1,4 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { NgxPermissionsService } from 'ngx-permissions';
 import { ToastrService } from 'ngx-toastr';
 import { LayoutService } from 'src/app/_rms';
 import { DashboardService } from 'src/app/_rms/services/entities/dashboard/dashboard.service';
@@ -25,7 +26,7 @@ export class InternalMainPageComponent implements OnInit {
   valuePer: any = {};
   valueNum: any = {};
 
-  constructor( private layout: LayoutService, private dashboardService: DashboardService, private toastr: ToastrService) { 
+  constructor( private layout: LayoutService, private dashboardService: DashboardService, private toastr: ToastrService, private permissionService: NgxPermissionsService) { 
     this.colorsGrayGray100 = this.layout.getProp('js.colors.gray.gray100');
     this.colorsGrayGray700 = this.layout.getProp('js.colors.gray.gray700');
     this.colorsThemeBaseSuccess = this.layout.getProp(
@@ -42,6 +43,8 @@ export class InternalMainPageComponent implements OnInit {
     this.getDupStatistics();
     this.getStudyStatistics();
     this.getObjectStatistics();
+    const perm = localStorage.getItem('role');
+    this.permissionService.loadPermissions([perm]);
   }
   getDtpStatistics() {
     this.dashboardService.getDtpStatistics().subscribe((res: any) => {
