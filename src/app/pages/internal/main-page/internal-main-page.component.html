@@ -1,12 +1,6 @@
 <ng-container *ngxPermissionsOnly="['Admin', 'Manager']">
     <div class="card" id="navbar">
         <div class="card-body">
-            <div class="row">
-                <div class="col-md-12 text-center" style="font-size: 16px; font-weight: bold;">
-                    Welcome Will Smith, <br>
-                    Data shown below are for the xxxxxx organization
-                </div>
-            </div>
             <div class="row" style="margin: 0 auto;">
                 <div class="col-md-3 text-center" (click)="scrollToElement(dtp)">
                     <ng-container *ngIf="dtpCompleted">
@@ -94,7 +88,7 @@
         </div>
     </div>
     <br />
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-12 col-sm-12 col-md-6">
             <app-new-studies></app-new-studies>
         </div>
@@ -102,7 +96,7 @@
             <app-new-objects></app-new-objects>
         </div>
     </div>
-    <br />
+    <br /> -->
     <div class="row" #study>
         <div class="col-12 col-sm-12 col-md-12">
             <app-recent-studies></app-recent-studies>
@@ -123,6 +117,15 @@
     <br />
 </ng-container>
 <ng-container *ngxPermissionsOnly="['User']">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12 text-center" style="font-size: 16px; font-weight: bold;">
+                    Data shown below are for the {{userData?.organisation}} organization
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12">
             <app-summary-dtp></app-summary-dtp>

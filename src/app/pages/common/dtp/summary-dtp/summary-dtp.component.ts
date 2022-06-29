@@ -26,7 +26,6 @@ export class SummaryDtpComponent implements OnInit {
   dataSource: MatTableDataSource<DataTransfer>;
   organizationList: [] = [];
   statusList: [] = [];
-  @Input() user: string = 'internal';
   filterOption: string = '';
   searchText:string = '';
   dtpLength: number = 0;

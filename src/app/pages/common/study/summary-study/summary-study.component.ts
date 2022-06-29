@@ -22,7 +22,6 @@ export class SummaryStudyComponent implements OnInit {
 
   displayedColumns = ['id', 'title', 'type', 'status', 'actions'];
   dataSource: MatTableDataSource<StudyRecord>;
-  @Input() user: string = 'internal';
   studyTypes: [] = [];
   studyStatus: [] = [];
   filterOption: string = '';

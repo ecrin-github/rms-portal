@@ -27,7 +27,6 @@ export class SummaryDupComponent implements OnInit {
   dataSource: MatTableDataSource<DataUseProcess>;
   organizationList:[] = [];
   statusList:[] = [];
-  @Input() user: string = 'internal';
   filterOption: string = '';
   searchText:string = '';
   dupLength: number = 0;

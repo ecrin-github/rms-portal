@@ -51,6 +51,7 @@ import { StudyContributorComponent } from './study/upsert/study-contributor/stud
 import { CommonModalComponent } from './common-modal/common-modal.component';
 import { ConfirmationWindowComponent } from './confirmation-window/confirmation-window.component';
 import { ConfirmationWindow1Component } from './confirmation-window1/confirmation-window1.component';
+import { NgxPermissionsModule } from 'ngx-permissions';
 
 
 @NgModule({
@@ -163,7 +164,8 @@ import { ConfirmationWindow1Component } from './confirmation-window1/confirmatio
         MatExpansionModule,
         NgSelectModule,
         CalendarModule,
-        NgbModule
+        NgbModule,
+        NgxPermissionsModule.forChild()
     ],
     exports: [ SummaryDtpComponent, SummaryDupComponent, SummaryStudyComponent, SummaryObjectComponent]
 })

@@ -25,7 +25,6 @@ export class SummaryObjectComponent implements OnInit {
   dataSource: MatTableDataSource<ObjectRecord>;
   objectType: [] = [];
   studyList: [] = [];
-  @Input() user: string = 'internal';
   filterOption: string = '';
   searchText:string = '';
   objectLength: number = 0;

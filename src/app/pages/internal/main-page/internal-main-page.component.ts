@@ -3,6 +3,7 @@ import { NgxPermissionsService } from 'ngx-permissions';
 import { ToastrService } from 'ngx-toastr';
 import { LayoutService } from 'src/app/_rms';
 import { DashboardService } from 'src/app/_rms/services/entities/dashboard/dashboard.service';
+import { UserService } from 'src/app/_rms/services/user/user.service';
 
 @Component({
   selector: 'app-main-page-internal',
@@ -25,8 +26,10 @@ export class InternalMainPageComponent implements OnInit {
   objectCompleted: any;
   valuePer: any = {};
   valueNum: any = {};
+  userData: any;
 
-  constructor( private layout: LayoutService, private dashboardService: DashboardService, private toastr: ToastrService, private permissionService: NgxPermissionsService) { 
+  constructor( private layout: LayoutService, private dashboardService: DashboardService, private toastr: ToastrService, private permissionService: NgxPermissionsService, 
+    private userService: UserService) { 
     this.colorsGrayGray100 = this.layout.getProp('js.colors.gray.gray100');
     this.colorsGrayGray700 = this.layout.getProp('js.colors.gray.gray700');
     this.colorsThemeBaseSuccess = this.layout.getProp(
@@ -43,8 +46,18 @@ export class InternalMainPageComponent implements OnInit {
     this.getDupStatistics();
     this.getStudyStatistics();
     this.getObjectStatistics();
+    this.getUserData();
     const perm = localStorage.getItem('role');
     this.permissionService.loadPermissions([perm]);
+  }
+  getUserData() {
+    this.userService.getUser().subscribe(res => {
+      if (res) {
+        this.userData = res;
+      }
+    }, error => {
+      console.log('error', error);
+    })
   }
   getDtpStatistics() {
     this.dashboardService.getDtpStatistics().subscribe((res: any) => {
