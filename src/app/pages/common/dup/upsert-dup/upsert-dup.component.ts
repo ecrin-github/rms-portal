@@ -9,6 +9,7 @@ import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
 import { DupService } from 'src/app/_rms/services/entities/dup/dup.service';
 import KTWizard from '../../../../../assets/js/components/wizard'
 import { CommonModalComponent } from '../../common-modal/common-modal.component';
+import { ConfirmationWindow1Component } from '../../confirmation-window1/confirmation-window1.component';
 
 @Component({
   selector: 'app-upsert-dup',
@@ -31,6 +32,7 @@ export class UpsertDupComponent implements OnInit {
   submitted: boolean = false;
   nextStep: number;
   buttonClick: any;
+  showStatus: boolean = false;
 
   constructor( private router: Router, private fb: FormBuilder, private dupService: DupService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private dtpService: DtpService, private modalService: NgbModal) { 
@@ -51,14 +53,14 @@ export class UpsertDupComponent implements OnInit {
   ngOnInit(): void {
     const todayDate = new Date();
     this.todayDate = {year: todayDate.getFullYear(), month: todayDate.getMonth()+1, day: todayDate.getDate()};
+    this.getOrganization();
+    this.getStatus();
     this.isEdit = this.router.url.includes('edit') ? true : false;
     this.isView = this.router.url.includes('view') ? true : false;
     if(this.isEdit || this.isView) {
       this.id = this.activatedRoute.snapshot.params.id;
       this.getDupById(this.id);
     }
-    this.getOrganization();
-    this.getStatus();
     if (this.router.url.includes('add')) {
       this.form.patchValue({
         initialContactDate: this.todayDate
@@ -164,57 +166,22 @@ export class UpsertDupComponent implements OnInit {
     payload.availabilityRequested = this.dateToString(payload.availabilityRequested);
     payload.availabilityConfirmed = this.dateToString(payload.availabilityConfirmed);
     payload.accessConfirmed = this.dateToString(payload.accessConfirmed);
-    payload.statusId = this.wizard.getStep() === 1 ? this.getStatusByName('creation') : this.wizard.getStep() === 2 ? this.getStatusByName('set up') : this.wizard.getStep() === 3 ? this.getStatusByName('preparation') : this.wizard.getStep() === 4 ? this.getStatusByName('transfer') : this.wizard.getStep() === 5 ? this.getStatusByName('complete') : this.getStatusByName('creation');
-    if (this.wizard.getStep() === 1) {
-      this.form.controls['initialContactDate'].setValidators(Validators.required);
-      this.form.controls['initialContactDate'].updateValueAndValidity();
+    let status = '';
+    if (this.form.value.initialContactDate !== null && this.form.value.initialContactDate !== '') {
+      status = 'set up';
     }
-    if (this.wizard.getStep() === 2) {
-      this.form.controls['initialContactDate'].setValidators(Validators.required);
-      this.form.controls['setUpCompleted'].setValidators(Validators.required);
-      this.form.controls['initialContactDate'].updateValueAndValidity();
-      this.form.controls['setUpCompleted'].updateValueAndValidity();
+    if (this.form.value.initialContactDate !== null && this.form.value.initialContactDate !== '' && this.form.value.setUpCompleted !== null && this.form.value.setUpCompleted !== '') {
+      status = 'preparation';
     }
-    if (this.wizard.getStep() === 3) {
-      this.form.controls['initialContactDate'].setValidators(Validators.required);
-      this.form.controls['setUpCompleted'].setValidators(Validators.required);
-      this.form.controls['prereqsMet'].setValidators(Validators.required);
-      this.form.controls['duaAgreedDate'].setValidators(Validators.required);
-      this.form.controls['initialContactDate'].updateValueAndValidity();
-      this.form.controls['setUpCompleted'].updateValueAndValidity();
-      this.form.controls['prereqsMet'].updateValueAndValidity();
-      this.form.controls['duaAgreedDate'].updateValueAndValidity();
+    if (this.form.value.initialContactDate !== null && this.form.value.initialContactDate !== '' && this.form.value.setUpCompleted !== null && this.form.value.setUpCompleted !== '' && this.form.value.prereqsMet !== null && this.form.value.prereqsMet !== '' && 
+    this.form.value.duaAgreedDate !== null && this.form.value.duaAgreedDate !== '') {
+      status = 'checking';
     }
-    if (this.wizard.getStep() === 4) {
-      this.form.controls['initialContactDate'].setValidators(Validators.required);
-      this.form.controls['setUpCompleted'].setValidators(Validators.required);
-      this.form.controls['prereqsMet'].setValidators(Validators.required);
-      this.form.controls['duaAgreedDate'].setValidators(Validators.required);
-      this.form.controls['availabilityRequested'].setValidators(Validators.required);
-      this.form.controls['availabilityConfirmed'].setValidators(Validators.required);
-      this.form.controls['initialContactDate'].updateValueAndValidity();
-      this.form.controls['setUpCompleted'].updateValueAndValidity();
-      this.form.controls['prereqsMet'].updateValueAndValidity();
-      this.form.controls['duaAgreedDate'].updateValueAndValidity();
-      this.form.controls['availabilityRequested'].updateValueAndValidity();
-      this.form.controls['availabilityConfirmed'].updateValueAndValidity();
+    if (this.form.value.initialContactDate !== null && this.form.value.initialContactDate !== '' && this.form.value.setUpCompleted !== null && this.form.value.setUpCompleted !== '' && this.form.value.prereqsMet !== null && this.form.value.prereqsMet !== '' &&
+    this.form.value.duaAgreedDate !== null && this.form.value.duaAgreedDate !== '' && this.form.value.availabilityRequested !== null && this.form.value.availabilityRequested !== '' && this.form.value.availabilityConfirmed !== null && this.form.value.availabilityConfirmed !== '') {
+      status = 'complete';
     }
-    if (this.wizard.getStep() === 5) {
-      this.form.controls['initialContactDate'].setValidators(Validators.required);
-      this.form.controls['setUpCompleted'].setValidators(Validators.required);
-      this.form.controls['prereqsMet'].setValidators(Validators.required);
-      this.form.controls['duaAgreedDate'].setValidators(Validators.required);
-      this.form.controls['availabilityRequested'].setValidators(Validators.required);
-      this.form.controls['availabilityConfirmed'].setValidators(Validators.required);
-      this.form.controls['accessConfirmed'].setValidators(Validators.required);
-      this.form.controls['initialContactDate'].updateValueAndValidity();
-      this.form.controls['setUpCompleted'].updateValueAndValidity();
-      this.form.controls['prereqsMet'].updateValueAndValidity();
-      this.form.controls['duaAgreedDate'].updateValueAndValidity();
-      this.form.controls['availabilityRequested'].updateValueAndValidity();
-      this.form.controls['availabilityConfirmed'].updateValueAndValidity();
-      this.form.controls['accessConfirmed'].updateValueAndValidity();
-    }
+    payload.statusId = this.getStatusByName(status);
     if (payload.initialContactDate > payload.setUpCompleted) {
       this.toastr.error('Initial Contact Date cannot be greater than Set Up Completed date');
       return;
@@ -250,6 +217,7 @@ export class UpsertDupComponent implements OnInit {
             this.toastr.success('DUP updated successfully');
             localStorage.setItem('updateDupList', 'true');
             this.getDupById(this.id);
+            this.showStatus = false;
           } else {
             this.toastr.error(res.messages[0]);
           }
@@ -267,6 +235,7 @@ export class UpsertDupComponent implements OnInit {
             setTimeout(() => {
               window.close();
             }, 1000);
+            this.showStatus = false;
           } else {
             this.toastr.error(res.messages[0]);
           }
@@ -311,7 +280,7 @@ export class UpsertDupComponent implements OnInit {
     });
     const arr: any = this.statusList.filter((item: any) => item.id === this.dupData.statusId);
     if (arr && arr.length) {
-      this.currentStatus = arr[0].name.toLowerCase() === 'creation' ? 1 : arr[0].name.toLowerCase() === 'set up' ? 2 : arr[0].name.toLowerCase() === 'preparation' ? 3 : arr[0].name.toLowerCase() === 'transfer' ? 4 : arr[0].name.toLowerCase() === 'complete' ? 5 : 1;
+      this.currentStatus = arr[0].name.toLowerCase() === 'creation' ? 1 : arr[0].name.toLowerCase() === 'set up' ? 2 : arr[0].name.toLowerCase() === 'preparation' ? 3 : arr[0].name.toLowerCase() === 'checking' ? 4 : arr[0].name.toLowerCase() === 'complete' ? 5 : 1;
       this.wizard.goTo(this.currentStatus);
     }
   }
@@ -348,5 +317,59 @@ export class UpsertDupComponent implements OnInit {
     const userModal = this.modalService.open(CommonModalComponent, {size: 'xl', backdrop: 'static'});
     userModal.componentInstance.title = 'Add User';
     userModal.componentInstance.type = 'user';
+  }
+  resetAll() {
+    const modal = this.modalService.open(ConfirmationWindow1Component, {size: 'lg', backdrop:'static'});
+    modal.result.then((data) => {
+      if (data) {
+        this.showStatus = true;
+      }
+    }, error => {});
+  }
+  onChange() {
+    const status = this.findStatus(parseInt(this.form.value.statusId));
+    if (status.toLowerCase() === 'creation') {
+      this.form.patchValue({
+        setUpCompleted: null,
+        prereqsMet: null,
+        duaAgreedDate: null,
+        availabilityRequested: null,
+        availabilityConfirmed: null,
+        accessConfirmed: null,
+      })
+    }
+    if (status.toLowerCase() === 'set up') {
+      this.form.patchValue({
+        setUpCompleted: null,
+        prereqsMet: null,
+        duaAgreedDate: null,
+        availabilityRequested: null,
+        availabilityConfirmed: null,
+        accessConfirmed: null,
+      })
+    }
+    if (status.toLowerCase() === 'preparation') {
+      this.form.patchValue({
+        prereqsMet: null,
+        duaAgreedDate: null,
+        availabilityRequested: null,
+        availabilityConfirmed: null,
+        accessConfirmed: null,
+      })
+    }
+    if (status.toLowerCase() === 'checking') {
+      this.form.patchValue({
+        availabilityRequested: null,
+        availabilityConfirmed: null,
+        accessConfirmed: null,
+      })
+    }
+    if (status.toLowerCase() === 'complete') {
+      this.form.patchValue({
+        accessConfirmed: null,
+      })
+    }
+    this.currentStatus = status.toLowerCase() === 'creation' ? 1 : status.toLowerCase() === 'set up' ? 2 : status.toLowerCase() === 'preparation' ? 3 : status.toLowerCase() === 'checking' ? 4 : status.toLowerCase() === 'complete' ? 5 : 1;
+    this.wizard.goTo(this.currentStatus);
   }
 }
