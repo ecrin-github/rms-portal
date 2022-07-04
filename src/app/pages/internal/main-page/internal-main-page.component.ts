@@ -95,7 +95,7 @@ export class InternalMainPageComponent implements OnInit {
   getChartOptions(data,label, format) {
     this.valuePer = {
       color: this.colorsGrayGray700,
-      fontSize: '30px',
+      fontSize: '20px',
       fontWeight: '700',
       offsetY: 12,
       show: true,
@@ -105,7 +105,7 @@ export class InternalMainPageComponent implements OnInit {
         return parseInt(val.toString(), 10).toString();
       },
       color: this.colorsGrayGray700,
-      fontSize: '30px',
+      fontSize: '20px',
       fontWeight: '700',
       offsetY: 12,
       show: true,
@@ -116,7 +116,7 @@ export class InternalMainPageComponent implements OnInit {
       offsetX: 5000,
       chart: {
         type: 'radialBar',
-        height: 200,
+        height: 170,
       },
       plotOptions: {
         radialBar: {

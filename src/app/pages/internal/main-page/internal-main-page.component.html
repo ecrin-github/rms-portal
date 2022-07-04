@@ -2,7 +2,7 @@
     <div class="card" id="navbar">
         <div class="card-body">
             <div class="row" style="margin: 0 auto;">
-                <div class="col-md-3 text-center" (click)="scrollToElement(dtp)">
+                <div class="offset-md-1 col-md-2 text-center" (click)="scrollToElement(dtp)">
                     <ng-container *ngIf="dtpCompleted">
                         <apx-chart style="cursor: pointer;" [series]="dtpChartOptions.series"
                             [chart]="dtpChartOptions.chart" [xaxis]="dtpChartOptions.xaxis"
@@ -14,7 +14,7 @@
                     </ng-container>
                     <span style="font-size: 14px; font-weight: 600;">Data Transfer</span>
                 </div>
-                <div class="col-md-3 text-center" (click)="scrollToElement(dup)">
+                <div class="col-md-2 text-center" (click)="scrollToElement(dup)">
                     <ng-container *ngIf="dupCompleted">
                         <apx-chart style="cursor: pointer;" [series]="dupChartOptions.series"
                             [chart]="dupChartOptions.chart" [xaxis]="dupChartOptions.xaxis"
@@ -26,7 +26,7 @@
                     </ng-container>
                     <span style="font-size: 14px; font-weight: 600;">Data Use Processes</span>
                 </div>
-                <div class="col-md-3 text-center" (click)="scrollToElement(study)">
+                <div class="col-md-2 text-center" (click)="scrollToElement(study)">
                     <ng-container *ngIf="studyCompleted">
                         <apx-chart style="cursor: pointer;" [series]="studyChartOptions.series"
                             [chart]="studyChartOptions.chart" [xaxis]="studyChartOptions.xaxis"
@@ -39,7 +39,7 @@
                     </ng-container>
                     <span style="font-size: 14px; font-weight: 600;">Studies</span>
                 </div>
-                <div class="col-md-3 text-center" (click)="scrollToElement(dataObject)">
+                <div class="col-md-2 text-center" (click)="scrollToElement(dataObject)">
                     <ng-container *ngIf="objectCompleted">
                         <apx-chart style="cursor: pointer;" [series]="objectChartOptions.series"
                             [chart]="objectChartOptions.chart" [xaxis]="objectChartOptions.xaxis"
@@ -51,6 +51,19 @@
                         </apx-chart>
                     </ng-container>
                     <span style="font-size: 14px; font-weight: 600;">Data Object</span>
+                </div>
+                <div class="col-md-2 text-center" (click)="scrollToElement(user)">
+                    <ng-container *ngIf="objectCompleted">
+                        <apx-chart style="cursor: pointer;" [series]="objectChartOptions.series"
+                            [chart]="objectChartOptions.chart" [xaxis]="objectChartOptions.xaxis"
+                            [yaxis]="objectChartOptions.yaxis" [dataLabels]="objectChartOptions.dataLabels"
+                            [stroke]="objectChartOptions.stroke" [legend]="objectChartOptions.legend"
+                            [fill]="objectChartOptions.fill" [states]="objectChartOptions.states"
+                            [tooltip]="objectChartOptions.tooltip" [colors]="objectChartOptions.colors"
+                            [markers]="objectChartOptions.markers" [plotOptions]="objectChartOptions.plotOptions">
+                        </apx-chart>
+                    </ng-container>
+                    <span style="font-size: 14px; font-weight: 600;">User</span>
                 </div>
             </div>
         </div>
@@ -109,7 +122,7 @@
         </div>
     </div>
     <br />
-    <div class="row">
+    <div class="row" #user>
         <div class="col-12">
             <app-recent-users></app-recent-users>
         </div>

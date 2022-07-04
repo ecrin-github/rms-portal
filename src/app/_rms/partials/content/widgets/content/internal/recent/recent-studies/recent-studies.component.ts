@@ -20,6 +20,7 @@ export class RecentStudiesComponent {
   dataSource: MatTableDataSource<StudyRecord>;
   studyTypes: [] = [];
   studyStatus: [] = [];
+  totalData: any;
 
 
   constructor( private dashboardService: DashboardService, private studyService: StudyService, private toastr: ToastrService) { }
@@ -28,6 +29,14 @@ export class RecentStudiesComponent {
     this.getStudyList();
     this.getStudyType();
     this.getStudyStatus();
+    this.getStatistics();
+  }
+  getStatistics() {
+    this.dashboardService.getStudyStatistics().subscribe((res: any) => {
+      this.totalData = res.total;
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
   }
   getStudyList() {
     const payload = {

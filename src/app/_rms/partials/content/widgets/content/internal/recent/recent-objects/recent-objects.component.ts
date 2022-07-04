@@ -20,6 +20,7 @@ export class RecentObjectsComponent {
   dataSource: MatTableDataSource<ObjectRecord>;
   objectType: [] = [];
   studyList: [] = [];
+  totalObject: any;
 
   constructor( private objectService: DataObjectService, private toastr: ToastrService, private studyService: StudyService, private dashboardService: DashboardService) { }
 
@@ -27,6 +28,14 @@ export class RecentObjectsComponent {
     this.getObjectList();
     this.getObjectType();
     this.getStudy();
+    this.getStatistics();
+  }
+  getStatistics() {
+    this.dashboardService.getObjectStatistics().subscribe((res: any) => {
+      this.totalObject = res.total;
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
   }
   getObjectList() {
     const payload = {
