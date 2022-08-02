@@ -28,6 +28,7 @@ export class StudyTopicComponent implements OnInit {
   @Output() emitTopic: EventEmitter<any> = new EventEmitter();
   studyTopic: StudyTopicInterface;
   controlledTerminology = [];
+  len: any;
 
   constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
@@ -60,9 +61,9 @@ export class StudyTopicComponent implements OnInit {
   }
 
   addStudyTopic() {
-    const len = this.studyTopics().value.length;
-    if (len) {
-      if (this.studyTopics().value[len-1].topicTypeId && this.studyTopics().value[len-1].meshValue) {
+    this.len = this.studyTopics().value.length;
+    if (this.len) {
+      if (this.studyTopics().value[this.len-1].topicTypeId && this.studyTopics().value[this.len-1].meshValue) {
         this.studyTopics().push(this.newStudyTopic());
       } else {
         this.toastr.info('Please provide the Topic Type and Topic Value in the previously added Study Topic');
@@ -181,10 +182,6 @@ export class StudyTopicComponent implements OnInit {
     const topicArray: any = this.topicTypes.filter((type: any) => type.id === id);
     return topicArray && topicArray.length ? topicArray[0].name : '';
   }
-  findTopicVocabulary(id) {
-    const vocabularyArray: any = this.controlledTerminology.filter((type: any) => type.id === id);
-    return vocabularyArray && vocabularyArray.length ? vocabularyArray[0].name : '';
-  }
   emitData() {
     const payload = this.form.value.studyTopics.map(item => {
       if (!item.id) {
@@ -197,6 +194,14 @@ export class StudyTopicComponent implements OnInit {
       return item;
     })
     this.emitTopic.emit({data: payload, isEmit: false});
+  }
+  scrollToElement(): void {
+    setTimeout(() => {
+      const yOffset = -200; 
+      const element = document.getElementById('topicpanel'+this.len);
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({top: y, behavior: 'smooth'});
+    });
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -30,7 +30,9 @@ export class StudyIdentifierComponent implements OnInit {
       this.emitData();
     }
   }
+  len: any;
   @Output() emitIdentifier: EventEmitter<any> = new EventEmitter();
+  @ViewChildren("panel", { read: ElementRef }) panel: QueryList<ElementRef>;
 
   constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private dtpService: DtpService) { 
     this.form = this.fb.group({
@@ -63,13 +65,13 @@ export class StudyIdentifierComponent implements OnInit {
   }
 
   addStudyIdentifier() {
-    const len = this.studyIdentifiers().value.length;
-    if (len) {
-      if (this.studyIdentifiers().value[len - 1].identifierValue && this.studyIdentifiers().value[len - 1].identifierTypeId && this.studyIdentifiers().value[len - 1].identifierOrgId) {
+    this.len = this.studyIdentifiers().value.length;
+    if (this.len) {
+      if (this.studyIdentifiers().value[this.len - 1].identifierValue && this.studyIdentifiers().value[this.len - 1].identifierTypeId && this.studyIdentifiers().value[this.len - 1].identifierOrgId) {
         this.studyIdentifiers().push(this.newStudyIdentifier());
         this.showIdentifierLinks.push(false);
       } else {
-        this.toastr.info('Please provide the Identifier Value and Identifier Type in the previously added Study Identifier');
+        this.toastr.info('Please provide the Identifier Value, Identifier Type and Identifier Organization in the previously added Study Identifier');
       }
     } else {
       this.studyIdentifiers().push(this.newStudyIdentifier());
@@ -224,6 +226,15 @@ export class StudyIdentifierComponent implements OnInit {
     const arr: any = this.identifierTypes.filter((item: any) => item.name.includes('Funder'));
     this.showIdentifierLinks[index] = arr && arr.length ? parseInt(this.form.value.studyIdentifiers[index].identifierTypeId) === arr[0].id ? true : false : false
   }
+  scrollToElement(): void {
+    setTimeout(() => {
+      const yOffset = -200; 
+      const element = document.getElementById('idenpanel'+this.len);
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({top: y, behavior: 'smooth'});
+    });
+  }
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

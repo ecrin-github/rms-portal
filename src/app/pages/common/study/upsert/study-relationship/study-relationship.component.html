@@ -1,3 +1,10 @@
+<div class="row pb-2" *ngIf="!isView">
+    <div class="col-12 text-right justify-content-center mt-5">
+        <button class="btn btn-primary" (click)="addStudyRelation(); scrollToElement()">
+            <i class="fa fa-plus"></i>Add relationship
+        </button>
+    </div>
+</div>
 <form [formGroup]="form">
     <ng-template [ngIf]="studyRelationships().length <= 0">
         <div class="row">
@@ -11,8 +18,8 @@
         <div formArrayName="studyRelationships">
             <div class="row" *ngFor="let studyRelation of studyRelationships().controls; let i = index;"
                 [formGroupName]="i">
-                <div class="col-12 mb-5">
-                    <mat-expansion-panel>
+                <div class="col-12 mb-5" [id]="'relpanel'+i">
+                    <mat-expansion-panel [expanded]="studyRelation.value.alreadyExist ? false : true">
                         <mat-expansion-panel-header>
                             {{findRelationshipType(studyRelation.value.relationshipTypeId)}}&nbsp;{{studyRelation.value.targetSdSid}}
                             <!-- ,&nbsp; {{findStudyTitle(studyRelation.value.targetSdSid)}} -->
@@ -59,11 +66,3 @@
         </div>
     </ng-template>
 </form>
-
-<div class="row" *ngIf="!isView">
-    <div class="col-12 text-center justify-content-center mt-5">
-        <button class="btn btn-primary" (click)="addStudyRelation()">
-            <i class="fa fa-plus"></i>Add new study relationship
-        </button>
-    </div>
-</div>

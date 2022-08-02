@@ -80,14 +80,19 @@ export class UpsertStudyComponent implements OnInit {
     this.isEdit = this.router.url.includes('edit') ? true : false;
     this.isView = this.router.url.includes('view') ? true : false;
     this.isAdd = this.router.url.includes('add') ? true : false;
+    this.getStudyType();
+    this.getStudyStatus();
+    this.getGenderEligibility();
+    this.getTimeUnits();
+
     if (this.isEdit || this.isView) {
       this.id = this.activatedRoute.snapshot.params.id;
       this.getStudyById(this.id);
     } else {
-      this.getStudyType();
-      this.getStudyStatus();
-      this.getGenderEligibility();
-      this.getTimeUnits();
+      // this.getStudyType();
+      // this.getStudyStatus();
+      // this.getGenderEligibility();
+      // this.getTimeUnits();
     }
   }
   getStudyType() {
@@ -209,10 +214,10 @@ export class UpsertStudyComponent implements OnInit {
       studyContributors: this.studyData.studyContributors ? this.studyData.studyContributors : [],
 
     });
-    this.getStudyType();
-    this.getStudyStatus();
-    this.getGenderEligibility();
-    this.getTimeUnits();
+    // this.getStudyType();
+    // this.getStudyStatus();
+    // this.getGenderEligibility();
+    // this.getTimeUnits();
   }
   getIdentifier(event) {
     this.studyForm.patchValue({

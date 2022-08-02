@@ -10,7 +10,7 @@
     <ng-template [ngIf]="selectedStudyType === 'interventional' || selectedStudyType === 'observational'">
         <div formArrayName="studyFeatures">
                 <div class="col-12 mb-5">
-                    <mat-expansion-panel>
+                    <mat-expansion-panel [expanded]="true">
                         <mat-expansion-panel-header>
                         </mat-expansion-panel-header>
                         <div class="row">

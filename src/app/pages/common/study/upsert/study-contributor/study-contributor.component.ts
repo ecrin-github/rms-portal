@@ -30,6 +30,7 @@ export class StudyContributorComponent implements OnInit {
   }
   @Output() emitContributor: EventEmitter<any> = new EventEmitter();
   arrLength = 0;
+  len: any;
 
   constructor( private fb: FormBuilder, private objectService: DataObjectService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
@@ -63,13 +64,13 @@ export class StudyContributorComponent implements OnInit {
   }
 
   addStudyContributor() {
-    const len = this.studyContributors().value.length;
-    if (len) {
-      if (this.studyContributors().value[len-1].isIndividual === 'true' || this.studyContributors().value[len-1].isIndividual === true ? this.studyContributors().value[len-1].contribTypeId && this.studyContributors().value[len-1].organisationName && this.studyContributors().value[len-1].personFamilyName && this.studyContributors().value[len-1].personGivenName : this.studyContributors().value[len-1].contribTypeId && this.studyContributors().value[len-1].organisationName) {
+    this.len = this.studyContributors().value.length;
+    if (this.len) {
+      if (this.studyContributors().value[this.len-1].isIndividual === 'true' || this.studyContributors().value[this.len-1].isIndividual === true ? this.studyContributors().value[this.len-1].contribTypeId && this.studyContributors().value[this.len-1].organisationName && this.studyContributors().value[this.len-1].personFamilyName && this.studyContributors().value[this.len-1].personGivenName : this.studyContributors().value[this.len-1].contribTypeId && this.studyContributors().value[this.len-1].organisationName) {
         this.arrLength = this.studyContributors().value.length;
         this.studyContributors().push(this.newStudyContributor());
       } else {
-        if (this.studyContributors().value[len-1].isIndividual === 'true' || this.studyContributors().value[len-1].isIndividual === true) {
+        if (this.studyContributors().value[this.len-1].isIndividual === 'true' || this.studyContributors().value[this.len-1].isIndividual === true) {
           this.toastr.info('Please provide Contributor Type, Organization, Persons First Name and Family Name in the previously added Study Contibutor');
         } else {
           this.toastr.info('Please provide Contributor Type and Organization in the previously added Study Contibutor');
@@ -211,6 +212,14 @@ export class StudyContributorComponent implements OnInit {
       personFamilyName: preValue.personFamilyName,
       personGivenName: preValue.personGivenName
     })
+  }
+  scrollToElement(): void {
+    setTimeout(() => {
+      const yOffset = -200; 
+      const element = document.getElementById('conpanel'+this.len);
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({top: y, behavior: 'smooth'});
+    });
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

@@ -36,6 +36,7 @@ export class StudyTitleComponent implements OnInit {
 
   @Output() emitTitle: EventEmitter<any> = new EventEmitter();
   studyTitle: StudyTitleInterface
+  len: any;
 
   constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
@@ -68,9 +69,9 @@ export class StudyTitleComponent implements OnInit {
   }
 
   addStudyTitle() {
-    const len = this.studyTitles().value.length;
-    if (len) {
-      if (this.studyTitles().value[len-1].titleTypeId && this.studyTitles().value[len-1].titleText) {
+    this.len = this.studyTitles().value.length;
+    if (this.len) {
+      if (this.studyTitles().value[this.len-1].titleTypeId && this.studyTitles().value[this.len-1].titleText) {
         this.studyTitles().push(this.newStudyTitle());
       } else {
         this.toastr.info('Please provide the Title Type and Title Value in the previously added Study Title');
@@ -226,6 +227,14 @@ export class StudyTitleComponent implements OnInit {
       return item;
     })
     this.emitTitle.emit({data: payload, isEmit: false});
+  }
+  scrollToElement(): void {
+    setTimeout(() => {
+      const yOffset = -200; 
+      const element = document.getElementById('titlepanel'+this.len);
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({top: y, behavior: 'smooth'});
+    });
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

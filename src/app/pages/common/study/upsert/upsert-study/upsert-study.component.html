@@ -105,7 +105,7 @@
                             <label for="minAge" class="font-style text-capitalize">Min age</label>
                             <input type="text" id="minAge" class="form-control" placeholder="Enter a min age value..."
                                 formControlName="minAge" *ngIf="!isView" />
-                            <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.minAge ? studyData?.minAge : 0}}</h6> 
+                            <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.minAge ? studyData?.minAge : ''}}</h6> 
                         </div>
                         <div class="col-4">
                             <label for="minAgeUnits" class="font-style text-capitalize">Units</label>
@@ -123,7 +123,7 @@
                             <label for="maxAge" class="font-style text-capitalize">Max age</label>
                             <input id="maxAge" type="text" class="form-control" placeholder="Enter a max age value..."
                                 formControlName="maxAge" *ngIf="!isView" />
-                            <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.maxAge ? studyData?.maxAge : 0}}</h6> 
+                            <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.maxAge ? studyData?.maxAge : ''}}</h6> 
                         </div>
                         <div class="col-4">
                             <label for="maxAgeUnits" class="font-style text-capitalize">Units</label>
@@ -146,8 +146,14 @@
             </div>
             <hr />
             <ng-container *ngIf="isEdit || isView">
-            
-                <div class="row">
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <h6 class="pt-3 font-style">Study identifier(s)</h6>
+                    </mat-expansion-panel-header>
+                    <app-study-identifier [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                    (emitIdentifier)="getIdentifier($event)"></app-study-identifier>
+                </mat-expansion-panel>
+                <!-- <div class="row">
                     <div class="col-12 text-center">
                         <h6 class="pt-3 font-style">Study identifier(s)</h6>
                     </div>
@@ -156,57 +162,92 @@
             
                 <app-study-identifier [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
                     (emitIdentifier)="getIdentifier($event)"></app-study-identifier>
-            
+             -->
                 <hr />
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <h6 class="pt-3 font-style">Study title(s)</h6>
+                    </mat-expansion-panel-header>
+                    <app-study-title [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                    [publicTitle]="publicTitle" (emitTitle)="getTitle($event)"></app-study-title>
+                </mat-expansion-panel>
             
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-12 text-center">
                         <h6 class="pt-3 font-style">Study title(s)</h6>
                     </div>
                 </div>
                 <br />
                 <app-study-title [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
-                    [publicTitle]="publicTitle" (emitTitle)="getTitle($event)"></app-study-title>
+                    [publicTitle]="publicTitle" (emitTitle)="getTitle($event)"></app-study-title> -->
                 <hr />
                 <ng-container *ngIf="studyType">
-                    <div class="row">
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <h6 class="pt-3 font-style">Study feature(s)</h6>
+                        </mat-expansion-panel-header>
+                        <app-study-feature [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                        (emitFeature)="getFeature($event)" [studyType]="studyType" *ngIf="studyType"></app-study-feature>
+                    </mat-expansion-panel>
+                    <!-- <div class="row">
                         <div class="col-12 text-center">
                             <h6 class="pt-3 font-style">Study feature(s)</h6>
                         </div>
                     </div>
                     <br />
                     <app-study-feature [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
-                        (emitFeature)="getFeature($event)" [studyType]="studyType" *ngIf="studyType"></app-study-feature>
+                        (emitFeature)="getFeature($event)" [studyType]="studyType" *ngIf="studyType"></app-study-feature> -->
                     <hr />
                 </ng-container>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <h6 class="pt-3 font-style">Study topic(s)</h6>
+                    </mat-expansion-panel-header>
+                    <app-study-topic [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                    (emitTopic)="getTopic($event)"></app-study-topic>
+                </mat-expansion-panel>
             
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-12 text-center">
                         <h6 class="pt-3 font-style">Study topic(s)</h6>
                     </div>
                 </div>
                 <br />
                 <app-study-topic [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
-                    (emitTopic)="getTopic($event)"></app-study-topic>
+                    (emitTopic)="getTopic($event)"></app-study-topic> -->
                 <hr />
-            
-                <div class="row">
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <h6 class="pt-3 font-style">Study relationship(s)</h6>
+                    </mat-expansion-panel-header>
+                    <app-study-relationship [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                    (emitRelation)="getRelation($event)"></app-study-relationship>
+                </mat-expansion-panel>
+
+                <!-- <div class="row">
                     <div class="col-12 text-center">
                         <h6 class="pt-3 font-style">Study relationship(s)</h6>
                     </div>
                 </div>
                 <br />
                 <app-study-relationship [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
-                    (emitRelation)="getRelation($event)"></app-study-relationship>
+                    (emitRelation)="getRelation($event)"></app-study-relationship> -->
                 <hr />
-                <div class="row">
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <h6 class="pt-3 font-style">Study contributor(s)</h6>
+                    </mat-expansion-panel-header>
+                    <app-study-contributor [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                    (emitContributor)="getContributor($event)"></app-study-contributor>
+                </mat-expansion-panel>
+                <!-- <div class="row">
                     <div class="col-12 text-center">
                         <h6 class="pt-3 font-style">Study contributor(s)</h6>
                     </div>
                 </div>
                 <br />
                 <app-study-contributor [sdSid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
-                    (emitContributor)="getContributor($event)"></app-study-contributor>
+                    (emitContributor)="getContributor($event)"></app-study-contributor> -->
                 <hr />
             </ng-container>
         </form>

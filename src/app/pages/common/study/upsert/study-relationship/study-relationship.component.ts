@@ -28,6 +28,7 @@ export class StudyRelationshipComponent implements OnInit {
   }
   @Output() emitRelation: EventEmitter<any> = new EventEmitter();
   studyRelationship: StudyRelationshipInterface;
+  len: any;
 
   constructor( private fb: FormBuilder, private studyService: StudyService, private toastr: ToastrService, private spinner: NgxSpinnerService, private modalService: NgbModal) {
     this.form = this.fb.group({
@@ -57,9 +58,9 @@ export class StudyRelationshipComponent implements OnInit {
   }
 
   addStudyRelation() {
-    const len = this.studyRelationships().value.length;
-    if (len) {
-      if (this.studyRelationships().value[len-1].relationshipTypeId && this.studyRelationships().value[len-1].targetSdSid) {
+    this.len = this.studyRelationships().value.length;
+    if (this.len) {
+      if (this.studyRelationships().value[this.len-1].relationshipTypeId && this.studyRelationships().value[this.len-1].targetSdSid) {
         this.studyRelationships().push(this.newStudyRelation());
       } else {
         this.toastr.info('Please provide the Relationship Type and Target study in the previously added Study Relationship');
@@ -197,4 +198,13 @@ export class StudyRelationshipComponent implements OnInit {
     term = term.toLocaleLowerCase();
     return item.sdSid.toLocaleLowerCase().indexOf(term) > -1 || item.displayTitle.toLocaleLowerCase().indexOf(term) > -1;
   }
+  scrollToElement(): void {
+    setTimeout(() => {
+      const yOffset = -200; 
+      const element = document.getElementById('relpanel'+this.len);
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({top: y, behavior: 'smooth'});
+    });
+  }
+
 }
