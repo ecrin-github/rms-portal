@@ -108,9 +108,9 @@ export class UpsertStudyComponent implements OnInit {
         const studyArray = this.studyTypes.filter((type: any) => type.id === this.studyForm.value.studyTypeId);
         this.studyTypeView = studyArray && studyArray.length ? studyArray[0] : {name: ''};
       }
-      if(this.isView || this.isEdit) {
-        this.studyTypeChange();
-      }
+      // if(this.isView || this.isEdit) {
+      //   this.studyTypeChange();
+      // }
     }, error => {
       this.spinner.hide();
       this.toastr.error(error.error.title);
@@ -214,6 +214,7 @@ export class UpsertStudyComponent implements OnInit {
       studyContributors: this.studyData.studyContributors ? this.studyData.studyContributors : [],
 
     });
+    this.studyTypeChange();
     // this.getStudyType();
     // this.getStudyStatus();
     // this.getGenderEligibility();

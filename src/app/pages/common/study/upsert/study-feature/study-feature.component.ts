@@ -141,7 +141,7 @@ export class StudyFeatureComponent implements OnInit {
       this.studyService.addStudyFeature(this.sdSid, item).subscribe((res: any) => {
         this.spinner.hide();
         if (res.statusCode === 200) {
-          this.toastr.success('Study Feature added successfully');
+          this.toastr.success('Study Feature updated successfully');
         } else {
           this.toastr.error(res.messages[0]);
         }
