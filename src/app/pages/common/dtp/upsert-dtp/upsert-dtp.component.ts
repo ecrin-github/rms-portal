@@ -32,6 +32,7 @@ export class UpsertDtpComponent implements OnInit {
   nextStep: number;
   buttonClick: any;
   showStatus: boolean = false;
+  showVariations: boolean = false;
 
   constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal) { 
@@ -51,6 +52,17 @@ export class UpsertDtpComponent implements OnInit {
       mdIntegratedWithMdr: null,
       availabilityRequested: null,
       availabilityConfirmed: null,
+      conformsToDefault: false,
+      variations: '',
+      repolsProxyProvider: false,
+      filePath: '',
+      repoSignatory1: '',
+      repoSignatory2: '',
+      providerSignatory1: '',
+      providerSignatory2: '',
+      requestSignatory1: '',
+      requestSignatory2: '',
+      notes: ''
     })
   }
 
@@ -77,6 +89,7 @@ export class UpsertDtpComponent implements OnInit {
       clickableSteps: false,
       navigation:true
     });
+    //checing if all the dates are entered in the current phase before going to the next phase
     this.wizard.on('change', (wizardObj) => {
       this.nextStep = this.buttonClick === 'next' ? wizardObj.getStep() + 1 : wizardObj.getStep() - 1;
       if (!this.isView && this.buttonClick === 'next') {
@@ -93,13 +106,13 @@ export class UpsertDtpComponent implements OnInit {
           }
         }
         if (this.nextStep - 1 === 3) {
-          if (this.form.value.mdAccessGranted === null || this.form.value.mdAccessGranted === '' || this.form.value.mdCompleteDate === null || this.form.value.mdCompleteDate === '') {
+          if (this.form.value.mdAccessGranted === null || this.form.value.mdAccessGranted === '' || this.form.value.mdCompleteDate === null || this.form.value.mdCompleteDate === '' || this.form.value.dtaAgreedDate === null || this.form.value.dtaAgreedDate === '') {
             this.wizard.stop();
             this.toastr.error('Complete all the fields to go to the next phase')
           }
         }
         if (this.nextStep - 1 === 4) {
-          if (this.form.value.dtaAgreedDate === null || this.form.value.dtaAgreedDate === '' || this.form.value.uploadAccessRequested === null || this.form.value.uploadAccessRequested === '' ||
+          if (this.form.value.uploadAccessRequested === null || this.form.value.uploadAccessRequested === '' ||
             this.form.value.uploadAccessConfirmed === null || this.form.value.uploadAccessConfirmed === '' || this.form.value.uploadsComplete === null || this.form.value.uploadsComplete === '') {
             this.wizard.stop();
             this.toastr.error('Complete all the fields to go to the next phase')
@@ -107,7 +120,7 @@ export class UpsertDtpComponent implements OnInit {
         }
         if (this.nextStep - 1 === 5) {
           if (this.form.value.qcChecksCompleted === null || this.form.value.qcChecksCompleted === '' || this.form.value.mdIntegratedWithMdr === null || this.form.value.mdIntegratedWithMdr === ''
-            || this.form.value.availabilityRequested === '' || this.form.value.availabilityRequested === null) {
+            || this.form.value.availabilityRequested === '' || this.form.value.availabilityRequested === null || this.form.value.availabilityConfirmed === '' || this.form.value.availabilityConfirmed === null) {
             this.wizard.stop();
             this.toastr.error('Complete all the fields to go to the next phase')
           }
@@ -165,6 +178,7 @@ export class UpsertDtpComponent implements OnInit {
     return date ? dateArray.getFullYear() + '/' + (dateArray.getMonth()+1) + '/' + (dateArray.getDate()+1) : '';
   }
   onSave() {
+    //setting local storage to reload the dashboard page when adding or editing the dtp
     if (localStorage.getItem('updateDtpList')) {
       localStorage.removeItem('updateDtpList');
     }
@@ -181,6 +195,7 @@ export class UpsertDtpComponent implements OnInit {
     payload.mdIntegratedWithMdr = this.dateToString(payload.mdIntegratedWithMdr);
     payload.availabilityRequested = this.dateToString(payload.availabilityRequested);
     payload.availabilityConfirmed = this.dateToString(payload.availabilityConfirmed);
+    //dynamically updating the status based on the filled in dates
     let status = ''
     if (this.form.value.initialContactDate !== null && this.form.value.initialContactDate !== '') {
       status = 'set up';
@@ -188,7 +203,7 @@ export class UpsertDtpComponent implements OnInit {
     if (this.form.value.initialContactDate !== null && this.form.value.initialContactDate !== '' && this.form.value.setUpCompleted !== null && this.form.value.setUpCompleted !== '') {
       status = 'preparation';
     }
-    if (this.form.value.initialContactDate !== null && this.form.value.initialContactDate !== '' && this.form.value.setUpCompleted !== null && this.form.value.setUpCompleted !== '' && this.form.value.mdAccessGranted !== null && this.form.value.mdAccessGranted !== '' && this.form.value.mdCompleteDate !== null && this.form.value.mdCompleteDate !== '') {
+    if (this.form.value.initialContactDate !== null && this.form.value.initialContactDate !== '' && this.form.value.setUpCompleted !== null && this.form.value.setUpCompleted !== '' && this.form.value.mdAccessGranted !== null && this.form.value.mdAccessGranted !== '' && this.form.value.mdCompleteDate !== null && this.form.value.mdCompleteDate !== '' && this.form.value.dtaAgreedDate !== null && this.form.value.dtaAgreedDate !== '') {
       status = 'transfer';
     }
     if (this.form.value.initialContactDate !== null && this.form.value.initialContactDate !== '' && this.form.value.setUpCompleted !== null && this.form.value.setUpCompleted !== '' && this.form.value.mdAccessGranted !== null && this.form.value.mdAccessGranted !== '' && this.form.value.mdCompleteDate !== null && this.form.value.mdCompleteDate !== '' && this.form.value.dtaAgreedDate !== null && this.form.value.dtaAgreedDate !== '' && this.form.value.uploadAccessRequested !== null && this.form.value.uploadAccessRequested !== '' &&
@@ -196,10 +211,11 @@ export class UpsertDtpComponent implements OnInit {
       status = 'checking';
     }
     if (this.form.value.initialContactDate !== null && this.form.value.initialContactDate !== '' && this.form.value.setUpCompleted !== null && this.form.value.setUpCompleted !== '' && this.form.value.mdAccessGranted !== null && this.form.value.mdAccessGranted !== '' && this.form.value.mdCompleteDate !== null && this.form.value.mdCompleteDate !== '' && this.form.value.dtaAgreedDate !== null && this.form.value.dtaAgreedDate !== '' && this.form.value.uploadAccessRequested !== null && this.form.value.uploadAccessRequested !== '' &&
-      this.form.value.uploadAccessConfirmed !== null && this.form.value.uploadAccessConfirmed !== '' && this.form.value.uploadsComplete !== null && this.form.value.uploadsComplete !== '' && this.form.value.qcChecksCompleted !== null && this.form.value.qcChecksCompleted !== '' && this.form.value.mdIntegratedWithMdr !== null && this.form.value.mdIntegratedWithMdr !== '' && this.form.value.availabilityRequested !== '' && this.form.value.availabilityRequested !== null) {
+      this.form.value.uploadAccessConfirmed !== null && this.form.value.uploadAccessConfirmed !== '' && this.form.value.uploadsComplete !== null && this.form.value.uploadsComplete !== '' && this.form.value.qcChecksCompleted !== null && this.form.value.qcChecksCompleted !== '' && this.form.value.mdIntegratedWithMdr !== null && this.form.value.mdIntegratedWithMdr !== '' && this.form.value.availabilityRequested !== '' && this.form.value.availabilityRequested !== null && this.form.value.availabilityConfirmed !== '' && this.form.value.availabilityRequested !== null) {
       status = 'complete';
     }
     payload.statusId = this.getStatusByName(status);
+    //checking if the entered dates are greater than the previous ones
     if (payload.initialContactDate > payload.setUpCompleted) {
       this.toastr.error('Initial contact date cannot be greater than Set Up completed date. Dates entered in one phase should not normally be before dtes in an earlier phase');
       return
@@ -375,6 +391,7 @@ export class UpsertDtpComponent implements OnInit {
     }, error => {})
   }
   onChange() {
+    //resetting the value when the status is changed
     const status = this.findStatus(parseInt(this.form.value.statusId));
     if (status.toLowerCase() === 'creation') {
       this.form.patchValue({
@@ -422,7 +439,6 @@ export class UpsertDtpComponent implements OnInit {
     }
     if (status.toLowerCase() === 'transfer') {
       this.form.patchValue({
-        dtaAgreedDate: null,
         uploadAccessRequested: null,
         uploadAccessConfirmed: null,
         uploadsComplete: null,
@@ -440,12 +456,10 @@ export class UpsertDtpComponent implements OnInit {
         availabilityConfirmed: null,
       })
     }
-    if (status.toLowerCase() === 'complete') {
-      this.form.patchValue({
-        availabilityConfirmed: null,
-      })
-    }
     this.currentStatus = status.toLowerCase() === 'creation' ? 1 : status.toLowerCase() === 'set up' ? 2 : status.toLowerCase() === 'preparation' ? 3 : status.toLowerCase() === 'transfer' ? 4 : status.toLowerCase() === 'checking' ? 5 : status.toLowerCase() === 'complete' ? 6 : 1;
     this.wizard.goTo(this.currentStatus);
+  }
+  conformsToDefaultChange() {
+    this.showVariations = this.form.value.conformsToDefault ? true : false
   }
 }

@@ -20,7 +20,7 @@ export class ObjectDateComponent implements OnInit {
   @Input() sdOid: string;
   @Input() isView: boolean;
   @Input() isEdit: boolean;
-  objectDate: ObjectDateInterface;
+  objectDateData: ObjectDateInterface;
   @Input() set initiateEmit(initiateEmit: any) {
     if (initiateEmit) {
       this.emitData();
@@ -72,7 +72,7 @@ export class ObjectDateComponent implements OnInit {
         this.objectDates().push(this.newObjectDate());
         this.showEndday.push(false);
       } else {
-        this.toastr.info('Please provide the Date Type in the previously added Object Date');
+        this.toastr.info('Please provide the Date Type and Start Year in the previously added Object Date');
       }
     } else {
       this.objectDates().push(this.newObjectDate());
@@ -112,8 +112,8 @@ export class ObjectDateComponent implements OnInit {
     this.objectService.getObjectDate(this.sdOid).subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
-        this.objectDate = res.data.length ? res.data : [];
-        this.patchForm(this.objectDate);
+        this.objectDateData = res.data.length ? res.data : [];
+        this.patchForm(this.objectDateData);
       }
     }, error => {
       this.spinner.hide();

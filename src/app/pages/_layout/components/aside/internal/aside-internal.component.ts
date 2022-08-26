@@ -19,6 +19,7 @@ export class AsideInternalComponent implements OnInit {
   brandClasses: string;
   asideMenuScroll = 1;
   asideSelfMinimizeToggle = false;
+  menuSelected: string = 'dashboard';
 
   constructor(private layout: LayoutService, private loc: Location) { }
 

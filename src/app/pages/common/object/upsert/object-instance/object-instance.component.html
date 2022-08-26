@@ -14,7 +14,7 @@
                 <div class="col-12 mb-5">
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
-                            {{objectInstance.value.repositoryOrg}}
+                            {{findResourceType(objectInstance.value.resourceTypeId)}} : {{objectInstance.value.repositoryOrg}}
                         </mat-expansion-panel-header>
                         <div class="row form-group">
                             <div class="col-md-6">
@@ -72,7 +72,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="resourceComments" class="font-style text-capitalize">Resource details</label>
+                                <label for="resourceComments" class="font-style text-capitalize">Comments</label>
                                 <textarea id="resourceComments" class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
                                     formControlName="resourceComments" *ngIf="!isView"></textarea>
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{objectInstance.value.resourceComments}}</h6>

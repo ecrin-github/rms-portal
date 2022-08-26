@@ -24,7 +24,7 @@
                     <label for="displayTitle" class="font-style text-capitalize">Display title</label>
                     <textarea id="displayTitle" cols="30" rows="3" class="form-control" placeholder="Enter display title..."
                     formControlName="displayTitle" *ngIf="!isView" ></textarea>
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.displayTitle}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.displayTitle}}</h6>
                 </div>
             </div>
 
@@ -33,13 +33,13 @@
                     <label for="doi" class="font-style text-capitalize">DOI</label>
                     <input id="doi" type="text" class="form-control" placeholder="Enter DOI..." formControlName="doi"
                         *ngIf="!isView" />
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.doi}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.doi}}</h6>
                 </div>
                 <div class="col-md-6">
                     <label for="version" class="font-style text-capitalize">Version</label>
                     <input type="text" id="version" class="form-control" placeholder="Enter version..." formControlName="version"
                         *ngIf="!isView" />
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.version}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.version}}</h6>
                 </div>
             </div>
 
@@ -50,7 +50,7 @@
                         <option selected disabled value="">Select an option...</option>
                         <option [value]=class.id *ngFor="let class of objectClass">{{class.name}}</option>
                     </select>
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{findObjectClass(objectData.objectClassId)}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{findObjectClass(objectData?.objectClassId)}}</h6>
                 </div>
                 <div class="col-md-6">
                     <label for="objectTypeId" class="font-style text-capitalize">Object type</label>
@@ -58,7 +58,7 @@
                         <option selected disabled value="">Select an option...</option>
                         <option [value]=type.id *ngFor="let type of objectType">{{type.name}}</option>
                     </select>
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{findobjectType(objectData.objectTypeId)}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{findobjectType(objectData?.objectTypeId)}}</h6>
                 </div>
             </div>
 
@@ -67,7 +67,7 @@
                     <label for="publicationYear" class="font-style text-capitalize">Publication year</label>
                     <input id="publicationYear" type="text" class="form-control" placeholder="Enter publication year..."
                         formControlName="publicationYear" *ngIf="!isView" />
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.publicationYear}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.publicationYear}}</h6>
                 </div>
                 <div class="col-md-6">
                     <label for="langCode" class="font-style text-capitalize">Language</label>
@@ -75,7 +75,7 @@
                         <option selected disabled value="">Select an option...</option>
                         <option [value]="language.code" *ngFor="let language of languageCode">{{language.code}}</option>
                     </select>
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.langCode}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.langCode}}</h6>
                 </div>
             </div>
             <div class="row form-group">
@@ -83,7 +83,7 @@
                     <label for="managingOrg" class="font-style text-capitalize">Managing organisation</label>
                     <input id="managingOrg" type="text" class="form-control" placeholder="Enter managing organisation..."
                         formControlName="managingOrg" *ngIf="!isView" />
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.managingOrg}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.managingOrg}}</h6>
                 </div>
                 <div class="col-md-6">
                     <label for="accessTypeId" class="font-style text-capitalize">Access type</label>
@@ -91,7 +91,7 @@
                         <option selected disabled value="">Select an option...</option>
                         <option [value]=access.id *ngFor="let access of accessType">{{access.name}}</option>
                     </select>
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{findAccessType(objectData.accessTypeId)}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{findAccessType(objectData?.accessTypeId)}}</h6>
                 </div>
             </div>
             <div class="row form-group">
@@ -101,7 +101,7 @@
                         <option selected disabled>Select an option...</option>
                         <option [value]=eosc *ngFor="let eosc of EoscCategory">{{eosc}}</option>
                     </select>
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.eoscCategory}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.eoscCategory}}</h6>
                 </div>
             </div>
             <hr />
@@ -116,13 +116,13 @@
                     <label for="accessDetails" class="font-style text-capitalize">Description</label>
                     <textarea id="accessDetails" class="form-control" cols="30" rows="5" placeholder="Enter description..."
                         formControlName="accessDetails" *ngIf="!isView"></textarea>
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.accessDetails}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.accessDetails}}</h6>
                 </div>
                 <div class="col-md-6">
                     <label for="accessDetailsUrl" class="font-style text-capitalize">URL</label>
                     <input id="accessDetailsUrl" type="text" class="form-control" placeholder="Enter a parameter..."
                         formControlName="accessDetailsUrl" *ngIf="!isView" />
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.accessDetailsUrl}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.accessDetailsUrl}}</h6>
                 </div>
             </div>
             <hr />
@@ -138,7 +138,7 @@
                         <label for="recordKeysDetails" class="font-style text-capitalize">Keys details</label>
                         <textarea id="recordKeysDetails" class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
                             formControlName="recordKeysDetails" *ngIf="!isView"></textarea>
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.recordKeysDetails}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.recordKeysDetails}}</h6>
                     </div>
                     <div class="col-md-6">
                         <label for="recordKeysTypeId" class="font-style text-capitalize">Keys type</label>
@@ -146,7 +146,7 @@
                             <option selected disabled value="">Select an option...</option>
                             <option [value]=key.id *ngFor="let key of keyType">{{key.name}}</option>
                         </select>
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{findKeyType(objectData.objectDatasets?.recordKeysTypeId)}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{findKeyType(objectData?.objectDatasets?.recordKeysTypeId)}}</h6>
                     </div>
                 </div>
                 <hr />
@@ -159,55 +159,55 @@
                 <br />
                 <div class="row form-group">
                     <div class="col-md-4">
-                        <label for="deidentTypeId" class="font-style text-capitalize">Deidentification type</label>
+                        <label for="deidentTypeId" class="font-style text-capitalize"> Type</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <select id="deidentTypeId" class="form-control" formControlName="deidentTypeId" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
                             <option [value]=identification.id *ngFor="let identification of deidentificationType">
                                 {{identification.name}}</option>
                         </select>
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{findDeidentificationType(objectData.objectDatasets?.deidentTypeId)}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{findDeidentificationType(objectData?.objectDatasets?.deidentTypeId)}}</h6>
                     </div>
                     <div class="col-md-4 form-check m-auto">
-                        <label class="form-check-label font-style text-capitalize" for="deidentDirect">Deidentification direct</label>
+                        <label class="form-check-label font-style text-capitalize" for="deidentDirect">Direct ID's</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="deidentDirect" formControlName="deidentDirect" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.deidentDirect}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.deidentDirect}}</h6>
                     </div>
                     <div class="col-md-4 form-check m-auto">
-                        <label class="form-check-label font-style text-capitalize" for="deidentHipaa">Deidentification HIPAA</label>
+                        <label class="form-check-label font-style text-capitalize" for="deidentHipaa">HIPAA Applied</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="deidentHipaa" formControlName="deidentHipaa" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.deidentHipaa}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.deidentHipaa}}</h6>
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-md-4 form-check m-auto">
-                        <label class="form-check-label font-style text-capitalize" for="deidentDates">Deidentification dates</label>
+                        <label class="form-check-label font-style text-capitalize" for="deidentDates">Dates Rebased</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="deidentDates" formControlName="deidentDates" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.deidentDates}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.deidentDates}}</h6>
                     </div>
                     <div class="col-md-4 form-check m-auto">
-                        <label class="form-check-label font-style text-capitalize" for="deidentNonarr">Deidentification NOARR</label>
+                        <label class="form-check-label font-style text-capitalize" for="deidentNonarr">No Narrative</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="deidentNonarr" formControlName="deidentNonarr" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.deidentNonarr}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.deidentNonarr}}</h6>
                     </div>
                     <div class="col-md-4 form-check m-auto">
-                        <label class="form-check-label font-style text-capitalize" for="deidentKanon">Deidentification KANON</label>
+                        <label class="form-check-label font-style text-capitalize" for="deidentKanon">KANON Applied</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="deidentKanon" formControlName="deidentKanon" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.deidentKanon}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.deidentKanon}}</h6>
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-md-6">
-                        <label for="deidentDetails" class="font-style text-capitalize">Deidentification details</label>
+                        <label for="deidentDetails" class="font-style text-capitalize">Details</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <textarea id="deidentDetails" class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
                             formControlName="deidentDetails" *ngIf="!isView"></textarea>
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.deidentDetails}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.deidentDetails}}</h6>
                     </div>
                 </div>
 
@@ -222,54 +222,54 @@
                 <br />
                 <div class="row form-group">
                     <div class="col-md-4">
-                        <label for="consentTypeId" class="font-style text-capitalize">Consent type</label>
+                        <label for="consentTypeId" class="font-style text-capitalize">Type</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <select id="consentTypeId" class="form-control" formControlName="consentTypeId" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
                             <option [value]=consent.id *ngFor="let consent of consentType">{{consent.name}}</option>
                         </select>
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{findConsentType(objectData.objectDatasets?.consentTypeId)}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{findConsentType(objectData?.objectDatasets?.consentTypeId)}}</h6>
                     </div>
                     <div class="col-md-4 form-check m-auto">
-                        <label class="form-check-label font-style text-capitalize" for="consentNoncommercial">Consent noncommercial</label>
+                        <label class="form-check-label font-style text-capitalize" for="consentNoncommercial">Noncommercial only</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="consentNoncommercial" formControlName="consentNoncommercial" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.consentNoncommercial}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.consentNoncommercial}}</h6>
                     </div>
                     <div class="col-md-4 form-check m-auto">
-                        <label class="form-check-label font-style text-capitalize" for="consentGeogRestrict">Consent geographical restrict</label>
+                        <label class="form-check-label font-style text-capitalize" for="consentGeogRestrict">Geographic restrictions</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="consentGeogRestrict" formControlName="consentGeogRestrict" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.consentGeogRestrict}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.consentGeogRestrict}}</h6>
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-md-4 form-check m-auto">
-                        <label class="form-check-label font-style text-capitalize" for="consentResearchType">Consent research type</label>
+                        <label class="form-check-label font-style text-capitalize" for="consentResearchType">Research type related</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="consentResearchType" formControlName="consentResearchType" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.consentResearchType}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.consentResearchType}}</h6>
                     </div>
                     <div class="col-md-4 form-check m-auto">
-                        <label class="form-check-label font-style text-capitalize" for="consentGeneticOnly">Consent genetic only</label>
+                        <label class="form-check-label font-style text-capitalize" for="consentGeneticOnly">Genetic research only</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="consentGeneticOnly" formControlName="consentGeneticOnly" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.consentGeneticOnly}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.consentGeneticOnly}}</h6>
                     </div>
                     <div class="col-md-4 form-check m-auto">
-                        <label class="form-check-label font-style text-capitalize" for="consentNoMethods">Consent no methods</label>
+                        <label class="form-check-label font-style text-capitalize" for="consentNoMethods">No methods</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="consentNoMethods" formControlName="consentNoMethods" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData.objectDatasets?.consentNoMethods}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.consentNoMethods}}</h6>
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-md-6">
-                        <label for="consentDetails" class="font-style text-capitalize">Consent details</label>
+                        <label for="consentDetails" class="font-style text-capitalize">Details</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <textarea id="consentDetails" class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
                             formControlName="consentDetails" *ngIf="!isView"></textarea>
-                        <h6  style="font-weight: 100;"*ngIf="isView">{{objectData.objectDatasets?.consentDetails}}</h6>
+                        <h6  style="font-weight: 100;"*ngIf="isView">{{objectData?.objectDatasets?.consentDetails}}</h6>
                     </div>
                 </div>
             </div>

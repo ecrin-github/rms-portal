@@ -36,6 +36,7 @@ export class CommonModalComponent implements OnInit {
     if (this.type === 'dataObject') {
       this.getObjectList();
     }
+    this.studyDropdownClose();
   }
   closeModal(data) {
     this.activeModal.close(data);
@@ -85,10 +86,14 @@ export class CommonModalComponent implements OnInit {
     })
   }
   studyDropdownClose() {
-    if (this.studyForm.value.targetSdSid.length) {
+    if (this.type === 'dataObject') {
       this.objectForm.controls.targetsdOid.enable();
-    } else {
-      this.objectForm.controls.targetsdOid.disable();
+    } else if (this.type === 'study') {
+      if (this.studyForm.value.targetSdSid.length) {
+        this.objectForm.controls.targetsdOid.enable();
+      } else {
+        this.objectForm.controls.targetsdOid.disable();
+      }
     }
   }
 }

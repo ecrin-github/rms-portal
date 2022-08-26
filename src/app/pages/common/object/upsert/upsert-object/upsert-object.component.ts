@@ -439,7 +439,7 @@ export class UpsertObjectComponent implements OnInit {
     return objectClassArray && objectClassArray.length ? objectClassArray[0].name : '';
   }
   findobjectType(id) {
-    const objectTypeArray: any = this.objectClass.filter((type: any) => type.id === id);
+    const objectTypeArray: any = this.objectType.filter((type: any) => type.id === id);
     return objectTypeArray && objectTypeArray.length ? objectTypeArray[0].name : '';
   }
   findAccessType(id) {

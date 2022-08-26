@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="row ml-3 form-group">
-            <div class="col-md-12" *ngIf="type === 'study'" [formGroup]="objectForm">
+            <div class="col-md-12" *ngIf="type === 'study' || type === 'dataObject'" [formGroup]="objectForm">
                 <label for="study" class="font-style text-capitalize">Object</label>
                 <ng-select [items]="objectType" bindLabel="sdOid" bindValue="sdOid" formControlName="targetsdOid"
                 [multiple]="true" [virtualScroll]="true" class="custom" notFoundText="No members found"
