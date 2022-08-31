@@ -393,17 +393,13 @@
                     </div>
                     <hr />
                     <div class="row form-group">
-                        <div [ngClass]="{'col-md-6': !showVariations, 'col-md-4': showVariations}">
+                        <div class="col-md-6">
                             <label class="form-check-label font-style text-capitalize" for="conformsToDefault">conforms to default</label>
                             <input class="form-check-input ml-4" type="checkbox" id="conformsToDefault" formControlName="conformsToDefault" (change)="conformsToDefaultChange()">
                         </div>
-                        <div class="col-md-4" *ngIf="showVariations">
+                        <div class="col-md-6" *ngIf="!showVariations">
                             <label for="variations" class="font-style text-capitalize">variations</label>
-                            <input type="text" class="form-control" id="variations" formControlName="variations">
-                        </div>
-                        <div [ngClass]="{'col-md-6': !showVariations, 'col-md-4': showVariations}">
-                            <label class="form-check-label font-style text-capitalize" for="repolsProxyProvider">repols proxy provider</label>
-                            <input class="form-check-input ml-4" type="checkbox" id="repolsProxyProvider" formControlName="repolsProxyProvider">
+                            <textarea cols="30" rows="3" class="form-control" id="variations" formControlName="variations"></textarea>
                         </div>
                     </div>
                     <div class="row form-group ">
@@ -414,13 +410,13 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-md-6">
-                            <label for="rsignatory1" class="font-style text-capitalize">RepoSignatory 1</label>
+                            <label for="rsignatory1" class="font-style text-capitalize">Repository Signatory 1</label>
                             <select id="rsignatory1" class="form-control" formControlName="repoSignatory1">
                                 <option value=""></option>
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="rsignatory2" class="font-style text-capitalize">RepoSignatory 2</label>
+                            <label for="rsignatory2" class="font-style text-capitalize">Repository Signatory 2</label>
                             <select id="rsignatory2" class="form-control" formControlName="repoSignatory2">
                                 <option value=""></option>
                             </select>
@@ -428,28 +424,14 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-md-6">
-                            <label for="psignatory1" class="font-style text-capitalize">ProviderSignatory 1</label>
+                            <label for="psignatory1" class="font-style text-capitalize">Provider Signatory 1</label>
                             <select id="psignatory1" class="form-control" formControlName="providerSignatory1">
                                 <option value=""></option>
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label for="psignatory2" class="font-style text-capitalize">ProviderSignatory 2</label>
+                            <label for="psignatory2" class="font-style text-capitalize">Provider Signatory 2</label>
                             <select id="psignatory2" class="form-control" formControlName="providerSignatory2">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row form-group">
-                        <div class="col-md-6">
-                            <label for="reqsignatory1" class="font-style text-capitalize">RequesterSignatory 1</label>
-                            <select id="reqsignatory1" class="form-control" formControlName="requestSignatory1">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="reqsignatory2" class="font-style text-capitalize">RequesterSignatory 2</label>
-                            <select id="reqsignatory2" class="form-control" formControlName="requestSignatory2">
                                 <option value=""></option>
                             </select>
                         </div>
@@ -475,7 +457,7 @@
                     <div class="row form-group">
                         <div class="col-md-12">
                             <span class="font-style">Associated Studies</span>
-                            <button class="btn btn-primary mr-5 float-right" (click)="addStudy()" *ngIf="!isView">Add Study</button>
+                            <button class="btn btn-primary float-right" (click)="addStudy()" *ngIf="!isView">Add Study</button>
                             <ng-container *ngIf="associatedStudies.length <= 0">
                                 <p>No Associated Study</p>
                             </ng-container>

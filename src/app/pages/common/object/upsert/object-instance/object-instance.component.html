@@ -1,3 +1,10 @@
+<div class="row pb-2" *ngIf="!isView">
+    <div class="col-12 text-right justify-content-center mt-5">
+        <button class="btn btn-primary" (click)="addObjectInstance()">
+            <i class="fa fa-plus"></i> Add Instance
+        </button>
+    </div>
+</div>
 <form [formGroup]="form">
     <ng-template [ngIf]="objectInstances().length <= 0">
         <div class="row">
@@ -89,11 +96,3 @@
         </div>
     </ng-template>
 </form>
-
-<div class="row" *ngIf="!isView">
-    <div class="col-12 text-center justify-content-center mt-5">
-        <button class="btn btn-primary" (click)="addObjectInstance()">
-            <i class="fa fa-plus"></i> Add new object instance
-        </button>
-    </div>
-</div>

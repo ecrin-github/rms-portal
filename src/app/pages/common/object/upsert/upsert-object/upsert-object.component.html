@@ -135,18 +135,18 @@
                 <br />
                 <div class="row form-group">
                     <div class="col-md-6">
-                        <label for="recordKeysDetails" class="font-style text-capitalize">Keys details</label>
-                        <textarea id="recordKeysDetails" class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
-                            formControlName="recordKeysDetails" *ngIf="!isView"></textarea>
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.recordKeysDetails}}</h6>
-                    </div>
-                    <div class="col-md-6">
                         <label for="recordKeysTypeId" class="font-style text-capitalize">Keys type</label>
                         <select id="recordKeysTypeId" class="form-control" formControlName="recordKeysTypeId" *ngIf="!isView">
                             <option selected disabled value="">Select an option...</option>
                             <option [value]=key.id *ngFor="let key of keyType">{{key.name}}</option>
                         </select>
                         <h6 style="font-weight: 100;" *ngIf="isView">{{findKeyType(objectData?.objectDatasets?.recordKeysTypeId)}}</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="recordKeysDetails" class="font-style text-capitalize">Keys details</label>
+                        <textarea id="recordKeysDetails" class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
+                            formControlName="recordKeysDetails" *ngIf="!isView"></textarea>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.recordKeysDetails}}</h6>
                     </div>
                 </div>
                 <hr />
@@ -274,101 +274,6 @@
                 </div>
             </div>
             <hr />
-
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <span class="pt-3 font-style">Object instance(s)</span>
-                </div>
-            </div>
-            <br />
-            <app-object-instance [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
-                (emitInstance)="getInstance($event)"></app-object-instance>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <span class="pt-3 font-style">Object title(s)</span>
-                </div>
-            </div>
-            <br />
-            <app-object-title [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
-                (emitTitle)="getTitle($event)"></app-object-title>
-            <hr />
-
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <span class="pt-3 font-style">Object date(s)</span>
-                </div>
-            </div>
-            <br />
-            <app-object-date [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
-                (emitDate)="getDate($event)"></app-object-date>
-            <hr />
-            <ng-container *ngIf="showContributor">
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <span class="pt-3 font-style">Object contributor(s)</span>
-                    </div>
-                </div>
-                <br />
-                <app-object-contributor [sdOid]="id" [isView]="isView" [isEdit]="isEdit"
-                    [initiateEmit]="initiateEmit" (emitContributor)="getContributor($event)"></app-object-contributor>
-                <hr />
-            </ng-container>
-            <ng-container *ngIf="showTopic">
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <span class="pt-3 font-style">Object topic(s)</span>
-                    </div>
-                </div>
-                <br />
-                <app-object-topic [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
-                    (emitTopic)="getTopic($event)"></app-object-topic>
-                <hr />
-            </ng-container>
-
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <span class="pt-3 font-style">Object identifier(s)</span>
-                </div>
-            </div>
-            <br />
-            <app-object-identifier [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
-                (emitIdentifier)="getIdentifier($event)"></app-object-identifier>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <span class="pt-3 font-style">Object descriptions(s)</span>
-                </div>
-            </div>
-            <br />
-            <app-object-description [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
-                (emitDescription)="getDescription($event)"></app-object-description>
-            <hr />
-
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <span class="pt-3 font-style">Object right(s)</span>
-                </div>
-            </div>
-            <br />
-            <app-object-right [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
-                (emitRight)="getRight($event)"></app-object-right>
-            <hr />
-
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <span class="pt-3 font-style">Object relationship(s)</span>
-                </div>
-            </div>
-            <br />
-            <app-object-relationship [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
-                (emitRelation)="getRelation($event)"></app-object-relationship>
-            <hr />
-
             <div class="row">
                 <div class="col-md-12 justify-content-center text-center">
                     <button class="btn btn-success mr-5" *ngIf="!isView" (click)="onClick()">{{isEdit ? 'Apply Changes'
@@ -376,6 +281,163 @@
                     <button class="btn btn-danger" (click)="close()"> {{isView ? 'Back' : 'Cancel'}}</button>
                 </div>
             </div>
+            <hr>
+            <ng-container *ngIf="isEdit || isView">
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <h6 class="pt-3 font-style">Object instance(s)</h6>
+                    </mat-expansion-panel-header>
+                    <app-object-instance [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                        (emitInstance)="getInstance($event)"></app-object-instance>
+                </mat-expansion-panel>
+                    <!-- <div class="row">
+                        <div class="col-md-12 text-center">
+                            <span class="pt-3 font-style">Object instance(s)</span>
+                        </div>
+                    </div>
+                <br />
+                <app-object-instance [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                    (emitInstance)="getInstance($event)"></app-object-instance> -->
+            
+                <hr />
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <h6 class="pt-3 font-style">Object title(s)</h6>
+                    </mat-expansion-panel-header>
+                    <app-object-title [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                        (emitTitle)="getTitle($event)"></app-object-title>
+                </mat-expansion-panel>
+                <!-- <div class="row">
+                    <div class="col-md-12 text-center">
+                        <span class="pt-3 font-style">Object title(s)</span>
+                    </div>
+                </div>
+                <br />
+                <app-object-title [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                    (emitTitle)="getTitle($event)"></app-object-title> -->
+                <hr />
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <h6 class="pt-3 font-style">Object date(s)</h6>
+                    </mat-expansion-panel-header>
+                    <app-object-date [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                        (emitDate)="getDate($event)"></app-object-date>
+                </mat-expansion-panel>
+                <!-- <div class="row">
+                    <div class="col-md-12 text-center">
+                        <span class="pt-3 font-style">Object date(s)</span>
+                    </div>
+                </div>
+                <br />
+                <app-object-date [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                    (emitDate)="getDate($event)"></app-object-date> -->
+                <hr />
+                <ng-container *ngIf="showTopic">
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <h6 class="pt-3 font-style">Object contributor(s)</h6>
+                        </mat-expansion-panel-header>
+                        <app-object-contributor [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                            (emitContributor)="getContributor($event)"></app-object-contributor>
+                    </mat-expansion-panel>
+                        <!-- <div class="row">
+                        <div class="col-md-12 text-center">
+                            <span class="pt-3 font-style">Object contributor(s)</span>
+                        </div>
+                    </div>
+                    <br />
+                    <app-object-contributor [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                        (emitContributor)="getContributor($event)"></app-object-contributor> -->
+                    <hr />
+                </ng-container>
+                <ng-container *ngIf="showTopic">
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <h6 class="pt-3 font-style">Object topic(s)</h6>
+                        </mat-expansion-panel-header>
+                        <app-object-topic [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                            (emitTopic)="getTopic($event)"></app-object-topic>
+                    </mat-expansion-panel>
+                    <!-- <div class="row">
+                        <div class="col-md-12 text-center">
+                            <span class="pt-3 font-style">Object topic(s)</span>
+                        </div>
+                    </div>
+                    <br />
+                    <app-object-topic [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                        (emitTopic)="getTopic($event)"></app-object-topic> -->
+                    <hr />
+                </ng-container>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <h6 class="pt-3 font-style">Object identifier(s)</h6>
+                    </mat-expansion-panel-header>
+                    <app-object-identifier [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                        (emitIdentifier)="getIdentifier($event)"></app-object-identifier>
+                </mat-expansion-panel>
+        
+                <!-- <div class="row">
+                    <div class="col-md-12 text-center">
+                        <span class="pt-3 font-style">Object identifier(s)</span>
+                    </div>
+                </div>
+                <br />
+                <app-object-identifier [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                    (emitIdentifier)="getIdentifier($event)"></app-object-identifier>
+             -->
+                <hr />
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <h6 class="pt-3 font-style">Object descriptions(s)</h6>
+                    </mat-expansion-panel-header>
+                    <app-object-description [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                        (emitDescription)="getDescription($event)"></app-object-description>
+                </mat-expansion-panel>
+            
+                <!-- <div class="row">
+                    <div class="col-md-12 text-center">
+                        <span class="pt-3 font-style">Object descriptions(s)</span>
+                    </div>
+                </div>
+                <br />
+                <app-object-description [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                    (emitDescription)="getDescription($event)"></app-object-description> -->
+                <hr />
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <h6 class="pt-3 font-style">Object right(s)</h6>
+                    </mat-expansion-panel-header>
+                    <app-object-right [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                        (emitRight)="getRight($event)"></app-object-right>
+                </mat-expansion-panel>
+            
+                <!-- <div class="row">
+                    <div class="col-md-12 text-center">
+                        <span class="pt-3 font-style">Object right(s)</span>
+                    </div>
+                </div>
+                <br />
+                <app-object-right [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                    (emitRight)="getRight($event)"></app-object-right> -->
+                <hr />
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <h6 class="pt-3 font-style">Object relationship(s)</h6>
+                    </mat-expansion-panel-header>
+                    <app-object-relationship [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                        (emitRelation)="getRelation($event)"></app-object-relationship>
+                </mat-expansion-panel>
+
+                <!-- <div class="row">
+                    <div class="col-md-12 text-center">
+                        <span class="pt-3 font-style">Object relationship(s)</span>
+                    </div>
+                </div>
+                <br />
+                <app-object-relationship [sdOid]="id" [isView]="isView" [isEdit]="isEdit" [initiateEmit]="initiateEmit"
+                    (emitRelation)="getRelation($event)"></app-object-relationship> -->
+                <hr />
+            </ng-container>
 
         </form>
     </div>

@@ -33,22 +33,34 @@ export class UpsertDupComponent implements OnInit {
   nextStep: number;
   buttonClick: any;
   showStatus: boolean = false;
+  showVariations: boolean = false;
 
-  constructor( private router: Router, private fb: FormBuilder, private dupService: DupService, private spinner: NgxSpinnerService, private toastr: ToastrService,
-    private activatedRoute: ActivatedRoute, private dtpService: DtpService, private modalService: NgbModal) { 
-      this.form = this.fb.group({
-        orgId: ['', Validators.required],
-        displayName: ['', Validators.required],
-        statusId: '',
-        initialContactDate: null,
-        setUpCompleted: null,
-        prereqsMet: null,
-        duaAgreedDate: null,
-        availabilityRequested: null,
-        availabilityConfirmed: null,
-        accessConfirmed: null,
-      })
-    }
+  constructor(private router: Router, private fb: FormBuilder, private dupService: DupService, private spinner: NgxSpinnerService, private toastr: ToastrService,
+    private activatedRoute: ActivatedRoute, private dtpService: DtpService, private modalService: NgbModal) {
+    this.form = this.fb.group({
+      orgId: ['', Validators.required],
+      displayName: ['', Validators.required],
+      statusId: '',
+      initialContactDate: null,
+      setUpCompleted: null,
+      prereqsMet: null,
+      duaAgreedDate: null,
+      availabilityRequested: null,
+      availabilityConfirmed: null,
+      accessConfirmed: null,
+      conformsToDefault: false,
+      variations: '',
+      repolsProxyProvider: false,
+      filePath: '',
+      repoSignatory1: '',
+      repoSignatory2: '',
+      providerSignatory1: '',
+      providerSignatory2: '',
+      requestSignatory1: '',
+      requestSignatory2: '',
+      notes: ''
+    })
+  }
 
   ngOnInit(): void {
     const todayDate = new Date();
@@ -371,5 +383,8 @@ export class UpsertDupComponent implements OnInit {
     }
     this.currentStatus = status.toLowerCase() === 'creation' ? 1 : status.toLowerCase() === 'set up' ? 2 : status.toLowerCase() === 'preparation' ? 3 : status.toLowerCase() === 'checking' ? 4 : status.toLowerCase() === 'complete' ? 5 : 1;
     this.wizard.goTo(this.currentStatus);
+  }
+  conformsToDefaultChange() {
+    this.showVariations = this.form.value.conformsToDefault ? true : false
   }
 }

@@ -31,7 +31,6 @@ export class UpsertObjectComponent implements OnInit {
   count = 0;
   showDatasetKey: boolean = false;
   showTopic: boolean = false;
-  showContributor: boolean = false;
   showIdentifier: boolean = false;
   showDescription: boolean = false;
   sticky: boolean = false;
@@ -43,26 +42,26 @@ export class UpsertObjectComponent implements OnInit {
       doi: '',
       displayTitle: '',
       version: '',
-      objectClassId: '',
-      objectTypeId: '',
-      publicationYear: '',
+      objectClassId: null,
+      objectTypeId: null,
+      publicationYear: null,
       langCode: '',
       managingOrg: '',
-      accessTypeId: '',
+      accessTypeId: null,
       accessDetails: '',
       accessDetailsUrl: '',
       eoscCategory: 0,
       objectDatasets: this.fb.group({
-        recordKeysTypeId: '',
+        recordKeysTypeId: null,
         recordKeysDetails: '',
-        deidentTypeId: '',
+        deidentTypeId: null,
         deidentDirect: false,
         deidentHipaa: false,
         deidentDates: false,
         deidentNonarr: false,
         deidentKanon: false,
         deidentDetails: '',
-        consentTypeId: '',
+        consentTypeId: null,
         consentNoncommercial: false,
         consentGeogRestrict: false,
         consentResearchType: false,
@@ -232,17 +231,13 @@ export class UpsertObjectComponent implements OnInit {
   patchObjectForm() {
     const arr: any = this.objectClass.filter((item:any) => item.name === 'Dataset');
     this.showDatasetKey = this.objectData.objectClassId === arr[0].id ? true : false;
-    const arrType: any = this.objectType.filter((item: any) => item.name.toLowerCase() === 'publication list');
-    // this.showDescription = this.objectData.objectTypeId === arrType[0].id ? true : false;
-    this.showTopic = this.objectData.objectTypeId === arrType[0].id ? true : false;
-    this.showContributor = this.objectData.objectTypeId === arrType[0].id ? true : false;
-    // this.showIdentifier = this.objectData.objectTypeId === arrType[0].id ? true : false;
-    const arrType1: any = this.objectType.filter((item: any) => item.name.toLowerCase() === 'journal article' || item.name.toLowerCase() === 'working paper / pre-print');
-    this.showTopic = this.objectData.objectTypeId === arrType1[0].id ? true : false;
-    this.showContributor = this.objectData.objectTypeId === arrType1[0].id ? true : false;
-    const arrType2: any = this.objectType.filter((item: any) => item.name.toLowerCase() === 'working paper / pre-print');
-    this.showTopic = this.objectData.objectTypeId === arrType2[0].id ? true : false;
-    this.showContributor = this.objectData.objectTypeId === arrType2[0].id ? true : false;
+    const arrType: any = this.objectType.filter((item: any) => item.name.toLowerCase() === 'publication list' || item.name.toLowerCase() === 'journal article' || item.name.toLowerCase() === 'working paper / pre-print');
+    arrType.map(item => {
+      if (item.id === this.objectData.objectTypeId) {
+        this.showTopic = true;
+        return;
+      }
+    });
     this.objectForm.patchValue({
       doi: this.objectData.doi,
       displayTitle: this.objectData.displayTitle,
@@ -293,7 +288,7 @@ export class UpsertObjectComponent implements OnInit {
     setTimeout(() => {
      this.initiateEmit = event.isEmit; 
     });
-    if (this.showContributor || this.showTopic ? this.count === 9 : this.count === 7) {
+    if (this.showTopic ? this.count === 9 : this.count === 7) {
       this.onSave();
     }
   }
@@ -302,7 +297,7 @@ export class UpsertObjectComponent implements OnInit {
       objectTitles: event.data
     })
     this.count += 1;
-    if (this.showContributor || this.showTopic ? this.count === 9 : this.count === 7) {
+    if (this.showTopic ? this.count === 9 : this.count === 7) {
       this.onSave();
     }
   }
@@ -311,7 +306,7 @@ export class UpsertObjectComponent implements OnInit {
       objectDates: event.data
     })
     this.count += 1;
-    if (this.showContributor || this.showTopic ? this.count === 9 : this.count === 7) {
+    if (this.showTopic ? this.count === 9 : this.count === 7) {
       this.onSave();
     }
   }
@@ -320,7 +315,7 @@ export class UpsertObjectComponent implements OnInit {
       objectContributors: event.data
     })
     this.count += 1;
-    if (this.showContributor || this.showTopic ? this.count === 9 : this.count === 7) {
+    if (this.showTopic ? this.count === 9 : this.count === 7) {
       this.onSave();
     }
   }
@@ -329,7 +324,7 @@ export class UpsertObjectComponent implements OnInit {
       objectTopics: event.data
     })
     this.count += 1;
-    if (this.showContributor || this.showTopic ? this.count === 9 : this.count === 7) {
+    if (this.showTopic ? this.count === 9 : this.count === 7) {
       this.onSave();
     }
   }
@@ -338,7 +333,7 @@ export class UpsertObjectComponent implements OnInit {
       objectIdentifiers: event.data
     })
     this.count += 1;
-    if (this.showContributor || this.showTopic ? this.count === 9 : this.count === 7) {
+    if (this.showTopic ? this.count === 9 : this.count === 7) {
       this.onSave();
     }
   }
@@ -347,7 +342,7 @@ export class UpsertObjectComponent implements OnInit {
       objectDescriptions: event.data
     })
     this.count += 1;
-    if (this.showContributor || this.showTopic ? this.count === 9 : this.count === 7) {
+    if (this.showTopic ? this.count === 9 : this.count === 7) {
       this.onSave();
     }
   }
@@ -356,7 +351,7 @@ export class UpsertObjectComponent implements OnInit {
       objectRights: event.data
     })
     this.count += 1;
-    if (this.showContributor || this.showTopic ? this.count === 9 : this.count === 7) {
+    if (this.showTopic ? this.count === 9 : this.count === 7) {
       this.onSave();
     }
   }
@@ -365,7 +360,7 @@ export class UpsertObjectComponent implements OnInit {
       objectRelationships: event.data
     })
     this.count += 1;
-    if (this.showContributor || this.showTopic ? this.count === 9 : this.count === 7) {
+    if (this.showTopic ? this.count === 9 : this.count === 7) {
       this.onSave();
     }
   }
@@ -469,14 +464,13 @@ export class UpsertObjectComponent implements OnInit {
     this.showDatasetKey = parseInt(this.objectForm.value.objectClassId) === arr[0].id ? true : false;
   }
   onTypeChange() {
-    const arrType: any = this.objectType.filter((item: any) => item.name.toLowerCase() === 'publication list');
-    this.showTopic = parseInt(this.objectForm.value.objectTypeId) === arrType[0].id ? true : false;
-    this.showContributor = parseInt(this.objectForm.value.objectTypeId) === arrType[0].id ? true : false;
-    const arrType1: any = this.objectType.filter((item: any) => item.name.toLowerCase() === 'journal article');
-    this.showTopic = parseInt(this.objectForm.value.objectTypeId) === arrType1[0].id ? true : false;
-    this.showContributor = parseInt(this.objectForm.value.objectTypeId) === arrType1[0].id ? true : false;
-    const arrType2: any = this.objectType.filter((item: any) => item.name.toLowerCase() === 'working paper / pre-print');
-    this.showTopic = parseInt(this.objectForm.value.objectTypeId) === arrType2[0].id ? true : false;
-    this.showContributor = parseInt(this.objectForm.value.objectTypeId) === arrType2[0].id ? true : false;
+    this.showTopic = false;
+    const arrType: any = this.objectType.filter((item: any) => item.name.toLowerCase() === 'publication list' || item.name.toLowerCase() === 'journal article' || item.name.toLowerCase() === 'working paper / pre-print');
+    arrType.map(item => {
+      if (item.id === parseInt(this.objectForm.value.objectTypeId)) {
+        this.showTopic = true;
+        return
+      }
+    });
   }
 }
