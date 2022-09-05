@@ -28,6 +28,7 @@ export class ObjectRelationshipComponent implements OnInit {
     }
   }
   @Output() emitRelation: EventEmitter<any> = new EventEmitter();
+  len: any;
 
   constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
@@ -57,9 +58,9 @@ export class ObjectRelationshipComponent implements OnInit {
   }
 
   addObjectRelation() {
-    const len = this.objectRelationships().value.length;
-    if (len) {
-      if (this.objectRelationships().value[len-1].relationshipTypeId && this.objectRelationships().value[len-1].targetSdOid) {
+    this.len = this.objectRelationships().value.length;
+    if (this.len) {
+      if (this.objectRelationships().value[this.len-1].relationshipTypeId && this.objectRelationships().value[this.len-1].targetSdOid) {
         this.objectRelationships().push(this.newObjectRelation());
       } else {
         this.toastr.info('Please provide the Relationship Type and Target Data Object in the previously added Object Relation');
@@ -192,5 +193,13 @@ export class ObjectRelationshipComponent implements OnInit {
   customSearchFn(term: string, item) {
     term = term.toLocaleLowerCase();
     return item.sdOid.toLocaleLowerCase().indexOf(term) > -1 || item.displayTitle.toLocaleLowerCase().indexOf(term) > -1;
+  }
+  scrollToElement(): void {
+    setTimeout(() => {
+      const yOffset = -200; 
+      const element = document.getElementById('objectrel'+this.len);
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({top: y, behavior: 'smooth'});
+    });
   }
 }

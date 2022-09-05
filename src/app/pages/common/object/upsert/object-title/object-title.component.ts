@@ -29,6 +29,7 @@ export class ObjectTitleComponent implements OnInit {
     }
   }
   @Output() emitTitle: EventEmitter<any> = new EventEmitter();
+  len: any;
 
   constructor( private fb: FormBuilder, private objectService: DataObjectService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
@@ -60,9 +61,9 @@ export class ObjectTitleComponent implements OnInit {
   }
 
   addObjectTitle() {
-    const len = this.objectTitles().value.length;
-    if (len) {
-      if (this.objectTitles().value[len-1].titleTypeId && this.objectTitles().value[len-1].titleText) {
+    this.len = this.objectTitles().value.length;
+    if (this.len) {
+      if (this.objectTitles().value[this.len-1].titleTypeId && this.objectTitles().value[this.len-1].titleText) {
         this.objectTitles().push(this.newObjectTitle());
       } else {
         this.toastr.info('Please provide the Title Type and Title text in the previously added Object Title');
@@ -186,6 +187,14 @@ export class ObjectTitleComponent implements OnInit {
       return item;
     })
     this.emitTitle.emit({data: payload, isEmit: false});
+  }
+  scrollToElement(): void {
+    setTimeout(() => {
+      const yOffset = -200; 
+      const element = document.getElementById('objecttitle'+this.len);
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({top: y, behavior: 'smooth'});
+    });
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

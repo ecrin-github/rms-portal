@@ -30,6 +30,7 @@ export class ObjectDateComponent implements OnInit {
   monthValues = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
   dayValues = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13','14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
   showEndday = [];
+  len: any;
 
   constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
@@ -66,9 +67,9 @@ export class ObjectDateComponent implements OnInit {
   }
 
   addObjectDate() {
-    const len = this.objectDates().value.length;
-    if (len) {
-      if (this.objectDates().value[len-1].dateTypeId && this.objectDates().value[len-1].startYear) {
+    this.len = this.objectDates().value.length;
+    if (this.len) {
+      if (this.objectDates().value[this.len-1].dateTypeId && this.objectDates().value[this.len-1].startYear) {
         this.objectDates().push(this.newObjectDate());
         this.showEndday.push(false);
       } else {
@@ -218,6 +219,14 @@ export class ObjectDateComponent implements OnInit {
   }
   onChange(index) {
     this.showEndday[index] = this.form.value.objectDates[index].dateIsRange === true || this.form.value.objectDates[index].dateIsRange === 'true' ? true : false;
+  }
+  scrollToElement(): void {
+    setTimeout(() => {
+      const yOffset = -200; 
+      const element = document.getElementById('objectdate'+this.len);
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({top: y, behavior: 'smooth'});
+    });
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

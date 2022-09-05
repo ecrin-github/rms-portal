@@ -24,6 +24,7 @@ export class ObjectRightComponent implements OnInit {
     }
   }
   @Output() emitRight: EventEmitter<any> = new EventEmitter();
+  len: any;
 
   constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
@@ -52,9 +53,9 @@ export class ObjectRightComponent implements OnInit {
   }
 
   addObjectRight() {
-    const len = this.objectRights().value.length;
-    if (len) {
-      if (this.objectRights().value[len-1].rightsName && this.objectRights().value[len-1].rightsUri) {
+    this.len = this.objectRights().value.length;
+    if (this.len) {
+      if (this.objectRights().value[this.len-1].rightsName && this.objectRights().value[this.len-1].rightsUri) {
         this.objectRights().push(this.newObjectRight());
       } else {
         this.toastr.info('Please provide the Rights Name and Rights URL in the previously added Object Right');
@@ -154,5 +155,12 @@ export class ObjectRightComponent implements OnInit {
     })
     this.emitRight.emit({data: payload, isEmit: false});
   }
-
+  scrollToElement(): void {
+    setTimeout(() => {
+      const yOffset = -200; 
+      const element = document.getElementById('objectright'+this.len);
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({top: y, behavior: 'smooth'});
+    });
+  }
 }

@@ -28,6 +28,7 @@ export class ObjectInstanceComponent implements OnInit {
     }
   }
   @Output() emitInstance: EventEmitter<any> = new EventEmitter();
+  len: any;
 
   constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
@@ -62,12 +63,12 @@ export class ObjectInstanceComponent implements OnInit {
   }
 
   addObjectInstance() {
-    const len = this.objectInstances().value.length;
-    if (len) {
-      if (this.objectInstances().value[len-1].urlAccessible === true || this.objectInstances().value[len-1].urlAccessible === 'true' ? this.objectInstances().value[len-1].repositoryOrg && this.objectInstances().value[len-1].url : this.objectInstances().value[len-1].repositoryOrg) {
+    this.len = this.objectInstances().value.length;
+    if (this.len) {
+      if (this.objectInstances().value[this.len-1].urlAccessible === true || this.objectInstances().value[this.len-1].urlAccessible === 'true' ? this.objectInstances().value[this.len-1].repositoryOrg && this.objectInstances().value[this.len-1].url : this.objectInstances().value[this.len-1].repositoryOrg) {
         this.objectInstances().push(this.newObjectInstance());
       } else {
-        if (this.objectInstances().value[len-1].urlAccessible === true || this.objectInstances().value[len-1].urlAccessible === 'true') {
+        if (this.objectInstances().value[this.len-1].urlAccessible === true || this.objectInstances().value[this.len-1].urlAccessible === 'true') {
           this.toastr.info('Please provide the Repository Organistion and URL in the previously added Object Instance');
         } else {
           this.toastr.info('Please provide the Repository Organistion in the previously added Object Instance');
@@ -209,6 +210,14 @@ export class ObjectInstanceComponent implements OnInit {
     } else {
       this.objectInstances().controls[index].get('url').disable();
     }
+  }
+  scrollToElement(): void {
+    setTimeout(() => {
+      const yOffset = -200; 
+      const element = document.getElementById('objectinst'+this.len);
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({top: y, behavior: 'smooth'});
+    });
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

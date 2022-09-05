@@ -1,6 +1,6 @@
 <div class="row pb-2" *ngIf="!isView">
     <div class="col-12 text-right justify-content-center mt-5">
-        <button class="btn btn-primary" (click)="addObjectInstance()">
+        <button class="btn btn-primary" (click)="addObjectInstance(); scrollToElement()">
             <i class="fa fa-plus"></i> Add Instance
         </button>
     </div>
@@ -18,8 +18,8 @@
         <div formArrayName="objectInstances">
             <div class="row" *ngFor="let objectInstance of objectInstances().controls; let i = index;"
                 [formGroupName]="i">
-                <div class="col-12 mb-5">
-                    <mat-expansion-panel>
+                <div class="col-12 mb-5" [id]="'objectinst'+i">
+                    <mat-expansion-panel [expanded]="objectInstance.value.alreadyExist ? false : true">
                         <mat-expansion-panel-header>
                             {{findResourceType(objectInstance.value.resourceTypeId)}} : {{objectInstance.value.repositoryOrg}}
                         </mat-expansion-panel-header>

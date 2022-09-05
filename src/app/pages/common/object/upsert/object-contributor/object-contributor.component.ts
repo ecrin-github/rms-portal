@@ -28,6 +28,7 @@ export class ObjectContributorComponent implements OnInit {
     }
   }
   @Output() emitContributor: EventEmitter<any> = new EventEmitter();
+  len: any;
 
   constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
@@ -61,9 +62,9 @@ export class ObjectContributorComponent implements OnInit {
   }
 
   addObjectContributor() {
-    const len = this.objectContributors().value.length;
-    if (len) {
-      if (this.objectContributors().value[len-1].contribTypeId) {
+    this.len = this.objectContributors().value.length;
+    if (this.len) {
+      if (this.objectContributors().value[this.len-1].contribTypeId) {
         this.objectContributors().push(this.newObjectContributor());
       } else {
         this.toastr.info('Please provide the Contributor type in the previously added Object Contributor');
@@ -187,7 +188,14 @@ export class ObjectContributorComponent implements OnInit {
   onChange(index) {
     this.isIndividual[index] = this.form.value.studyContributors[index].isIndividual === 'true' ? true : false;
   }
-
+  scrollToElement(): void {
+    setTimeout(() => {
+      const yOffset = -200; 
+      const element = document.getElementById('objectconst'+this.len);
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({top: y, behavior: 'smooth'});
+    });
+  }
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

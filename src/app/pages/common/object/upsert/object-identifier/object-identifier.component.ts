@@ -30,6 +30,7 @@ export class ObjectIdentifierComponent implements OnInit {
     }
   }
   @Output() emitIdentifier: EventEmitter<any> = new EventEmitter();
+  len: any;
 
   constructor( private fb: FormBuilder, private studyService: StudyService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
@@ -60,9 +61,9 @@ export class ObjectIdentifierComponent implements OnInit {
   }
 
   addObjectIdentifier() {
-    const len = this.objectIdentifiers().value.length;
-    if (len) {
-      if (this.objectIdentifiers().value[len-1].identifierTypeId && this.objectIdentifiers().value[len-1].identifierValue) {
+    this.len = this.objectIdentifiers().value.length;
+    if (this.len) {
+      if (this.objectIdentifiers().value[this.len-1].identifierTypeId && this.objectIdentifiers().value[this.len-1].identifierValue) {
         this.objectIdentifiers().push(this.newObjectIdentifier());
       } else {
         this.toastr.info('Please provide the Identifier Type and Identifier Value in the previously added Object Identifier');
@@ -187,6 +188,14 @@ export class ObjectIdentifierComponent implements OnInit {
       return item;
     })
     this.emitIdentifier.emit({data: payload, isEmit: false});
+  }
+  scrollToElement(): void {
+    setTimeout(() => {
+      const yOffset = -200; 
+      const element = document.getElementById('objectiden'+this.len);
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({top: y, behavior: 'smooth'});
+    });
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

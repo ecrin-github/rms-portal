@@ -28,6 +28,7 @@ export class ObjectDescriptionComponent implements OnInit {
     }
   }
   @Output() emitDescription: EventEmitter<any> = new EventEmitter();
+  len: any;
   
   constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
@@ -59,9 +60,9 @@ export class ObjectDescriptionComponent implements OnInit {
   }
 
   addObjectDescription() {
-    const len = this.objectDescriptions().value.length;
-    if (len) {
-      if (this.objectDescriptions().value[len-1].descriptionTypeId && this.objectDescriptions().value[len-1].label) {
+    this.len = this.objectDescriptions().value.length;
+    if (this.len) {
+      if (this.objectDescriptions().value[this.len-1].descriptionTypeId && this.objectDescriptions().value[this.len-1].label) {
         this.objectDescriptions().push(this.newObjectDescription());
       } else {
         this.toastr.info('Please provide the Description Type and Description label in the previously added Object Description');
@@ -185,6 +186,14 @@ export class ObjectDescriptionComponent implements OnInit {
       return item;
     })
     this.emitDescription.emit({data: payload, isEmit: false});
+  }
+  scrollToElement(): void {
+    setTimeout(() => {
+      const yOffset = -200; 
+      const element = document.getElementById('objectdesc'+this.len);
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({top: y, behavior: 'smooth'});
+    });
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

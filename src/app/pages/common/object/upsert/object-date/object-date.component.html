@@ -1,6 +1,6 @@
 <div class="row pb-2" *ngIf="!isView">
     <div class="col-12 justify-content-center text-right mt-5">
-        <button class="btn btn-primary" (click)="addObjectDate()">
+        <button class="btn btn-primary" (click)="addObjectDate(); scrollToElement()">
             <i class="fa fa-plus"></i> Add Date
         </button>
     </div>
@@ -16,8 +16,8 @@
     <ng-template [ngIf]="objectDates().length > 0">
         <div formArrayName="objectDates">
             <div class="row" *ngFor="let objectDate of objectDates().controls; let i = index;" [formGroupName]="i">
-                <div class="col-12 mb-5">
-                    <mat-expansion-panel>
+                <div class="col-12 mb-5" [id]="'objectdate'+i">
+                    <mat-expansion-panel [expanded]="objectDate.value.alreadyExist ? false : true">
                         <mat-expansion-panel-header>
                             {{findDateType(objectDate.value.dateTypeId)}} : {{objectDateData[i]?.startYear}}-{{objectDate.value.startMonth}}-{{objectDate.value.startDay}}
                         </mat-expansion-panel-header>

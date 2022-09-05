@@ -28,6 +28,7 @@ export class ObjectTopicComponent implements OnInit {
     }
   }
   @Output() emitTopic: EventEmitter<any> = new EventEmitter();
+  len: any;
 
   constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private objectService: DataObjectService, private modalService: NgbModal) {
     this.form = this.fb.group({
@@ -61,9 +62,9 @@ export class ObjectTopicComponent implements OnInit {
   }
 
   addObjectTopic() {
-    const len = this.objectTopics().value.length;
-    if (len) {
-      if (this.objectTopics().value[len-1].topicTypeId && this.objectTopics().value[len-1].meshValue) {
+    this.len = this.objectTopics().value.length;
+    if (this.len) {
+      if (this.objectTopics().value[this.len-1].topicTypeId && this.objectTopics().value[this.len-1].meshValue) {
         this.objectTopics().push(this.newObjectTopic());
       } else {
         this.toastr.info('Please provide the Topic Type and Topic Value in the previously added Object Topic');
@@ -183,6 +184,14 @@ export class ObjectTopicComponent implements OnInit {
       return item;
     })
     this.emitTopic.emit({data: payload, isEmit: false});
+  }
+  scrollToElement(): void {
+    setTimeout(() => {
+      const yOffset = -200; 
+      const element = document.getElementById('objecttopic'+this.len);
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({top: y, behavior: 'smooth'});
+    });
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();
