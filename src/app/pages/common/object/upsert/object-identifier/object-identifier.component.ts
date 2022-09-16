@@ -8,6 +8,7 @@ import { DataObjectService } from 'src/app/_rms/services/entities/data-object/da
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
+import { ObjectLookupService } from 'src/app/_rms/services/entities/object-lookup/object-lookup.service';
 
 
 
@@ -32,7 +33,7 @@ export class ObjectIdentifierComponent implements OnInit {
   @Output() emitIdentifier: EventEmitter<any> = new EventEmitter();
   len: any;
 
-  constructor( private fb: FormBuilder, private studyService: StudyService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: FormBuilder, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectIdentifiers: this.fb.array([])
     });
@@ -89,18 +90,18 @@ export class ObjectIdentifierComponent implements OnInit {
     }
   }
   getIdentifierType() {
-    const getIdentifierType$ = this.studyService.getIdentifierType().subscribe((res:any) => {
+    const getIdentifierType$ = this.objectLookupService.getObjectIdentifierTypes().subscribe((res:any) => {
       if(res.data) {
-        this.identifierType = res.data.filter(item => item.appliesTo === 'Data Object' || item.appliesTo === 'All');
+        this.identifierType = res.data;
       }
     }, error => {
-      console.log('error', error);
+      this.toastr.error(error.error.title);
     });
     this.subscription.add(getIdentifierType$);
   }
   getObjectIdentifier() {
     this.spinner.show();
-    this.objectService.getObjectIdentifier(this.sdOid).subscribe((res: any) => {
+    this.objectService.getObjectIdentifiers(this.sdOid).subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectIdentifier = res.data.length ? res.data : [];

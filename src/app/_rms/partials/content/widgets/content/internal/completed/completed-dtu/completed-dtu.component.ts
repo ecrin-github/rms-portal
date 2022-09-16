@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { DashboardService } from 'src/app/_rms/services/entities/dashboard/dashboard.service';
 import {LayoutService} from '../../../../../../../services/layout/layout.service';
@@ -9,6 +9,7 @@ import {LayoutService} from '../../../../../../../services/layout/layout.service
   templateUrl: './completed-dtu.component.html',
 })
 export class CompletedDtuComponent implements OnInit {
+  @Input() dtpCompleted: number = 0;
   colorsGrayGray100: string;
   colorsGrayGray700: string;
   colorsThemeBaseSuccess: string;
@@ -32,9 +33,10 @@ export class CompletedDtuComponent implements OnInit {
   ngOnInit(): void {
     this.getStatistics();
   }
+  
   getStatistics() {
     this.dashboardService.getDtpStatistics().subscribe((res: any) => {
-      this.dataCompleted = Math.round((((res.total-res.uncompleted)/res.total)*100)*100)/100;
+      this.dataCompleted = Math.round((res.data[0].statValue-res.data[1].statValue)*100/res.data[0].statValue);
       this.chartOptions = this.getChartOptions();
     }, error => {
       this.toastr.error(error.error.title);

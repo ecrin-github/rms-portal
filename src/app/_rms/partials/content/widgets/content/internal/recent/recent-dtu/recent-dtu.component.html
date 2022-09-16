@@ -6,7 +6,7 @@
       <div class="col-7 col-sm-6 col-md-7">
         <div class="row">
           <div class="col-md-12 font-weight-bolder text-dark" style="font-size: 1.27rem;">Recent Data Transfers</div>
-          <div class="col-md-12 text-muted font-weight-bold font-size-sm">10 recently added Data Transfers records</div>
+          <div class="col-md-12 text-muted font-weight-bold font-size-sm">Showing the 10 most recently added DTPs, from a total of {{dtpTotal}}.</div>
         </div>
       </div>
       <div class="col-5 col-sm-6 col-md-5 text-right">
@@ -32,7 +32,7 @@
           <ng-container matColumnDef="organisation">
             <mat-header-cell *matHeaderCellDef> Organisation </mat-header-cell>
             <mat-cell *matCellDef="let row">
-              {{findOrganization(row.orgId)}}
+              {{row.orgName}}
             </mat-cell>
           </ng-container>
       
@@ -48,7 +48,7 @@
       
           <ng-container matColumnDef="status">
             <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{findStatus(row.statusId)}} </mat-cell>
+            <mat-cell *matCellDef="let row"> {{row.statusName}} </mat-cell>
           </ng-container>
       
           <ng-container matColumnDef="actions">

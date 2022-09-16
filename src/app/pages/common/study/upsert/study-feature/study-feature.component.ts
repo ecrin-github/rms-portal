@@ -4,9 +4,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { combineLatest, Subscription } from 'rxjs';
-import { StudyFeatureInterface } from 'src/app/_rms/interfaces/study/study-feature.interface';
+import { StudyLookupService } from 'src/app/_rms/services/entities/study-lookup/study-lookup.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
-import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
 @Component({
   selector: 'app-study-feature',
@@ -42,7 +41,7 @@ export class StudyFeatureComponent implements OnInit {
   showAll: boolean = true;
 
 
-  constructor(private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor(private fb: FormBuilder, private studyService: StudyService, private studyLookupService: StudyLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       studyFeatures: this.fb.array([])
     });
@@ -70,7 +69,7 @@ export class StudyFeatureComponent implements OnInit {
   }
   getStudyFeature() {
     this.spinner.show();
-    this.studyService.getStudyFeature(this.sdSid).subscribe((res: any) => {
+    this.studyService.getStudyFeatures(this.sdSid).subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.studyFeature = res.data.length ? res.data : [];
@@ -92,8 +91,8 @@ export class StudyFeatureComponent implements OnInit {
     })
   }
   getFeature() {
-    const getFeatureType$ = this.studyService.getFeatureType();
-    const getFeatureValue$ = this.studyService.getFeatureValue();
+    const getFeatureType$ = this.studyLookupService.getFeatureTypes();
+    const getFeatureValue$ = this.studyLookupService.getFeatureValues();
     this.spinner.show();
     const combine$ = combineLatest([getFeatureType$, getFeatureValue$]).subscribe(([featureType, featureValue] : [any, any]) => {
       this.spinner.hide();

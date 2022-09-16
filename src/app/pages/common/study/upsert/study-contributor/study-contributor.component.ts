@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { StudyContributorInterface } from 'src/app/_rms/interfaces/study/study-contributor.interface';
+import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
@@ -32,7 +33,7 @@ export class StudyContributorComponent implements OnInit {
   arrLength = 0;
   len: any;
 
-  constructor( private fb: FormBuilder, private objectService: DataObjectService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
+  constructor( private fb: FormBuilder, private commonLookupService: CommonLookupService, private objectService: DataObjectService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
       studyContributors: this.fb.array([])
     });
@@ -98,7 +99,7 @@ export class StudyContributorComponent implements OnInit {
     }
   }
   getContributorType() {
-    const getContributorType$ = this.objectService.getContributorType().subscribe((res:any) => {
+    const getContributorType$ = this.commonLookupService.getContributorTypes().subscribe((res:any) => {
       if(res.data) {
         this.contributorType = res.data;
       }
@@ -109,7 +110,7 @@ export class StudyContributorComponent implements OnInit {
   }
   getStudyContributor() {
     this.spinner.show();
-    this.studyService.getStudyContributor(this.sdSid).subscribe((res: any) => {
+    this.studyService.getStudyContributors(this.sdSid).subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.studyContributor = res.data.length ? res.data : [];

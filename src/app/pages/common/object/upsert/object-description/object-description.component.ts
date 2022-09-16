@@ -5,7 +5,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ObjectDescriptionInterface } from 'src/app/_rms/interfaces/data-object/object-description.interface';
+import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
+import { ObjectLookupService } from 'src/app/_rms/services/entities/object-lookup/object-lookup.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
 @Component({
@@ -30,7 +32,7 @@ export class ObjectDescriptionComponent implements OnInit {
   @Output() emitDescription: EventEmitter<any> = new EventEmitter();
   len: any;
   
-  constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: FormBuilder, private commonLookupService: CommonLookupService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectDescriptions: this.fb.array([])
     })
@@ -88,7 +90,7 @@ export class ObjectDescriptionComponent implements OnInit {
     }
   }
   getDescriptionType() {
-    const getDescriptionType$ = this.objectService.getDescriptionType().subscribe((res: any) => {
+    const getDescriptionType$ = this.objectLookupService.getDescriptionTypes().subscribe((res: any) => {
       if(res.data) {
         this.descriptionType = res.data;
       }
@@ -98,7 +100,7 @@ export class ObjectDescriptionComponent implements OnInit {
     this.subscription.add(getDescriptionType$);
   }
   getLanguageCode() {
-    const getLanguageCode$ = this.objectService.getLanguageCode().subscribe((res:any) => {
+    const getLanguageCode$ = this.commonLookupService.getLanguageCodes().subscribe((res:any) => {
       if(res.data) {
         this.languageCode = res.data;
       }
@@ -109,7 +111,7 @@ export class ObjectDescriptionComponent implements OnInit {
   }
   getObjectDescription() {
     this.spinner.show();
-    this.objectService.getObjectDescription(this.sdOid).subscribe((res: any) => {
+    this.objectService.getObjectDescriptions(this.sdOid).subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectDescription = res.data.length ? res.data : [];

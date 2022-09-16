@@ -5,7 +5,7 @@
     <h3 class="card-title align-items-start flex-column">
       <span class="card-label font-weight-bolder text-dark">Recent Data objects</span>
       <span class="text-muted mt-3 font-weight-bold font-size-sm"
-        >Showing 10 recently added Data Objects of total {{totalObject}} Data Objects</span
+        >Showing the 10 most recently added data objects, from a total of {{objectTotal}}.</span
       >
     </h3>
     <div class="card-toolbar">
@@ -39,13 +39,13 @@
 
       <ng-container matColumnDef="type">
           <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{findObjectType(row.objectTypeId)}} </mat-cell>
+          <mat-cell *matCellDef="let row"> {{row.typeName}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="linkedStudy">
           <mat-header-cell *matHeaderCellDef> Linked to studies </mat-header-cell>
           <mat-cell *matCellDef="let row">
-              {{findStudy(row.sdSid)}}
+              {{row.studyName}}
               <!-- <a [routerLink]="['/studies', row.linkedStudyId.toString(), 'view']" target="_blank">
                   Study {{row.linkedStudyId.toString()}}
               </a> -->

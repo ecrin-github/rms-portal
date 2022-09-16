@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ObjectDateInterface } from 'src/app/_rms/interfaces/data-object/object-date.interface';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
+import { ObjectLookupService } from 'src/app/_rms/services/entities/object-lookup/object-lookup.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
 @Component({
@@ -32,7 +33,7 @@ export class ObjectDateComponent implements OnInit {
   showEndday = [];
   len: any;
 
-  constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: FormBuilder, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectDates: this.fb.array([])
     })
@@ -99,7 +100,7 @@ export class ObjectDateComponent implements OnInit {
     }
   }
   getDateType() {
-    const getDateType$ = this.objectService.getDateType().subscribe((res: any) => {
+    const getDateType$ = this.objectLookupService.getDateTypes().subscribe((res: any) => {
       if(res.data) {
         this.dateType = res.data
       }
@@ -110,7 +111,7 @@ export class ObjectDateComponent implements OnInit {
   }
   getObjectDate() {
     this.spinner.show();
-    this.objectService.getObjectDate(this.sdOid).subscribe((res: any) => {
+    this.objectService.getObjectDates(this.sdOid).subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectDateData = res.data.length ? res.data : [];

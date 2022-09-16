@@ -9,6 +9,8 @@ import * as _ from 'lodash';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
+import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
+import { StudyLookupService } from 'src/app/_rms/services/entities/study-lookup/study-lookup.service';
 
 @Component({
   selector: 'app-study-identifier',
@@ -34,7 +36,7 @@ export class StudyIdentifierComponent implements OnInit {
   @Output() emitIdentifier: EventEmitter<any> = new EventEmitter();
   @ViewChildren("panel", { read: ElementRef }) panel: QueryList<ElementRef>;
 
-  constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private dtpService: DtpService) { 
+  constructor( private fb: FormBuilder, private studyService: StudyService, private studyLookupService: StudyLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private dtpService: DtpService, private commonLookup: CommonLookupService) { 
     this.form = this.fb.group({
       studyIdentifiers: this.fb.array([])
     });
@@ -98,7 +100,7 @@ export class StudyIdentifierComponent implements OnInit {
   }
   getOrganization() {
     this.spinner.show();
-    this.dtpService.getOrganizationList().subscribe((res: any) => {
+    this.commonLookup.getOrganizationList().subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.organizationList = res.data;
@@ -112,10 +114,9 @@ export class StudyIdentifierComponent implements OnInit {
     setTimeout(() => {
       this.spinner.show(); 
     });
-    const getIdentifierType$ = this.studyService.getIdentifierType().subscribe((res: any) => {
-      if(res.data) {
-        const temp = res.data.filter(item => item.appliesTo === 'Study' || item.appliesTo === 'All');
-        this.identifierTypes = _.sortBy(temp, ['listOrder']);
+    const getIdentifierType$ = this.studyLookupService.getStudyIdentifierTypes().subscribe((res: any) => {
+      if(res && res.data) {
+        this.identifierTypes = res.data;
       }
       this.spinner.hide();
     }, error => {
@@ -126,7 +127,7 @@ export class StudyIdentifierComponent implements OnInit {
   }
   getStudyIdentifier() {
     this.spinner.show();
-    this.studyService.getStudyIdentifier(this.sdSid).subscribe((res:any) => {
+    this.studyService.getStudyIdentifiers(this.sdSid).subscribe((res:any) => {
       if(res && res.data) {
         this.studyIdentifier = res.data.length ? res.data : [];
         this.patchForm(this.studyIdentifier);
@@ -207,7 +208,7 @@ export class StudyIdentifierComponent implements OnInit {
   }
   findOrganization(id) {
     const organizationArray: any = this.organizationList.filter((type: any) => type.id === id);
-    return organizationArray && organizationArray.length ? organizationArray[0].defaultName : ''
+    return organizationArray && organizationArray.length ? organizationArray[0].name : ''
   }
   emitData() {
     const payload = this.form.value.studyIdentifiers.map(item => {

@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { StudyTopicInterface } from 'src/app/_rms/interfaces/study/study-topic.interface';
+import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
@@ -30,7 +31,7 @@ export class StudyTopicComponent implements OnInit {
   controlledTerminology = [];
   len: any;
 
-  constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
+  constructor( private fb: FormBuilder, private commonLookupService: CommonLookupService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
       studyTopics: this.fb.array([])
     })
@@ -89,7 +90,7 @@ export class StudyTopicComponent implements OnInit {
     }
   }
   getTopicType() {
-    const getTopicType$ = this.studyService.getTopicType().subscribe((res: any) => {
+    const getTopicType$ = this.commonLookupService.getTopicTypes().subscribe((res: any) => {
       if (res.data) {
         this.topicTypes = res.data;
       }
@@ -102,7 +103,7 @@ export class StudyTopicComponent implements OnInit {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    this.studyService.getTopicVocabulary().subscribe((res: any) => {
+    this.commonLookupService.getTopicVocabularies().subscribe((res: any) => {
       this.spinner.hide();
       if (res.data) {
         this.controlledTerminology = res.data;
@@ -114,7 +115,7 @@ export class StudyTopicComponent implements OnInit {
   }
   getStudyTopic() {
     this.spinner.show();
-    this.studyService.getStudyTopic(this.sdSid).subscribe((res: any) => {
+    this.studyService.getStudyTopics(this.sdSid).subscribe((res: any) => {
       if (res && res.data) {
         this.studyTopic = res.data.length ? res.data : [];
         this.patchForm(this.studyTopic);

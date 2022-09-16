@@ -5,6 +5,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { StudyTitleInterface } from 'src/app/_rms/interfaces/study/study-title.interface';
+import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
+import { StudyLookupService } from 'src/app/_rms/services/entities/study-lookup/study-lookup.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
@@ -38,7 +40,7 @@ export class StudyTitleComponent implements OnInit {
   studyTitle: StudyTitleInterface
   len: any;
 
-  constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: FormBuilder, private studyService: StudyService, private commonLookupService: CommonLookupService, private studyLookupService: StudyLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       studyTitles: this.fb.array([])
     });
@@ -123,7 +125,7 @@ export class StudyTitleComponent implements OnInit {
     setTimeout(() => {
       this.spinner.show(); 
     });
-    const getTitleType$ = this.studyService.getTitleType().subscribe((res:any) => {
+    const getTitleType$ = this.studyLookupService.getStudyTitleTypes().subscribe((res:any) => {
       this.spinner.hide();
       if(res.data) {
         this.titleType = res.data;
@@ -138,7 +140,7 @@ export class StudyTitleComponent implements OnInit {
     setTimeout(() => {
       this.spinner.show(); 
     });
-    this.studyService.getLanguageCode().subscribe((res: any) => {
+    this.commonLookupService.getLanguageCodes().subscribe((res: any) => {
       this.spinner.hide();
       if (res.data) {
         this.languageCodes = res.data;
@@ -150,7 +152,7 @@ export class StudyTitleComponent implements OnInit {
   }
   getStudyTitle() {
     this.spinner.show();
-    this.studyService.getStudyTitle(this.sdSid).subscribe((res: any) => {
+    this.studyService.getStudyTitles(this.sdSid).subscribe((res: any) => {
       if (res && res.data) {
         this.studyTitle = res.data.length ? res.data : [];
         this.patchForm(this.studyTitle);

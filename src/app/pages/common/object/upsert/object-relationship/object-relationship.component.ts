@@ -6,6 +6,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ObjectRelationshipInterface } from 'src/app/_rms/interfaces/data-object/object-relationship.interface';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
+import { ListService } from 'src/app/_rms/services/entities/list/list.service';
+import { ObjectLookupService } from 'src/app/_rms/services/entities/object-lookup/object-lookup.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
 @Component({
@@ -30,7 +32,7 @@ export class ObjectRelationshipComponent implements OnInit {
   @Output() emitRelation: EventEmitter<any> = new EventEmitter();
   len: any;
 
-  constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: FormBuilder, private listService: ListService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectRelationships: this.fb.array([])
     });
@@ -86,7 +88,7 @@ export class ObjectRelationshipComponent implements OnInit {
     }
   }
   getRelationshipType() {
-    const getRelationshipType$ = this.objectService.getRelationshipType().subscribe((res:any) => {
+    const getRelationshipType$ = this.objectLookupService.getObjectRelationshipTypes().subscribe((res:any) => {
       if(res.data) {
         this.relationshipType = res.data;
       }
@@ -97,7 +99,7 @@ export class ObjectRelationshipComponent implements OnInit {
   }
   getObjectRelation() {
     this.spinner.show();
-    this.objectService.getObjectRelationship(this.sdOid).subscribe((res: any) => {
+    this.objectService.getObjectRelationships(this.sdOid).subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectRelation = res.data.length ? res.data : [];
@@ -112,7 +114,7 @@ export class ObjectRelationshipComponent implements OnInit {
     setTimeout(() => {
       this.spinner.show();
     });
-    this.objectService.getObject().subscribe((res: any) => {
+    this.listService.getObjectList().subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectList = res.data.length ? res.data : [];

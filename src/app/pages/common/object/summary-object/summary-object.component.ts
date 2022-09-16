@@ -4,15 +4,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
-import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
+import { ObjectListEntryInterface } from 'src/app/_rms/interfaces/data-object/data-object-listentry.interface';
+import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 import { ConfirmationWindowComponent } from '../../confirmation-window/confirmation-window.component';
-export interface ObjectRecord {
-  id: number;
-  title: string;
-  type: string;
-  linkedStudyId: number;
-}
 
 @Component({
   selector: 'app-summary-object',
@@ -22,29 +16,28 @@ export interface ObjectRecord {
 export class SummaryObjectComponent implements OnInit {
 
   displayedColumns = ['id', 'title', 'type', 'linkedStudy', 'actions'];
-  dataSource: MatTableDataSource<ObjectRecord>;
-  objectType: [] = [];
-  studyList: [] = [];
+  dataSource: MatTableDataSource<ObjectListEntryInterface>;
   filterOption: string = '';
   searchText:string = '';
   objectLength: number = 0;
 
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-
-  constructor( private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private studyService: StudyService, private modalService: NgbModal) {
+  constructor( private listService: ListService, 
+               private spinner: NgxSpinnerService, 
+               private toastr: ToastrService, 
+               private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
     this.getObjectList();
-    this.getObjectType();
-    this.getStudy();
   }
+  
   getObjectList() {
-    this.objectService.getObject().subscribe((res: any) => {
+    this.listService.getObjectList().subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
-        this.dataSource = new MatTableDataSource(res.data);
+        this.dataSource = new MatTableDataSource<ObjectListEntryInterface>(res.data);
       } else {
         this.dataSource = new MatTableDataSource();
       }
@@ -55,75 +48,41 @@ export class SummaryObjectComponent implements OnInit {
       this.toastr.error(error.error.title);
     })
   }
-  getObjectType() {
-    setTimeout(() => {
-     this.spinner.show(); 
-    });
-    this.objectService.getObjectType().subscribe((res: any) => {
-      this.spinner.hide();
-      if (res && res.data) {
-        this.objectType = res.data
-      }
-    }, error => {
-      this.spinner.hide();
-      this.toastr.error(error.error.title);
-    })
-  }
-  getStudy() {
-    setTimeout(() => {
-     this.spinner.show(); 
-    });
-    this.studyService.getStudy().subscribe((res: any) => {
-      this.spinner.hide();
-      if (res && res.data) {
-        this.studyList = res.data;
-      }
-    }, error => {
-      this.spinner.hide();
-      this.toastr.error(error.error.title);
-    })
-  }
-  findObjectType(id) {
-    const objectTypeArray: any = this.objectType.filter((type: any) => type.id === id);
-    return objectTypeArray && objectTypeArray.length ? objectTypeArray[0].name : '';
-  }
-  findStudy(id) {
-    const studyArray: any = this.studyList.filter((type: any) => type.sdSid === id);
-    return studyArray && studyArray.length ? studyArray[0].displayTitle : '';
-  }
+    
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
+
   filterSearch() {
-    const payload = {
-      page: 1,
-      size: 10,
-      title: this.searchText
-    }
+    let page = 1; let size = 10; // though not currently used
+    let title_fragment = this.searchText;
     if (this.filterOption === 'title' && this.searchText != '') {
       this.spinner.show();
-      this.objectService.filterByTitle(payload).subscribe((res: any) => {
+      this.listService.getFilteredObjectList(title_fragment, page, size).subscribe((res: any) => {
         this.spinner.hide();
         if (res && res.data) {
-          this.dataSource = res.data;
+          this.dataSource = new MatTableDataSource<ObjectListEntryInterface>(res.data);
           this.objectLength = res.total;
         } else {
           this.dataSource = new MatTableDataSource();
         }
+        this.dataSource.paginator = this.paginator;
       }, error => {
         this.spinner.hide();
         this.toastr.error(error.error.title);
       })
     }
   }
+
   @HostListener('window:storage', ['$event'])
   refreshList(event) {
     console.log('event triggered', event)
     this.getObjectList();
     localStorage.removeItem('updateObjectList');
   }
+
   deleteRecord(id) {
     const deleteModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
     deleteModal.componentInstance.type = 'dataObject';

@@ -1,179 +1,239 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-const url = environment.baseUrl + '/context';
-const objectUrl = environment.baseUrl + '/metadata-management/data-objects';
-const filterUrl = environment.baseUrl + '/metadata-management';
+const base = environment.baseUrl;
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class DataObjectService {
 
   constructor( private http: HttpClient) { }
-  getObjectClass() {
-    return this.http.get(`${url}/object-classes`);
+  
+  // full Object - witrh attributes
+  
+  getFullObjectById(sdOid) {
+    return this.http.get(`${base}/data-objects/full/${sdOid}`);
   }
-  getObjectType() {
-    return this.http.get(`${url}/object-types`);
+
+  deleteFullObjectById(sdOid) {
+    return this.http.delete(`${base}/data-objects/full/${sdOid}`);
   }
-  getAccessType() {
-    return this.http.get(`${url}/object-access-types`);
+
+  // MDR related calls
+  // Parameters are the SdSid of the parent study in the RMS, 
+  // and integer id of the object in the MDR
+  getFullObjectFromMdr(sdSid: string, mdrId: number) {
+    return this.http.get(`${base}/data-objects/mdr/${sdSid}/${mdrId}`);
   }
-  getKeyTypes() {
-    return this.http.get(`${url}/dataset-recordkey-types`);
+  
+  
+  // Object data - Object table data only 
+
+  getDataObjectById(sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}`);
   }
-  getDeidentificationTypes() {
-    return this.http.get(`${url}/dataset-deidentification-types`);
+  addDataObject(sdSid, payload) {
+    // note inclusion of parent sdSid in call
+    return this.http.post(`${base}/data-objects/${sdSid}`, payload);
   }
-  getConsentType() {
-    return this.http.get(`${url}/dataset-consent-types`);
+  editDataObject(sdOid, payload) {
+    return this.http.put(`${base}/data-objects/${sdOid}`, payload);
   }
-  getSizeUnit() {
-    return this.http.get(`${url}/size-units`);
+  deleteDataObjectById(sdOid) {
+    // full delete would normally be more useful
+    return this.http.delete(`${base}/data-objects/${sdOid}`);
   }
-  getResourceType() {
-    return this.http.get(`${url}/resource-types`);;
+  
+
+  // Object instances
+
+  getObjectInstances(sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/instances`);
   }
-  getLanguageCode() {
-    return this.http.get(`${url}/lang-codes`);
+  addObjectInstance(sdOid, payload) {
+    return this.http.post(`${base}/data-objects/${sdOid}/instances`, payload);
   }
-  getDateType() {
-    return this.http.get(`${url}/date-types`);
+  getObjectInstance(id, sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/instances/${id}`);
   }
-  getContributorType() {
-    return this.http.get(`${url}/contribution-types`);
-  }
-  getDescriptionType() {
-    return this.http.get(`${url}/description-types`);
-  }
-  getRelationshipType() {
-    return this.http.get(`${url}/object-relationship-types`);
-  }
-  getObject() {
-    return this.http.get(`${objectUrl}`);
-  }
-  getObjectById(id) {
-    return this.http.get(`${objectUrl}/${id}`);
-  }
-  addDataObject(payload) {
-    return this.http.post(`${objectUrl}`, payload);
-  }
-  editDataObject(id, payload) {
-    return this.http.put(`${objectUrl}/${id}`, payload);
-  }
-  getObjectInstance(id) {
-    return this.http.get(`${objectUrl}/${id}/instances`);
-  }
-  addObjectInstance(id, payload) {
-    return this.http.post(`${objectUrl}/${id}/instances`, payload);
-  }
-  editObjectInstance(id, sdOid, payload) {
-    return this.http.put(`${objectUrl}/${sdOid}/instances/${id}`, payload);
+   editObjectInstance(id, sdOid, payload) {
+    return this.http.put(`${base}/data-objects/${sdOid}/instances/${id}`, payload);
   }
   deleteObjectInstance(id, sdOid) {
-    return this.http.delete(`${objectUrl}/${sdOid}/instances/${id}`);
+    return this.http.delete(`${base}/data-objects/${sdOid}/instances/${id}`);
   }
-  getObjectTitle(id) {
-    return this.http.get(`${objectUrl}/${id}/titles`);
+
+  
+  // Object titles
+
+  getObjectTitles(sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/titles`);
   }
-  addObjectTitle(id, payload) {
-    return this.http.post(`${objectUrl}/${id}/titles`, payload);
+  addObjectTitle(sdOid, payload) {
+    return this.http.post(`${base}/data-objects/${sdOid}/titles`, payload);
+  }
+  getObjectTitle(id, sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/titles/${id}`);
   }
   editObjectTitle(id, sdOid, payload) {
-    return this.http.put(`${objectUrl}/${sdOid}/titles/${id}`, payload);
+    return this.http.put(`${base}/data-objects/${sdOid}/titles/${id}`, payload);
   }
   deleteObjectTitle(id, sdOid) {
-    return this.http.delete(`${objectUrl}/${sdOid}/titles/${id}`);
+    return this.http.delete(`${base}/data-objects/${sdOid}/titles/${id}`);
   }
-  getObjectDate(id) {
-    return this.http.get(`${objectUrl}/${id}/dates`);
+
+
+  // Object dates
+
+  getObjectDates(sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/dates`);
   }
-  addObjectDate(id, payload) {
-    return this.http.post(`${objectUrl}/${id}/dates`, payload);
+  addObjectDate(sdOid, payload) {
+    return this.http.post(`${base}/data-objects/${sdOid}/dates`, payload);
+  }
+  getObjectDate(id, sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/dates/${id}`);
   }
   editObjectDate(id, sdOid, payload) {
-    return this.http.put(`${objectUrl}/${sdOid}/dates/${id}`, payload);
+    return this.http.put(`${base}/data-objects/${sdOid}/dates/${id}`, payload);
   }
   deleteObjectDate(id, sdOid) {
-    return this.http.delete(`${objectUrl}/${sdOid}/dates/${id}`);
+    return this.http.delete(`${base}/data-objects/${sdOid}/dates/${id}`);
   }
-  getObjectContributor(id) {
-    return this.http.get(`${objectUrl}/${id}/contributors`);
+  
+
+  // Object datasets
+
+  getObjectDatasets(sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/datasets`);
   }
-  addObjectContributor(id, payload) {
-    return this.http.post(`${objectUrl}/${id}/contributors`, payload);
+  addObjectDatasete(sdOid, payload) {
+    return this.http.post(`${base}/data-objects/${sdOid}/datasets`, payload);
   }
-  editObjectContributor(id, sdOid, payload) {
-    return this.http.put(`${objectUrl}/${sdOid}/contributors/${id}`, payload);
+  getObjectDatasete(id, sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/datasets/${id}`);
   }
-  deleteObjectContributor(id, sdOid) {
-    return this.http.delete(`${objectUrl}/${sdOid}/contributors/${id}`);
+  editObjecDataset(id, sdOid, payload) {
+    return this.http.put(`${base}/data-objects/${sdOid}/datasets/${id}`, payload);
   }
-  getObjectTopic(id) {
-    return this.http.get(`${objectUrl}/${id}/topics`);
+  deleteObjectDataset(id, sdOid) {
+    return this.http.delete(`${base}/data-objects/${sdOid}/datasets/${id}`);
   }
-  addObjectTopic(id, payload) {
-    return this.http.post(`${objectUrl}/${id}/topics`, payload);
+
+
+  // Object topics
+
+  getObjectTopics(sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/topics`);
+  }
+  addObjectTopic(sdOid, payload) {
+    return this.http.post(`${base}/data-objects/${sdOid}/topics`, payload);
+  }
+  getObjectTopic(id, sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/topics/${id}`);
   }
   editObjectTopic(id, sdOid, payload) {
-    return this.http.put(`${objectUrl}/${sdOid}/topics/${id}`, payload);
+    return this.http.put(`${base}/data-objects/${sdOid}/topics/${id}`, payload);
   }
   deleteObjectTopic(id, sdOid) {
-    return this.http.delete(`${objectUrl}/${sdOid}/topics/${id}`);
+    return this.http.delete(`${base}/data-objects/${sdOid}/topics/${id}`);
   }
-  getObjectIdentifier(id) {
-    return this.http.get(`${objectUrl}/${id}/identifiers`);
+  
+
+  // Object relationships
+
+  getObjectRelationships(sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/relationships`);
   }
-  addObjectIdentifier(id, payload) {
-    return this.http.post(`${objectUrl}/${id}/identifiers`, payload);
+  addObjectRelationship(sdOid, payload) {
+    return this.http.post(`${base}/data-objects/${sdOid}/relationships`, payload);
   }
-  editObjectIdentifier(id, sdOid, payload) {
-    return this.http.put(`${objectUrl}/${sdOid}/identifiers/${id}`, payload);
-  }
-  deleteObjectIdentifier(id, sdOid) {
-    return this.http.delete(`${objectUrl}/${sdOid}/identifiers/${id}`);
-  }
-  getObjectRight(id) {
-    return this.http.get(`${objectUrl}/${id}/rights`);
-  }
-  addObjectRight(id, payload) {
-    return this.http.post(`${objectUrl}/${id}/rights`, payload);
-  }
-  editObjectRight(id, sdOid, payload) {
-    return this.http.put(`${objectUrl}/${sdOid}/rights/${id}`, payload);
-  }
-  deleteObjectRight(id, sdOid) {
-    return this.http.delete(`${objectUrl}/${sdOid}/rights/${id}`);
-  }
-  getObjectDescription(id) {
-    return this.http.get(`${objectUrl}/${id}/descriptions`);
-  }
-  addObjectDescription(id, payload) {
-    return this.http.post(`${objectUrl}/${id}/descriptions`, payload);
-  }
-  editObjectDescription(id, sdOid, payload) {
-    return this.http.put(`${objectUrl}/${sdOid}/descriptions/${id}`, payload);
-  }
-  deleteObjectDescription(id, sdOid) {
-    return this.http.delete(`${objectUrl}/${sdOid}/descriptions/${id}`);
-  }
-  getObjectRelationship(id) {
-    return this.http.get(`${objectUrl}/${id}/relationships`);
-  }
-  addObjectRelationship(id, payload) {
-    return this.http.post(`${objectUrl}/${id}/relationships`, payload);
+  getObjectRelationship(id, sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/relationships/${id}`);
   }
   editObjectRelationship(id, sdOid, payload) {
-    return this.http.put(`${objectUrl}/${sdOid}/relationships/${id}`, payload);
+    return this.http.put(`${base}/data-objects/${sdOid}/relationships/${id}`, payload);
   }
   deleteObjectRelationship(id, sdOid) {
-    return this.http.delete(`${objectUrl}/${sdOid}/relationships/${id}`);
+    return this.http.delete(`${base}/data-objects/${sdOid}/relationships/${id}`);
   }
-  filterByTitle(payload) {
-    return this.http.post(`${filterUrl}/filter/data-objects/by-title`, payload);
+
+
+  // Object contributors
+
+  getObjectContributors(sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/contributors`);
   }
-  deleteDataObjectById(id) {
-    return this.http.delete(`${objectUrl}/${id}`);
+  addObjectContributor(sdOid, payload) {
+    return this.http.post(`${base}/data-objects/${sdOid}/contributors`, payload);
   }
+  getObjectContributor(id, sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/contributors/${id}`);
+  }
+  editObjectContributor(id, sdOid, payload) {
+    return this.http.put(`${base}/data-objects/${sdOid}/contributors/${id}`, payload);
+  }
+  deleteObjectContributor(id, sdOid) {
+    return this.http.delete(`${base}/data-objects/${sdOid}/contributors/${id}`);
+  }
+
+
+  // Object descriptions
+
+  getObjectDescriptions(sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/descriptions`);
+  }
+  addObjectDescription(sdOid, payload) {
+    return this.http.post(`${base}/data-objects/${sdOid}/descriptions`, payload);
+  }
+  getObjectDescription(id, sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/descriptions/${id}`);
+  }
+  editObjectDescription(id, sdOid, payload) {
+    return this.http.put(`${base}/data-objects/${sdOid}/descriptions/${id}`, payload);
+  }
+  deleteObjectDescription(id, sdOid) {
+    return this.http.delete(`${base}/data-objects/${sdOid}/descriptions/${id}`);
+  }
+
+
+  // Object Rights
+
+  getObjectRights(sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/rights`);
+  }
+  addObjectRight(sdOid, payload) {
+    return this.http.post(`${base}/data-objects/${sdOid}/rights`, payload);
+  }
+  getObjectRight(id, sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/rights/${id}`);
+  }
+  editObjectRight(id, sdOid, payload) {
+    return this.http.put(`${base}/data-objects/${sdOid}/rights/${id}`, payload);
+  }
+  deleteObjectRight(id, sdOid) {
+    return this.http.delete(`${base}/data-objects/${sdOid}/rights/${id}`);
+  }
+
+
+  // Object identifiers
+
+  getObjectIdentifiers(sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/identifiers`);
+  }
+  addObjectIdentifier(sdOid, payload) {
+    return this.http.post(`${base}/data-objects/${sdOid}/identifiers`, payload);
+  }
+  getObjectIdentifier(id, sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/identifiers/${id}`);
+  }
+  editObjectIdentifier(id, sdOid, payload) {
+    return this.http.put(`${base}/data-objects/${sdOid}/identifiers/${id}`, payload);
+  }
+  deleteObjectIdentifier(id, sdOid) {
+    return this.http.delete(`${base}/data-objects/${sdOid}/identifiers/${id}`);
+  }
+  
  }

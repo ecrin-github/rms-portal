@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ObjectContributorInterface } from 'src/app/_rms/interfaces/data-object/object-contributor.interface';
+import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
@@ -30,7 +31,7 @@ export class ObjectContributorComponent implements OnInit {
   @Output() emitContributor: EventEmitter<any> = new EventEmitter();
   len: any;
 
-  constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
+  constructor( private fb: FormBuilder,private commonLooupService: CommonLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
       objectContributors: this.fb.array([])
     });
@@ -90,7 +91,7 @@ export class ObjectContributorComponent implements OnInit {
     }
   }
   getContributorType() {
-    const getContributorType$ = this.objectService.getContributorType().subscribe((res:any) => {
+    const getContributorType$ = this.commonLooupService.getContributorTypes().subscribe((res:any) => {
       if(res.data) {
         this.contributorType = res.data;
       }
@@ -101,7 +102,7 @@ export class ObjectContributorComponent implements OnInit {
   }
   getObjectContributor() {
     this.spinner.show();
-    this.objectService.getObjectContributor(this.sdOid).subscribe((res: any) => {
+    this.objectService.getObjectContributors(this.sdOid).subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectContributor = res.data.length ? res.data : [];

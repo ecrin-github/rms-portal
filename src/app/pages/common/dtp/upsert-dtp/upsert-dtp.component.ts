@@ -1,11 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbDate, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { combineLatest } from 'rxjs';
 import { DtpInterface } from 'src/app/_rms/interfaces/dtp/dtp.interface';
+import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
+import { ProcessLookupService } from 'src/app/_rms/services/entities/process-lookup/process-lookup.service';
 import KTWizard from '../../../../../assets/js/components/wizard'
 import { CommonModalComponent } from '../../common-modal/common-modal.component';
 import { ConfirmationWindow1Component } from '../../confirmation-window1/confirmation-window1.component';
@@ -17,25 +20,29 @@ import { ConfirmationWindow1Component } from '../../confirmation-window1/confirm
 })
 export class UpsertDtpComponent implements OnInit {
   form: FormGroup;
+  preReqForm: FormGroup;
   isEdit: boolean = false;
   isView: boolean = false;
   organizationList:[] = [];
   statusList:[] = [];
   id: any;
-  dtpData: DtpInterface;
+  dtpData: any;
   @ViewChild('wizard', { static: true }) el: ElementRef;
   wizard: any;
   currentStatus: number = 2;
   associatedStudies = [];
+  associatedObject = [];
+  associatedUser = [];
   todayDate: any;
   submitted:boolean = false;
   nextStep: number;
   buttonClick: any;
   showStatus: boolean = false;
   showVariations: boolean = false;
+  preRequTypes: [] = [];
 
   constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
-    private activatedRoute: ActivatedRoute, private modalService: NgbModal) { 
+    private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService) { 
     this.form = this.fb.group({
       orgId: ['', Validators.required],
       displayName: ['', Validators.required],
@@ -52,20 +59,19 @@ export class UpsertDtpComponent implements OnInit {
       mdIntegratedWithMdr: null,
       availabilityRequested: null,
       availabilityConfirmed: null,
-      conformsToDefault: false,
+      conformsToDefaultChange: false,
       variations: '',
-      repolsProxyProvider: false,
-      filePath: '',
+      dtaFilePath: '',
       repoSignatory1: '',
       repoSignatory2: '',
       providerSignatory1: '',
       providerSignatory2: '',
-      requestSignatory1: '',
-      requestSignatory2: '',
-      notes: ''
-    })
+      notes: this.fb.array([])
+    });
+    this.preReqForm = this.fb.group({
+      preRequisite: this.fb.array([])
+    });
   }
-
   ngOnInit(): void {
     const todayDate = new Date();
     this.todayDate = {year: todayDate.getFullYear(), month: todayDate.getMonth()+1, day: todayDate.getDate()};
@@ -75,6 +81,7 @@ export class UpsertDtpComponent implements OnInit {
     this.isView = this.router.url.includes('view') ? true : false;
     if (this.isEdit || this.isView) {
       this.id = this.activatedRoute.snapshot.params.id;
+      this.getDtpPeople(this.id);
       this.getDtpById(this.id);
     }
     if (this.router.url.includes('add')) {
@@ -128,10 +135,129 @@ export class UpsertDtpComponent implements OnInit {
       }
     });
   }
+  notes(): FormArray {
+   return this.form.get('notes') as FormArray;
+  }
+  newDtpNote(): FormGroup {
+    return this.fb.group({
+      id: '',
+      text: '',
+      alreadyExist: false
+    })
+  }
+  addDtpNote() {
+    this.notes().push(this.newDtpNote());
+  }
+  patchNote(notes) {
+    this.form.setControl('notes', this.patchNoteArray(notes));
+  }
+  patchNoteArray(notes): FormArray {
+    const formArray = new FormArray([]);
+    notes.forEach(note => {
+      formArray.push(this.fb.group({
+        id: note.id,
+        text: note.text,
+        alreadyExist: true
+      }))
+    });
+    return formArray;
+  }
+  getDtpNotes(id) {
+    this.spinner.show();
+    this.dtpService.getDtpNotes(id).subscribe((res:any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.patchNote(res.data);
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
+  deleteDtpNote(i) {
+    if (this.notes().value[i].alreadyExist) {
+      this.spinner.show();
+      this.dtpService.deleteDtpNote(this.notes().value[i].id, this.id).subscribe((res: any) => {
+        this.spinner.hide();
+        if (res.statusCode === 204) {
+          this.toastr.success('Note deleted successfully');
+          this.getDtpNotes(this.id);
+        } else {
+          this.toastr.error(res.messages[0])
+        }
+      }, error => {
+        this.spinner.hide();
+        this.toastr.error(error.error.title);
+      })
+    } else {
+      this.notes().removeAt(i);
+    }
+  }
+  saveDtpNote(note) {
+    if (note.value.alreadyExist) {
+      this.spinner.show();
+      this.dtpService.editDtpNote(note.value.id, this.id, note.value).subscribe((res: any) => {
+        this.spinner.hide();
+        if (res.statusCode === 200) {
+          this.toastr.success('Note updated successfully');
+        } else {
+          this.toastr.error(res.messages[0])
+        }
+      }, error => {
+        this.spinner.hide();
+        this.toastr.error(error.error.title);
+      })
+    } else {
+      this.spinner.show();
+      const payload = note.value;
+      delete payload.id;
+      this.dtpService.addDtpNote(this.id, 400002, payload).subscribe((res: any) => {
+        this.spinner.hide();
+        if (res.statusCode === 200) {
+          this.toastr.success('Note added successfully');
+        } else {
+          this.toastr.error(res.messages[0]);
+        }
+      }, error => {
+        this.spinner.hide();
+        this.toastr.error(error.error.title);
+      })
+    }
+  }
+  preReqs(): FormArray {
+    return this.preReqForm.get('preRequisite') as FormArray
+  }
+  newPreReq(): FormGroup {
+    return this.fb.group({
+      id: '',
+      preRequisiteNotes: '',
+      preRequisiteTypeId: '',
+      sdOid: ''
+    })
+  }
+ 
+  addPreReq() {
+    this.preReqs().push(this.newPreReq());
+  }
+  patchPreReq(preReqs) {
+    this.preReqForm.setControl('preRequisite', this.patchPreReqArray(preReqs));
+  }
+  patchPreReqArray(preReqs): FormArray {
+    const formArray = new FormArray([]);
+    preReqs.forEach(preReq => {
+      formArray.push(this.fb.group({
+        id: preReq.id,
+        preRequisiteNotes: preReq.preRequisiteNotes,
+        preRequisiteTypeId: preReq.preRequisiteTypeId,
+        sdOid: preReq.sdOid
+      }))
+    });
+    return formArray;
+  }
   get g() { return this.form.controls; }
   getOrganization() {
     this.spinner.show();
-    this.dtpService.getOrganizationList().subscribe((res: any) => {
+    this.commonLookup.getOrganizationList().subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.organizationList = res.data;
@@ -145,7 +271,7 @@ export class UpsertDtpComponent implements OnInit {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    this.dtpService.getStatusList().subscribe((res: any) => {
+    this.processLookup.getDtpStatusTypes().subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.statusList = res.data;
@@ -160,6 +286,19 @@ export class UpsertDtpComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title);
     })
+  }
+  getPrereqTypes() {
+    this.processLookup.getPrereqTypes().subscribe((res: any) => {
+      if (res) {
+        this.preRequTypes = res.data;
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  onClickControllTab() {
+    this.getPrereqTypes();
+    this.patchPreReq(this.dtpData.dtpPrereqs);
   }
   dateToString(date) {
     if (date) {
@@ -265,21 +404,28 @@ export class UpsertDtpComponent implements OnInit {
       if (this.isEdit) {
         this.spinner.show();
         payload.id = this.id;
-        this.dtpService.editDtp(this.id, payload).subscribe((res: any) => {
+        const editCoreDtp$ = this.dtpService.editDtp(this.id, payload);
+        const editDta$ = this.dtpData.dtas.length ? this.dtpService.editDta(this.id, payload) : this.dtpService.addDta(this.id, payload);
+        delete payload.notes;
+        const combine$ = combineLatest([editCoreDtp$, editDta$]).subscribe(([coreDtpRes, dtaRes] : [any, any]) => {
           this.spinner.hide();
-          if (res.statusCode === 200) {
+          if (coreDtpRes.statusCode === 200 && dtaRes.statusCode === 200) {
             this.toastr.success('DTP updated successfully');
             localStorage.setItem('updateDtpList', 'true');
             this.getDtpById(this.id);
             this.showStatus = false;
           } else {
-            this.toastr.error(res.messages[0]);
+            if (coreDtpRes.statusCode !== 200) {
+              this.toastr.error(coreDtpRes.messages[0]);
+            }
+            if (dtaRes.statusCode !== 200) {
+              this.toastr.error(dtaRes.messages[0])
+            }
           }
         }, error => {
           this.spinner.hide();
-          this.toastr.error(error.error.title);
+          this.toastr.error(error.error.title);;
         })
-
       } else {
         this.spinner.show();
         this.dtpService.addDtp(payload).subscribe((res: any) => {
@@ -309,7 +455,7 @@ export class UpsertDtpComponent implements OnInit {
     setTimeout(() => {
      this.spinner.show();; 
     });
-    this.dtpService.getDtpById(id).subscribe((res: any) => {
+    this.dtpService.getFullDtpById(id).subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.dtpData = res.data[0];
@@ -322,31 +468,40 @@ export class UpsertDtpComponent implements OnInit {
   }
   patchForm(data) {
     this.form.patchValue({
-      orgId: data.orgId,
-      displayName: data.displayName,
-      statusId: data.statusId,
-      initialContactDate: this.stringTodate(data.initialContactDate),
-      setUpCompleted: this.stringTodate(data.setUpCompleted),
-      mdAccessGranted: this.stringTodate(data.mdAccessGranted),
-      mdCompleteDate: this.stringTodate(data.mdCompleteDate),
-      dtaAgreedDate: this.stringTodate(data.dtaAgreedDate),
-      uploadAccessRequested: this.stringTodate(data.uploadAccessRequested),
-      uploadAccessConfirmed: this.stringTodate(data.uploadAccessConfirmed),
-      uploadsComplete: this.stringTodate(data.uploadsComplete),
-      qcChecksCompleted: this.stringTodate(data.qcChecksCompleted),
-      mdIntegratedWithMdr: this.stringTodate(data.mdIntegratedWithMdr),
-      availabilityRequested: this.stringTodate(data.availabilityRequested),
-      availabilityConfirmed: this.stringTodate(data.availabilityConfirmed),
+      orgId: data.coreDtp.orgId,
+      displayName: data.coreDtp.displayName,
+      statusId: data.coreDtp.statusId,
+      initialContactDate: this.stringTodate(data.coreDtp.initialContactDate),
+      setUpCompleted: this.stringTodate(data.coreDtp.setUpCompleted),
+      mdAccessGranted: this.stringTodate(data.coreDtp.mdAccessGranted),
+      mdCompleteDate: this.stringTodate(data.coreDtp.mdCompleteDate),
+      dtaAgreedDate: this.stringTodate(data.coreDtp.dtaAgreedDate),
+      uploadAccessRequested: this.stringTodate(data.coreDtp.uploadAccessRequested),
+      uploadAccessConfirmed: this.stringTodate(data.coreDtp.uploadAccessConfirmed),
+      uploadsComplete: this.stringTodate(data.coreDtp.uploadsComplete),
+      qcChecksCompleted: this.stringTodate(data.coreDtp.qcChecksCompleted),
+      mdIntegratedWithMdr: this.stringTodate(data.coreDtp.mdIntegratedWithMdr),
+      availabilityRequested: this.stringTodate(data.coreDtp.availabilityRequested),
+      availabilityConfirmed: this.stringTodate(data.coreDtp.availabilityConfirmed),
+      conformsToDefaultChange: data.dtas[0]?.conformsToDefault,
+      variations: data.dtas[0]?.variations,
+      dtaFilePath: data.dtas[0]?.dtaFilePath,
+      repoSignatory1: data.dtas[0]?.repoSignatory1,
+      repoSignatory2: data.dtas[0]?.repoSignatory2,
+      providerSignatory1: data.dtas[0]?.providerSignatory1,
+      providerSignatory2: data.dtas[0]?.providerSignatory2
     });
-    const arr: any = this.statusList.filter((item: any) => item.id === this.dtpData.statusId);
+    this.patchNote(data.dtpNotes);
+    const arr: any = this.statusList.filter((item: any) => item.id === this.dtpData.coreDtp.statusId);
     if (arr && arr.length) {
       this.currentStatus = arr[0].name.toLowerCase() === 'creation' ? 1 : arr[0].name.toLowerCase() === 'set up' ? 2 : arr[0].name.toLowerCase() === 'preparation' ? 3 : arr[0].name.toLowerCase() === 'transfer' ? 4 : arr[0].name.toLowerCase() === 'checking' ? 5 : arr[0].name.toLowerCase() === 'complete' ? 6 : 1;
       this.wizard.goTo(this.currentStatus);
     }
+    this.showVariations = data.dtas[0]?.conformsToDefault ? true : false;
   }
   findOrganization(id) {
     const organizationArray: any = this.organizationList.filter((type: any) => type.id === id);
-    return organizationArray && organizationArray.length ? organizationArray[0].defaultName : ''
+    return organizationArray && organizationArray.length ? organizationArray[0].name : ''
   }
   findStatus(id) {
     const statusArray: any = this.statusList.filter((type: any) => type.id === id);
@@ -359,25 +514,80 @@ export class UpsertDtpComponent implements OnInit {
     const studyModal = this.modalService.open(CommonModalComponent, { size: 'xl', backdrop: 'static' });
     studyModal.componentInstance.title = 'Add Study';
     studyModal.componentInstance.type = 'study';
+    studyModal.componentInstance.dtpId = this.id;
     studyModal.result.then((data) => {
-      if (data) {
-        this.associatedStudies = data;
-      }
-      console.log('studyPayload', data);
+      this.getDtpStudies(this.id);
+      this.getDtpObjects(this.id);
     }, error => {})
   }
-  removeStudy(index) {
-    this.associatedStudies.splice(index, 1);
+  getDtpStudies(id) {
+    this.dtpService.getDtpStudiesWfkn(id).subscribe((res: any) => {
+      if (res) {
+        this.associatedStudies = res.data ? res.data : [];
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  removeDtpStudy(id) {
+    this.dtpService.deleteDtpStudy(id, this.id).subscribe((res: any) => {
+      this.toastr.success('Study has been disassociated successfully');
+      this.getDtpStudies(this.id);
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
   }
   addDataObject() {
     const dataModal = this.modalService.open(CommonModalComponent, {size: 'xl', backdrop: 'static'});
     dataModal.componentInstance.title = 'Add Data Object';
     dataModal.componentInstance.type = 'dataObject';
+    dataModal.componentInstance.dtpId = this.id;
+    dataModal.result.then((data) => {
+      this.getDtpObjects(this.id);
+    }, error => {});
+  }
+  getDtpObjects(id) {
+    this.dtpService.getDtpObjectsWfkn(id).subscribe((res: any) => {
+      if (res) {
+        this.associatedObject = res.data ? res.data : [];
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  removeDtpObject(id) {
+    this.dtpService.deleteDtpObject(id, this.id).subscribe((res: any) => {
+      this.toastr.success('Data object has been disassociated successfully');
+      this.getDtpObjects(this.id);
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
   }
   addUser() {
     const userModal = this.modalService.open(CommonModalComponent, {size: 'xl', backdrop: 'static'});
     userModal.componentInstance.title = 'Add User';
     userModal.componentInstance.type = 'user';
+    userModal.componentInstance.dtpId = this.id;
+    userModal.result.then((data) => {
+      this.getDtpPeople(this.id);
+    }, error => {});
+  }
+  getDtpPeople(id) {
+    this.dtpService.getDtpPeopleWfkn(id).subscribe((res: any) => {
+      if (res) {
+        this.associatedUser = res.data ? res.data : [];
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  removeDtpUser(id) {
+    this.dtpService.deleteDtpPerson(id, this.id).subscribe((res: any) => {
+      this.toastr.success('User has been disassociated successfully');
+      this.getDtpPeople(this.id);
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
   }
   printDocument() {
     window.print();
@@ -460,6 +670,6 @@ export class UpsertDtpComponent implements OnInit {
     this.wizard.goTo(this.currentStatus);
   }
   conformsToDefaultChange() {
-    this.showVariations = this.form.value.conformsToDefault ? true : false
+    this.showVariations = this.form.value.conformsToDefaultChange ? true : false
   }
 }

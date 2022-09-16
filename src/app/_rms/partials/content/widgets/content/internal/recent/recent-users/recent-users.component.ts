@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class RecentUsersComponent {
   @Input() cssClass;
+  @Input() peopleTotal: number = 0;
   displayedColumns = ['name', 'role', 'email', 'location', 'actions'];
   dataSource: MatTableDataSource<any>;
   totalData: any;

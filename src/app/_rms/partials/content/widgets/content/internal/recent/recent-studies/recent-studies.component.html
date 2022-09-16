@@ -4,7 +4,7 @@
   <div class="card-header border-0 py-5">
     <h3 class="card-title align-items-start flex-column">
       <span class="card-label font-weight-bolder text-dark">Recent Studies</span>
-      <span class="text-muted mt-3 font-weight-bold font-size-sm">Showing 10 recently added studies of total {{totalData}} studies</span>
+      <span class="text-muted mt-3 font-weight-bold font-size-sm">Showing the 10 most recently added studies, from a total of {{studyTotal}}.</span>
     </h3>
     <div class="card-toolbar">
       <a [routerLink]="['/studies', 'add']" target="_blank"
@@ -31,12 +31,12 @@
 
       <ng-container matColumnDef="type">
         <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{findStudyType(row.studyTypeId)}} </mat-cell>
+        <mat-cell *matCellDef="let row"> {{row.typeName}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="status">
         <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{findStudyStatus(row.studyStatusId)}} </mat-cell>
+        <mat-cell *matCellDef="let row"> {{row.statusName}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="actions">

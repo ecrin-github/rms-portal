@@ -20,12 +20,17 @@
 
     <div class="card-body" id="content">
         <form [formGroup]="studyForm">
-            <div class="row form-group">
+            <div class="row form-group" *ngIf="isAdd">
                 <div class="col-md-6">
                     <label for="registryId" class="font-style text-capitalize">Trial Registry ID</label>
                     <select id="registryId" class="form-control">
                         <option selected disabled value="">Select an ID...</option>
+                        <option [value]=registry.id *ngFor="let registry of trialRegistries">{{registry.name}}</option>
                     </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="trialId" class="font-style text-capitalize">Trial ID</label>
+                    <input id="trialId" type="text" class="form-control">
                 </div>
             </div>
             <div class="row form-group">

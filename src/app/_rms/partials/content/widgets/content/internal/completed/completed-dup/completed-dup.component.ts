@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { DashboardService } from 'src/app/_rms/services/entities/dashboard/dashboard.service';
-import {LayoutService} from '../../../../../../../services/layout/layout.service';
+import { LayoutService } from '../../../../../../../services/layout/layout.service';
 
 
 @Component({
@@ -9,6 +9,7 @@ import {LayoutService} from '../../../../../../../services/layout/layout.service
   templateUrl: './completed-dup.component.html',
 })
 export class CompletedDupComponent implements OnInit {
+  @Input() dupCompleted: number = 0;
   colorsGrayGray100: string;
   colorsGrayGray700: string;
   colorsThemeBaseSuccess: string;
@@ -16,7 +17,7 @@ export class CompletedDupComponent implements OnInit {
   fontFamily: string;
   chartOptions: any = {};
   dataCompleted: any;
-
+  
   constructor(private layout: LayoutService, private dashboardService: DashboardService, private toastr: ToastrService) {
     this.colorsGrayGray100 = this.layout.getProp('js.colors.gray.gray100');
     this.colorsGrayGray700 = this.layout.getProp('js.colors.gray.gray700');
@@ -28,14 +29,15 @@ export class CompletedDupComponent implements OnInit {
     );
     this.fontFamily = this.layout.getProp('js.fontFamily');
   }
-
+  
   ngOnInit(): void {
     this.getStatistics();
   }
+  
   getStatistics() {
     this.dashboardService.getDupStatistics().subscribe((res: any) => {
-      this.dataCompleted = Math.round((((res.total-res.uncompleted)/res.total)*100)*100)/100;
-      this.chartOptions = this.getChartOptions();
+    this.dataCompleted = Math.round((res.data[0].statValue-res.data[1].statValue)*100/res.data[0].statValue);
+    this.chartOptions = this.getChartOptions();
     }, error => {
       this.toastr.error(error.error.title);
     })

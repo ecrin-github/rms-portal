@@ -5,8 +5,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ObjectTopicInterface } from 'src/app/_rms/interfaces/data-object/object-topic.interface';
+import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
-import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
 @Component({
@@ -30,7 +30,7 @@ export class ObjectTopicComponent implements OnInit {
   @Output() emitTopic: EventEmitter<any> = new EventEmitter();
   len: any;
 
-  constructor( private fb: FormBuilder, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private objectService: DataObjectService, private modalService: NgbModal) {
+  constructor( private fb: FormBuilder, private commonLookupService: CommonLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private objectService: DataObjectService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectTopics: this.fb.array([])
     });
@@ -90,7 +90,7 @@ export class ObjectTopicComponent implements OnInit {
     }
   }
   getTopicType() {
-    const getTopicType$ = this.studyService.getTopicType().subscribe((res: any) => {
+    const getTopicType$ = this.commonLookupService.getTopicTypes().subscribe((res: any) => {
       if(res.data) {
         this.topicType = res.data;
       }
@@ -101,7 +101,7 @@ export class ObjectTopicComponent implements OnInit {
   }
   getObjectTopic() {
     this.spinner.show();
-    this.objectService.getObjectTopic(this.sdOid).subscribe((res: any) => {
+    this.objectService.getObjectTopics(this.sdOid).subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectTopic = res.data.length ? res.data : [];

@@ -5,7 +5,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { DataObjectInterface } from 'src/app/_rms/interfaces/data-object/data-object.interface';
+import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
+import { ObjectLookupService } from 'src/app/_rms/services/entities/object-lookup/object-lookup.service';
 
 @Component({
   selector: 'app-upsert-object',
@@ -36,7 +38,7 @@ export class UpsertObjectComponent implements OnInit {
   sticky: boolean = false;
   EoscCategory = ['0', '1', '2', '3'];
 
-  constructor(private fb: FormBuilder, private router: Router, private objectService: DataObjectService, private spinner: NgxSpinnerService,
+  constructor(private fb: FormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService,
     private toastr: ToastrService, private activatedRoute: ActivatedRoute) {
     this.objectForm = this.fb.group({
       doi: '',
@@ -113,7 +115,7 @@ export class UpsertObjectComponent implements OnInit {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    const getObjectClass$ = this.objectService.getObjectClass().subscribe((res: any) => {
+    const getObjectClass$ = this.objectLookupService.getObjectClasses().subscribe((res: any) => {
       this.spinner.hide();
       if(res.data) {
         this.objectClass = res.data;
@@ -128,7 +130,7 @@ export class UpsertObjectComponent implements OnInit {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    const getObjectType$ = this.objectService.getObjectType().subscribe((res: any) => {
+    const getObjectType$ = this.objectLookupService.getObjectTypes().subscribe((res: any) => {
       this.spinner.hide();
       if (res.data) {
         this.objectType = res.data;
@@ -143,7 +145,7 @@ export class UpsertObjectComponent implements OnInit {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    const getAccessType$ = this.objectService.getAccessType().subscribe((res: any) => {
+    const getAccessType$ = this.objectLookupService.getAccessTypes().subscribe((res: any) => {
       this.spinner.hide();
       if(res.data) {
         this.accessType = res.data;
@@ -158,7 +160,7 @@ export class UpsertObjectComponent implements OnInit {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    const getKeyType$ = this.objectService.getKeyTypes().subscribe((res: any) => {
+    const getKeyType$ = this.objectLookupService.getRecordKeyTypes().subscribe((res: any) => {
       this.spinner.hide();
       if (res.data) {
         this.keyType = res.data;
@@ -173,7 +175,7 @@ export class UpsertObjectComponent implements OnInit {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    const getDeidentificationType$ = this.objectService.getDeidentificationTypes().subscribe((res: any) => {
+    const getDeidentificationType$ = this.objectLookupService.getDeidentificationTypes().subscribe((res: any) => {
       this.spinner.hide();
       if (res.data) {
         this.deidentificationType = res.data
@@ -188,7 +190,7 @@ export class UpsertObjectComponent implements OnInit {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    const getConsentType$ = this.objectService.getConsentType().subscribe((res:any) => {
+    const getConsentType$ = this.objectLookupService.getConsentTypes().subscribe((res:any) => {
       this.spinner.hide();
       if(res.data) {
         this.consentType = res.data;
@@ -203,7 +205,7 @@ export class UpsertObjectComponent implements OnInit {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    this.objectService.getLanguageCode().subscribe((res: any) => {
+    this.commonLookupService.getLanguageCodes().subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.languageCode = res.data;
@@ -217,7 +219,7 @@ export class UpsertObjectComponent implements OnInit {
     setTimeout(() => {
      this.spinner.show();
     });
-    this.objectService.getObjectById(id).subscribe((res: any) => {
+    this.objectService.getDataObjectById(id).subscribe((res: any) => {
       this.spinner.hide();
       if(res && res.data && res.data.length) {
         this.objectData = res.data[0];
@@ -412,7 +414,7 @@ export class UpsertObjectComponent implements OnInit {
           this.toastr.error(error.error.title);
         })
       } else {
-        this.objectService.addDataObject(payload).subscribe((res: any) => {
+        this.objectService.addDataObject('', payload).subscribe((res: any) => {
           this.spinner.hide();
           if (res.statusCode === 200) {
             this.toastr.success('Data Object added successfully');

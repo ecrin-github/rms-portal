@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { StudyInterface } from 'src/app/_rms/interfaces/study/study.interface';
+import { StudyLookupService } from 'src/app/_rms/services/entities/study-lookup/study-lookup.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 
 @Component({
@@ -22,6 +23,7 @@ export class UpsertStudyComponent implements OnInit {
   studyStatuses: [] = [];
   genderEligibility: [] = [];
   timeUnits: [] =[];
+  trialRegistries: [] = [];
   subscription: Subscription = new Subscription();
   isSubmitted: boolean = false;
   id: any;
@@ -38,7 +40,7 @@ export class UpsertStudyComponent implements OnInit {
   sticky: boolean = false;
   studyType: string = '';
 
-  constructor(private fb: FormBuilder, private router: Router, private studyService: StudyService, private activatedRoute: ActivatedRoute,
+  constructor(private fb: FormBuilder, private router: Router, private studyLookupService: StudyLookupService, private studyService: StudyService, private activatedRoute: ActivatedRoute,
     private spinner: NgxSpinnerService, private toastr: ToastrService) {
     this.studyForm = this.fb.group({
       displayTitle: '',
@@ -88,18 +90,16 @@ export class UpsertStudyComponent implements OnInit {
     if (this.isEdit || this.isView) {
       this.id = this.activatedRoute.snapshot.params.id;
       this.getStudyById(this.id);
-    } else {
-      // this.getStudyType();
-      // this.getStudyStatus();
-      // this.getGenderEligibility();
-      // this.getTimeUnits();
+    }
+    if (this.isAdd) {
+      this.getTrialRegistries();
     }
   }
   getStudyType() {
     setTimeout(() => {
       this.spinner.show(); 
     });
-    const getStudyType$ = this.studyService.getStudyType().subscribe((res:any) => {
+    const getStudyType$ = this.studyLookupService.getStudyTypes().subscribe((res:any) => {
       this.spinner.hide();
       if(res.data) {
         this.studyTypes = res.data;
@@ -121,7 +121,7 @@ export class UpsertStudyComponent implements OnInit {
     setTimeout(() => {
       this.spinner.show(); 
     });
-    const getStudyStatus$ = this.studyService.getStudyStatus().subscribe((res: any) => {
+    const getStudyStatus$ = this.studyLookupService.getStudyStatuses().subscribe((res: any) => {
       this.spinner.hide();
       if(res.data) {
         this.studyStatuses = res.data;
@@ -140,7 +140,7 @@ export class UpsertStudyComponent implements OnInit {
     setTimeout(() => {
       this.spinner.show(); 
     });
-    const getGenderEligibility$ = this.studyService.getGenderEligibility().subscribe((res: any) => {
+    const getGenderEligibility$ = this.studyLookupService.getGenderEligibilities().subscribe((res: any) => {
       this.spinner.hide();
       if (res.data) {
         this.genderEligibility = res.data;
@@ -159,7 +159,7 @@ export class UpsertStudyComponent implements OnInit {
     setTimeout(() => {
       this.spinner.show(); 
     });
-    const getTimeUnits$ = this.studyService.getTimeUnits().subscribe((res: any) => {
+    const getTimeUnits$ = this.studyLookupService.getTimeUnits().subscribe((res: any) => {
       this.spinner.hide();
       if(res.data) {
         this.timeUnits = res.data;
@@ -188,6 +188,16 @@ export class UpsertStudyComponent implements OnInit {
       }
     }, error => {
       this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
+  getTrialRegistries() {
+    this.studyLookupService.getTrialRegistries().subscribe((res: any) => {
+      if (res && res.data) {
+        this.trialRegistries = res.data;
+        console.log('registry', this.trialRegistries);
+      }
+    }, error => {
       this.toastr.error(error.error.title);
     })
   }
@@ -307,7 +317,7 @@ export class UpsertStudyComponent implements OnInit {
         })
       } else {
         payload.studyStartYear = this.studyForm.value.studyStartYear ? this.studyForm.value.studyStartYear.getFullYear() : null;
-        this.studyService.addStudy(payload).subscribe((res: any) => {
+        this.studyService.addStudy('', payload).subscribe((res: any) => {
           this.spinner.hide();
           if (res.statusCode === 200) {
             this.toastr.success('Study Detail added successfully');

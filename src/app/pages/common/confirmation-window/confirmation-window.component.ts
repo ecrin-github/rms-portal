@@ -90,7 +90,7 @@ export class ConfirmationWindowComponent implements OnInit {
       localStorage.removeItem('deleteDtp');
     }
     this.dtpService.deleteDtpById(this.id).subscribe((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 204) {
         this.toastr.success('DTP deleted successfully');
         localStorage.setItem('deleteDtp', 'true');
         this.activeModal.close('data');
@@ -106,7 +106,7 @@ export class ConfirmationWindowComponent implements OnInit {
       localStorage.removeItem('deleteDup');
     }
     this.dupService.deleteDupById(this.id).subscribe((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 204) {
         this.toastr.success('DUP deleted successfully');
         localStorage.setItem('deleteDup', 'true');
         this.activeModal.close('data');
@@ -122,7 +122,7 @@ export class ConfirmationWindowComponent implements OnInit {
       localStorage.removeItem('studyDelete');
     }
     this.studyService.deleteStudyById(this.id).subscribe((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 204) {
         this.toastr.success('Study deleted successfully');
         localStorage.setItem('studyDelete', 'true');
         this.activeModal.close('data');
@@ -138,7 +138,7 @@ export class ConfirmationWindowComponent implements OnInit {
       localStorage.removeItem('deleteDataObject');
     }
     this.objectService.deleteDataObjectById(this.id).subscribe((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 204) {
         this.toastr.success('Data Object deleted successfully');
         localStorage.setItem('deleteDataObject', 'true');
         this.activeModal.close('data');
@@ -151,7 +151,7 @@ export class ConfirmationWindowComponent implements OnInit {
   }
   deleletStudyIdentifier() {
     this.studyService.deleteStudyIdentifier(this.id, this.sdSid).subscribe((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 204) {
         this.toastr.success('Study Identifier deleted successfully');
         this.activeModal.close('data');
       } else {
@@ -163,7 +163,7 @@ export class ConfirmationWindowComponent implements OnInit {
   }
   deleteStudyTitle() {
     this.studyService.deleteStudyTitle(this.id, this.sdSid).subscribe((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 204) {
         this.toastr.success('Study Title deleted successfully');
         this.activeModal.close('data');
       } else {
@@ -175,7 +175,7 @@ export class ConfirmationWindowComponent implements OnInit {
   }
   deleteStudyFeature() {
     this.studyService.deleteStudyFeature(this.id, this.sdSid).subscribe((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 204) {
         this.toastr.success('Study Feature deleted successfully');
         this.activeModal.close('data');
       } else {
@@ -187,7 +187,7 @@ export class ConfirmationWindowComponent implements OnInit {
   }
   deleteStudyTopic() {
     this.studyService.deleteStudyTopic(this.id, this.sdSid).subscribe((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 204) {
         this.toastr.success('Study Toic deleted successfully');
         this.activeModal.close('data');
       } else {
@@ -198,8 +198,8 @@ export class ConfirmationWindowComponent implements OnInit {
     })
   }
   deleteStudyRelationship() {
-    this.studyService.deleteStudyRelationshi(this.id, this.sdSid).subscribe((res: any) => {
-      if (res.statusCode === 200) {
+    this.studyService.deleteStudyRelationship(this.id, this.sdSid).subscribe((res: any) => {
+      if (res.statusCode === 204) {
         this.toastr.success('Study Relationship deleted successfully');
         this.activeModal.close('data');
       } else {
@@ -211,7 +211,7 @@ export class ConfirmationWindowComponent implements OnInit {
   }
   deleteStudyContributor() {
     this.studyService.deleteStudyContributor(this.id, this.sdSid).subscribe((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 204) {
         this.toastr.success('Study Contributor deleted successfully');
         this.activeModal.close('data');
       } else {
@@ -223,7 +223,7 @@ export class ConfirmationWindowComponent implements OnInit {
   }
   deleteObjectInstance() {
     this.objectService.deleteObjectInstance(this.id, this.sdOid).subscribe((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 204) {
         this.toastr.success('Object Instance deleted successfully');
         this.activeModal.close('data');
       } else {
@@ -235,7 +235,7 @@ export class ConfirmationWindowComponent implements OnInit {
   }
   deleteObjectTitle() {
     this.objectService.deleteObjectTitle(this.id, this.sdOid).subscribe((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 204) {
         this.toastr.success('Object Title deleted successfully');
         this.activeModal.close('data');
       } else {
@@ -247,7 +247,7 @@ export class ConfirmationWindowComponent implements OnInit {
   }
   deleteObjectDate() {
     this.objectService.deleteObjectDate(this.id, this.sdOid).subscribe((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 204) {
         this.toastr.success('Object Date deleted successfully');
         this.activeModal.close('data')
       } else {
@@ -259,7 +259,7 @@ export class ConfirmationWindowComponent implements OnInit {
   }
   deleteObjectIdentifier() {
     this.objectService.deleteObjectIdentifier(this.id, this.sdOid).subscribe((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 204) {
         this.toastr.success('Object Identifier deleted successfully');
         this.activeModal.close('data');
       } else {
@@ -271,7 +271,7 @@ export class ConfirmationWindowComponent implements OnInit {
   }
   deleteObjectDescription() {
     this.objectService.deleteObjectDescription(this.id, this.sdOid).subscribe((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 204) {
         this.toastr.success('Object Description deleted successfully');
         this.activeModal.close('data');
       } else {
@@ -283,7 +283,7 @@ export class ConfirmationWindowComponent implements OnInit {
   }
   deleteObjectRight() {
     this.objectService.deleteObjectRight(this.id, this.sdOid).subscribe((res:any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 204) {
         this.toastr.success('Object Right deleted successfully');
         this.activeModal.close('data');
       } else {
@@ -295,7 +295,7 @@ export class ConfirmationWindowComponent implements OnInit {
   }
   deleteObjectRelationship() {
     this.objectService.deleteObjectRelationship(this.id, this.sdOid).subscribe((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 204) {
         this.toastr.success('Object Relationship deleted successfully');
         this.activeModal.close('data');
       } else {
@@ -307,7 +307,7 @@ export class ConfirmationWindowComponent implements OnInit {
   }
   deleteObjectTopic() {
     this.objectService.deleteObjectTopic(this.id, this.sdOid).subscribe((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 204) {
         this.toastr.success('Object Topic deleted successfully');
         this.activeModal.close('data');
       } else {
@@ -319,7 +319,7 @@ export class ConfirmationWindowComponent implements OnInit {
   }
   deleteObjectContributor() {
     this.objectService.deleteObjectContributor(this.id, this.sdOid).subscribe((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 204) {
         this.toastr.success('Object Contributor deleted successfully');
         this.activeModal.close('data');
       } else {

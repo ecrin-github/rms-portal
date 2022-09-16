@@ -5,6 +5,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { StudyRelationshipInterface } from 'src/app/_rms/interfaces/study/study-relationship.interface';
+import { ListService } from 'src/app/_rms/services/entities/list/list.service';
+import { StudyLookupService } from 'src/app/_rms/services/entities/study-lookup/study-lookup.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
@@ -30,7 +32,7 @@ export class StudyRelationshipComponent implements OnInit {
   studyRelationship: StudyRelationshipInterface;
   len: any;
 
-  constructor( private fb: FormBuilder, private studyService: StudyService, private toastr: ToastrService, private spinner: NgxSpinnerService, private modalService: NgbModal) {
+  constructor( private fb: FormBuilder, private listService: ListService, private studyService: StudyService, private studyLookupService: StudyLookupService, private toastr: ToastrService, private spinner: NgxSpinnerService, private modalService: NgbModal) {
     this.form = this.fb.group({
       studyRelationships: this.fb.array([])
     });
@@ -86,7 +88,7 @@ export class StudyRelationshipComponent implements OnInit {
     }
   }
   getRelationshipType() {
-    const getRelationshipType$ = this.studyService.getReleationshiType().subscribe((res: any) => {
+    const getRelationshipType$ = this.studyLookupService.getStudyRelationshipTypes().subscribe((res: any) => {
       if(res.data) {
         this.relationshipType = res.data;
       }
@@ -99,7 +101,7 @@ export class StudyRelationshipComponent implements OnInit {
     setTimeout(() => {
       this.spinner.show();
     });
-    this.studyService.getStudy().subscribe((res: any) => {
+    this.listService.getStudyList().subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.studyType = res.data.length ? res.data : [];
@@ -111,7 +113,7 @@ export class StudyRelationshipComponent implements OnInit {
   }
   getStudyRelationship() {
     this.spinner.show();
-    this.studyService.getStudyRelationship(this.sdSid).subscribe((res: any) => {
+    this.studyService.getStudyRelationships(this.sdSid).subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.studyRelationship = res.data.length ? res.data : [];

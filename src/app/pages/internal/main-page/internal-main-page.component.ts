@@ -17,17 +17,19 @@ export class InternalMainPageComponent implements OnInit {
   colorsThemeLightSuccess: string;
   fontFamily: string;
   dtpChartOptions: any = {};
-  dtpCompleted: any;
+  dtpTotal: number = 0;
   dupChartOptions: any = {};
-  dupCompleted: any;
+  dupTotal: number = 0;
   studyChartOptions: any = {};
-  studyCompleted: any;
+  studyTotal: any;
   objectChartOptions: any = {};
-  objectCompleted: any;
+  objectTotal: any;
+  peopleChartOptions: any = {};
+  peopleTotal: any;
   valuePer: any = {};
   valueNum: any = {};
   userData: any;
-
+  
   constructor( private layout: LayoutService, private dashboardService: DashboardService, private toastr: ToastrService, private permissionService: NgxPermissionsService, 
     private userService: UserService) { 
     this.colorsGrayGray100 = this.layout.getProp('js.colors.gray.gray100');
@@ -41,15 +43,17 @@ export class InternalMainPageComponent implements OnInit {
     this.fontFamily = this.layout.getProp('js.fontFamily');
 
   }
+
   ngOnInit(): void {
     this.getDtpStatistics();
     this.getDupStatistics();
     this.getStudyStatistics();
     this.getObjectStatistics();
-    this.getUserData();
+    this.getPeopleStatistics();
     const perm = localStorage.getItem('role');
     this.permissionService.loadPermissions([perm]);
   }
+
   getUserData() {
     this.userService.getUser().subscribe(res => {
       if (res) {
@@ -59,40 +63,52 @@ export class InternalMainPageComponent implements OnInit {
       console.log('error', error);
     })
   }
+
   getDtpStatistics() {
     this.dashboardService.getDtpStatistics().subscribe((res: any) => {
-      this.dtpCompleted = Math.round((((res.total-res.uncompleted)/res.total)*100)*100)/100 ;
-      this.dtpChartOptions = this.getChartOptions(this.dtpCompleted, 'Completed DTs', true);
+      this.dtpTotal = res.data[0].statValue;
+      this.dtpChartOptions = this.getChartOptions(this.dtpTotal, 'Completed DTs', false);
     }, error => {
       this.toastr.error(error.error.title);
     })
   }
+  
   getDupStatistics() {
     this.dashboardService.getDupStatistics().subscribe((res: any) => {
-      this.dupCompleted = Math.round((((res.total-res.uncompleted)/res.total)*100)*100)/100;
-      this.dupChartOptions = this.getChartOptions(this.dupCompleted, 'Completed DTs', true);
-    }, error => {
-      this.toastr.error(error.error.title);
-    })
-  }
-  getStudyStatistics() {
-    this.dashboardService.getStudyStatistics().subscribe((res: any) => {
-      this.studyCompleted = res.total;
-      this.studyChartOptions = this.getChartOptions(this.studyCompleted, 'Completed DUs', false);
-    }, error => {
-      this.toastr.error(error.error.title);
-    })
-  }
-  getObjectStatistics() {
-    this.dashboardService.getObjectStatistics().subscribe((res: any) => {
-      this.objectCompleted = res.total;
-      this.objectChartOptions = this.getChartOptions(this.objectCompleted, 'Total Objects', false);
+      this.dupTotal = res.data[0].statValue;
+      this.dupChartOptions = this.getChartOptions(this.dupTotal, 'Completed DUs', false);
     }, error => {
       this.toastr.error(error.error.title);
     })
   }
 
-  getChartOptions(data,label, format) {
+  getStudyStatistics() {
+    this.dashboardService.getStudyStatistics().subscribe((res: any) => {
+      this.studyTotal = res.data[0].statValue;
+      this.studyChartOptions = this.getChartOptions(this.studyTotal, 'Total Studies', false);
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  } 
+  getObjectStatistics() {
+    this.dashboardService.getObjectStatistics().subscribe((res: any) => {
+      this.objectTotal = res.data[0].statValue;
+      this.objectChartOptions = this.getChartOptions(this.objectTotal, 'Total Objects', false);
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  getPeopleStatistics() {
+    this.dashboardService.getPeopleStatistics().subscribe((res: any) => {
+      this.peopleTotal = res.data[0].statValue;
+      this.peopleChartOptions = this.getChartOptions(this.peopleTotal, 'Total People', false);
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  } 
+
+
+  getChartOptions(data, label, format) {
     this.valuePer = {
       color: this.colorsGrayGray700,
       fontSize: '20px',

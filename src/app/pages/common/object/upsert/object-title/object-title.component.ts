@@ -5,7 +5,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { ObjectTitleInterface } from 'src/app/_rms/interfaces/data-object/object-title.interface';
+import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
+import { ObjectLookupService } from 'src/app/_rms/services/entities/object-lookup/object-lookup.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 
@@ -31,7 +33,7 @@ export class ObjectTitleComponent implements OnInit {
   @Output() emitTitle: EventEmitter<any> = new EventEmitter();
   len: any;
 
-  constructor( private fb: FormBuilder, private objectService: DataObjectService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: FormBuilder, private commonLookupService: CommonLookupService, private objectService: DataObjectService, private objectLookupService: ObjectLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectTitles: this.fb.array([])
     });
@@ -89,7 +91,7 @@ export class ObjectTitleComponent implements OnInit {
     }
   }
   getLanguageCode() {
-    const getLanguageCode$ = this.objectService.getLanguageCode().subscribe((res:any) => {
+    const getLanguageCode$ = this.commonLookupService.getLanguageCodes().subscribe((res:any) => {
       if(res.data) {
         this.languageCode = res.data;
       }
@@ -99,7 +101,7 @@ export class ObjectTitleComponent implements OnInit {
     this.subscription.add(getLanguageCode$);
   }
   getTitleType() {
-    const getTitleType$ = this.studyService.getTitleType().subscribe((res:any) => {
+    const getTitleType$ = this.objectLookupService.getObjectTitleTypes().subscribe((res:any) => {
       if(res.data) {
         this.titleType = res.data;
       }
@@ -110,7 +112,7 @@ export class ObjectTitleComponent implements OnInit {
   }
   getObjectTitle() {
     this.spinner.show();
-    this.objectService.getObjectTitle(this.sdOid).subscribe((res: any) => {
+    this.objectService.getObjectTitles(this.sdOid).subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectTitle = res.data.length ? res.data : [];

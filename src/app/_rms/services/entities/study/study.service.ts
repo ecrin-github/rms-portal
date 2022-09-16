@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-const url = environment.baseUrl + '/context';
-const studyUrl = environment.baseUrl + '/metadata-management/studies';
-const filterUrl = environment.baseUrl + '/metadata-management';
+const base = environment.baseUrl;
 
 @Injectable({
   providedIn: 'root'
@@ -12,130 +10,153 @@ export class StudyService {
 
   constructor( private http: HttpClient) { }
 
-  getFeatureType() {
-    return this.http.get(`${url}/study-feature-types`);
+  // full study - witrh attributes
+  
+  getFullStudyById(sdSid) {
+    return this.http.get(`${base}/studies/full/${sdSid}`);
   }
-  getFeatureValue() {
-    return this.http.get(`${url}/study-feature-categories`);
+
+  deleteFullStudyById(sdSid) {
+    return this.http.delete(`${base}/studies/full/${sdSid}`);
   }
-  getIdentifierType() {
-    return this.http.get(`${url}/identifier-types`);
+
+  // MDR related calls
+ 
+  getFullStudyFromMdr(regId: number, sdSid: string) {
+    return this.http.get(`${base}/studies/mdr/${regId}/${sdSid}`);
   }
-  getTitleType() {
-    return this.http.get(`${url}/title-types`);
+  
+  getStudyFromMdr(regId: number, sdSid: string) {
+    // N.B. Limited use - was for testing only
+    return this.http.get(`${base}/studies/mdr/${regId}/${sdSid}/data`);
   }
-  getTopicType() {
-    return this.http.get(`${url}/topic-types`);
+
+  
+  // study data - study table data only 
+
+  addStudy(sdSid, payload) {
+    // note inclusion of explicit sdSid in call
+    return this.http.post(`${base}/studies/${sdSid}`, payload);
   }
-  getReleationshiType() {
-    return this.http.get(`${url}/study-relationship-types`);
+  getStudyById(sdSid) {
+    return this.http.get(`${base}/studies/${sdSid}`);
   }
-  getStudyType() {
-    return this.http.get(`${url}/study-types`);
+  editStudy(sdSid, payload) {
+    return this.http.put(`${base}/studies/${sdSid}`, payload);
   }
-  getStudyStatus() {
-    return this.http.get(`${url}/study-statuses`);
+  deleteStudyById(sdSid) {
+    // full delete would normally be more useful
+    return this.http.delete(`${base}/studies/${sdSid}`);
   }
-  getGenderEligibility() {
-    return this.http.get(`${url}/gender-eligibility-types`);
+
+
+  // study identifiers
+
+  getStudyIdentifiers(sdSid) {
+    return this.http.get(`${base}/studies/${sdSid}/identifiers`);
   }
-  getTimeUnits() {
-    return this.http.get(`${url}/time-units`);
+  addStudyIdentifier(sdSid, payload) {
+    return this.http.post(`${base}/studies/${sdSid}/identifiers`, payload);
   }
-  getLanguageCode() {
-    return this.http.get(`${url}/lang-codes`);
+  getStudyIdentifier(id, sdSid) {
+    return this.http.get(`${base}/studies/${sdSid}/identifiers/${id}`);
   }
-  getTopicVocabulary() {
-    return this.http.get(`${url}/topic-vocabularies`);
-  }
-  getStudy() {
-    return this.http.get(`${studyUrl}`);
-  }
-  addStudy(payload) {
-    return this.http.post(`${studyUrl}`, payload);
-  }
-  getStudyById(id) {
-    return this.http.get(`${studyUrl}/${id}`);
-  }
-  editStudy(id, payload) {
-    return this.http.put(`${studyUrl}/${id}`, payload);
-  }
-  getStudyIdentifier(id) {
-    return this.http.get(`${studyUrl}/${id}/identifiers`);
-  }
-  addStudyIdentifier(id, payload) {
-    return this.http.post(`${studyUrl}/${id}/identifiers`, payload);
-  }
-  editStudyIdentifier(id, sdSid, payload) {
-    return this.http.put(`${studyUrl}/${sdSid}/identifiers/${id}`, payload);
+    editStudyIdentifier(id, sdSid, payload) {
+    return this.http.put(`${base}/studies/${sdSid}/identifiers/${id}`, payload);
   }
   deleteStudyIdentifier(id, sdSid) {
-    return this.http.delete(`${studyUrl}/${sdSid}/identifiers/${id}`);
+    return this.http.delete(`${base}/studies/${sdSid}/identifiers/${id}`);
   }
-  getStudyTitle(id) {
-    return this.http.get(`${studyUrl}/${id}/titles`);
+
+
+  // study titles
+
+  getStudyTitles(sdSid) {
+    return this.http.get(`${base}/studies/${sdSid}/titles`);
   }
-  addStudyTitle(id, payload) {
-    return this.http.post(`${studyUrl}/${id}/titles`, payload);
+  addStudyTitle(sdSid, payload) {
+    return this.http.post(`${base}/studies/${sdSid}/titles`, payload);
+  }
+  getStudyTitle(id, sdSid) {
+    return this.http.get(`${base}/studies/${sdSid}/titles/${id}`);
   }
   editStudyTitle(id, sdSid, payload) {
-    return this.http.put(`${studyUrl}/${sdSid}/titles/${id}`, payload);
+    return this.http.put(`${base}/studies/${sdSid}/titles/${id}`, payload);
   }
   deleteStudyTitle(id, sdSid) {
-    return this.http.delete(`${studyUrl}/${sdSid}/titles/${id}`);
+    return this.http.delete(`${base}/studies/${sdSid}/titles/${id}`);
   }
-  getStudyFeature(id) {
-    return this.http.get(`${studyUrl}/${id}/features`);
+
+
+  // study features
+  getStudyFeatures(sdSid) {
+    return this.http.get(`${base}/studies/${sdSid}/features`);
   }
-  addStudyFeature(id, payload) {
-    return this.http.post(`${studyUrl}/${id}/features`, payload);
+  addStudyFeature(sdSid, payload) {
+    return this.http.post(`${base}/studies/${sdSid}/features`, payload);
+  }
+  getStudyFeature(id, sdSid) {
+    return this.http.get(`${base}/studies/${sdSid}/features/${id}`);
   }
   editStudyFeature(id, sdSid, payload) {
-    return this.http.put(`${studyUrl}/${sdSid}/features/${id}`, payload);
+    return this.http.put(`${base}/studies/${sdSid}/features/${id}`, payload);
   }
   deleteStudyFeature(id, sdSid) {
-    return this.http.delete(`${studyUrl}/${sdSid}/features/${id}`);
+    return this.http.delete(`${base}/studies/${sdSid}/features/${id}`);
   }
-  getStudyTopic(id) {
-    return this.http.get(`${studyUrl}/${id}/topics`);
+
+
+  // study topics
+  getStudyTopics(sdSid) {
+    return this.http.get(`${base}/studies/${sdSid}/topics`);
   }
-  addStudyTopic(id, payload) {
-    return this.http.post(`${studyUrl}/${id}/topics`, payload);
+  addStudyTopic(sdSid, payload) {
+    return this.http.post(`${base}/studies/${sdSid}/topics`, payload);
+  }
+  getStudyTopic(id, sdSid) {
+    return this.http.get(`${base}/studies/${sdSid}/topics/${id}`);
   }
   editStudyTopic(id, sdSid, payload) {
-    return this.http.put(`${studyUrl}/${sdSid}/topics/${id}`, payload);
+    return this.http.put(`${base}/studies/${sdSid}/topics/${id}`, payload);
   }
   deleteStudyTopic(id, sdSid) {
-    return this.http.delete(`${studyUrl}/${sdSid}/topics/${id}`);
+    return this.http.delete(`${base}/studies/${sdSid}/topics/${id}`);
   }
-  getStudyRelationship(id) {
-    return this.http.get(`${studyUrl}/${id}/relationships`);
+  
+
+  // study relationships
+  getStudyRelationships(sdSid) {
+    return this.http.get(`${base}/studies/${sdSid}/relationships`);
   }
-  addStudyRelationship(id, payload) {
-    return this.http.post(`${studyUrl}/${id}/relationships`, payload);
+  addStudyRelationship(sdSid, payload) {
+    return this.http.post(`${base}/studies/${sdSid}/relationships`, payload);
+  }
+  getStudyRelationship(id, sdSid) {
+    return this.http.get(`${base}/studies/${sdSid}/relationships/${id}`);
   }
   editStudyRelationship(id, sdSid, payload) {
-    return this.http.put(`${studyUrl}/${sdSid}/relationships/${id}`, payload);
+    return this.http.put(`${base}/studies/${sdSid}/relationships/${id}`, payload);
   }
-  deleteStudyRelationshi(id, sdSid) {
-    return this.http.delete(`${studyUrl}/${sdSid}/relationships/${id}`);
+  deleteStudyRelationship(id, sdSid) {
+    return this.http.delete(`${base}/studies/${sdSid}/relationships/${id}`);
   }
-  getStudyContributor(id) {
-    return this.http.get(`${studyUrl}/${id}/contributors`);
+
+
+  // study contributors
+  getStudyContributors(sdSid) {
+    return this.http.get(`${base}/studies/${sdSid}/contributors`);
   }
-  addStudyContributor(id, payload) {
-    return this.http.post(`${studyUrl}/${id}/contributors`, payload);
+  addStudyContributor(sdSid, payload) {
+    return this.http.post(`${base}/studies/${sdSid}/contributors`, payload);
+  }
+  getStudyContributor(id, sdSid) {
+    return this.http.get(`${base}/studies/${sdSid}/contributors/${id}`);
   }
   editStudyContributor(id, sdSid, payload) {
-    return this.http.put(`${studyUrl}/${sdSid}/contributors/${id}`, payload);
+    return this.http.put(`${base}/studies/${sdSid}/contributors/${id}`, payload);
   }
   deleteStudyContributor(id, sdSid) {
-    return this.http.delete(`${studyUrl}/${sdSid}/contributors/${id}`);
+    return this.http.delete(`${base}/studies/${sdSid}/contributors/${id}`);
   }
-  filterByTitle(payload) {
-    return this.http.post(`${filterUrl}/filter/studies/by-title`, payload);
-  }
-  deleteStudyById(id) {
-    return this.http.delete(`${studyUrl}/${id}`);
-  }
+
 }

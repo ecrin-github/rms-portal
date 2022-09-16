@@ -7,6 +7,7 @@ import { ObjectInstanceInterface } from 'src/app/_rms/interfaces/data-object/obj
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
+import { ObjectLookupService } from 'src/app/_rms/services/entities/object-lookup/object-lookup.service';
 
 @Component({
   selector: 'app-object-instance',
@@ -30,7 +31,7 @@ export class ObjectInstanceComponent implements OnInit {
   @Output() emitInstance: EventEmitter<any> = new EventEmitter();
   len: any;
 
-  constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
+  constructor( private fb: FormBuilder, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
       objectInstances: this.fb.array([])
     });
@@ -95,7 +96,7 @@ export class ObjectInstanceComponent implements OnInit {
     }
   }
   getSizeUnit() {
-    const getSizeUnit$ = this.objectService.getSizeUnit().subscribe((res: any) => {
+    const getSizeUnit$ = this.objectLookupService.getSizeUnits().subscribe((res: any) => {
       if(res.data) {
         this.sizeUnit = res.data;
       }
@@ -105,7 +106,7 @@ export class ObjectInstanceComponent implements OnInit {
     this.subscription.add(getSizeUnit$)
   }
   getResourceType() {
-    const getResourceType$ = this.objectService.getResourceType().subscribe((res: any) => {
+    const getResourceType$ = this.objectLookupService.getResourceTypes().subscribe((res: any) => {
       if (res.data) {
         this.resourceType = res.data;
       }
@@ -116,7 +117,7 @@ export class ObjectInstanceComponent implements OnInit {
   }
   getObjectInstance() {
     this.spinner.show();
-    this.objectService.getObjectInstance(this.sdOid).subscribe((res: any) => {
+    this.objectService.getObjectInstances(this.sdOid).subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectInstance = res.data.length ? res.data : [];

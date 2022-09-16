@@ -82,7 +82,7 @@ export class ObjectRightComponent implements OnInit {
   }
   getObjectRight() {
     this.spinner.show();
-    this.objectService.getObjectRight(this.sdOid).subscribe((res: any) => {
+    this.objectService.getObjectRights(this.sdOid).subscribe((res: any) => {
       this.spinner.hide();
       if(res && res.data) {
         this.objectRight = res.data.length ? res.data : [];

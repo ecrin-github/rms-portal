@@ -42,7 +42,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="identifierOrgId" class="font-style text-capitalize">Identifier organisation</label>
-                                <ng-select [items]="organizationList" bindLabel="defaultName" bindValue="id" formControlName="identifierOrgId"
+                                <ng-select [items]="organizationList" bindLabel="name" bindValue="id" formControlName="identifierOrgId"
                                     [multiple]="false" [virtualScroll]="true" class="custom" notFoundText="No organization found"
                                     placeholder="Select Organization" *ngIf="!isView">
                                 </ng-select>
