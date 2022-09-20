@@ -1,10 +1,17 @@
 <div class="card">
     <div class="card-header">
         <h2>Studies list</h2>
-        <div style="float: right; margin-top: -40px;" *ngxPermissionsOnly="['Admin', 'Manager']">
-            <a [routerLink]="['/studies', 'add']" class="btn btn-success" target="_blank">
-                <i class="fa fa-plus"></i> New study
-            </a>
+        <!-- <div style="float: right; margin-top: -40px;" *ngxPermissionsOnly="['Admin', 'Manager']"> -->
+        <div style="float: right; margin-top: -40px;">
+            <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-plus"></i> New study
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="/studies/add?type=usingTrialId" target="_blank">Using Trial Registry</a>
+                  <a class="dropdown-item" href="/studies/add?type=manual" target="_blank">Manually</a>
+                </div>
+            </div>      
         </div>
     </div>
 

@@ -296,6 +296,10 @@ export class UpsertDtpComponent implements OnInit {
       this.toastr.error(error.error.title);
     })
   }
+  findPrereqType(id) {
+    const arr: any = this.preRequTypes.filter((item: any) => item.id === id);
+    return arr && arr.length ? arr[0].name : '';
+  }
   onClickControllTab() {
     this.getPrereqTypes();
     this.patchPreReq(this.dtpData.dtpPrereqs);
@@ -580,6 +584,10 @@ export class UpsertDtpComponent implements OnInit {
     }, error => {
       this.toastr.error(error.error.title);
     })
+  }
+  findPeopleById(id) {
+    const arr: any = this.associatedUser.filter((item: any) => item.personId === id);
+    return arr && arr.length ? arr[0].personName : '';
   }
   removeDtpUser(id) {
     this.dtpService.deleteDtpPerson(id, this.id).subscribe((res: any) => {

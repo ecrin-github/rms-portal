@@ -512,7 +512,7 @@
                                             <option [value]=user.personId *ngFor="let user of associatedUser">
                                                 {{user.personName}}</option>
                                         </select>
-                                        <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData?.dtas[0].repoSignatory1}}
+                                        <h6 style="font-weight: 100;" *ngIf="isView">{{findPeopleById(dtpData?.dtas[0].repoSignatory1)}}
                                         </h6>
                                     </div>
                                     <div class="col-md-6">
@@ -524,7 +524,7 @@
                                             <option [value]="user.personId" *ngFor="let user of associatedUser">
                                                 {{user.personName}}</option>
                                         </select>
-                                        <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData?.dtas[0].repoSignatory2}}
+                                        <h6 style="font-weight: 100;" *ngIf="isView">{{findPeopleById(dtpData?.dtas[0].repoSignatory2)}}
                                         </h6>
                                     </div>
                                 </div>
@@ -539,7 +539,7 @@
                                                 {{user.personName}}</option>
                                         </select>
                                         <h6 style="font-weight: 100;" *ngIf="isView">
-                                            {{dtpData?.dtas[0].providerSignatory1}}
+                                            {{findPeopleById(dtpData?.dtas[0].providerSignatory1)}}
                                         </h6>
                                     </div>
                                     <div class="col-md-6">
@@ -552,7 +552,7 @@
                                                 {{user.personName}}</option>
                                         </select>
                                         <h6 style="font-weight: 100;" *ngIf="isView">
-                                            {{dtpData?.dtas[0].providerSignatory2}}
+                                            {{findPeopleById(dtpData?.dtas[0].providerSignatory2)}}
                                         </h6>
                                     </div>
                                 </div>
@@ -564,8 +564,8 @@
                                         <div class="col-md-12" *ngFor="let note of notes().controls;let i = index" [formGroupName]="i">
                                             <div class="card border-0">
                                                 <div class="card-body pl-0 pr-0 pb-0 pt-5">
-                                                    <i class="fa fa-times float-right pr-1 text-danger" style="cursor: pointer;" (click)="deleteDtpNote(i)"></i>
-                                                    <i class="fa fa-check float-right pr-2 text-success" style="cursor: pointer;" (click)="saveDtpNote(note)"></i>
+                                                    <i class="fa fa-times float-right pr-1 text-danger" style="cursor: pointer;" (click)="deleteDtpNote(i)" *ngIf="!isView"></i>
+                                                    <i class="fa fa-check float-right pr-2 text-success" style="cursor: pointer;" (click)="saveDtpNote(note)" *ngIf="!isView"></i>
                                                     <textarea id="notes" cols="30" rows="3" class="form-control" formControlName="text"
                                                         *ngIf="!isView"></textarea>
                                                     <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData.dtpNotes[i].text}}</h6>
@@ -574,7 +574,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            <hr>
+                                <hr>
                             </ng-container>
                             <div class="row">
                                 <div class="col-md-12 justify-content-center text-center">
@@ -657,15 +657,17 @@
                                 <div class="col-md-12" *ngFor="let preReq of preReqs().controls;let i = index" [formGroupName]="i">
                                     <div class="row" class="row form-group">
                                         <div class="col-md-6">
-                                            <label for="preReqId">Pre-Requisite for Data Object {{preReq.value.sdOid}}</label>
-                                            <select id="preReqId" formControlName="preRequisiteTypeId" class="form-control">
+                                            <label for="preReqId" class="font-style text-capitalize">Pre-Requisite for Data Object {{preReq.value.sdOid}}</label>
+                                            <select id="preReqId" formControlName="preRequisiteTypeId" class="form-control" *ngIf="!isView">
                                                 <option [value]=preReqType.id *ngFor="let preReqType of preRequTypes">{{preReqType.name}}</option>
                                             </select>
+                                            <h6 style="font-weight: 100;" *ngIf="isView">{{findPrereqType(dtpData.dtpPrereqs[i].preRequisiteTypeId)}}</h6>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="notes">Note</label>
+                                            <label for="notes" class="font-style text-capitalize">Note</label>
                                             <textarea id="notes" cols="30" rows="3" class="form-control" formControlName="preRequisiteNotes"
                                             *ngIf="!isView"></textarea>
+                                            <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData.dtpPrereqs[i].preRequisiteNotes}}</h6>
                                         </div>
                                     </div>
                                 </div>

@@ -39,6 +39,9 @@ export class UpsertStudyComponent implements OnInit {
   monthValues = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
   sticky: boolean = false;
   studyType: string = '';
+  addType: string;
+  registryId: number;
+  trialId: string;
 
   constructor(private fb: FormBuilder, private router: Router, private studyLookupService: StudyLookupService, private studyService: StudyService, private activatedRoute: ActivatedRoute,
     private spinner: NgxSpinnerService, private toastr: ToastrService) {
@@ -92,7 +95,12 @@ export class UpsertStudyComponent implements OnInit {
       this.getStudyById(this.id);
     }
     if (this.isAdd) {
-      this.getTrialRegistries();
+      this.activatedRoute.queryParams.subscribe(params => {
+        this.addType = params.type;
+      })
+      if (this.addType === 'usingTrialId') {
+        this.getTrialRegistries();
+      }
     }
   }
   getStudyType() {
@@ -195,7 +203,6 @@ export class UpsertStudyComponent implements OnInit {
     this.studyLookupService.getTrialRegistries().subscribe((res: any) => {
       if (res && res.data) {
         this.trialRegistries = res.data;
-        console.log('registry', this.trialRegistries);
       }
     }, error => {
       this.toastr.error(error.error.title);
@@ -294,44 +301,68 @@ export class UpsertStudyComponent implements OnInit {
     if (localStorage.getItem('updateStudyList')) {
       localStorage.removeItem('updateStudyList');
     }
-    this.isSubmitted = true;
-    if (this.studyForm.valid) {
-      const payload = JSON.parse(JSON.stringify(this.studyForm.value));
-      this.spinner.show();
-      if (this.isEdit) {
-        payload.id = this.studyData.id;
-        payload.sdSid = this.id;
-        payload.studyStartYear = this.studyForm.value.studyStartYear ? this.studyForm.value.studyStartYear.getFullYear() : null;
-        this.studyService.editStudy(this.id, payload).subscribe((res: any) => {
-          this.spinner.hide();
-          if (res.statusCode === 200) {
-            this.toastr.success('Study Details updated successfully');
-            localStorage.setItem('updateStudyList', 'true');
-            this.getStudyById(this.id);
-          } else {
-            this.toastr.error(res.messages[0]);
-          }
-        }, error => {
-          this.spinner.hide();
-          this.toastr.error(error.error.title);
-        })
-      } else {
-        payload.studyStartYear = this.studyForm.value.studyStartYear ? this.studyForm.value.studyStartYear.getFullYear() : null;
-        this.studyService.addStudy('', payload).subscribe((res: any) => {
-          this.spinner.hide();
-          if (res.statusCode === 200) {
-            this.toastr.success('Study Detail added successfully');
-            localStorage.setItem('updateStudyList', 'true');
-          } else {
-            this.toastr.error(res.messages[0]);
-          }
-        }, error => {
-          this.spinner.hide();
-          this.toastr.error(error.error.title);
-        })
+    if (this.addType === 'manual') {
+      this.isSubmitted = true;
+      if (this.studyForm.valid) {
+        const payload = JSON.parse(JSON.stringify(this.studyForm.value));
+        this.spinner.show();
+        if (this.isEdit) {
+          payload.id = this.studyData.id;
+          payload.sdSid = this.id;
+          payload.studyStartYear = this.studyForm.value.studyStartYear ? this.studyForm.value.studyStartYear.getFullYear() : null;
+          this.studyService.editStudy(this.id, payload).subscribe((res: any) => {
+            this.spinner.hide();
+            if (res.statusCode === 200) {
+              this.toastr.success('Study Details updated successfully');
+              localStorage.setItem('updateStudyList', 'true');
+              this.getStudyById(this.id);
+            } else {
+              this.toastr.error(res.messages[0]);
+            }
+          }, error => {
+            this.spinner.hide();
+            this.toastr.error(error.error.title);
+          })
+        } else {
+          payload.studyStartYear = this.studyForm.value.studyStartYear ? this.studyForm.value.studyStartYear.getFullYear() : null;
+          this.studyService.addStudy('', payload).subscribe((res: any) => {
+            this.spinner.hide();
+            if (res.statusCode === 200) {
+              this.toastr.success('Study Detail added successfully');
+              localStorage.setItem('updateStudyList', 'true');
+            } else {
+              this.toastr.error(res.messages[0]);
+            }
+          }, error => {
+            this.spinner.hide();
+            this.toastr.error(error.error.title);
+          })
+        }
       }
+      this.count = 0;
     }
-    this.count = 0;
+    if (this.addType === 'usingTrialId') {
+      this.spinner.show();
+      this.studyService.getFullStudyFromMdr(this.registryId, this.trialId).subscribe((res: any) => {
+        if (res.statusCode === 200) {
+          this.toastr.success('Study imported successfully. you will be redirected shortly');
+          localStorage.setItem('updateStudyList', 'true');
+          setTimeout(() => {
+            this.spinner.hide();
+            window.close();
+            this.router.navigate([]).then((result) => {
+              window.open(`studies/${res?.data[0]?.coreStudy?.sdSid}/edit`, '_blank');
+            });
+          }, 2000);
+        } else {
+          this.spinner.hide();
+          this.toastr.error(res.messages[0]);
+        }
+      }, error => {
+        this.spinner.hide();
+        this.toastr.error(error.error.title);
+      })
+    }
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

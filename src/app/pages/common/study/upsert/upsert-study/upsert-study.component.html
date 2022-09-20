@@ -19,129 +19,134 @@
     </div>
 
     <div class="card-body" id="content">
+        <div class="row form-group" *ngIf="isAdd && addType === 'usingTrialId'">
+            <div class="col-md-6">
+                <label for="registryId" class="font-style text-capitalize">Trial Registry ID</label>
+                <select id="registryId" class="form-control" [(ngModel)]="registryId">
+                    <option selected disabled value="">Select an ID...</option>
+                    <option [value]=registry.id *ngFor="let registry of trialRegistries">{{registry.name}}</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="trialId" class="font-style text-capitalize">Trial ID</label>
+                <input id="trialId" type="text" class="form-control" [(ngModel)]="trialId">
+            </div>
+        </div>
         <form [formGroup]="studyForm">
-            <div class="row form-group" *ngIf="isAdd">
-                <div class="col-md-6">
-                    <label for="registryId" class="font-style text-capitalize">Trial Registry ID</label>
-                    <select id="registryId" class="form-control">
-                        <option selected disabled value="">Select an ID...</option>
-                        <option [value]=registry.id *ngFor="let registry of trialRegistries">{{registry.name}}</option>
-                    </select>
+            <ng-container *ngIf="!(addType==='usingTrialId')">
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <label for="displayTitle" class="font-style text-capitalize">Public title</label>
+                        <textarea cols="30" rows="3" class="form-control" placeholder="Enter study display title..."
+                            formControlName="displayTitle" *ngIf="!isView" id="displayTitle" (change)="onChange()"></textarea>
+                        <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.displayTitle}}</h6>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label for="trialId" class="font-style text-capitalize">Trial ID</label>
-                    <input id="trialId" type="text" class="form-control">
+                <div class="row form-group">
+                    <div class="col-md-3">
+                        <label for="studyStatusId" class="font-style text-capitalize">Study status</label>
+                        <select class="form-control" id="studyStatusId" formControlName="studyStatusId" *ngIf="!isView">
+                            <option selected disabled value="">Select an option...</option>
+                            <option [value]=status.id *ngFor="let status of studyStatuses">{{status.name}}</option>
+                        </select>
+                        <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyStatusView?.name}}</h6>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="studyTypeId" class="font-style text-capitalize">Study type</label>
+                        <select class="form-control" id="studyTypeId" formControlName="studyTypeId" *ngIf="!isView"
+                            (change)="studyTypeChange()">
+                            <option selected disabled value="">Select an option...</option>
+                            <option [value]=type.id *ngFor="let type of studyTypes">{{type.name}}</option>
+                        </select>
+                        <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyTypeView?.name}}</h6>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="studyStartMonth" class="font-style text-capitalize">Study Start Month</label>
+                        <select id="studyStartMonth" class="form-control" formControlName="studyStartMonth" *ngIf="!isView">
+                            <option selected disabled value="">Select an option...</option>
+                            <option [value]="month" *ngFor="let month of monthValues">{{month}}</option>
+                        </select>
+                        <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.studyStartMonth}}</h6>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="studyStartYear" class="font-style text-capitalize">Study Start Year</label>
+                        <p-calendar id="studyStartYear" formControlName="studyStartYear" view="year" dateFormat="yy"
+                            *ngIf="!isView"></p-calendar>
+                        <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.studyStartYear}}</h6>
+                    </div>
                 </div>
-            </div>
-            <div class="row form-group">
-                <div class="col-md-12">
-                    <label for="displayTitle" class="font-style text-capitalize">Public title</label>
-                    <textarea cols="30" rows="3" class="form-control" placeholder="Enter study display title..." 
-                    formControlName="displayTitle" *ngIf="!isView" id="displayTitle" (change)="onChange()"></textarea>
-                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.displayTitle}}</h6>
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <label for="briefDescription" class="font-style text-capitalize">Brief description</label>
+                        <textarea class="form-control" cols="30" rows="5" placeholder="Enter a brief description..."
+                            formControlName="briefDescription" *ngIf="!isView" id="briefDescription">
+                            </textarea>
+                        <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.briefDescription}}</h6>
+                    </div>
                 </div>
-            </div>
-            <div class="row form-group">
-                <div class="col-md-3">
-                    <label for="studyStatusId" class="font-style text-capitalize">Study status</label>
-                    <select class="form-control" id="studyStatusId" formControlName="studyStatusId" *ngIf="!isView">
-                        <option selected disabled value="">Select an option...</option>
-                        <option [value]=status.id *ngFor="let status of studyStatuses">{{status.name}}</option>
-                    </select>
-                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyStatusView?.name}}</h6>
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <label for="dataSharingStatement" class="font-style text-capitalize">Data sharing statement</label>
+                        <textarea class="form-control" cols="30" rows="5" placeholder="Enter a data sharing statement"
+                            formControlName="dataSharingStatement" *ngIf="!isView" id="dataSharingStatement"></textarea>
+                        <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.dataSharingStatement}}</h6>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <label for="studyTypeId" class="font-style text-capitalize">Study type</label>
-                    <select class="form-control" id="studyTypeId" formControlName="studyTypeId" *ngIf="!isView" (change)="studyTypeChange()">
-                        <option selected disabled value="">Select an option...</option>
-                        <option [value]=type.id *ngFor="let type of studyTypes">{{type.name}}</option>
-                    </select>
-                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyTypeView?.name}}</h6>
-                </div>
-                <div class="col-md-3">
-                    <label for="studyStartMonth" class="font-style text-capitalize">Study Start Month</label>
-                    <select id="studyStartMonth" class="form-control" formControlName="studyStartMonth" *ngIf="!isView">
-                        <option selected disabled value="">Select an option...</option>
-                        <option [value]="month" *ngFor="let month of monthValues">{{month}}</option>
-                    </select>
-                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.studyStartMonth}}</h6>
-                </div>
-                <div class="col-md-3">
-                    <label for="studyStartYear" class="font-style text-capitalize">Study Start Year</label>
-                    <p-calendar id="studyStartYear" formControlName="studyStartYear" view="year" dateFormat="yy" *ngIf="!isView"></p-calendar>
-                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.studyStartYear}}</h6>
-                </div>
-            </div>
-            <div class="row form-group">
-                <div class="col-md-12">
-                    <label for="briefDescription" class="font-style text-capitalize">Brief description</label>
-                    <textarea class="form-control" cols="30" rows="5" placeholder="Enter a brief description..."
-                    formControlName="briefDescription" *ngIf="!isView" id="briefDescription">
-                </textarea>
-                <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.briefDescription}}</h6>
-                </div>
-            </div>
-            <div class="row form-group">
-                <div class="col-md-12">
-                    <label for="dataSharingStatement" class="font-style text-capitalize">Data sharing statement</label>
-                    <textarea class="form-control" cols="30" rows="5" placeholder="Enter a data sharing statement"
-                        formControlName="dataSharingStatement" *ngIf="!isView" id="dataSharingStatement" ></textarea>
-                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.dataSharingStatement}}</h6>
-                </div>
-            </div>
-            <div class="row form-group">
-                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                    <label for="studyGenderEligId" class="font-style text-capitalize">Study gender eligibility</label>
-                    <select class="form-control" id="studyGenderEligId" formControlName="studyGenderEligId" *ngIf="!isView">
-                        <option selected disabled value="">Select an option...</option>
-                        <option [value]=gender.id *ngFor="let gender of genderEligibility">{{gender.name}}</option>
-                    </select>
-                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyGenderView?.name}}</h6> 
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                    <label for="studyEnrolment" class="font-style text-capitalize">Study enrollment</label>
-                    <input type="text" class="form-control" placeholder="Enter study enrollment..."
-                        formControlName="studyEnrolment" *ngIf="!isView" id="studyEnrolment" />
-                    <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.studyEnrolment}}</h6>   
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                    <div class="row">
-                        <div class="col-8">
-                            <label for="minAge" class="font-style text-capitalize">Min age</label>
-                            <input type="text" id="minAge" class="form-control" placeholder="Enter a min age value..."
-                                formControlName="minAge" *ngIf="!isView" />
-                            <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.minAge ? studyData?.minAge : ''}}</h6> 
+                <div class="row form-group">
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                        <label for="studyGenderEligId" class="font-style text-capitalize">Study gender eligibility</label>
+                        <select class="form-control" id="studyGenderEligId" formControlName="studyGenderEligId" *ngIf="!isView">
+                            <option selected disabled value="">Select an option...</option>
+                            <option [value]=gender.id *ngFor="let gender of genderEligibility">{{gender.name}}</option>
+                        </select>
+                        <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyGenderView?.name}}</h6>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                        <label for="studyEnrolment" class="font-style text-capitalize">Study enrollment</label>
+                        <input type="text" class="form-control" placeholder="Enter study enrollment..."
+                            formControlName="studyEnrolment" *ngIf="!isView" id="studyEnrolment" />
+                        <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.studyEnrolment}}</h6>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                        <div class="row">
+                            <div class="col-8">
+                                <label for="minAge" class="font-style text-capitalize">Min age</label>
+                                <input type="text" id="minAge" class="form-control" placeholder="Enter a min age value..."
+                                    formControlName="minAge" *ngIf="!isView" />
+                                <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.minAge ? studyData?.minAge :
+                                    ''}}</h6>
+                            </div>
+                            <div class="col-4">
+                                <label for="minAgeUnits" class="font-style text-capitalize">Units</label>
+                                <select id="minAgeUnits" class="form-control" formControlName="minAgeUnitsId" *ngIf="!isView">
+                                    <option selected disabled value="">Select an option...</option>
+                                    <option [value]=unit.id *ngFor="let unit of timeUnits">{{unit.name}}</option>
+                                </select>
+                                <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyMinAgeView?.name}}</h6>
+                            </div>
                         </div>
-                        <div class="col-4">
-                            <label for="minAgeUnits" class="font-style text-capitalize">Units</label>
-                            <select id="minAgeUnits" class="form-control" formControlName="minAgeUnitsId" *ngIf="!isView">
-                                <option selected disabled value="">Select an option...</option>
-                                <option [value]=unit.id *ngFor="let unit of timeUnits">{{unit.name}}</option>
-                            </select>
-                            <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyMinAgeView?.name}}</h6> 
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                        <div class="row">
+                            <div class="col-8">
+                                <label for="maxAge" class="font-style text-capitalize">Max age</label>
+                                <input id="maxAge" type="text" class="form-control" placeholder="Enter a max age value..."
+                                    formControlName="maxAge" *ngIf="!isView" />
+                                <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.maxAge ? studyData?.maxAge :
+                                    ''}}</h6>
+                            </div>
+                            <div class="col-4">
+                                <label for="maxAgeUnits" class="font-style text-capitalize">Units</label>
+                                <select id="maxAgeUnits" class="form-control" formControlName="maxAgeUnitsId" *ngIf="!isView">
+                                    <option selected disabled value="">Select an option...</option>
+                                    <option [value]=unit.id *ngFor="let unit of timeUnits">{{unit.name}}</option>
+                                </select>
+                                <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyMaxAgeView?.name}}</h6>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                    <div class="row">
-                        <div class="col-8">
-                            <label for="maxAge" class="font-style text-capitalize">Max age</label>
-                            <input id="maxAge" type="text" class="form-control" placeholder="Enter a max age value..."
-                                formControlName="maxAge" *ngIf="!isView" />
-                            <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.maxAge ? studyData?.maxAge : ''}}</h6> 
-                        </div>
-                        <div class="col-4">
-                            <label for="maxAgeUnits" class="font-style text-capitalize">Units</label>
-                            <select id="maxAgeUnits" class="form-control" formControlName="maxAgeUnitsId" *ngIf="!isView">
-                                <option selected disabled value="">Select an option...</option>
-                                <option [value]=unit.id *ngFor="let unit of timeUnits">{{unit.name}}</option>
-                            </select>
-                            <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyMaxAgeView?.name}}</h6> 
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            </ng-container>
             <hr />
             <div class="row">
                 <div class="col-12 justify-content-center text-center">
