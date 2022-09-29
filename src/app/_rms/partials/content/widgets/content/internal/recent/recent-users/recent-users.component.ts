@@ -10,7 +10,7 @@ import { DashboardService } from 'src/app/_rms/services/entities/dashboard/dashb
 export class RecentUsersComponent {
   @Input() cssClass;
   @Input() peopleTotal: number = 0;
-  displayedColumns = ['name', 'roleName', 'email', 'orgName', 'actions'];
+  displayedColumns = ['name', 'roleName', 'orgName', 'actions'];
   dataSource: MatTableDataSource<any>;
   totalData: any;
   constructor( private dahboardService: DashboardService, private toastr: ToastrService) { }

@@ -12,7 +12,7 @@ import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 })
 export class SummaryUserComponent implements OnInit {
 
-  displayedColumns = ['name', 'roleName', 'email', 'orgName', 'actions'];
+  displayedColumns = ['name', 'roleName', 'orgName', 'actions'];
   dataSource: MatTableDataSource<any>;
   peopleLength: number = 0;
   searchText: string = '';
