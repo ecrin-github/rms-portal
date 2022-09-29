@@ -306,8 +306,12 @@
                         
                                 </div>
                             </div>
-                            <hr />
+                            <hr *ngIf="!isEdit && !isView" />
                             <ng-container *ngIf="isEdit || isView">
+                                <hr style="border-top: 2px solid;" />
+                                <br />
+                                <h3>Agreement Details</h3>
+                                <br />
                                 <div class="row form-group">
                                     <div [ngClass]="{'col-md-4': !showVariations, 'col-md-6': showVariations}">
                                         <label class="form-check-label font-style text-capitalize" for="conformsToDefault">conforms to
@@ -323,7 +327,7 @@
                                         <h6 style="font-weight: 100;" *ngIf="isView">{{dupData?.duas[0].variations}}</h6>
                                     </div>
                                     <div [ngClass]="{'col-md-4': !showVariations, 'col-md-6': showVariations}">
-                                        <label class="form-check-label font-style text-capitalize" for="repolsProxyProvider">repols proxy
+                                        <label class="form-check-label font-style text-capitalize" for="repolsProxyProvider">repo is proxy
                                             provider</label>
                                         <input class="form-check-input ml-4" type="checkbox" id="repolsProxyProvider"
                                             formControlName="repoIsProxyProvider" *ngIf="!isView">
@@ -420,9 +424,11 @@
                                 </div>
                             <!-- </ng-container> -->
                             <ng-container *ngIf="isEdit || isView">
+                                <hr style="border-top: 2px solid;" />
+                                <h3>Notes</h3>
                                 <div formArrayName="notes">
                                     <div class="row form-group">
-                                        <label for="notes" class="font-style text-capitalize">Notes</label>
+                                        <!-- <label for="notes" class="font-style text-capitalize">Notes</label> -->
                                         <div class="col-md-12 text-right pb-2"><button class="btn btn-primary" (click)="addDtpNote()"
                                                 *ngIf="!isView">Add</button></div>
                                         <div class="col-md-12" *ngFor="let note of notes().controls;let i = index" [formGroupName]="i">

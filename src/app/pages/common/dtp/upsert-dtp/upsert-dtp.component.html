@@ -471,8 +471,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <hr />
+                            <hr *ngIf="!isEdit && !isView" />
                             <ng-container *ngIf="isEdit || isView">
+                                <hr style="border-top: 2px solid;" />
+                                <br />
+                                <h3>Agreement Details</h3>
+                                <br />
                                 <div class="row form-group">
                                     <div class="col-md-6">
                                         <label class="form-check-label font-style text-capitalize" for="conformsToDefault">conforms to
@@ -560,9 +564,11 @@
                                 </div>
                             </div>
                             <ng-container *ngIf="isEdit || isView">
+                                <hr style="border-top: 2px solid;" />
+                                <h3>Notes</h3>
                                 <div formArrayName="notes">
                                     <div class="row form-group">
-                                        <label for="notes" class="font-style text-capitalize">Notes</label>
+                                        <!-- <label for="notes" class="font-style text-capitalize">Notes</label> -->
                                         <div class="col-md-12 text-right pb-2"><button class="btn btn-primary" (click)="addDtpNote()"
                                                 *ngIf="!isView">Add</button></div>
                                         <div class="col-md-12" *ngFor="let note of notes().controls;let i = index" [formGroupName]="i">
