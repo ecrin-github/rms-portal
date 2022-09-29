@@ -5,8 +5,8 @@ import { NgbDate, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { combineLatest } from 'rxjs';
-import { DtpInterface } from 'src/app/_rms/interfaces/dtp/dtp.interface';
 import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
+import { ObjectLookupService } from 'src/app/_rms/services/entities/object-lookup/object-lookup.service';
 import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
 import { ProcessLookupService } from 'src/app/_rms/services/entities/process-lookup/process-lookup.service';
 import KTWizard from '../../../../../assets/js/components/wizard'
@@ -21,6 +21,7 @@ import { ConfirmationWindow1Component } from '../../confirmation-window1/confirm
 export class UpsertDtpComponent implements OnInit {
   form: FormGroup;
   preReqForm: FormGroup;
+  objectEmbargoForm: FormGroup;
   isEdit: boolean = false;
   isView: boolean = false;
   organizationList:[] = [];
@@ -40,9 +41,12 @@ export class UpsertDtpComponent implements OnInit {
   showStatus: boolean = false;
   showVariations: boolean = false;
   preRequTypes: [] = [];
+  preRequisitData = [];
+  accessTypes: [] = [];
 
   constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
-    private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService) { 
+    private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService,
+    private objectLookupService: ObjectLookupService) { 
     this.form = this.fb.group({
       orgId: ['', Validators.required],
       displayName: ['', Validators.required],
@@ -71,6 +75,9 @@ export class UpsertDtpComponent implements OnInit {
     this.preReqForm = this.fb.group({
       preRequisite: this.fb.array([])
     });
+    this.objectEmbargoForm = this.fb.group({
+      embargo: this.fb.array([])
+    })
   }
   ngOnInit(): void {
     const todayDate = new Date();
@@ -254,6 +261,61 @@ export class UpsertDtpComponent implements OnInit {
     });
     return formArray;
   }
+  embargos(): FormArray {
+    return this.objectEmbargoForm.get('embargo') as FormArray
+  }
+  newEmbargo(): FormGroup{
+    return this.fb.group({
+      accessCheckStatusId: '',
+      accessCheckBy: '',
+      accessDetails: '',
+      accessCheckDate: '',
+      accessTypeId: '',
+      downloadAllowed: '',
+      dtpId: '',
+      embargoRegime: '',
+      embargoRequested: '',
+      embargoStillApplies: '',
+      id: '',
+      sdOid: ''
+    })
+  }
+  addEmbargo() {
+    this.embargos().push(this.newEmbargo());
+  }
+  patchEmbargo(embargos) {
+    this.objectEmbargoForm.setControl('embargo', this.patchEmbargoArray(embargos))
+  }
+  patchEmbargoArray(embargos): FormArray {
+    const formArray = new FormArray([]);
+    embargos.forEach(embargo => {
+      formArray.push(this.fb.group({
+        accessCheckStatusId: embargo.accessCheckStatusId,
+        accessCheckBy: embargo.accessCheckBy,
+        accessDetails: embargo.accessDetails,
+        accessCheckDate: this.stringTodate(embargo.accessCheckDate),
+        accessTypeId: embargo.accessTypeId,
+        downloadAllowed: embargo.downloadAllowed,
+        dtpId: embargo.dtpId,
+        embargoRegime: embargo.embargoRegime,
+        embargoRequested: embargo.embargoRequested,
+        embargoStillApplies: embargo.embargoStillApplies,
+        id: embargo.id,
+        sdOid: embargo.sdOid
+      }))
+    });
+    return formArray;
+  }
+  getAccessType() {
+    const getAccessType$ = this.objectLookupService.getAccessTypes().subscribe((res: any) => {
+      if(res.data) {
+        this.accessTypes = res.data;
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    });
+  }
+
   get g() { return this.form.controls; }
   getOrganization() {
     this.spinner.show();
@@ -303,6 +365,10 @@ export class UpsertDtpComponent implements OnInit {
   onClickControllTab() {
     this.getPrereqTypes();
     this.patchPreReq(this.dtpData.dtpPrereqs);
+  }
+  onClickObjectAccessTab() {
+    this.getAccessType();
+    this.patchEmbargo(this.dtpData.dtpObjects)
   }
   dateToString(date) {
     if (date) {

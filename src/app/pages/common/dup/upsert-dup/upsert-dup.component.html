@@ -514,44 +514,54 @@
                     <div class="col-md-12">
                         <form [formGroup]="preReqForm">
                             <div formArrayName="preRequisite">
-                                <div class="col-md-12" *ngFor="let preReq of preReqs().controls;let i = index"
-                                    [formGroupName]="i">
-                                    <div class="row form-group">
-                                        <div class="col-md-6">
-                                            <label for="preReqId" class="font-style text-capitalize">Pre-Requisite for Data Object
-                                                {{preReq.value.sdOid}}</label>
-                                            <select id="preReqId" formControlName="preRequisiteId"
-                                                class="form-control" *ngIf="!isView">
-                                                <option [value]=preReqType.id *ngFor="let preReqType of preRequTypes">
-                                                    {{preReqType.name}}</option>
-                                            </select>
-                                            <h6 style="font-weight: 100;" *ngIf="isView">{{findPrereqType(dupData.dupPrereqs[i].preRequisiteId)}}</h6>
+                                <div class="col-md-12" *ngFor="let preReq of preReqs().controls;let i = index" [formGroupName]="i">
+                                    <br>
+                                    <label for="preReqId" class="font-style text-capitalize">{{(preReqs()?.controls[i-1]?.value?.sdOid ===
+                                        preReqs()?.controls[i]?.value?.sdOid) && i!==0 ? '' : 'Pre-Requisite for Data Object' +
+                                        preReq.value.sdOid}}</label>
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header> {{findPrereqType(dupData.dupPrereqs[i].preRequisiteId)}}
+                                        </mat-expansion-panel-header>
+                                        <div class="row form-group">
+                                            <div class="col-md-6">
+                                                <label for="notes" class="font-style text-capitalize">Pre-Requisite Type</label>
+                                                <select id="preReqId" formControlName="preRequisiteId" class="form-control" *ngIf="!isView">
+                                                    <option [value]=preReqType.id *ngFor="let preReqType of preRequTypes">
+                                                        {{preReqType.name}}</option>
+                                                </select>
+                                                <h6 style="font-weight: 100;" *ngIf="isView">
+                                                    {{findPrereqType(dupData.dupPrereqs[i].preRequisiteId)}}</h6>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="notes" class="font-style text-capitalize">Note</label>
+                                                <textarea id="notes" cols="30" rows="3" class="form-control" formControlName="preRequisiteNotes"
+                                                    *ngIf="!isView"></textarea>
+                                                <h6 style="font-weight: 100;" *ngIf="isView">{{dupData.dupPrereqs[i].preRequisiteNotes}}
+                                                </h6>
+                                            </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label for="notes" class="font-style text-capitalize">Note</label>
-                                            <textarea id="notes" cols="30" rows="3" class="form-control"
-                                                formControlName="preRequisiteNotes" *ngIf="!isView"></textarea>
-                                            <h6 style="font-weight: 100;" *ngIf="isView">{{dupData.dupPrereqs[i].preRequisiteNotes}}</h6>
+                                        <div class="row form-group">
+                                            <div class="col-md-6">
+                                                <label for="notes" class="font-style text-capitalize">Pre-Requisite met</label>
+                                                <!-- <input type="text" class="form-control" formControlName="preRequisiteMet" *ngIf="!isView"> -->
+                                                <input class="form-control" placeholder="yyyy-mm-dd" name="preRequisiteMet" ngbDatepicker
+                                                    #preRequisiteMet="ngbDatepicker" (click)="preRequisiteMet.toggle()"
+                                                    formControlName="preRequisiteMet" [maxDate]="todayDate" *ngIf="!isView">
+                                                <h6 style="font-weight: 100;" *ngIf="isView">
+                                                    {{viewDate(dupData.dupPrereqs[i].preRequisiteMet)}}</h6>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="notes" class="font-style text-capitalize">Pre-Requisite met Note</label>
+                                                <textarea id="notes" cols="30" rows="3" class="form-control" formControlName="metNotes"
+                                                    *ngIf="!isView"></textarea>
+                                                <h6 style="font-weight: 100;" *ngIf="isView">{{dupData.dupPrereqs[i].metNotes}}</h6>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row form-group">
-                                        <div class="col-md-6">
-                                            <label for="notes" class="font-style text-capitalize">Pre-Requisite met</label>
-                                            <!-- <input type="text" class="form-control" formControlName="preRequisiteMet" *ngIf="!isView"> -->
-                                            <input class="form-control" placeholder="yyyy-mm-dd"
-                                            name="preRequisiteMet" ngbDatepicker
-                                            #preRequisiteMet="ngbDatepicker"
-                                            (click)="preRequisiteMet.toggle()"
-                                            formControlName="preRequisiteMet" [maxDate]="todayDate" *ngIf="!isView">
-                                            <h6 style="font-weight: 100;" *ngIf="isView">{{viewDate(dupData.dupPrereqs[i].preRequisiteMet)}}</h6>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="notes" class="font-style text-capitalize">Pre-Requisite met Note</label>
-                                            <textarea id="notes" cols="30" rows="3" class="form-control" formControlName="metNotes"
-                                                *ngIf="!isView"></textarea>
-                                            <h6 style="font-weight: 100;" *ngIf="isView">{{dupData.dupPrereqs[i].metNotes}}</h6>
-                                        </div>
-                                    </div>
+                                        <mat-action-row *ngIf="!isView">
+                                            <button mat-button color="primary">Save</button>
+                                            <button mat-button color="warn">Remove</button>
+                                        </mat-action-row>                
+                                    </mat-expansion-panel>
                                 </div>
                             </div>
                         </form>

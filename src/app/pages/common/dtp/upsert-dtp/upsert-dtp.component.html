@@ -32,7 +32,7 @@
                                 (click)="getDtpStudies(id); getDtpObjects(id); getDtpPeople(id)">Set up</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#objectsaccess" data-toggle="tab" id="objectsaccesss">Objects and
+                            <a class="nav-link" href="#objectsaccess" data-toggle="tab" id="objectsaccesss" (click)="onClickObjectAccessTab()">Objects and
                                 Access</a>
                         </li>
                         <li class="nav-item">
@@ -651,6 +651,81 @@
                 </div>
                 <div class="tab-pane fade" id="objectsaccess">
                     <div class="col-md-12">
+                        <form [formGroup]="objectEmbargoForm">
+                            <div formArrayName="embargo">
+                                <div class="col-md-12" *ngFor="let embargo of embargos().controls;let i = index" [formGroupName]="i">
+                                    <br>
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header>{{dtpData.dtpObjects[i].sdOid}}</mat-expansion-panel-header>
+                                        <div class="row form-group">
+                                            <div class="col-md-4">
+                                                <label for="accessTypeId" class="font-style text-capitalize">Access Type</label>
+                                                <select id="accessTypeId" formControlName="accessTypeId" class="form-control" *ngIf="!isView">
+                                                    <option [value]=accessType.id *ngFor="let accessType of accessTypes">{{accessType.name}}
+                                                    </option>
+                                                </select>
+                                                <h6 style="font-weight: 100;" *ngIf="isView">
+                                                    {{findPrereqType(dtpData.dtpObjects[i].accessTypeId)}}</h6>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="accessCheckStatusId" class="font-style text-capitalize">Access check status</label>
+                                                <select id="accessCheckStatusId" formControlName="accessCheckStatusId" class="form-control" *ngIf="!isView">
+                                                    <option [value]=preReqType.id *ngFor="let preReqType of preRequTypes">{{preReqType.name}}
+                                                    </option>
+                                                </select>
+                                                <h6 style="font-weight: 100;" *ngIf="isView">
+                                                    {{findPrereqType(dtpData.dtpObjects[i].accessCheckStatusId)}}</h6>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="accessDetails" class="font-style text-capitalize">access details</label>
+                                                <textarea id="accessDetails" cols="30" rows="3" class="form-control" formControlName="accessDetails"
+                                                    *ngIf="!isView"></textarea>
+                                                <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData.dtpObjects[i].accessDetails}}</h6>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <div class="col-md-4">
+                                                <label for="accessCheckBy" class="font-style text-capitalize">access check by</label>
+                                                <select id="accessCheckBy" formControlName="accessCheckBy" class="form-control" *ngIf="!isView">
+                                                    <option value=""></option>
+                                                </select>
+                                                <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData.dtpObjects[i].accessCheckBy}}</h6>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="accessCheckDate" class="font-style text-capitalize">access check date</label>
+                                                <input class="form-control" placeholder="yyyy-mm-dd"
+                                                name="accessCheckDate" ngbDatepicker
+                                                #accessCheckDate="ngbDatepicker"
+                                                (click)="accessCheckDate.toggle()"
+                                                formControlName="accessCheckDate" [maxDate]="todayDate" *ngIf="!isView">
+                                                <h6 style="font-weight: 100;" *ngIf="isView">{{viewDate(dtpData.dtpObjects[i].accessCheckDate)}}</h6>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <div class="col-md-4">
+                                                <label for="embargoRegime" class="font-style text-capitalize">embargo Regime</label>
+                                                <input type="text" class="form-control" id="embargoRegime" formControlName="embargoRegime" *ngIf="!isView">
+                                                <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData.dtpObjects[i].embargoRegime}}</h6>
+                                            </div>
+                                            <div class="col-md-4 form-check m-auto">
+                                                <label class="form-check-label font-style text-capitalize" for="embargoRequested">embargo requested</label>
+                                                <input class="form-check-input ml-4" type="checkbox" id="embargoRequested" formControlName="embargoRequested" *ngIf="!isView">
+                                                <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData.dtpObjects[i].embargoRequested}}</h6>
+                                            </div>
+                                            <div class="col-md-4 form-check m-auto">
+                                                <label class="form-check-label font-style text-capitalize" for="embargoStillApplies">Emmbargo still applies</label>
+                                                <input class="form-check-input ml-4" type="checkbox" id="embargoStillApplies" formControlName="embargoStillApplies" *ngIf="!isView">
+                                                <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData.dtpObjects[i].embargoStillApplies}}</h6>
+                                            </div>                        
+                                        </div>
+                                        <mat-action-row *ngIf="!isView">
+                                            <button mat-button color="primary">Save</button>
+                                            <button mat-button color="warn">Remove</button>
+                                        </mat-action-row>                
+                                    </mat-expansion-panel>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="controlledaccess">
@@ -658,21 +733,34 @@
                         <form [formGroup]="preReqForm">
                             <div formArrayName="preRequisite">
                                 <div class="col-md-12" *ngFor="let preReq of preReqs().controls;let i = index" [formGroupName]="i">
-                                    <div class="row" class="row form-group">
-                                        <div class="col-md-6">
-                                            <label for="preReqId" class="font-style text-capitalize">Pre-Requisite for Data Object {{preReq.value.sdOid}}</label>
-                                            <select id="preReqId" formControlName="preRequisiteTypeId" class="form-control" *ngIf="!isView">
-                                                <option [value]=preReqType.id *ngFor="let preReqType of preRequTypes">{{preReqType.name}}</option>
-                                            </select>
-                                            <h6 style="font-weight: 100;" *ngIf="isView">{{findPrereqType(dtpData.dtpPrereqs[i].preRequisiteTypeId)}}</h6>
+                                    <br>
+                                    <label for="preReqId" class="font-style text-capitalize">{{(preReqs()?.controls[i-1]?.value?.sdOid ===
+                                        preReqs()?.controls[i]?.value?.sdOid) && i!==0 ? '' : 'Pre-Requisite for Data Object' +
+                                        preReq.value.sdOid}}</label>
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header>{{findPrereqType(dtpData.dtpPrereqs[i].preRequisiteTypeId)}}</mat-expansion-panel-header>
+                                        <div class="row form-group">
+                                            <div class="col-md-6">
+                                                <label for="preReqId" class="font-style text-capitalize">Pre-Requisite Type</label>
+                                                <select id="preReqId" formControlName="preRequisiteTypeId" class="form-control" *ngIf="!isView">
+                                                    <option [value]=preReqType.id *ngFor="let preReqType of preRequTypes">{{preReqType.name}}
+                                                    </option>
+                                                </select>
+                                                <h6 style="font-weight: 100;" *ngIf="isView">
+                                                    {{findPrereqType(dtpData.dtpPrereqs[i].preRequisiteTypeId)}}</h6>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="notes" class="font-style text-capitalize">Note</label>
+                                                <textarea id="notes" cols="30" rows="3" class="form-control" formControlName="preRequisiteNotes"
+                                                    *ngIf="!isView"></textarea>
+                                                <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData.dtpPrereqs[i].preRequisiteNotes}}</h6>
+                                            </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label for="notes" class="font-style text-capitalize">Note</label>
-                                            <textarea id="notes" cols="30" rows="3" class="form-control" formControlName="preRequisiteNotes"
-                                            *ngIf="!isView"></textarea>
-                                            <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData.dtpPrereqs[i].preRequisiteNotes}}</h6>
-                                        </div>
-                                    </div>
+                                        <mat-action-row *ngIf="!isView">
+                                            <button mat-button color="primary">Save</button>
+                                            <button mat-button color="warn">Remove</button>
+                                        </mat-action-row>                
+                                    </mat-expansion-panel>
                                 </div>
                             </div>
                         </form>
