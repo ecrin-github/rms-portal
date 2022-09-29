@@ -52,6 +52,7 @@ import { CommonModalComponent } from './common-modal/common-modal.component';
 import { ConfirmationWindowComponent } from './confirmation-window/confirmation-window.component';
 import { ConfirmationWindow1Component } from './confirmation-window1/confirmation-window1.component';
 import { NgxPermissionsModule } from 'ngx-permissions';
+import { SummaryUserComponent } from './user/summary-user/summary-user/summary-user.component';
 
 
 @NgModule({
@@ -97,7 +98,8 @@ import { NgxPermissionsModule } from 'ngx-permissions';
         StudyContributorComponent,
         CommonModalComponent,
         ConfirmationWindowComponent,
-        ConfirmationWindow1Component
+        ConfirmationWindow1Component,
+        SummaryUserComponent
     ],
     schemas: [NO_ERRORS_SCHEMA],
     imports: [

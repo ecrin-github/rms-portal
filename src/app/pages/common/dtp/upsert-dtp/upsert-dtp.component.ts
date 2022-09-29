@@ -318,7 +318,7 @@ export class UpsertDtpComponent implements OnInit {
   }
   viewDate(date) {
     const dateArray = new Date(date);
-    return date ? dateArray.getFullYear() + '/' + (dateArray.getMonth()+1) + '/' + (dateArray.getDate()+1) : '';
+    return date ? dateArray.getFullYear() + '/' + (dateArray.getMonth()+1) + '/' + (dateArray.getDate()+1) : 'No Date Provided';
   }
   onSave() {
     //setting local storage to reload the dashboard page when adding or editing the dtp

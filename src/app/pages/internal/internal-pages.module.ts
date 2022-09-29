@@ -28,6 +28,7 @@ import { UpsertObjectComponent } from '../common/object/upsert/upsert-object/ups
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { CommonPagesModule } from '../common/common-pages.module';
+import { SummaryUserComponent } from '../common/user/summary-user/summary-user/summary-user.component';
 
 
 @NgModule({
@@ -94,6 +95,12 @@ import { CommonPagesModule } from '../common/common-pages.module';
                 path: 'reports',
                 pathMatch: 'full',
                 component: ReportsPageInternalComponent
+            },
+            // People
+            {
+                path: 'people',
+                pathMatch: 'full',
+                component: SummaryUserComponent
             }
         ]),
         NgbDatepickerModule,

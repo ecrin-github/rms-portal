@@ -224,6 +224,10 @@ export class UpsertDupComponent implements OnInit {
       this.toastr.error(error.error.title);
     })
   }
+  findPrereqType(id) {
+    const arr: any = this.preRequTypes.filter((item: any) => item.id === id);
+    return arr && arr.length ? arr[0].name : '';
+  }
   onClickControllTab() {
     this.getPrereqTypes();
     this.patchPreReq(this.dupData.dupPrereqs);
@@ -254,7 +258,7 @@ export class UpsertDupComponent implements OnInit {
         id: preReq.id,
         preRequisiteId: preReq.preRequisiteId,
         preRequisiteNotes: preReq.preRequisiteNotes,
-        preRequisiteMet: preReq.preRequisiteMet,
+        preRequisiteMet: this.stringTodate(preReq.preRequisiteMet),
         metNotes: preReq.metNotes,
         sdOid: preReq.sdOid
       }))
@@ -309,7 +313,7 @@ export class UpsertDupComponent implements OnInit {
   }
   viewDate(date) {
     const dateArray = new Date(date);
-    return date ? dateArray.getFullYear() + '/' + (dateArray.getMonth()+1) + '/' + (dateArray.getDate()+1) : '';
+    return date ? dateArray.getFullYear() + '/' + (dateArray.getMonth()+1) + '/' + (dateArray.getDate()+1) : 'No Date Provided';
   }
   onSave() {
     if (localStorage.getItem('updateDupList')) {
@@ -544,6 +548,10 @@ export class UpsertDupComponent implements OnInit {
     }, error => {
       this.toastr.error(error.error.title);
     })
+  }
+  findPeopleById(id) {
+    const arr: any = this.associatedUser.filter((item: any) => item.personId === id);
+    return arr && arr.length ? arr[0].personName : '';
   }
   removeDupUser(id) {
     this.dupService.deleteDupPerson(id, this.id).subscribe((res: any) => {

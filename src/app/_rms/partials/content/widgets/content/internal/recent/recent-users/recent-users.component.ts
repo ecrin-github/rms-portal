@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { ToastrService } from 'ngx-toastr';
+import { DashboardService } from 'src/app/_rms/services/entities/dashboard/dashboard.service';
 
 @Component({
   selector: 'app-recent-users',
@@ -8,8 +10,23 @@ import { MatTableDataSource } from '@angular/material/table';
 export class RecentUsersComponent {
   @Input() cssClass;
   @Input() peopleTotal: number = 0;
-  displayedColumns = ['name', 'role', 'email', 'location', 'actions'];
+  displayedColumns = ['name', 'roleName', 'email', 'orgName', 'actions'];
   dataSource: MatTableDataSource<any>;
   totalData: any;
-  constructor() { }
+  constructor( private dahboardService: DashboardService, private toastr: ToastrService) { }
+
+  ngOnInit(): void {
+    this.getUserList();
+  }
+  getUserList() {
+    this.dahboardService.getMostRecent10People().subscribe((res: any) => {
+      if (res && res.data) {
+        this.dataSource = new MatTableDataSource(res.data);
+      } else {
+        this.dataSource = new MatTableDataSource();
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
 }
