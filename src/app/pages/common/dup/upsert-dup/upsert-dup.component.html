@@ -558,8 +558,8 @@
                                             </div>
                                         </div>
                                         <mat-action-row *ngIf="!isView">
-                                            <button mat-button color="primary">Save</button>
-                                            <button mat-button color="warn">Remove</button>
+                                            <button mat-button color="primary" (click)="editPreReq(preReq)">Save</button>
+                                            <button mat-button color="warn" (click)="removePreReq(i)">Remove</button>
                                         </mat-action-row>                
                                     </mat-expansion-panel>
                                 </div>

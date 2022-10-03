@@ -12,6 +12,8 @@ import { ProcessLookupService } from 'src/app/_rms/services/entities/process-loo
 import KTWizard from '../../../../../assets/js/components/wizard'
 import { CommonModalComponent } from '../../common-modal/common-modal.component';
 import { ConfirmationWindow1Component } from '../../confirmation-window1/confirmation-window1.component';
+import { ConfirmationWindowComponent } from '../../confirmation-window/confirmation-window.component';
+import { AddModalComponent } from '../../add-modal/add-modal.component';
 
 @Component({
   selector: 'app-upsert-dtp',
@@ -244,7 +246,15 @@ export class UpsertDtpComponent implements OnInit {
   }
  
   addPreReq() {
-    this.preReqs().push(this.newPreReq());
+    const addModal = this.modalService.open(AddModalComponent, { size: 'lg', backdrop: 'static'});
+    addModal.componentInstance.title = 'Add Pre-Requisite';
+    addModal.componentInstance.dtpId = this.id;
+    addModal.componentInstance.type = 'dtpPrereq';
+    addModal.result.then((data) => {
+      if (data) {
+        this.getDtpById(this.id, 'isPreReq');
+      }
+    }, error => {})
   }
   patchPreReq(preReqs) {
     this.preReqForm.setControl('preRequisite', this.patchPreReqArray(preReqs));
@@ -260,6 +270,33 @@ export class UpsertDtpComponent implements OnInit {
       }))
     });
     return formArray;
+  }
+  editPreReq(preReqsObject) {
+    const payload = preReqsObject.value;
+    this.spinner.show();
+    this.dtpService.editDtpObjectPrereq(payload.id, payload.sdOid, this.id, payload).subscribe((res: any) => {
+      this.spinner.hide();
+      if (res.statusCode === 200) {
+        this.toastr.success('Pre-Requisite updated successfully');
+      } else {
+        this.toastr.error(res.messages[0]);
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
+  removePreReq(i) {
+    const removeModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
+    removeModal.componentInstance.type = 'objectPreReqDtp';
+    removeModal.componentInstance.id = this.preReqs().value[i].id;
+    removeModal.componentInstance.sdOid = this.preReqs().value[i].sdOid;
+    removeModal.componentInstance.dtpId = this.id;
+    removeModal.result.then((data) => {
+      if (data) {
+        this.preReqs().removeAt(i);
+      }
+    }, error => {})
   }
   embargos(): FormArray {
     return this.objectEmbargoForm.get('embargo') as FormArray
@@ -281,7 +318,15 @@ export class UpsertDtpComponent implements OnInit {
     })
   }
   addEmbargo() {
-    this.embargos().push(this.newEmbargo());
+    const embargoModal = this.modalService.open(AddModalComponent, {size: 'lg', backdrop: 'static'});
+    embargoModal.componentInstance.title = 'Add Access details';
+    embargoModal.componentInstance.dtpId = this.id;
+    embargoModal.componentInstance.type = 'dtpEmbargo';
+    embargoModal.result.then((data) => {
+      if (data) {
+        this.getDtpById(this.id, 'isEmbargo');
+      }
+    }, error => {})
   }
   patchEmbargo(embargos) {
     this.objectEmbargoForm.setControl('embargo', this.patchEmbargoArray(embargos))
@@ -305,6 +350,32 @@ export class UpsertDtpComponent implements OnInit {
       }))
     });
     return formArray;
+  }
+  editEmbargo(embargoObject) {
+    const payload = embargoObject.value;
+    this.spinner.show();
+    this.dtpService.editDtpObject(payload.id, this.id, payload).subscribe((res: any) => {
+      this.spinner.hide();
+      if (res.statusCode === 200) {
+        this.toastr.success('Object Embargo updated successfully');
+      } else {
+        this.toastr.error(res.messages[0]);
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
+  removeEmbargo(i) {
+    const removeModal = this.modalService.open(ConfirmationWindowComponent, {size:'lg', backdrop: 'static'});
+    removeModal.componentInstance.type = 'objectEmbargo';
+    removeModal.componentInstance.id = this.embargos().value[i].id;
+    removeModal.componentInstance.dtpId = this.id;
+    removeModal.result.then((data) => {
+      if (data) {{
+        this.embargos().removeAt(i);
+      }}
+    }, error => {});
   }
   getAccessType() {
     const getAccessType$ = this.objectLookupService.getAccessTypes().subscribe((res: any) => {
@@ -364,7 +435,8 @@ export class UpsertDtpComponent implements OnInit {
   }
   onClickControllTab() {
     this.getPrereqTypes();
-    this.patchPreReq(this.dtpData.dtpPrereqs);
+    const preReqArray = (this.dtpData.dtpPrereqs.sort((a,b)=> (a.sdOid > b.sdOid ? 1 : -1)))
+    this.patchPreReq(preReqArray);
   }
   onClickObjectAccessTab() {
     this.getAccessType();
@@ -521,7 +593,7 @@ export class UpsertDtpComponent implements OnInit {
     const arr: any = this.statusList.filter((item: any) => item.name.toLowerCase() === name);
     return arr[0].id;
   }
-  getDtpById(id) {
+  getDtpById(id, type?) {
     setTimeout(() => {
      this.spinner.show();; 
     });
@@ -530,6 +602,13 @@ export class UpsertDtpComponent implements OnInit {
       if (res && res.data) {
         this.dtpData = res.data[0];
         this.patchForm(this.dtpData);
+        if (type === 'isPreReq') {
+          const preReqArray = (this.dtpData.dtpPrereqs.sort((a, b) => (a.sdOid > b.sdOid ? 1 : -1)))
+          this.patchPreReq(preReqArray);
+        }
+        if (type === 'isEmbargo') {
+          this.patchEmbargo(this.dtpData.dtpObjects)
+        }
       }
     }, error => {
       this.spinner.hide();

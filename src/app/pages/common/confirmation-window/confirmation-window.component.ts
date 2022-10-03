@@ -16,6 +16,8 @@ export class ConfirmationWindowComponent implements OnInit {
   id: any;
   sdSid: any;
   sdOid: any;
+  dtpId: any;
+  dupId: any;
 
   constructor( private activeModal: NgbActiveModal, private toastr: ToastrService, private dtpService: DtpService, private dupService: DupService, private studyService: StudyService, private objectService: DataObjectService) { }
 
@@ -81,6 +83,12 @@ export class ConfirmationWindowComponent implements OnInit {
       case 'objectContributor':
         this.deleteObjectContributor();
         break;
+      case 'objectPreReqDtp':
+        this.deletePreReqDtp();
+      case 'objectPreReqDup':
+        this.deletePreReqDup();
+      case 'objectEmbargo':
+        this.deleteEmbargo();
       default:
         break;
     }
@@ -327,6 +335,40 @@ export class ConfirmationWindowComponent implements OnInit {
       }
     }, error => {
       this.toastr.error(error.error.title);
+    })
+  }
+  deletePreReqDtp() {
+    this.dtpService.deleteDtpObjectPrereq(this.id, this.sdOid, this.dtpId).subscribe((res: any) => {
+      if (res.statusCode === 204) {
+        this.toastr.success('Pre-Requisite deleted successfully');
+        this.activeModal.close('data');
+      } else {
+        this.toastr.error(res.messages[0]);
+      }
+    }, error => {
+      this.toastr.error(error.erro.title);
+    })
+  }
+  deleteEmbargo() {
+    this.dtpService.deleteDtpObject(this.id, this.dtpId).subscribe((res: any) => {
+      if (res.statusCode === 204) {
+        this.toastr.success('Object Access details deleted successfully');
+        this.activeModal.close('data');
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  deletePreReqDup() {
+    this.dupService.deleteDupObjectPrereq(this.id, this.sdOid, this.dupId).subscribe((res: any) => {
+      if (res.statusCode === 204) {
+        this.toastr.success('Pre-Requisite deleted successfully');
+        this.activeModal.close('data');
+      } else {
+        this.toastr.error(res.messages[0]);
+      }
+    }, error => {
+      this.toastr.error(error.erro.title);
     })
   }
   closeModal() {

@@ -650,6 +650,9 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="objectsaccess">
+                    <div class="col-md-12 text-right">
+                        <button class="btn btn-primary" (click)="addEmbargo()">Add</button>
+                    </div>
                     <div class="col-md-12">
                         <form [formGroup]="objectEmbargoForm">
                             <div formArrayName="embargo">
@@ -719,8 +722,8 @@
                                             </div>                        
                                         </div>
                                         <mat-action-row *ngIf="!isView">
-                                            <button mat-button color="primary">Save</button>
-                                            <button mat-button color="warn">Remove</button>
+                                            <button mat-button color="primary" (click)="editEmbargo(embargo)">Save</button>
+                                            <button mat-button color="warn" (click)="removeEmbargo(i)">Remove</button>
                                         </mat-action-row>                
                                     </mat-expansion-panel>
                                 </div>
@@ -731,6 +734,9 @@
                 <div class="tab-pane fade" id="controlledaccess">
                     <div class="col-md-12">
                         <form [formGroup]="preReqForm">
+                            <div class="col-md-12 text-right" *ngIf="!isView">
+                                <button class="btn btn-primary" (click)="addPreReq()">Add Pre-Requisite</button>
+                            </div>
                             <div formArrayName="preRequisite">
                                 <div class="col-md-12" *ngFor="let preReq of preReqs().controls;let i = index" [formGroupName]="i">
                                     <br>
@@ -757,8 +763,8 @@
                                             </div>
                                         </div>
                                         <mat-action-row *ngIf="!isView">
-                                            <button mat-button color="primary">Save</button>
-                                            <button mat-button color="warn">Remove</button>
+                                            <button mat-button color="primary" (click)="editPreReq(preReq)">Save</button>
+                                            <button mat-button color="warn" (click)="removePreReq(i)">Remove</button>
                                         </mat-action-row>                
                                     </mat-expansion-panel>
                                 </div>

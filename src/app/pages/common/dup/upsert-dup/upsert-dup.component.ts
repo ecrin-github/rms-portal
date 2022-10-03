@@ -12,6 +12,7 @@ import { DupService } from 'src/app/_rms/services/entities/dup/dup.service';
 import { ProcessLookupService } from 'src/app/_rms/services/entities/process-lookup/process-lookup.service';
 import KTWizard from '../../../../../assets/js/components/wizard'
 import { CommonModalComponent } from '../../common-modal/common-modal.component';
+import { ConfirmationWindowComponent } from '../../confirmation-window/confirmation-window.component';
 import { ConfirmationWindow1Component } from '../../confirmation-window1/confirmation-window1.component';
 
 @Component({
@@ -264,6 +265,34 @@ export class UpsertDupComponent implements OnInit {
       }))
     });
     return formArray;
+  }
+  editPreReq(preReqsObject) {
+    const payload = preReqsObject.value;
+    payload.preRequisiteMet = this.dateToString(payload.preRequisiteMet);
+    this.spinner.show();
+    this.dupService.editDupObjectPrereq(payload.id, payload.sdOid, this.id, payload).subscribe((res: any) => {
+      this.spinner.hide();
+      if (res.statusCode === 200) {
+        this.toastr.success('Pre-Requisite updated successfully');
+      } else {
+        this.toastr.error(res.messages[0]);
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
+  removePreReq(i) {
+    const removeModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
+    removeModal.componentInstance.type = 'objectPreReqDup';
+    removeModal.componentInstance.id = this.preReqs().value[i].id;
+    removeModal.componentInstance.sdOid = this.preReqs().value[i].sdOid;
+    removeModal.componentInstance.dupId = this.id;
+    removeModal.result.then((data) => {
+      if (data) {
+        this.preReqs().removeAt(i);
+      }
+    }, error => {})
   }
   get g() { return this.form.controls; }
 

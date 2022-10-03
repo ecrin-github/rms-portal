@@ -53,6 +53,7 @@ import { ConfirmationWindowComponent } from './confirmation-window/confirmation-
 import { ConfirmationWindow1Component } from './confirmation-window1/confirmation-window1.component';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { SummaryUserComponent } from './user/summary-user/summary-user/summary-user.component';
+import { AddModalComponent } from './add-modal/add-modal.component';
 
 
 @NgModule({
@@ -99,7 +100,8 @@ import { SummaryUserComponent } from './user/summary-user/summary-user/summary-u
         CommonModalComponent,
         ConfirmationWindowComponent,
         ConfirmationWindow1Component,
-        SummaryUserComponent
+        SummaryUserComponent,
+        AddModalComponent
     ],
     schemas: [NO_ERRORS_SCHEMA],
     imports: [
