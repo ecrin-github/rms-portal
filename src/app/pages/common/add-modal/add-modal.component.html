@@ -72,19 +72,36 @@
                         </select>
                     </div>
                     <div class="col-md-4">
+                        <label for="accessDetails" class="font-style text-capitalize">access details</label>
+                        <textarea id="accessDetails" cols="30" rows="3" class="form-control" formControlName="accessDetails"></textarea>
+                    </div>
+                    <div class="col-md-4 form-check m-auto">
+                        <label class="form-check-label font-style text-capitalize" for="embargoRequested">embargo
+                            requested</label>
+                        <input class="form-check-input ml-4" type="checkbox" id="embargoRequested"
+                            formControlName="embargoRequested"(change)="isEmbargoRequested = !isEmbargoRequested">
+                    </div>
+                </div>
+                <div class="row form-group" *ngIf="isEmbargoRequested">
+                    <div class="col-md-8">
+                        <label for="embargoRegime" class="font-style text-capitalize">embargo Regime</label>
+                        <input type="text" class="form-control" id="embargoRegime" formControlName="embargoRegime">
+                    </div>
+                    <div class="col-md-4 form-check m-auto">
+                        <label class="form-check-label font-style text-capitalize" for="embargoStillApplies">Emmbargo still
+                            applies</label>
+                        <input class="form-check-input ml-4" type="checkbox" id="embargoStillApplies"
+                            formControlName="embargoStillApplies">
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-4">
                         <label for="accessCheckStatusId" class="font-style text-capitalize">Access check status</label>
                         <select id="accessCheckStatusId" formControlName="accessCheckStatusId" class="form-control">
                             <option [value]=preReqType.id *ngFor="let preReqType of preRequTypes">{{preReqType.name}}
                             </option>
                         </select>
                     </div>
-                    <div class="col-md-4">
-                        <label for="accessDetails" class="font-style text-capitalize">access details</label>
-                        <textarea id="accessDetails" cols="30" rows="3" class="form-control" formControlName="accessDetails"
-                        ></textarea>
-                    </div>
-                </div>
-                <div class="row form-group">
                     <div class="col-md-4">
                         <label for="accessCheckBy" class="font-style text-capitalize">access check by</label>
                         <select id="accessCheckBy" formControlName="accessCheckBy" class="form-control">
@@ -94,25 +111,57 @@
                     <div class="col-md-4">
                         <label for="accessCheckDate" class="font-style text-capitalize">access check date</label>
                         <input class="form-control" placeholder="yyyy-mm-dd" name="accessCheckDate" ngbDatepicker
-                            #accessCheckDate="ngbDatepicker" (click)="accessCheckDate.toggle()" formControlName="accessCheckDate"
-                            [maxDate]="todayDate">
+                            #accessCheckDate="ngbDatepicker" (click)="accessCheckDate.toggle()"
+                            formControlName="accessCheckDate" [maxDate]="todayDate">
+                    </div>
+                </div>
+            </form>
+        </ng-container>
+        <ng-container *ngIf="type === 'dupPrereq'">
+            <form [formGroup]="dupPreReqForm">
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <label for="object" class="font-style text-capitalize">Object</label>
+                        <ng-select [items]="objectList" bindLabel="sdOid" bindValue="sdOid" formControlName="sdOid"
+                            [multiple]="false" [virtualScroll]="true" class="custom" notFoundText="No members found"
+                            placeholder="Select object" [searchFn]="customSearchFn">
+                            <ng-template ng-label-tmp let-item="item">
+                                {{item.sdOid}}
+                            </ng-template>
+                            <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+                                <div class="row m-0">
+                                    <div class="col-md-8 col-8 p-0 m-0">
+                                        <div class="col-md-12">{{item.sdOid}}</div>
+                                        <div class="col-md-12" style="font-size: 83%; color: gray;">{{item.displayTitle}}</div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-select>
                     </div>
                 </div>
                 <div class="row form-group">
-                    <div class="col-md-4">
-                        <label for="embargoRegime" class="font-style text-capitalize">embargo Regime</label>
-                        <input type="text" class="form-control" id="embargoRegime" formControlName="embargoRegime">
+                    <div class="col-md-6">
+                        <label for="notes" class="font-style text-capitalize">Pre-Requisite Type</label>
+                        <select id="preReqId" formControlName="preRequisiteId" class="form-control">
+                            <option [value]=preReqType.id *ngFor="let preReqType of preRequTypes">
+                                {{preReqType.name}}</option>
+                        </select>
                     </div>
-                    <div class="col-md-4 form-check m-auto">
-                        <label class="form-check-label font-style text-capitalize" for="embargoRequested">embargo requested</label>
-                        <input class="form-check-input ml-4" type="checkbox" id="embargoRequested"
-                            formControlName="embargoRequested">
+                    <div class="col-md-6">
+                        <label for="notes" class="font-style text-capitalize">Note</label>
+                        <textarea id="notes" cols="30" rows="3" class="form-control" formControlName="preRequisiteNotes"></textarea>
                     </div>
-                    <div class="col-md-4 form-check m-auto">
-                        <label class="form-check-label font-style text-capitalize" for="embargoStillApplies">Emmbargo still
-                            applies</label>
-                        <input class="form-check-input ml-4" type="checkbox" id="embargoStillApplies"
-                            formControlName="embargoStillApplies">
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-6">
+                        <label for="notes" class="font-style text-capitalize">Pre-Requisite met</label>
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="preRequisiteMet" ngbDatepicker
+                            #preRequisiteMet="ngbDatepicker" (click)="preRequisiteMet.toggle()"
+                            formControlName="preRequisiteMet" [maxDate]="todayDate">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="notes" class="font-style text-capitalize">Pre-Requisite met Note</label>
+                        <textarea id="notes" cols="30" rows="3" class="form-control" formControlName="metNotes"></textarea>
                     </div>
                 </div>
             </form>

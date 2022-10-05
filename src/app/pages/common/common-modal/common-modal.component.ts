@@ -24,6 +24,7 @@ export class CommonModalComponent implements OnInit {
   studyList: [] = [];
   objectList: [] = [];
   userList: [] = [];
+  sdSidArray: any;
 
   constructor( private activeModal: NgbActiveModal, private listService: ListService, private spinner: NgxSpinnerService, 
     private toastr: ToastrService, private objectService: DataObjectService, private fb: FormBuilder, private dtpService: DtpService, private dupService: DupService) { 
@@ -43,7 +44,7 @@ export class CommonModalComponent implements OnInit {
       this.getStudyList();
     }
     if (this.type === 'dataObject') {
-      this.getObjectList();
+      this.getObjectListByStudy(this.sdSidArray);
     }
     if (this.type === 'user') {
       this.getPeopleList();
@@ -158,7 +159,7 @@ export class CommonModalComponent implements OnInit {
     if (this.type === 'user') {
       const payload = this.userForm.value.targetPersonId;
       payload.map((item: any) => {
-        if (this.dupId) {
+        if (this.dtpId) {
           this.addDtpUser(this.dtpId, item, {});
         }
         if (this.dupId) {
@@ -184,21 +185,13 @@ export class CommonModalComponent implements OnInit {
     term = term.toLocaleLowerCase();
     return item.sdSid.toLocaleLowerCase().indexOf(term) > -1 || item.displayTitle.toLocaleLowerCase().indexOf(term) > -1;
   }
-  getObjectList() {
-    this.spinner.show();
-    this.listService.getObjectList().subscribe((res: any) => {
-      this.spinner.hide();
-      if (res && res.data) {
-        this.objectList = res.data;
-      }
-    }, error => {
-      this.spinner.hide();
-      this.toastr.error(error.error.title);
-    })
+  customSearchUser(term: string, item) {
+    term = term.toLocaleLowerCase();
+    return item.name.toLocaleLowerCase().indexOf(term) > -1 || item.name.toLocaleLowerCase().indexOf(term) > -1;
   }
   getObjectListByStudy(id) {
     this.spinner.show();
-    this.listService.getObjectListByStudy(id).subscribe((res: any) => {
+    this.listService.getObjectByMultiStudies(id).subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectList = res.data;
@@ -227,7 +220,8 @@ export class CommonModalComponent implements OnInit {
     } else if (this.type === 'study') {
       if (this.studyForm.value.targetSdSid.length) {
         this.objectForm.controls.targetsdOid.enable();
-        this.getObjectListByStudy(this.studyForm.value.targetSdSid[0]);
+        const sdSids = this.sdSidArray ? this.studyForm.value.targetSdSid.toString() + this.sdSidArray : this.studyForm.value.targetSdSid.toString();
+        this.getObjectListByStudy(this.studyForm.value.targetSdSid.toString());
       } else {
         this.objectForm.controls.targetsdOid.disable();
       }

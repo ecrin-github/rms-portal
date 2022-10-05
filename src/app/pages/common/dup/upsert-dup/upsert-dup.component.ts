@@ -1,16 +1,15 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { combineLatest } from 'rxjs';
-import { DupInterface } from 'src/app/_rms/interfaces/dup/dup.interface';
 import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
-import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
 import { DupService } from 'src/app/_rms/services/entities/dup/dup.service';
 import { ProcessLookupService } from 'src/app/_rms/services/entities/process-lookup/process-lookup.service';
 import KTWizard from '../../../../../assets/js/components/wizard'
+import { AddModalComponent } from '../../add-modal/add-modal.component';
 import { CommonModalComponent } from '../../common-modal/common-modal.component';
 import { ConfirmationWindowComponent } from '../../confirmation-window/confirmation-window.component';
 import { ConfirmationWindow1Component } from '../../confirmation-window1/confirmation-window1.component';
@@ -42,6 +41,8 @@ export class UpsertDupComponent implements OnInit {
   showStatus: boolean = false;
   showVariations: boolean = false;
   preRequTypes: [] = [];
+  sticky: boolean = false;
+  showButton: boolean = true;
 
   constructor(private router: Router, private fb: FormBuilder, private dupService: DupService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService) {
@@ -71,6 +72,18 @@ export class UpsertDupComponent implements OnInit {
     this.preReqForm = this.fb.group({
       preRequisite: this.fb.array([])
     });
+  }
+  @HostListener('window:scroll', ['$event'])
+  onScroll() {
+    const navbar = document.getElementById('navbar');
+    const sticky = navbar.offsetTop;
+    if (window.pageYOffset >= sticky) {
+      navbar.classList.add('sticky');
+      this.sticky = true;
+    } else {
+      navbar.classList.remove('sticky');
+      this.sticky = false;
+    }
   }
 
   ngOnInit(): void {
@@ -130,15 +143,15 @@ export class UpsertDupComponent implements OnInit {
   notes(): FormArray {
     return this.form.get('notes') as FormArray;
   }
-  newDtpNote(): FormGroup {
+  newDupNote(): FormGroup {
     return this.fb.group({
       id: '',
       text: '',
       alreadyExist: false
     })
   }
-  addDtpNote() {
-    this.notes().push(this.newDtpNote());
+  addDupNote() {
+    this.notes().push(this.newDupNote());
   }
   patchNote(notes) {
     this.form.setControl('notes', this.patchNoteArray(notes));
@@ -154,7 +167,7 @@ export class UpsertDupComponent implements OnInit {
     });
     return formArray;
   }
-  getDtpNotes(id) {
+  getDupNotes(id) {
     this.spinner.show();
     this.dupService.getDupNotes(id).subscribe((res:any) => {
       this.spinner.hide();
@@ -166,14 +179,14 @@ export class UpsertDupComponent implements OnInit {
       this.toastr.error(error.error.title);
     })
   }
-  deleteDtpNote(i) {
+  deleteDupNote(i) {
     if (this.notes().value[i].alreadyExist) {
       this.spinner.show();
       this.dupService.deleteDupNote(this.notes().value[i].id, this.id).subscribe((res: any) => {
         this.spinner.hide();
         if(res.statusCode === 204) {
           this.toastr.success('Note deleted successfully');
-          this.getDtpNotes(this.id);
+          this.getDupNotes(this.id);
         } else {
           this.toastr.error(res.messages[0]);
         }
@@ -185,7 +198,7 @@ export class UpsertDupComponent implements OnInit {
       this.notes().removeAt(i);
     }
   }
-  saveDtpNote(note) {
+  saveDupNote(note) {
     if (note.value.alreadyExist) {
       this.spinner.show();
       this.dupService.editDupNote(note.value.id, this.id, note.value).subscribe((res: any) => {
@@ -231,7 +244,8 @@ export class UpsertDupComponent implements OnInit {
   }
   onClickControllTab() {
     this.getPrereqTypes();
-    this.patchPreReq(this.dupData.dupPrereqs);
+    const preReqArray = (this.dupData.dupPrereqs.sort((a, b) => (a.sdOid > b.sdOid ? 1 : -1)))
+    this.patchPreReq(preReqArray);
   }
   preReqs(): FormArray {
     return this.preReqForm.get('preRequisite') as FormArray;
@@ -246,8 +260,16 @@ export class UpsertDupComponent implements OnInit {
       sdOid: ''
     })
   }
-  addPreRe() {
-    this.preReqs().push(this.newPreReq());
+  addPreReq() {
+    const addModal = this.modalService.open(AddModalComponent, { size: 'lg', backdrop: 'static' });
+    addModal.componentInstance.title = 'Add Pre-Requisite';
+    addModal.componentInstance.dupId = this.id;
+    addModal.componentInstance.type = 'dupPrereq';
+    addModal.result.then((data) => {
+      if (data) {
+        this.getDupById(this.id, 'isPreReq');
+      }
+    }, error => { })
   }
   patchPreReq(preReqs) {
     this.preReqForm.setControl('preRequisite', this.patchPreReqArray(preReqs))
@@ -290,7 +312,7 @@ export class UpsertDupComponent implements OnInit {
     removeModal.componentInstance.dupId = this.id;
     removeModal.result.then((data) => {
       if (data) {
-        this.preReqs().removeAt(i);
+        this.getDupById(this.id, 'isPreReq');
       }
     }, error => {})
   }
@@ -448,7 +470,7 @@ export class UpsertDupComponent implements OnInit {
     const arr: any = this.statusList.filter((item: any) => item.name.toLowerCase() === name);
     return arr[0].id;
   }
-  getDupById(id) {
+  getDupById(id, type?) {
     setTimeout(() => {
      this.spinner.show(); 
     });
@@ -457,6 +479,10 @@ export class UpsertDupComponent implements OnInit {
       if (res && res.data) {
         this.dupData = res.data[0];
         this.patchForm(this.dupData);
+        if (type === 'isPreReq') {
+          const preReqArray = (this.dupData.dupPrereqs.sort((a, b) => (a.sdOid > b.sdOid ? 1 : -1)))
+          this.patchPreReq(preReqArray);
+        }
       }
     }, error => {
       this.spinner.hide();
@@ -495,7 +521,7 @@ export class UpsertDupComponent implements OnInit {
     this.showVariations = data.duas[0]?.conformsToDefault ? true : false;
   }
   findOrganization(id) {
-    const organizationArray: any = this.organizationList.filter((type: any) => type.id === id);
+    const organizationArray: any = this.organizationList.filter((type: any) => type.orgId === id);
     return organizationArray && organizationArray.length ? organizationArray[0].name : ''
   }
   findStatus(id) {
@@ -510,10 +536,21 @@ export class UpsertDupComponent implements OnInit {
     studyModal.componentInstance.title = 'Add Study';
     studyModal.componentInstance.type = 'study';
     studyModal.componentInstance.dupId = this.id;
+    if (this.dupData.dupStudies.length) {
+      const sdSidArray = [];
+      this.dupData.dupStudies.map((item: any) => {
+        sdSidArray.push(item.sdSid);
+      })
+      studyModal.componentInstance.sdSidArray = sdSidArray.toString();
+    }
     studyModal.result.then((data) => {
       if (data) {
-        this.getDupStudies(this.id);
-        this.getDupObjects(this.id);
+        this.spinner.show();
+        setTimeout(() => {
+          this.getDupStudies(this.id);
+          this.getDupObjects(this.id);
+          this.spinner.hide();
+        }, 3000);
       }
     }, error => {});
   }
@@ -539,8 +576,19 @@ export class UpsertDupComponent implements OnInit {
     dataModal.componentInstance.title = 'Add Data Object';
     dataModal.componentInstance.type = 'dataObject';
     dataModal.componentInstance.dupId = this.id;
+    if (this.dupData.dupStudies.length) {
+      const sdSidArray = [];
+      this.dupData.dupStudies.map((item: any) => {
+        sdSidArray.push(item.sdSid);
+      })
+      dataModal.componentInstance.sdSidArray = sdSidArray.toString();
+    }
     dataModal.result.then((data) => {
-      this.getDupObjects(this.id);
+      this.spinner.show();
+      setTimeout(() => {
+        this.getDupObjects(this.id);
+        this.spinner.hide();
+      }, 3000);
     }, error => {})
   }
   getDupObjects(id) {
@@ -566,7 +614,11 @@ export class UpsertDupComponent implements OnInit {
     userModal.componentInstance.type = 'user';
     userModal.componentInstance.dupId = this.id;
     userModal.result.then((data) => {
-      this.getDupPeople(this.id);
+      this.spinner.show();
+      setTimeout(() => {
+        this.getDupPeople(this.id);
+        this.spinner.hide();
+      }, 3000);
     }, error => {})
   }
   getDupPeople(id) {

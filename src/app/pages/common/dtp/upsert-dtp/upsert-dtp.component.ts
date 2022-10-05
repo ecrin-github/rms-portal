@@ -1,7 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbDate, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {  NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { combineLatest } from 'rxjs';
@@ -45,6 +45,9 @@ export class UpsertDtpComponent implements OnInit {
   preRequTypes: [] = [];
   preRequisitData = [];
   accessTypes: [] = [];
+  isEmbargoRequested = [];
+  sticky: boolean = false;
+  showButton: boolean = true;
 
   constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService,
@@ -80,6 +83,18 @@ export class UpsertDtpComponent implements OnInit {
     this.objectEmbargoForm = this.fb.group({
       embargo: this.fb.array([])
     })
+  }
+  @HostListener('window:scroll', ['$event'])
+  onScroll() {
+    const navbar = document.getElementById('navbar');
+    const sticky = navbar.offsetTop;
+    if (window.pageYOffset >= sticky) {
+      navbar.classList.add('sticky');
+      this.sticky = true;
+    } else {
+      navbar.classList.remove('sticky');
+      this.sticky = false;
+    }
   }
   ngOnInit(): void {
     const todayDate = new Date();
@@ -294,7 +309,7 @@ export class UpsertDtpComponent implements OnInit {
     removeModal.componentInstance.dtpId = this.id;
     removeModal.result.then((data) => {
       if (data) {
-        this.preReqs().removeAt(i);
+        this.getDtpById(this.id, 'isPreReq');
       }
     }, error => {})
   }
@@ -333,7 +348,7 @@ export class UpsertDtpComponent implements OnInit {
   }
   patchEmbargoArray(embargos): FormArray {
     const formArray = new FormArray([]);
-    embargos.forEach(embargo => {
+    embargos.forEach((embargo, index) => {
       formArray.push(this.fb.group({
         accessCheckStatusId: embargo.accessCheckStatusId,
         accessCheckBy: embargo.accessCheckBy,
@@ -348,8 +363,12 @@ export class UpsertDtpComponent implements OnInit {
         id: embargo.id,
         sdOid: embargo.sdOid
       }))
+      this.isEmbargoRequested[index] = embargo.embargoRequested ? true : false;
     });
     return formArray;
+  }
+  onEmbargoChange(index) {
+    this.isEmbargoRequested[index] = !this.isEmbargoRequested[index];
   }
   editEmbargo(embargoObject) {
     const payload = embargoObject.value;
@@ -373,7 +392,7 @@ export class UpsertDtpComponent implements OnInit {
     removeModal.componentInstance.dtpId = this.id;
     removeModal.result.then((data) => {
       if (data) {{
-        this.embargos().removeAt(i);
+        this.getDtpById(this.id, 'isEmbargo');
       }}
     }, error => {});
   }
@@ -649,7 +668,7 @@ export class UpsertDtpComponent implements OnInit {
     this.showVariations = data.dtas[0]?.conformsToDefault ? true : false;
   }
   findOrganization(id) {
-    const organizationArray: any = this.organizationList.filter((type: any) => type.id === id);
+    const organizationArray: any = this.organizationList.filter((type: any) => type.orgId === id);
     return organizationArray && organizationArray.length ? organizationArray[0].name : ''
   }
   findStatus(id) {
@@ -664,9 +683,20 @@ export class UpsertDtpComponent implements OnInit {
     studyModal.componentInstance.title = 'Add Study';
     studyModal.componentInstance.type = 'study';
     studyModal.componentInstance.dtpId = this.id;
+    if (this.dtpData.dtpStudies.length) {
+      const sdSidArray = [];
+      this.dtpData.dtpStudies.map((item: any) => {
+        sdSidArray.push(item.sdSid);
+      })
+      studyModal.componentInstance.sdSidArray = sdSidArray.toString();
+    }
     studyModal.result.then((data) => {
-      this.getDtpStudies(this.id);
-      this.getDtpObjects(this.id);
+      this.spinner.show();
+      setTimeout(() => {
+        this.spinner.hide();
+        this.getDtpStudies(this.id);
+        this.getDtpObjects(this.id);
+      }, 3000);
     }, error => {})
   }
   getDtpStudies(id) {
@@ -691,8 +721,19 @@ export class UpsertDtpComponent implements OnInit {
     dataModal.componentInstance.title = 'Add Data Object';
     dataModal.componentInstance.type = 'dataObject';
     dataModal.componentInstance.dtpId = this.id;
+    if (this.dtpData.dtpStudies.length) {
+      const sdSidArray = [];
+      this.dtpData.dtpStudies.map((item: any) => {
+        sdSidArray.push(item.sdSid);
+      })
+      dataModal.componentInstance.sdSidArray = sdSidArray.toString();
+    }
     dataModal.result.then((data) => {
-      this.getDtpObjects(this.id);
+      this.spinner.show();
+      setTimeout(() => {
+        this.spinner.hide();
+        this.getDtpObjects(this.id);
+      }, 3000);
     }, error => {});
   }
   getDtpObjects(id) {
@@ -718,7 +759,11 @@ export class UpsertDtpComponent implements OnInit {
     userModal.componentInstance.type = 'user';
     userModal.componentInstance.dtpId = this.id;
     userModal.result.then((data) => {
-      this.getDtpPeople(this.id);
+      this.spinner.show();
+      setTimeout(() => {
+        this.getDtpPeople(this.id);
+        this.spinner.hide();
+      }, 3000);
     }, error => {});
   }
   getDtpPeople(id) {

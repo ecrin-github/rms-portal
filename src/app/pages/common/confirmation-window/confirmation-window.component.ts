@@ -85,10 +85,13 @@ export class ConfirmationWindowComponent implements OnInit {
         break;
       case 'objectPreReqDtp':
         this.deletePreReqDtp();
+        break;
       case 'objectPreReqDup':
         this.deletePreReqDup();
+        break;
       case 'objectEmbargo':
         this.deleteEmbargo();
+        break;
       default:
         break;
     }

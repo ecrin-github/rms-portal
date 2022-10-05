@@ -4,6 +4,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
+import { DupService } from 'src/app/_rms/services/entities/dup/dup.service';
 import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 import { ObjectLookupService } from 'src/app/_rms/services/entities/object-lookup/object-lookup.service';
 import { ProcessLookupService } from 'src/app/_rms/services/entities/process-lookup/process-lookup.service';
@@ -19,13 +20,16 @@ export class AddModalComponent implements OnInit {
   embargoForm: FormGroup;
   title: any;
   dtpId: any;
+  dupId: any;
   preRequTypes: [] = [];
   type: any;
   todayDate: any;
   accessTypes: [] = [];
+  dupPreReqForm: FormGroup;
+  isEmbargoRequested: boolean = false;
 
   constructor( private spinner: NgxSpinnerService, private fb: FormBuilder, private dtpService: DtpService, private toastr: ToastrService, private processLookup: ProcessLookupService,
-    private activeModal: NgbActiveModal, private objectLookupService: ObjectLookupService) { 
+    private activeModal: NgbActiveModal, private objectLookupService: ObjectLookupService, private dupService: DupService) { 
     this.preReqForm = this.fb.group({
       sdOid: '',
       preRequisiteTypeId: '',
@@ -42,18 +46,31 @@ export class AddModalComponent implements OnInit {
       embargoRequested: null,
       embargoStillApplies: null,
       sdOid: ''
+    });
+    this.dupPreReqForm = this.fb.group({
+      preRequisiteId: '',
+      preRequisiteNotes: '',
+      preRequisiteMet: '',
+      metNotes: '',
+      sdOid: ''
     })
 }
 
   ngOnInit(): void {
     const todayDate = new Date();
     this.todayDate = {year: todayDate.getFullYear(), month: todayDate.getMonth()+1, day: todayDate.getDate()};
-    this.getObjectList(this.dtpId);
     if (this.type === 'dtpPrereq') {
-      this.getPrereqTypes();  
+      this.getPrereqTypes();
+      this.getDtpObjectList(this.dtpId);
     }
-    if (this.type === 'dtpEmbargo')
-    this.getAccessType();
+    if (this.type === 'dtpEmbargo') {
+      this.getAccessType();
+      this.getDtpObjectList(this.dtpId);
+    }
+    if (this.type === 'dupPrereq') {
+      this.getPrereqTypes();
+      this.getDupObjectList(this.dupId);
+    }
   }
   getPrereqTypes() {
     this.processLookup.getPrereqTypes().subscribe((res: any) => {
@@ -65,7 +82,7 @@ export class AddModalComponent implements OnInit {
     })
   }
   getAccessType() {
-    const getAccessType$ = this.objectLookupService.getAccessTypes().subscribe((res: any) => {
+    this.objectLookupService.getAccessTypes().subscribe((res: any) => {
       if(res.data) {
         this.accessTypes = res.data;
       }
@@ -73,7 +90,7 @@ export class AddModalComponent implements OnInit {
       this.toastr.error(error.error.title);
     });
   }
-  getObjectList(id) {
+  getDtpObjectList(id) {
     this.spinner.show();
     this.dtpService.getDtpObjects(id).subscribe((res: any) => {
       this.spinner.hide();
@@ -83,6 +100,18 @@ export class AddModalComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.toastr.error(error.error.title)
+    })
+  }
+  getDupObjectList(id) {
+    this.spinner.show();
+    this.dupService.getDupObjects(id).subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.objectList = res.data;
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
     })
   }
 
@@ -122,6 +151,31 @@ export class AddModalComponent implements OnInit {
         this.spinner.hide();
         this.toastr.error(error.error.title);
       })
+    }
+    if (this.type === 'dupPrereq') {
+      this.spinner.show();
+      const payload = this.dupPreReqForm.value;
+      payload.preRequisiteMet = this.dateToString(payload.preRequisiteMet);
+      this.dupService.addDupObjectPrereq(this.dupId, payload.sdOid, payload).subscribe((res: any) => {
+        this.spinner.hide();
+        if (res.statusCode === 200) {
+          this.toastr.success('Pre-Requisite added successfully');
+          this.closeModal('data');
+        } else {
+          this.toastr.error(res.messages[0]);
+        }
+      }, error => {
+        this.spinner.hide();
+        this.toastr.error(error.error.title);
+      })
+    }
+  }
+  dateToString(date) {
+    if (date) {
+      const dateString =  date.year + '-' + date.month + '-' + date.day;
+      return new Date(dateString).toISOString();
+    } else {
+      return null
     }
   }
   closeModal(data) {

@@ -16,6 +16,10 @@
                     <i class="fa fa-code"></i> JSON
                 </button>
             </div>
+            <div class="text-right" [ngClass]="sticky ? 'col-md-12' : 'col-md-5'" *ngIf="!isView && showButton" id="navbar">
+                <button class="btn btn-success mr-5" *ngIf="!isView" (click)="onSave()">{{isEdit ? 'Apply Changes' : 'Save'}}</button>
+                <button class="btn btn-danger" *ngIf="!isView" (click)="close()"> Cancel</button>
+            </div>
         </div>
     </div>
     <div class="card-body">
@@ -23,15 +27,15 @@
             <div class="col-md-12 mb-5">
                 <ul class="nav nav-pills maxw-fit-content nav-fill" style="border-bottom: 1px solid lightgray">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#overview" data-toggle="tab" id="overviews">Overview</a>
+                        <a class="nav-link active" href="#overview" data-toggle="tab" id="overviews" (click)="showButton = true">Overview</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#setup" data-toggle="tab" id="setups"
-                            (click)="getDupStudies(id); getDupObjects(id); getDupPeople(id)">Set up</a>
+                            (click)="getDupStudies(id); getDupObjects(id); getDupPeople(id); showButton = false">{{ isView ? 'Linked Objects and People' : 'Set up'}}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#objectprerequisite" data-toggle="tab" id="objectprerequisites"
-                            (click)="onClickControllTab()">Object Pre-requisites</a>
+                            (click)="onClickControllTab(); showButton = false">Controlled Access Data</a>
                     </li>
                 </ul>
             </div>
@@ -42,7 +46,7 @@
                             <div class="row form-group">
                                 <div class="col-md-6">
                                     <label for="" class="font-style text-capitalize">organization</label>
-                                    <ng-select [items]="organizationList" bindLabel="name" bindValue="id" formControlName="orgId"
+                                    <ng-select [items]="organizationList" bindLabel="name" bindValue="orgId" formControlName="orgId"
                                         [multiple]="false" [virtualScroll]="true" class="custom" notFoundText="No members found"
                                         placeholder="Select Organisation" *ngIf="!isView"
                                         [ngClass]="{ 'is-invalid': submitted && g.orgId.errors }">
@@ -412,32 +416,21 @@
                                     </div>
                                 </div>
                             </ng-container>
-                            <!-- <ng-container> -->
-                                <div class="row">
-                                    <div class="col-md-12 justify-content-center text-center">
-                                        <button class="btn btn-success mr-5" *ngIf="!isView" (click)="onSave()">{{isEdit ?
-                                            'Apply Changes' :
-                                            'Save'}}</button>
-                                        <button class="btn btn-danger" (click)="close()"> {{isView ? 'Back' :
-                                            'Cancel'}}</button>
-                                    </div>
-                                </div>
-                            <!-- </ng-container> -->
                             <ng-container *ngIf="isEdit || isView">
                                 <hr style="border-top: 2px solid;" />
                                 <h3>Notes</h3>
                                 <div formArrayName="notes">
                                     <div class="row form-group">
                                         <!-- <label for="notes" class="font-style text-capitalize">Notes</label> -->
-                                        <div class="col-md-12 text-right pb-2"><button class="btn btn-primary" (click)="addDtpNote()"
+                                        <div class="col-md-12 text-right pb-2"><button class="btn btn-primary" (click)="addDupNote()"
                                                 *ngIf="!isView">Add</button></div>
                                         <div class="col-md-12" *ngFor="let note of notes().controls;let i = index" [formGroupName]="i">
                                             <div class="card border-0">
                                                 <div class="card-body pl-0 pr-0 pb-0 pt-5">
                                                     <i class="fa fa-times float-right pr-1 text-danger" style="cursor: pointer;"
-                                                        (click)="deleteDtpNote(i)" *ngIf="!isView"></i>
+                                                        (click)="deleteDupNote(i)" *ngIf="!isView"></i>
                                                     <i class="fa fa-check float-right pr-2 text-success" style="cursor: pointer;"
-                                                        (click)="saveDtpNote(note)" *ngIf="!isView"></i>
+                                                        (click)="saveDupNote(note)" *ngIf="!isView"></i>
                                                     <textarea id="notes" cols="30" rows="3" class="form-control" formControlName="text"
                                                         *ngIf="!isView"></textarea>
                                                     <h6 style="font-weight: 100;" *ngIf="isView">
@@ -482,7 +475,7 @@
                                 <ng-container *ngIf="associatedObjects.length > 0">
                                     <ul>
                                         <li *ngFor="let object of associatedObjects; let i = index" class="pl-4">
-                                            {{object.objectName}}({{object.sdOid}})
+                                            {{object.sdOid}}<span title="{{object.objectName}}">({{object.objectName | slice:0:50}}...)</span>
                                             <i class="fa fa-times pl-3" (click)="removeDupObject(object.id)"
                                                 *ngIf="!isView"></i>
                                         </li>
@@ -490,16 +483,16 @@
                                 </ng-container>
                                 <br>
                                 <hr>
-                                <span class="font-style">Associated Users</span>
+                                <span class="font-style">Associated People</span>
                                 <button class="btn btn-primary float-right" (click)="addUser()" *ngIf="!isView">Add
-                                    User</button>
+                                    People</button>
                                 <ng-container *ngIf="associatedUser.length <= 0">
                                     <p>No Associated Users</p>
                                 </ng-container>
                                 <ng-container *ngIf="associatedUser.length > 0">
                                     <ul>
                                         <li *ngFor="let user of associatedUser; let i = index" class="pl-4">
-                                            {{user.personName}}({{user.personId}})
+                                            {{user.personName}}
                                             <i class="fa fa-times pl-3" (click)="removeDupUser(user.id)"
                                                 *ngIf="!isView"></i>
                                         </li>
@@ -511,6 +504,9 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="objectprerequisite">
+                    <div class="col-md-12 text-right">
+                        <button class="btn btn-primary" (click)="addPreReq()">Add Pre-Requisite</button>
+                    </div>
                     <div class="col-md-12">
                         <form [formGroup]="preReqForm">
                             <div formArrayName="preRequisite">
@@ -519,11 +515,11 @@
                                     <label for="preReqId" class="font-style text-capitalize">{{(preReqs()?.controls[i-1]?.value?.sdOid ===
                                         preReqs()?.controls[i]?.value?.sdOid) && i!==0 ? '' : 'Pre-Requisite for Data Object' +
                                         preReq.value.sdOid}}</label>
-                                    <mat-expansion-panel>
+                                    <mat-expansion-panel [expanded]="isView ? 'true' : 'false'">
                                         <mat-expansion-panel-header> {{findPrereqType(dupData.dupPrereqs[i].preRequisiteId)}}
                                         </mat-expansion-panel-header>
                                         <div class="row form-group">
-                                            <div class="col-md-6">
+                                            <div class="col-md-6" *ngIf="!isView">
                                                 <label for="notes" class="font-style text-capitalize">Pre-Requisite Type</label>
                                                 <select id="preReqId" formControlName="preRequisiteId" class="form-control" *ngIf="!isView">
                                                     <option [value]=preReqType.id *ngFor="let preReqType of preRequTypes">
