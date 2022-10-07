@@ -367,7 +367,8 @@ export class UpsertObjectComponent implements OnInit {
     }
   }
   onClick() {
-    this.initiateEmit = true;
+    // this.initiateEmit = true;
+    this.onSave();
   }
   onSave() {
     if (localStorage.getItem('updateObjectList')) {
@@ -414,11 +415,12 @@ export class UpsertObjectComponent implements OnInit {
           this.toastr.error(error.error.title);
         })
       } else {
-        this.objectService.addDataObject('', payload).subscribe((res: any) => {
+        this.objectService.addDataObject('RMS-ISRCTN18853827', payload).subscribe((res: any) => {
           this.spinner.hide();
           if (res.statusCode === 200) {
             this.toastr.success('Data Object added successfully');
             localStorage.setItem('updateObjectList', 'true');
+            this.close();
           } else {
             this.toastr.error(res.messages[0]);
           }

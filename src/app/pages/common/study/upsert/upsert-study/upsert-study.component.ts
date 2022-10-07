@@ -325,11 +325,12 @@ export class UpsertStudyComponent implements OnInit {
           })
         } else {
           payload.studyStartYear = this.studyForm.value.studyStartYear ? this.studyForm.value.studyStartYear.getFullYear() : null;
-          this.studyService.addStudy('', payload).subscribe((res: any) => {
+          this.studyService.addStudy(123, payload).subscribe((res: any) => {
             this.spinner.hide();
             if (res.statusCode === 200) {
               this.toastr.success('Study Detail added successfully');
               localStorage.setItem('updateStudyList', 'true');
+              this.close();
             } else {
               this.toastr.error(res.messages[0]);
             }

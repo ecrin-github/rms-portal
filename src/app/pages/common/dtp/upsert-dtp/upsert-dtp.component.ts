@@ -691,12 +691,14 @@ export class UpsertDtpComponent implements OnInit {
       studyModal.componentInstance.sdSidArray = sdSidArray.toString();
     }
     studyModal.result.then((data) => {
-      this.spinner.show();
-      setTimeout(() => {
-        this.spinner.hide();
-        this.getDtpStudies(this.id);
-        this.getDtpObjects(this.id);
-      }, 3000);
+      if (data) {
+        this.spinner.show();
+        setTimeout(() => {
+          this.spinner.hide();
+          this.getDtpStudies(this.id);
+          this.getDtpObjects(this.id);
+        }, 3000);
+      }
     }, error => {})
   }
   getDtpStudies(id) {
@@ -729,11 +731,13 @@ export class UpsertDtpComponent implements OnInit {
       dataModal.componentInstance.sdSidArray = sdSidArray.toString();
     }
     dataModal.result.then((data) => {
-      this.spinner.show();
-      setTimeout(() => {
-        this.spinner.hide();
-        this.getDtpObjects(this.id);
-      }, 3000);
+      if (data) {
+        this.spinner.show();
+        setTimeout(() => {
+          this.spinner.hide();
+          this.getDtpObjects(this.id);
+        }, 3000);
+      }
     }, error => {});
   }
   getDtpObjects(id) {
@@ -759,11 +763,13 @@ export class UpsertDtpComponent implements OnInit {
     userModal.componentInstance.type = 'user';
     userModal.componentInstance.dtpId = this.id;
     userModal.result.then((data) => {
-      this.spinner.show();
-      setTimeout(() => {
-        this.getDtpPeople(this.id);
-        this.spinner.hide();
-      }, 3000);
+      if (data) {
+        this.spinner.show();
+        setTimeout(() => {
+          this.getDtpPeople(this.id);
+          this.spinner.hide();
+        }, 3000);
+      }
     }, error => {});
   }
   getDtpPeople(id) {

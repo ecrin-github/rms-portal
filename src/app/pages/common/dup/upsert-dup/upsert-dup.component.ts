@@ -572,7 +572,7 @@ export class UpsertDupComponent implements OnInit {
     })
   }
   addDataObject() {
-    const dataModal = this.modalService.open(CommonModalComponent, {size: 'xl', backdrop: 'static'});
+    const dataModal = this.modalService.open(CommonModalComponent, { size: 'xl', backdrop: 'static' });
     dataModal.componentInstance.title = 'Add Data Object';
     dataModal.componentInstance.type = 'dataObject';
     dataModal.componentInstance.dupId = this.id;
@@ -584,12 +584,14 @@ export class UpsertDupComponent implements OnInit {
       dataModal.componentInstance.sdSidArray = sdSidArray.toString();
     }
     dataModal.result.then((data) => {
-      this.spinner.show();
-      setTimeout(() => {
-        this.getDupObjects(this.id);
-        this.spinner.hide();
-      }, 3000);
-    }, error => {})
+      if (data) {
+        this.spinner.show();
+        setTimeout(() => {
+          this.getDupObjects(this.id);
+          this.spinner.hide();
+        }, 3000);
+      }
+    }, error => { })
   }
   getDupObjects(id) {
     this.dupService.getDupObjectsWfkn(id).subscribe((res: any) => {
@@ -614,11 +616,13 @@ export class UpsertDupComponent implements OnInit {
     userModal.componentInstance.type = 'user';
     userModal.componentInstance.dupId = this.id;
     userModal.result.then((data) => {
-      this.spinner.show();
-      setTimeout(() => {
-        this.getDupPeople(this.id);
-        this.spinner.hide();
-      }, 3000);
+      if (data) {
+        this.spinner.show();
+        setTimeout(() => {
+          this.getDupPeople(this.id);
+          this.spinner.hide();
+        }, 3000);
+      }
     }, error => {})
   }
   getDupPeople(id) {
