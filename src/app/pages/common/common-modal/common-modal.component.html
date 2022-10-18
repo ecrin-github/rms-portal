@@ -8,7 +8,7 @@
                 <label for="study" class="font-style text-capitalize">Study</label>
                 <ng-select id="study" [items]="studyList" bindLabel="sdSid" bindValue="sdSid" formControlName="targetSdSid"
                 [multiple]="true" [virtualScroll]="true" class="custom" notFoundText="No members found"
-                    placeholder="Select study" [searchFn]="customSearchFn" (close)="studyDropdownClose()" [closeOnSelect]="false">
+                    placeholder="Select study" [searchFn]="customSearchFn" (close)="studyDropdownClose()">
                     <ng-template ng-label-tmp let-item="item">
                         {{item.sdSid}}
                     </ng-template>

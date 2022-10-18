@@ -48,6 +48,7 @@ export class UpsertDtpComponent implements OnInit {
   isEmbargoRequested = [];
   sticky: boolean = false;
   showButton: boolean = true;
+  selectedSdSid: [] = [];
 
   constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService,
@@ -397,7 +398,7 @@ export class UpsertDtpComponent implements OnInit {
     }, error => {});
   }
   getAccessType() {
-    const getAccessType$ = this.objectLookupService.getAccessTypes().subscribe((res: any) => {
+    const getAccessType$ = this.processLookup.getRepoAccessTypes().subscribe((res: any) => {
       if(res.data) {
         this.accessTypes = res.data;
       }
@@ -454,12 +455,11 @@ export class UpsertDtpComponent implements OnInit {
   }
   onClickControllTab() {
     this.getPrereqTypes();
-    const preReqArray = (this.dtpData.dtpPrereqs.sort((a,b)=> (a.sdOid > b.sdOid ? 1 : -1)))
-    this.patchPreReq(preReqArray);
+    this.getDtpById(this.id, 'isPreReq');
   }
   onClickObjectAccessTab() {
     this.getAccessType();
-    this.patchEmbargo(this.dtpData.dtpObjects)
+    this.getDtpById(this.id, 'isEmbargo');
   }
   dateToString(date) {
     if (date) {
@@ -683,15 +683,16 @@ export class UpsertDtpComponent implements OnInit {
     studyModal.componentInstance.title = 'Add Study';
     studyModal.componentInstance.type = 'study';
     studyModal.componentInstance.dtpId = this.id;
-    if (this.dtpData.dtpStudies.length) {
+    if (this.associatedStudies.length) {
       const sdSidArray = [];
-      this.dtpData.dtpStudies.map((item: any) => {
+      this.associatedStudies.map((item: any) => {
         sdSidArray.push(item.sdSid);
       })
       studyModal.componentInstance.sdSidArray = sdSidArray.toString();
     }
     studyModal.result.then((data) => {
       if (data) {
+        this.selectedSdSid = data;
         this.spinner.show();
         setTimeout(() => {
           this.spinner.hide();
@@ -723,9 +724,9 @@ export class UpsertDtpComponent implements OnInit {
     dataModal.componentInstance.title = 'Add Data Object';
     dataModal.componentInstance.type = 'dataObject';
     dataModal.componentInstance.dtpId = this.id;
-    if (this.dtpData.dtpStudies.length) {
+    if (this.associatedStudies.length) {
       const sdSidArray = [];
-      this.dtpData.dtpStudies.map((item: any) => {
+      this.associatedStudies.map((item: any) => {
         sdSidArray.push(item.sdSid);
       })
       dataModal.componentInstance.sdSidArray = sdSidArray.toString();

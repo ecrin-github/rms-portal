@@ -33,7 +33,7 @@ export class UpsertStudyComponent implements OnInit {
   studyGenderView: any;
   studyMinAgeView: any;
   studyMaxAgeView: any;
-  initiateEmit: boolean = false;
+  // initiateEmit: boolean = false;
   count = 0;
   publicTitle: string = '';
   monthValues = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
@@ -46,6 +46,7 @@ export class UpsertStudyComponent implements OnInit {
   constructor(private fb: FormBuilder, private router: Router, private studyLookupService: StudyLookupService, private studyService: StudyService, private activatedRoute: ActivatedRoute,
     private spinner: NgxSpinnerService, private toastr: ToastrService) {
     this.studyForm = this.fb.group({
+      sdSid: '',
       displayTitle: '',
       briefDescription: '',
       dataSharingStatement: '',
@@ -94,13 +95,11 @@ export class UpsertStudyComponent implements OnInit {
       this.id = this.activatedRoute.snapshot.params.id;
       this.getStudyById(this.id);
     }
-    if (this.isAdd) {
-      this.activatedRoute.queryParams.subscribe(params => {
-        this.addType = params.type;
-      })
-      if (this.addType === 'usingTrialId') {
-        this.getTrialRegistries();
-      }
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.addType = params.type;
+    })
+    if (this.addType === 'usingTrialId') {
+      this.getTrialRegistries();
     }
   }
   getStudyType() {
@@ -116,9 +115,6 @@ export class UpsertStudyComponent implements OnInit {
         const studyArray = this.studyTypes.filter((type: any) => type.id === this.studyForm.value.studyTypeId);
         this.studyTypeView = studyArray && studyArray.length ? studyArray[0] : {name: ''};
       }
-      // if(this.isView || this.isEdit) {
-      //   this.studyTypeChange();
-      // }
     }, error => {
       this.spinner.hide();
       this.toastr.error(error.error.title);
@@ -232,70 +228,6 @@ export class UpsertStudyComponent implements OnInit {
 
     });
     this.studyTypeChange();
-    // this.getStudyType();
-    // this.getStudyStatus();
-    // this.getGenderEligibility();
-    // this.getTimeUnits();
-  }
-  getIdentifier(event) {
-    this.studyForm.patchValue({
-      studyIdentifiers: event.data
-    })
-    this.count += 1;
-    setTimeout(() => {
-      this.initiateEmit = event.isEmit;
-    });
-    if (this.studyType === 'interventional' ? this.count === 6 : this.count === 5) {
-      this.onSave();
-    }
-  }
-  getTitle(event) {
-    this.studyForm.patchValue({
-      studyTitles: event.data
-    })
-    this.count += 1;
-    if (this.studyType === 'interventional' ? this.count === 6 : this.count === 5) {
-      this.onSave();
-    }
-  }
-  getFeature(event) {
-    this.studyForm.patchValue({
-      studyFeatures: event.data
-    })
-    this.count += 1;
-    if (this.studyType === 'interventional' ? this.count === 6 : this.count === 5) {
-      this.onSave();
-    }
-  }
-  getTopic(event) {
-    this.studyForm.patchValue({
-      studyTopics: event.data
-    })
-    this.count += 1;
-    if (this.studyType === 'interventional' ? this.count === 6 : this.count === 5) {
-      this.onSave();
-    }
-  }
-  getRelation(event) {
-    this.studyForm.patchValue({
-      studyRelationships: event.data
-    })
-    this.count += 1;
-    if (this.studyType === 'interventional' ? this.count === 6 : this.count === 5) {
-      this.onSave();
-    }
-  }
-  getContributor(event) {
-    this.studyForm.patchValue({
-      studyContributors: event.data
-    })
-    this.count += 1;
-    if (this.studyType === 'interventional' ? this.count === 6 : this.count === 5) {
-      this.onSave();
-    }
-  }
-  onClick() {
-    this.initiateEmit = true;
   }
   onSave() {
     if (localStorage.getItem('updateStudyList')) {
@@ -325,7 +257,7 @@ export class UpsertStudyComponent implements OnInit {
           })
         } else {
           payload.studyStartYear = this.studyForm.value.studyStartYear ? this.studyForm.value.studyStartYear.getFullYear() : null;
-          this.studyService.addStudy(123, payload).subscribe((res: any) => {
+          this.studyService.addStudy(payload.sdSid, payload).subscribe((res: any) => {
             this.spinner.hide();
             if (res.statusCode === 200) {
               this.toastr.success('Study Detail added successfully');

@@ -20,6 +20,14 @@
     <div class="card-body">
         <form [formGroup]="objectForm">
             <div class="row form-group">
+                <div class="col-md-6">
+                    <label for="studyId" class="font-style text-capitalize">parent study</label>
+                    <select id="studyId" class="form-control">
+                        <option selected disabled value="">Select an option...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row form-group">
                 <div class="col-md-12">
                     <label for="displayTitle" class="font-style text-capitalize">Display title</label>
                     <textarea id="displayTitle" cols="30" rows="3" class="form-control" placeholder="Enter display title..."
@@ -27,7 +35,6 @@
                     <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.displayTitle}}</h6>
                 </div>
             </div>
-
             <div class="row form-group">
                 <div class="col-md-6">
                     <label for="doi" class="font-style text-capitalize">DOI</label>

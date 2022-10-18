@@ -244,8 +244,7 @@ export class UpsertDupComponent implements OnInit {
   }
   onClickControllTab() {
     this.getPrereqTypes();
-    const preReqArray = (this.dupData.dupPrereqs.sort((a, b) => (a.sdOid > b.sdOid ? 1 : -1)))
-    this.patchPreReq(preReqArray);
+    this.getDupById(this.id, 'isPreReq');
   }
   preReqs(): FormArray {
     return this.preReqForm.get('preRequisite') as FormArray;
@@ -536,9 +535,9 @@ export class UpsertDupComponent implements OnInit {
     studyModal.componentInstance.title = 'Add Study';
     studyModal.componentInstance.type = 'study';
     studyModal.componentInstance.dupId = this.id;
-    if (this.dupData.dupStudies.length) {
+    if (this.associatedStudies.length) {
       const sdSidArray = [];
-      this.dupData.dupStudies.map((item: any) => {
+      this.associatedStudies.map((item: any) => {
         sdSidArray.push(item.sdSid);
       })
       studyModal.componentInstance.sdSidArray = sdSidArray.toString();
@@ -576,9 +575,9 @@ export class UpsertDupComponent implements OnInit {
     dataModal.componentInstance.title = 'Add Data Object';
     dataModal.componentInstance.type = 'dataObject';
     dataModal.componentInstance.dupId = this.id;
-    if (this.dupData.dupStudies.length) {
+    if (this.associatedStudies.length) {
       const sdSidArray = [];
-      this.dupData.dupStudies.map((item: any) => {
+      this.associatedStudies.map((item: any) => {
         sdSidArray.push(item.sdSid);
       })
       dataModal.componentInstance.sdSidArray = sdSidArray.toString();

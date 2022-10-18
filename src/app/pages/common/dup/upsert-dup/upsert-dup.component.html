@@ -25,19 +25,23 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-12 mb-5">
-                <ul class="nav nav-pills maxw-fit-content nav-fill" style="border-bottom: 1px solid lightgray">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#overview" data-toggle="tab" id="overviews" (click)="showButton = true">Overview</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#setup" data-toggle="tab" id="setups"
-                            (click)="getDupStudies(id); getDupObjects(id); getDupPeople(id); showButton = false">{{ isView ? 'Linked Objects and People' : 'Set up'}}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#objectprerequisite" data-toggle="tab" id="objectprerequisites"
-                            (click)="onClickControllTab(); showButton = false">Controlled Access Data</a>
-                    </li>
-                </ul>
+                <ng-container *ngIf="isView || isEdit">
+                    <ul class="nav nav-pills maxw-fit-content nav-fill" style="border-bottom: 1px solid lightgray">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#overview" data-toggle="tab" id="overviews"
+                                (click)="showButton = true">Overview</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#setup" data-toggle="tab" id="setups"
+                                (click)="getDupStudies(id); getDupObjects(id); getDupPeople(id); showButton = false">{{ isView ? 'Linked
+                                Objects and People' : 'Set up'}}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#objectprerequisite" data-toggle="tab" id="objectprerequisites"
+                                (click)="onClickControllTab(); showButton = false">Controlled Access Data</a>
+                        </li>
+                    </ul>
+                </ng-container>
             </div>
             <div class="tab-content w-100">
                 <div class="tab-pane fade show active" id="overview">
@@ -49,7 +53,7 @@
                                     <ng-select [items]="organizationList" bindLabel="name" bindValue="orgId" formControlName="orgId"
                                         [multiple]="false" [virtualScroll]="true" class="custom" notFoundText="No members found"
                                         placeholder="Select Organisation" *ngIf="!isView"
-                                        [ngClass]="{ 'is-invalid': submitted && g.orgId.errors }">
+                                        [ngClass]="{ 'is-invalid': submitted && g.orgId.errors }" [readonly]="isEdit">
                                     </ng-select>
                                     <div class="col-md-12 invalid-feedback" *ngIf="submitted && g.orgId.errors">
                                         <p *ngIf="submitted && g.orgId.errors.required"> Please select Organization</p>
@@ -421,9 +425,8 @@
                                 <h3>Notes</h3>
                                 <div formArrayName="notes">
                                     <div class="row form-group">
-                                        <!-- <label for="notes" class="font-style text-capitalize">Notes</label> -->
-                                        <div class="col-md-12 text-right pb-2"><button class="btn btn-primary" (click)="addDupNote()"
-                                                *ngIf="!isView">Add</button></div>
+                                        <div class="col-md-12 text-right pb-2"><button class="btn btn-primary p-2" (click)="addDupNote()"
+                                                *ngIf="!isView"><i class="fa fa-plus p-0"></i></button></div>
                                         <div class="col-md-12" *ngFor="let note of notes().controls;let i = index" [formGroupName]="i">
                                             <div class="card border-0">
                                                 <div class="card-body pl-0 pr-0 pb-0 pt-5">
@@ -504,9 +507,6 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="objectprerequisite">
-                    <div class="col-md-12 text-right">
-                        <button class="btn btn-primary" (click)="addPreReq()">Add Pre-Requisite</button>
-                    </div>
                     <div class="col-md-12">
                         <form [formGroup]="preReqForm">
                             <div formArrayName="preRequisite">
@@ -555,7 +555,6 @@
                                         </div>
                                         <mat-action-row *ngIf="!isView">
                                             <button mat-button color="primary" (click)="editPreReq(preReq)">Save</button>
-                                            <button mat-button color="warn" (click)="removePreReq(i)">Remove</button>
                                         </mat-action-row>                
                                     </mat-expansion-panel>
                                 </div>

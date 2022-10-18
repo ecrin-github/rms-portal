@@ -142,7 +142,7 @@ export class CommonModalComponent implements OnInit {
           }
         });
       }
-      this.closeModal({});
+      this.closeModal(this.studyForm.value.targetSdSid);
     }
     if (this.type === 'dataObject') {
       const payload = this.objectForm.value.targetsdOid;
@@ -220,8 +220,8 @@ export class CommonModalComponent implements OnInit {
     } else if (this.type === 'study') {
       if (this.studyForm.value.targetSdSid.length) {
         this.objectForm.controls.targetsdOid.enable();
-        const sdSids = this.sdSidArray ? this.studyForm.value.targetSdSid.toString() + this.sdSidArray : this.studyForm.value.targetSdSid.toString();
-        this.getObjectListByStudy(this.studyForm.value.targetSdSid.toString());
+        const sdSids = this.sdSidArray ? this.studyForm.value.targetSdSid.toString() + ',' + this.sdSidArray : this.studyForm.value.targetSdSid.toString();
+        this.getObjectListByStudy(sdSids);
       } else {
         this.objectForm.controls.targetsdOid.disable();
       }

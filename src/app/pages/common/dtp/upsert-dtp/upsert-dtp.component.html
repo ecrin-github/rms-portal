@@ -60,7 +60,7 @@
                                     <ng-select [items]="organizationList" bindLabel="name" bindValue="orgId"
                                         formControlName="orgId" [multiple]="false" [virtualScroll]="true" class="custom"
                                         notFoundText="No members found" placeholder="Select Organisation"
-                                        *ngIf="!isView" [ngClass]="{ 'is-invalid': submitted && g.orgId.errors }">
+                                        *ngIf="!isView" [ngClass]="{ 'is-invalid': submitted && g.orgId.errors }" [readonly]="isEdit">
                                     </ng-select>
                                     <div class="col-md-12 invalid-feedback" *ngIf="submitted && g.orgId.errors">
                                         <p *ngIf="submitted && g.orgId.errors.required"> Please select Organization</p>
@@ -566,7 +566,6 @@
                                 <h3>Notes</h3>
                                 <div formArrayName="notes">
                                     <div class="row form-group">
-                                        <!-- <label for="notes" class="font-style text-capitalize">Notes</label> -->
                                         <div class="col-md-12 text-right pb-2">
                                             <button class="btn btn-primary p-2" (click)="addDtpNote()" *ngIf="!isView"><i class="fa fa-plus p-0"></i></button>
                                         </div>
@@ -649,16 +648,15 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="objectsaccess">
-                    <div class="col-md-12 text-right">
-                        <button class="btn btn-primary" (click)="addEmbargo()">Add</button>
-                    </div>
                     <div class="col-md-12">
                         <form [formGroup]="objectEmbargoForm">
                             <div formArrayName="embargo">
                                 <div class="col-md-12" *ngFor="let embargo of embargos().controls;let i = index" [formGroupName]="i">
                                     <br>
                                     <mat-expansion-panel [expanded]="isView ? 'true' : 'false'">
-                                        <mat-expansion-panel-header>{{dtpData.dtpObjects[i].sdOid}}</mat-expansion-panel-header>
+                                        <mat-expansion-panel-header>{{dtpData.dtpObjects[i].sdOid}}
+                                           <div class="col text-right"><i class="fas fa-square" [ngClass]="dtpData.dtpObjects[i].accessTypeId === 11 || dtpData.dtpObjects[i].accessTypeId === 12 ? 'text-success' : 'text-warning'"></i></div>
+                                        </mat-expansion-panel-header>
                                         <div class="row form-group">
                                             <div class="col-md-4">
                                                 <label for="accessTypeId" class="font-style text-capitalize">Access Type</label>
