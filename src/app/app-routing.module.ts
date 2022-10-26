@@ -6,7 +6,7 @@ import {AuthGuard} from './_rms/guards/auth/auth.guard';
 export const routes: Routes = [
   {
     path: '',
-    // canActivate: [AuthGuard], enable permission in intenal main page, summary study/data object/dtp/dup
+    canActivate: [AuthGuard], // enables permission in intenal main page, summary study/data object/dtp/dup
     loadChildren: () =>
       import('./pages/layout.module').then((m) => m.LayoutModule),
   },

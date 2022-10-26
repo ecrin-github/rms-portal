@@ -6,16 +6,6 @@ import {States} from '../../../../../states/states';
 import {AuthService} from '../../../../../services/auth/auth.service';
 import { UserService } from 'src/app/_rms/services/user/user.service';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-export interface UserDataResult {
-  sub: string,
-  name: string
-  preferred_username: string,
-  given_name: string,
-  family_name: string,
-  email: string
-  pic: string
-  occupation: string
-}
 
 
 @Component({
@@ -33,7 +23,7 @@ export class UserOffcanvasComponent implements OnInit {
       private states: States,
       private auth: AuthService,
       private userService: UserService,
-      private OidcSecurityService: OidcSecurityService
+      private oidcSecurityService: OidcSecurityService
   ) {}
 
   ngOnInit(): void {
@@ -46,23 +36,18 @@ export class UserOffcanvasComponent implements OnInit {
   getUserData() {
     this.userService.getUser().subscribe((res: any) => {
       if (res) {
+        console.log(res);
         this.userData = res;
         this.userData.pic = './assets/media/svg/avatars/001-boy.svg';
         this.userData.occupation = '';
       }
-      // Elixir AAI
-      // if (res.data && res.data.length) {
-      //   this.userData = res.data[0];
-      //   this.userData.pic = './assets/media/svg/avatars/001-boy.svg';
-      //   this.userData.occupation = '';
-      // }
     }, error => {
       console.log('error', error);
-    })
+    });
   }
 
   logout() {
-    this.OidcSecurityService.logoff();
+    this.oidcSecurityService.logoff();
     // this.auth.logout();
     // document.location.reload();
   }

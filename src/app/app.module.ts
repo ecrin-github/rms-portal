@@ -63,11 +63,11 @@ function appInitializer(authService: AuthService) {
     ToastrModule.forRoot(),
     AuthModule.forRoot({
       config: {
-        authority: 'https://identity.ecrin-rms.org',
+        authority: 'https://proxy.aai.lifescience-ri.eu/',
         redirectUrl: window.location.origin,
         postLogoutRedirectUri: window.location.origin,
-        clientId: 'e87edd5d-16cd-45dc-8ffe-2307376d45c3',
-        scope: 'openid profile offline_access email phone roles organisations address locations people_id organisations_id',
+        clientId: 'APP-FDD7EABC-450A-426B-BDFA-3CBD87B7C56A',
+        scope: 'openid profile email',
         responseType: 'code',
         silentRenew: true,
         useRefreshToken: true,

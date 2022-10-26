@@ -57,6 +57,7 @@ export class InternalMainPageComponent implements OnInit {
   getUserData() {
     this.userService.getUser().subscribe(res => {
       if (res) {
+        console.log('user: ', res);
         this.userData = res;
       }
     }, error => {
