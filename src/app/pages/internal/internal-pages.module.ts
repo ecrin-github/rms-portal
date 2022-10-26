@@ -29,6 +29,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { CommonPagesModule } from '../common/common-pages.module';
 import { SummaryUserComponent } from '../common/user/summary-user/summary-user/summary-user.component';
+import { UpsertUserComponent } from '../common/user/upsert/upsert-user/upsert-user.component';
 
 
 @NgModule({
@@ -101,6 +102,11 @@ import { SummaryUserComponent } from '../common/user/summary-user/summary-user/s
                 path: 'people',
                 pathMatch: 'full',
                 component: SummaryUserComponent
+            },
+            {
+                path: 'people/add',
+                pathMatch: 'full',
+                component: UpsertUserComponent
             }
         ]),
         NgbDatepickerModule,

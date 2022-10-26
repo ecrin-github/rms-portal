@@ -54,6 +54,8 @@ import { ConfirmationWindow1Component } from './confirmation-window1/confirmatio
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { SummaryUserComponent } from './user/summary-user/summary-user/summary-user.component';
 import { AddModalComponent } from './add-modal/add-modal.component';
+import { UpsertUserComponent } from './user/upsert/upsert-user/upsert-user.component';
+import { UsersComponent } from 'src/app/modules/user-management/users/users.component';
 
 
 @NgModule({
@@ -101,7 +103,8 @@ import { AddModalComponent } from './add-modal/add-modal.component';
         ConfirmationWindowComponent,
         ConfirmationWindow1Component,
         SummaryUserComponent,
-        AddModalComponent
+        AddModalComponent,
+        UpsertUserComponent
     ],
     schemas: [NO_ERRORS_SCHEMA],
     imports: [
@@ -156,6 +159,16 @@ import { AddModalComponent } from './add-modal/add-modal.component';
                 path: 'data-objects/:id/view',
                 pathMatch: 'full',
                 component: UpsertObjectComponent
+            },
+            {
+                path: 'people/:id/edit',
+                pathMatch: 'full',
+                component: UpsertUserComponent
+            },
+            {
+                path: 'people/:id/view',
+                pathMatch: 'full',
+                component: UpsertUserComponent
             }
         ]),
         MatTableModule,

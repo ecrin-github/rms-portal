@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { DataObjectInterface } from 'src/app/_rms/interfaces/data-object/data-object.interface';
 import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
+import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 import { ObjectLookupService } from 'src/app/_rms/services/entities/object-lookup/object-lookup.service';
 
 @Component({
@@ -37,10 +38,12 @@ export class UpsertObjectComponent implements OnInit {
   showDescription: boolean = false;
   sticky: boolean = false;
   EoscCategory = ['0', '1', '2', '3'];
+  studyList: [] = [];
 
   constructor(private fb: FormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService,
-    private toastr: ToastrService, private activatedRoute: ActivatedRoute) {
+    private toastr: ToastrService, private activatedRoute: ActivatedRoute, private listService: ListService) {
     this.objectForm = this.fb.group({
+      linkedSdSid: '',
       doi: '',
       displayTitle: '',
       version: '',
@@ -99,6 +102,7 @@ export class UpsertObjectComponent implements OnInit {
   ngOnInit(): void {
     this.isEdit = this.router.url.includes('edit') ? true : false;
     this.isView = this.router.url.includes('view') ? true : false;
+    this.getStudyList();
     this.getObjectClass();
     this.getObjectType();
     this.getAccessType();
@@ -110,6 +114,22 @@ export class UpsertObjectComponent implements OnInit {
       this.id = this.activatedRoute.snapshot.params.id;
       this.getObjectById(this.id);
     }
+  }
+  getStudyList() {
+    this.spinner.show();
+    this.listService.getStudyList().subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.studyList = res.data;
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+      this.spinner.hide();
+    })
+  }
+  customSearchFn(term: string, item) {
+    term = term.toLocaleLowerCase();
+    return item.sdSid.toLocaleLowerCase().indexOf(term) > -1 || item.displayTitle.toLocaleLowerCase().indexOf(term) > -1;
   }
   getObjectClass() {
     setTimeout(() => {
@@ -282,94 +302,6 @@ export class UpsertObjectComponent implements OnInit {
       objectRelationships: this.objectData.objectRelationships ? this.objectData.objectRelationships : []
     })
   }
-  getInstance(event) {
-    this.objectForm.patchValue({
-      objectInstances: event.data
-    })
-    this.count +=1;
-    setTimeout(() => {
-     this.initiateEmit = event.isEmit; 
-    });
-    if (this.showTopic ? this.count === 9 : this.count === 7) {
-      this.onSave();
-    }
-  }
-  getTitle(event) {
-    this.objectForm.patchValue({
-      objectTitles: event.data
-    })
-    this.count += 1;
-    if (this.showTopic ? this.count === 9 : this.count === 7) {
-      this.onSave();
-    }
-  }
-  getDate(event) {
-    this.objectForm.patchValue({
-      objectDates: event.data
-    })
-    this.count += 1;
-    if (this.showTopic ? this.count === 9 : this.count === 7) {
-      this.onSave();
-    }
-  }
-  getContributor(event) {
-    this.objectForm.patchValue({
-      objectContributors: event.data
-    })
-    this.count += 1;
-    if (this.showTopic ? this.count === 9 : this.count === 7) {
-      this.onSave();
-    }
-  }
-  getTopic(event) {
-    this.objectForm.patchValue({
-      objectTopics: event.data
-    })
-    this.count += 1;
-    if (this.showTopic ? this.count === 9 : this.count === 7) {
-      this.onSave();
-    }
-  }
-  getIdentifier(event) {
-    this.objectForm.patchValue({
-      objectIdentifiers: event.data
-    })
-    this.count += 1;
-    if (this.showTopic ? this.count === 9 : this.count === 7) {
-      this.onSave();
-    }
-  }
-  getDescription(event) {
-    this.objectForm.patchValue({
-      objectDescriptions: event.data
-    })
-    this.count += 1;
-    if (this.showTopic ? this.count === 9 : this.count === 7) {
-      this.onSave();
-    }
-  }
-  getRight(event) {
-    this.objectForm.patchValue({
-      objectRights: event.data
-    })
-    this.count += 1;
-    if (this.showTopic ? this.count === 9 : this.count === 7) {
-      this.onSave();
-    }
-  }
-  getRelation(event) {
-    this.objectForm.patchValue({
-      objectRelationships: event.data
-    })
-    this.count += 1;
-    if (this.showTopic ? this.count === 9 : this.count === 7) {
-      this.onSave();
-    }
-  }
-  onClick() {
-    // this.initiateEmit = true;
-    this.onSave();
-  }
   onSave() {
     if (localStorage.getItem('updateObjectList')) {
       localStorage.removeItem('updateObjectList');
@@ -415,7 +347,7 @@ export class UpsertObjectComponent implements OnInit {
           this.toastr.error(error.error.title);
         })
       } else {
-        this.objectService.addDataObject('RMS-ISRCTN18853827', payload).subscribe((res: any) => {
+        this.objectService.addDataObject(payload.linkedSdSid, payload).subscribe((res: any) => {
           this.spinner.hide();
           if (res.statusCode === 200) {
             this.toastr.success('Data Object added successfully');

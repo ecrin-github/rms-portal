@@ -56,12 +56,12 @@ export class ObjectDateComponent implements OnInit {
       dateTypeId: '',
       dateIsRange: false,
       dateAsString: '',
-      startDay: '',
-      startMonth: '',
-      startYear:'',
-      endDay: '',
-      endMonth:'',
-      endYear: '',
+      startDay: null,
+      startMonth: null,
+      startYear:null,
+      endDay: null,
+      endMonth:null,
+      endYear: null,
       details: '',
       alreadyExist: false
     });
