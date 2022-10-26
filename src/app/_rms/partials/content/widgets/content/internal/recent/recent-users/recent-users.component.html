@@ -7,7 +7,7 @@
       <span class="text-muted mt-3 font-weight-bold font-size-sm">Showing the 10 most recently added people, from a total of {{peopleTotal}}.</span>
     </h3>
     <div class="card-toolbar">
-      <a [routerLink]="['/studies', 'add']" target="_blank"
+      <a [routerLink]="['/people', 'add']" target="_blank"
         class="btn btn-success font-weight-bolder font-size-sm mr-3">Add</a>
       <a [routerLink]="['/people']" target="_blank" class="btn btn-info font-weight-bolder font-size-sm">See All</a>
 
@@ -42,9 +42,9 @@
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef> </mat-header-cell>
         <mat-cell *matCellDef="let row">
-          <a [routerLink]="['/studies', row.sdSid, 'view']" target="_blank"
+          <a [routerLink]="['/people', row.id, 'view']" target="_blank"
             class="btn btn-light-primary font-weight-bolder font-size-sm mr-3">View</a>
-          <a [routerLink]="['/studies', row.sdSid, 'edit']" target="_blank"
+          <a [routerLink]="['/people', row.id, 'edit']" target="_blank"
             class="btn btn-light-success font-weight-bolder font-size-sm">Edit</a>
         </mat-cell>
       </ng-container>
