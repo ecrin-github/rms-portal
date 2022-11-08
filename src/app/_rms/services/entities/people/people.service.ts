@@ -9,7 +9,13 @@ const base = environment.baseUrl;
 export class PeopleService {
 
   constructor( private http: HttpClient) { }
-  getPeopleList() {
-    return this.http.get(`${base}/people/list`);
+  getPeopleById(id) {
+    return this.http.get(`${base}/people/${id}`);
   }
+  editPeople(id, payload) {
+    return this.http.put(`${base}/people/${id}`, payload)
+  }
+  addPeople(payload) {
+    return this.http.post(`${base}/people`, payload);
+  } 
 }
