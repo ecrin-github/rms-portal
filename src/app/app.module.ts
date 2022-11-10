@@ -67,7 +67,7 @@ function appInitializer(authService: AuthService) {
         redirectUrl: window.location.origin,
         postLogoutRedirectUri: window.location.origin,
         clientId: 'APP-FDD7EABC-450A-426B-BDFA-3CBD87B7C56A',
-        scope: 'openid profile email',
+        scope: 'openid profile email offline_access',
         responseType: 'code',
         silentRenew: true,
         useRefreshToken: true,
@@ -75,6 +75,9 @@ function appInitializer(authService: AuthService) {
         storage: new CustomStorage(),
         renewTimeBeforeTokenExpiresInSeconds: 100,
         ignoreNonceAfterRefresh: true,
+        customParamsAuthRequest: {
+          prompt: 'consent'
+        }
       },
     }),
     NgxPermissionsModule.forRoot()

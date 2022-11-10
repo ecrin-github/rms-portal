@@ -131,6 +131,7 @@ export class TopbarComponent implements OnInit, AfterViewInit {
     //   console.log('data1111', data)
     //   console.log(this.oidcSecurityService.userData$)
     // });
+    console.log('refresh token: ', this.oidcSecurityService.getRefreshToken());
     this.userService.getUser().subscribe((res: any) => {
       console.log('data11111', res);
       if (res) {
