@@ -74,8 +74,8 @@ export class UpsertUserComponent implements OnInit {
     })
   }
   onSave() {
-    if (localStorage.getItem('upsertUserList')) {
-      localStorage.removeItem('upsertUserList');
+    if (localStorage.getItem('updateUserList')) {
+      localStorage.removeItem('updateUserList');
     }
     const payload = JSON.parse(JSON.stringify(this.userForm.value));
     this.submitte = true;
@@ -85,10 +85,10 @@ export class UpsertUserComponent implements OnInit {
         payload.id = this.id;
         payload.orgName = this.findOrganization(payload.orgId);
         this.peopleService.editPeople(this.id, payload).subscribe((res: any) => {
-          console.log('editRes', res);
           this.spinner.hide();
           if (res.statusCode === 200) {
             this.toastr.success('Information updated successfully');
+            localStorage.setItem('updateUserList', 'true');
           } else {
             this.toastr.error(res.messages[0]);
           }
@@ -103,6 +103,7 @@ export class UpsertUserComponent implements OnInit {
           this.spinner.hide();
           if (res.statusCode === 200) {
             this.toastr.success('People added successfully');
+            localStorage.setItem('updateUserList', 'true');
           }
         }, error => {
           this.spinner.hide();

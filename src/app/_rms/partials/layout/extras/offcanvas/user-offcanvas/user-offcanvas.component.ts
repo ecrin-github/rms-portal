@@ -48,7 +48,6 @@ export class UserOffcanvasComponent implements OnInit {
 
   logout() {
     this.oidcSecurityService.logoff();
-    // this.auth.logout();
-    // document.location.reload();
+    document.location.reload();
   }
 }

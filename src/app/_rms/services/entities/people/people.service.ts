@@ -17,5 +17,8 @@ export class PeopleService {
   }
   addPeople(payload) {
     return this.http.post(`${base}/people`, payload);
-  } 
+  }
+  deletePeopleById(id) {
+    return this.http.delete(`${base}/people/full/${id}`);
+  }
 }

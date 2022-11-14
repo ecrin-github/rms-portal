@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { DashboardService } from 'src/app/_rms/services/entities/dashboard/dashboard.service';
@@ -28,5 +28,9 @@ export class RecentUsersComponent {
     }, error => {
       this.toastr.error(error.error.title);
     })
+  }
+  @HostListener('window: storage', ['$event'])
+  refreshList(event) {
+    this.getUserList();
   }
 }

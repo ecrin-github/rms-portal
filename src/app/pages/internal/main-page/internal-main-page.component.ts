@@ -45,20 +45,26 @@ export class InternalMainPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getUserData();
     this.getDtpStatistics();
     this.getDupStatistics();
     this.getStudyStatistics();
     this.getObjectStatistics();
     this.getPeopleStatistics();
-    const perm = localStorage.getItem('role');
-    this.permissionService.loadPermissions([perm]);
+    // const perm = localStorage.getItem('role');
+    // this.permissionService.loadPermissions([perm]);
   }
 
   getUserData() {
     this.userService.getUser().subscribe(res => {
       if (res) {
-        console.log('user: ', res);
         this.userData = res;
+        this.userService.getUserRoleInfo(this.userData).subscribe((res: any) => {
+          console.log('roleInfo', res);
+          this.permissionService.loadPermissions([res.role]);
+        }, error => {
+          console.log(error);
+        })
       }
     }, error => {
       console.log('error', error);

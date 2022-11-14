@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
 import { DupService } from 'src/app/_rms/services/entities/dup/dup.service';
+import { PeopleService } from 'src/app/_rms/services/entities/people/people.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 
 @Component({
@@ -18,8 +19,9 @@ export class ConfirmationWindowComponent implements OnInit {
   sdOid: any;
   dtpId: any;
   dupId: any;
+  peopleId: any;
 
-  constructor( private activeModal: NgbActiveModal, private toastr: ToastrService, private dtpService: DtpService, private dupService: DupService, private studyService: StudyService, private objectService: DataObjectService) { }
+  constructor( private activeModal: NgbActiveModal, private toastr: ToastrService, private dtpService: DtpService, private dupService: DupService, private studyService: StudyService, private objectService: DataObjectService, private peopleService: PeopleService) { }
 
   ngOnInit(): void {
   }
@@ -91,6 +93,9 @@ export class ConfirmationWindowComponent implements OnInit {
         break;
       case 'objectEmbargo':
         this.deleteEmbargo();
+        break;
+      case 'people':
+        this.deletePeople();
         break;
       default:
         break;
@@ -372,6 +377,18 @@ export class ConfirmationWindowComponent implements OnInit {
       }
     }, error => {
       this.toastr.error(error.erro.title);
+    })
+  }
+  deletePeople() {
+    this.peopleService.deletePeopleById(this.peopleId).subscribe((res: any) => {
+      if (res.statusCode === 204) {
+        this.toastr.success('People deleted successfully');
+        this.activeModal.close('data');
+      } else {
+        this.toastr.error(res.messages[0]);
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
     })
   }
   closeModal() {

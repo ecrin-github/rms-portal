@@ -15,7 +15,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-7">
-                            <h2>Add User Details</h2>
+                            <h2>{{isView ? 'View User Data' : isEdit ? 'Edit User Data' : 'Add User Data'}}</h2>
                         </div>
                         <div class="col-md-5 text-right">
                             <button class="btn btn-success mr-5" *ngIf="!isView" (click)="onSave()">{{isEdit ?'Apply Changes' : 'Save'}}</button>
