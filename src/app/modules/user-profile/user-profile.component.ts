@@ -31,7 +31,7 @@ export class UserProfileComponent implements OnInit {
     this.form.patchValue({
       pic: this.user.pic,
       userName: this.user.preferred_username,
-      firstName: this.user.given_name,
+      firstName: this.user.given_name ? this.user.given_name : '',
       lastName: this.user.family_name,
       email: this.user.email,
       phone: this.user.phone,
