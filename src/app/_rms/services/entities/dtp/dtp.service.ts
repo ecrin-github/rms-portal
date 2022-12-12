@@ -20,6 +20,10 @@ export class DtpService {
     return this.http.delete(`${base}/data-transfers/full/${id}`);
   }
 
+  // check for the deletion
+  checkDtaAgreed(dtpId) {
+    return this.http.get(`${base}/data-transfers/${dtpId}`);
+  }
   
   // DTP record - core record only
 

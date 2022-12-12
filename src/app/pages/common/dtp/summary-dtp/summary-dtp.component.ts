@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ConfirmationWindowComponent } from '../../confirmation-window/confirmation-window.component';
 import { DtpListEntryInterface } from 'src/app/_rms/interfaces/dtp/dtp-listentry.interface';
 import { ListService } from 'src/app/_rms/services/entities/list/list.service';
+import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
 
 
 @Component({
@@ -21,13 +22,16 @@ export class SummaryDtpComponent implements OnInit {
   filterOption: string = '';
   searchText:string = '';
   dtpLength: number = 0;
+  warningModal: any;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild('exampleModal') exampleModal : TemplateRef<any>;
 
   constructor( private listService: ListService, 
                private spinner: NgxSpinnerService, 
                private toastr: ToastrService, 
-               private modalService: NgbModal) {
+               private modalService: NgbModal,
+               private dtpService: DtpService) {
   }
 
   ngOnInit() {
@@ -86,14 +90,25 @@ export class SummaryDtpComponent implements OnInit {
   }
 
   deleteRecord(id) {
-    const deleteModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
-    deleteModal.componentInstance.type = 'dtp';
-    deleteModal.componentInstance.id = id;
-    deleteModal.result.then((data: any) => {
-      console.log('data', data)
-      if (data) {
-        this.getDtpList();
+    this.dtpService.checkDtaAgreed(id).subscribe((res: any) => {
+      if (res && res.data) {
+        if (res.data[0].statusId === 14 || res.data[0].statusId === 15 || res.data[0].statusId === 16) {
+          this.warningModal = this.modalService.open(this.exampleModal, { size: 'lg', backdrop: 'static' });
+        } else {
+          const deleteModal = this.modalService.open(ConfirmationWindowComponent, { size: 'lg', backdrop: 'static' });
+          deleteModal.componentInstance.type = 'dtp';
+          deleteModal.componentInstance.id = id;
+          deleteModal.result.then((data: any) => {
+            console.log('data', data)
+            if (data) {
+              this.getDtpList();
+            }
+          }, error => { });
+        }
       }
-    }, error => {});
+    }, error => {})
+  }
+  closeModal() {
+    this.warningModal.close();
   }
 }

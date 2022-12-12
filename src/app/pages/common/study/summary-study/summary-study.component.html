@@ -81,3 +81,22 @@
 </div>
 
 <br />
+
+<!-- Modal -->
+<ng-template #studyDeleteModal let-modal>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Delete Record</h5>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <h6>{{title}}</h6>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" (click)="closeModal()">Close</button>
+        </div>
+    </div>
+</ng-template>

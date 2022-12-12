@@ -82,3 +82,22 @@
 </div>
 
 <br />
+  
+  <!-- Modal -->
+<ng-template #exampleModal let-modal>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Delete Record</h5>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <h6>Sorry, DTP agreed date is present for this DTP so you can't delete this DTP</h6>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" (click)="closeModal()">Close</button>
+        </div>
+    </div>
+</ng-template>

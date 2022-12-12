@@ -159,4 +159,14 @@ export class StudyService {
     return this.http.delete(`${base}/studies/${sdSid}/contributors/${id}`);
   }
 
+  // check number of linked DTP and DUP
+  studyInvolvement(sdSid) {
+    return this.http.get(`${base}/studies/${sdSid}/involvement`);
+  }
+
+  // check number of linked objects
+  linkedObject(sdSid){
+    return this.http.get(`${base}/studies/${sdSid}/objects`);
+  }
+
 }

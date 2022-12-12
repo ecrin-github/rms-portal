@@ -91,7 +91,7 @@ export class ObjectTitleComponent implements OnInit {
     }
   }
   getLanguageCode() {
-    const getLanguageCode$ = this.commonLookupService.getLanguageCodes().subscribe((res:any) => {
+    const getLanguageCode$ = this.commonLookupService.getLanguageCodes('en').subscribe((res:any) => {
       if(res.data) {
         this.languageCode = res.data;
       }

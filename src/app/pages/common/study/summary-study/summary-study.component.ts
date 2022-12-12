@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -7,6 +7,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ConfirmationWindowComponent } from '../../confirmation-window/confirmation-window.component';
 import { StudyListEntryInterface } from 'src/app/_rms/interfaces/study/study-listentry.interface';
 import { ListService } from 'src/app/_rms/services/entities/list/list.service';
+import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-summary-study',
@@ -21,13 +23,17 @@ export class SummaryStudyComponent implements OnInit {
   filterOption: string = '';
   searchText:string = '';
   studyLength: number = 0;
+  title: string = '';
+  warningModal: any;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild('studyDeleteModal') studyDeleteModal : TemplateRef<any>;
 
   constructor( private listService: ListService, 
                private spinner: NgxSpinnerService, 
                private toastr: ToastrService, 
-               private modalService: NgbModal) {
+               private modalService: NgbModal,
+               private studyService: StudyService) {
   }
 
   ngOnInit(): void {
@@ -90,13 +96,49 @@ export class SummaryStudyComponent implements OnInit {
   }
 
   deleteRecord(id) {
-    const deleteModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
-    deleteModal.componentInstance.type = 'study';
-    deleteModal.componentInstance.id = id;
-    deleteModal.result.then((data: any) => {
-      if(data) {
-        this.getStudyList();
+    const studyInvolvement$ = this.studyService.studyInvolvement(id);
+    const linkedObject$ = this.studyService.linkedObject(id);
+    const combine$ = combineLatest([studyInvolvement$, linkedObject$]).subscribe(([studyInvolvementRes, linkedObjectRes]: [any, any]) => {
+      if (studyInvolvementRes && studyInvolvementRes.data && linkedObjectRes && linkedObjectRes.data) {
+        const dtpLinked = studyInvolvementRes.data[0].statValue;
+        const dupLinked = studyInvolvementRes.data[1].statValue;
+        if (dtpLinked > 0 && dupLinked > 0) {
+          this.title = `There are ${dtpLinked} DTP's and ${dupLinked} DUP's linked to this study. So you can't delete the study`;
+          this.warningModal = this.modalService.open(this.studyDeleteModal, { size: 'lg', backdrop: 'static' });
+        } else if (dtpLinked > 0) {
+          this.title = `There are ${dtpLinked} DTP's linked to this study. So you can't delete the study`;
+          this.warningModal = this.modalService.open(this.studyDeleteModal, { size: 'lg', backdrop: 'static' });
+        } else if (dupLinked > 0) {
+          this.title = ` There are ${dupLinked} DUP's linked to this study. So you can't delete the study`;
+          this.warningModal = this.modalService.open(this.studyDeleteModal, { size: 'lg', backdrop: 'static' });
+        } else if (linkedObjectRes.data) {
+          this.title = `Objects are linked to this study. So you can't delete the study`;
+          this.warningModal = this.modalService.open(this.studyDeleteModal, { size: 'lg', backdrop: 'static' });
+        } else {
+          const deleteModal = this.modalService.open(ConfirmationWindowComponent, { size: 'lg', backdrop: 'static' });
+          deleteModal.componentInstance.type = 'study';
+          deleteModal.componentInstance.id = id;
+          deleteModal.result.then((data: any) => {
+            if (data) {
+              this.getStudyList();
+            }
+          }, error => { });
+        }
+      } else {
+        const deleteModal = this.modalService.open(ConfirmationWindowComponent, { size: 'lg', backdrop: 'static' });
+        deleteModal.componentInstance.type = 'study';
+        deleteModal.componentInstance.id = id;
+        deleteModal.result.then((data: any) => {
+          if (data) {
+            this.getStudyList();
+          }
+        }, error => { });
       }
-    }, error => {});
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  closeModal() {
+    this.warningModal.close();
   }
 }

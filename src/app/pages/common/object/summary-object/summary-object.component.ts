@@ -1,10 +1,11 @@
-import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { ObjectListEntryInterface } from 'src/app/_rms/interfaces/data-object/data-object-listentry.interface';
+import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 import { ConfirmationWindowComponent } from '../../confirmation-window/confirmation-window.component';
 
@@ -20,13 +21,17 @@ export class SummaryObjectComponent implements OnInit {
   filterOption: string = '';
   searchText:string = '';
   objectLength: number = 0;
+  title: string = '';
+  warningModal: any;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild('objectDeleteModal') objectDeleteModal : TemplateRef<any>;
 
   constructor( private listService: ListService, 
                private spinner: NgxSpinnerService, 
                private toastr: ToastrService, 
-               private modalService: NgbModal) {
+               private modalService: NgbModal,
+               private dataObjectService: DataObjectService) {
   }
 
   ngOnInit(): void {
@@ -84,13 +89,44 @@ export class SummaryObjectComponent implements OnInit {
   }
 
   deleteRecord(id) {
-    const deleteModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
-    deleteModal.componentInstance.type = 'dataObject';
-    deleteModal.componentInstance.id = id;
-    deleteModal.result.then((data: any) => {
-      if (data) {
-        this.getObjectList();
+    this.dataObjectService.objectInvolvement(id).subscribe((res: any) => {
+      if (res && res.data) {
+        const dtpLinked = res.data[0].statValue;
+        const dupLinked = res.data[1].statValue;  
+        if (dtpLinked > 0 && dupLinked > 0) {
+          this.title = `There are ${dtpLinked} DTP's and ${dupLinked} DUP's linked to this object. So you can't delete the object`;
+          this.warningModal = this.modalService.open(this.objectDeleteModal, { size: 'lg', backdrop: 'static' });
+        } else if (dtpLinked > 0) {
+          this.title = `There are ${dtpLinked} DTP's linked to this object. So you can't delete the object`;
+          this.warningModal = this.modalService.open(this.objectDeleteModal, { size: 'lg', backdrop: 'static' });
+        } else if (dupLinked > 0) {
+          this.title = ` There are ${dupLinked} DUP's linked to this object. So you can't delete the object`;
+          this.warningModal = this.modalService.open(this.objectDeleteModal, { size: 'lg', backdrop: 'static' });
+        } else {
+          const deleteModal = this.modalService.open(ConfirmationWindowComponent, { size: 'lg', backdrop: 'static' });
+          deleteModal.componentInstance.type = 'dataObject';
+          deleteModal.componentInstance.id = id;
+          deleteModal.result.then((data: any) => {
+            if (data) {
+              this.getObjectList();
+            }
+          }, error => { });
+        }
+      } else {
+        const deleteModal = this.modalService.open(ConfirmationWindowComponent, { size: 'lg', backdrop: 'static' });
+        deleteModal.componentInstance.type = 'dataObject';
+        deleteModal.componentInstance.id = id;
+        deleteModal.result.then((data: any) => {
+          if (data) {
+            this.getObjectList();
+          }
+        }, error => { });
       }
-    }, error => {});
+    }, error => {
+      this.toastr.error(error.error.title);
+    });
+  }
+  closeModal() {
+    this.warningModal.close();
   }
 }

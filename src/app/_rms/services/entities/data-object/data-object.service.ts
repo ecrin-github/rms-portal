@@ -235,5 +235,10 @@ export class DataObjectService {
   deleteObjectIdentifier(id, sdOid) {
     return this.http.delete(`${base}/data-objects/${sdOid}/identifiers/${id}`);
   }
+
+  // check number of linked DTP and DUP
+  objectInvolvement(sdOid) {
+    return this.http.get(`${base}/data-objects/${sdOid}/involvement`);
+  }
   
  }

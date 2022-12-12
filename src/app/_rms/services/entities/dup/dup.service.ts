@@ -20,6 +20,11 @@ export class DupService {
     return this.http.delete(`${base}/data-uses/full/${id}`);
   }
 
+  // check for deletion
+  checkDupAgreed(dupId) {
+    return this.http.get(`${base}/data-uses/${dupId}`);
+  }
+
 
     // DUP record - core record only
 

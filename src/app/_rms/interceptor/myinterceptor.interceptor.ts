@@ -22,29 +22,35 @@ export class MyinterceptorInterceptor implements HttpInterceptor {
     let path = '';
     if (!request.url.includes('https://login.elixir-czech.org/oidc')) {
       path += request.url;
-      if (!request.url.includes('context')) {
-        if (!request.url.includes('/identity/elixir')) {
-          request = request.clone({
-            setHeaders: {
-              Authorization: `Bearer ${token}`,
-            },
-            url: path
-          })
+      request = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+        url: path
+      })
+      // if (!request.url.includes('context')) {
+      //   if (!request.url.includes('/identity/elixir')) {
+      //     request = request.clone({
+      //       setHeaders: {
+      //         Authorization: `Bearer ${token}`,
+      //       },
+      //       url: path
+      //     })
 
-        } else {
-          request = request.clone({
-            setParams: {
-              accessToken: token
-            },
-            url: path
-          })
+      //   } else {
+      //     request = request.clone({
+      //       setParams: {
+      //         accessToken: token
+      //       },
+      //       url: path
+      //     })
 
-        }
-      } else {
-        request = request.clone({
-          url: path
-        })
-      }
+      //   }
+      // } else {
+      //   request = request.clone({
+      //     url: path
+      //   })
+      // }
     } else {
       path = request.url;
     }
@@ -54,10 +60,10 @@ export class MyinterceptorInterceptor implements HttpInterceptor {
       }
     }, error => {
       if (error instanceof HttpErrorResponse) {
-        if (error.status === 400) {
-          localStorage.clear();
-          document.location.reload();
-        }
+        // if (error.status === 400) {
+        //   localStorage.clear();
+        //   document.location.reload();
+        // }
       }
     }
     ));

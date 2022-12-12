@@ -225,7 +225,7 @@ export class UpsertObjectComponent implements OnInit {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    this.commonLookupService.getLanguageCodes().subscribe((res: any) => {
+    this.commonLookupService.getLanguageCodes('en').subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.languageCode = res.data;

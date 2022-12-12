@@ -31,7 +31,7 @@ export class CommonLookupService {
     return this.http.get(`${base}/context/orgnames`);
   }
 
-  getLanguageCodes() {
-    return this.http.get(`${base}/lookup/major-langs`);
+  getLanguageCodes(nameLang) {
+    return this.http.get(`${base}/lookup/major-langs/${nameLang}`);
   }
 }

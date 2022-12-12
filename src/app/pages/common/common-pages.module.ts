@@ -4,7 +4,7 @@ import {CommonModule} from '@angular/common';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatButtonModule} from '@angular/material/button';
-import {NgbDatepickerModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbActiveModal, NgbDatepickerModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatExpansionModule} from '@angular/material/expansion';
@@ -184,6 +184,7 @@ import { UsersComponent } from 'src/app/modules/user-management/users/users.comp
         NgbModule,
         NgxPermissionsModule.forChild()
     ],
+    providers: [NgbActiveModal],
     exports: [ SummaryDtpComponent, SummaryDupComponent, SummaryStudyComponent, SummaryObjectComponent]
 })
 export class CommonPagesModule {}

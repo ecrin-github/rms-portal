@@ -84,3 +84,21 @@
 </div>
 
 <br />
+<!-- Modal -->
+<ng-template #deleteModal let-modal>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Delete Record</h5>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <h6>Sorry, DUP agreed date is present for this DUP so you can't delete this DUP.</h6>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" (click)="closeModal()">Close</button>
+        </div>
+    </div>
+</ng-template>
