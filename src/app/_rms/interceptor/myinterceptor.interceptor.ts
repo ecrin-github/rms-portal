@@ -28,29 +28,6 @@ export class MyinterceptorInterceptor implements HttpInterceptor {
         },
         url: path
       })
-      // if (!request.url.includes('context')) {
-      //   if (!request.url.includes('/identity/elixir')) {
-      //     request = request.clone({
-      //       setHeaders: {
-      //         Authorization: `Bearer ${token}`,
-      //       },
-      //       url: path
-      //     })
-
-      //   } else {
-      //     request = request.clone({
-      //       setParams: {
-      //         accessToken: token
-      //       },
-      //       url: path
-      //     })
-
-      //   }
-      // } else {
-      //   request = request.clone({
-      //     url: path
-      //   })
-      // }
     } else {
       path = request.url;
     }
@@ -60,10 +37,10 @@ export class MyinterceptorInterceptor implements HttpInterceptor {
       }
     }, error => {
       if (error instanceof HttpErrorResponse) {
-        // if (error.status === 400) {
-        //   localStorage.clear();
-        //   document.location.reload();
-        // }
+        if (error.status === 401) {
+          localStorage.clear();
+          document.location.reload();
+        }
       }
     }
     ));

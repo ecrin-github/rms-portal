@@ -2,7 +2,7 @@
     <div class="card-header">
         <div class="row">
             <div class="col-md-7">
-                <h2>{{ isView ? 'View '+ dtpData?.coreDtp.displayName +' transfer details' : isEdit ? 'Edit '+
+                <h2>{{ isView ? dtpData?.coreDtp.displayName +' transfer details' : isEdit ? 'Edit '+
                     dtpData?.coreDtp.displayName + '
                     transfer details' : 'Add new data transfer'}}</h2>
             </div>
@@ -159,10 +159,10 @@
                                             <div class="wizard-label">
                                                 <i class="wizard-icon flaticon2-open-text-book"></i>
                                                 <h3 class="wizard-title">DTP Completed, objects listed</h3>
-                                                <i class="fa fa-check-circle" style="color: green;"
+                                                <i class="fa fa-check-circle" style="color: orange;"
                                                     *ngIf="!(isEdit || isView) ? 6 < currentStatus : 6 < currentStatus"></i>
-                                                <i class="fa fa-exclamation-circle" style="color: orange;"
-                                                    *ngIf="6 === currentStatus"></i>
+                                                <i class="fa fa-exclamation-circle" style="color: green;"
+                                                    *ngIf="currentStatus === 6"></i>
                                             </div>
                                         </a>
                                     </div>
@@ -576,9 +576,10 @@
                                                         (click)="deleteDtpNote(i)" *ngIf="!isView"></i>
                                                     <i class="fa fa-check float-right pr-2 text-success" style="cursor: pointer;"
                                                         (click)="saveDtpNote(note)" *ngIf="!isView"></i>
+                                                    <h6>{{findPeopleById(dtpData.dtpNotes[i].author)}} <small>{{dtpData.dtpNotes[i].createdOn | date}}</small></h6>
                                                     <textarea id="notes" cols="30" rows="3" class="form-control" formControlName="text"
                                                         *ngIf="!isView"></textarea>
-                                                    <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData.dtpNotes[i].text}}</h6>
+                                                    <span style="font-weight: 100;" *ngIf="isView">{{dtpData.dtpNotes[i].text}}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -665,7 +666,7 @@
                                                     </option>
                                                 </select>
                                                 <h6 style="font-weight: 100;" *ngIf="isView">
-                                                    {{findPrereqType(dtpData.dtpObjects[i].accessTypeId)}}</h6>
+                                                    {{findAccessType(dtpData.dtpObjects[i].accessTypeId)}}</h6>
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="accessDetails" class="font-style text-capitalize">access details</label>
@@ -695,18 +696,22 @@
                                             <div class="col-md-4">
                                                 <label for="accessCheckStatusId" class="font-style text-capitalize">Access check status</label>
                                                 <select id="accessCheckStatusId" formControlName="accessCheckStatusId" class="form-control" *ngIf="!isView">
-                                                    <option [value]=preReqType.id *ngFor="let preReqType of preRequTypes">{{preReqType.name}}
+                                                    <option [value]=accessStatusType.id *ngFor="let accessStatusType of accessStatusTypes">{{accessStatusType.name}}
                                                     </option>
                                                 </select>
                                                 <h6 style="font-weight: 100;" *ngIf="isView">
-                                                    {{findPrereqType(dtpData.dtpObjects[i].accessCheckStatusId)}}</h6>
+                                                    {{findCheckSatus(dtpData.dtpObjects[i].accessCheckStatusId)}}</h6>
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="accessCheckBy" class="font-style text-capitalize">access check by</label>
-                                                <select id="accessCheckBy" formControlName="accessCheckBy" class="form-control" *ngIf="!isView">
-                                                    <option value=""></option>
+                                                <select id="accessCheckBy" class="form-control" formControlName="accessCheckBy" *ngIf="!isView">
+                                                    <option selected disabled value="">Select an option...</option>
+                                                    <option [value]="user.personId" *ngFor="let user of associatedUser">
+                                                        {{user.personName}}</option>
                                                 </select>
-                                                <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData.dtpObjects[i].accessCheckBy}}</h6>
+                                                <h6 style="font-weight: 100;" *ngIf="isView">
+                                                    {{findPeopleById(dtpData.dtpObjects[i].accessCheckBy)}}
+                                                </h6>        
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="accessCheckDate" class="font-style text-capitalize">access check date</label>
@@ -740,7 +745,7 @@
                                     <label for="preReqId" class="font-style text-capitalize">{{(preReqs()?.controls[i-1]?.value?.sdOid ===
                                         preReqs()?.controls[i]?.value?.sdOid) && i!==0 ? '' : 'Pre-Requisite for Data Object' +
                                         preReq.value.sdOid}}</label>
-                                    <mat-expansion-panel [expanded]="isView ? 'true' : 'false'">
+                                    <mat-expansion-panel [expanded]="isView ? 'true' : 'true'">
                                         <mat-expansion-panel-header>{{findPrereqType(dtpData.dtpPrereqs[i].preRequisiteTypeId)}}</mat-expansion-panel-header>
                                         <div class="row form-group">
                                             <div class="col-md-6" *ngIf="!isView">

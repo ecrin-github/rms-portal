@@ -49,6 +49,7 @@ export class UpsertDtpComponent implements OnInit {
   sticky: boolean = false;
   showButton: boolean = true;
   selectedSdSid: [] = [];
+  accessStatusTypes: [] = [];
 
   constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService,
@@ -373,6 +374,7 @@ export class UpsertDtpComponent implements OnInit {
   }
   editEmbargo(embargoObject) {
     const payload = embargoObject.value;
+    payload.accessCheckDate = this.dateToString(payload.accessCheckDate);
     this.spinner.show();
     this.dtpService.editDtpObject(payload.id, this.id, payload).subscribe((res: any) => {
       this.spinner.hide();
@@ -401,6 +403,7 @@ export class UpsertDtpComponent implements OnInit {
     const getAccessType$ = this.processLookup.getRepoAccessTypes().subscribe((res: any) => {
       if(res.data) {
         this.accessTypes = res.data;
+        this.getDtpById(this.id, 'isEmbargo');
       }
     }, error => {
       this.toastr.error(error.error.title);
@@ -444,6 +447,16 @@ export class UpsertDtpComponent implements OnInit {
     this.processLookup.getPrereqTypes().subscribe((res: any) => {
       if (res) {
         this.preRequTypes = res.data;
+        this.getDtpById(this.id, 'isPreReq');
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  getAccessCheckStauts() {
+    this.processLookup.getObjectAccessTypes().subscribe((res: any) => {
+      if (res) {
+        this.accessStatusTypes = res.data;
       }
     }, error => {
       this.toastr.error(error.error.title);
@@ -453,13 +466,20 @@ export class UpsertDtpComponent implements OnInit {
     const arr: any = this.preRequTypes.filter((item: any) => item.id === id);
     return arr && arr.length ? arr[0].name : '';
   }
+  findAccessType(id) {
+    const arr: any = this.accessTypes.filter((item: any) => item.id === id);
+    return arr && arr.length ? arr[0].name : '';
+  }
+  findCheckSatus(id) {
+    const arr: any = this.accessStatusTypes.filter((item: any) => item.id === id);
+    return arr && arr.length ? arr[0].name : '';
+  }
   onClickControllTab() {
     this.getPrereqTypes();
-    this.getDtpById(this.id, 'isPreReq');
   }
   onClickObjectAccessTab() {
     this.getAccessType();
-    this.getDtpById(this.id, 'isEmbargo');
+    this.getAccessCheckStauts();
   }
   dateToString(date) {
     if (date) {
@@ -471,7 +491,7 @@ export class UpsertDtpComponent implements OnInit {
   }
   stringTodate(date) {
     const dateArray = new Date(date);
-    return date ? { year: dateArray.getFullYear(), month: dateArray. getMonth()+1, day: dateArray. getDate()+1} : null;
+    return date ? { year: dateArray.getFullYear(), month: dateArray. getMonth()+1, day: dateArray. getDate()} : null;
   }
   viewDate(date) {
     const dateArray = new Date(date);
@@ -676,7 +696,7 @@ export class UpsertDtpComponent implements OnInit {
     return statusArray && statusArray.length ? statusArray[0].name : '';
   }
   close() {
-    window.close();
+    this.patchForm(this.dtpData);
   }
   addStudy() {
     const studyModal = this.modalService.open(CommonModalComponent, { size: 'xl', backdrop: 'static' });

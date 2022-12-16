@@ -33,5 +33,8 @@ export class ProcessLookupService {
   getRmsUserTypes() {
     return this.http.get(`${base}/rms-user-types/simple`);
   }
+  getObjectAccessTypes() {
+    return this.http.get(`${base}/check-status-types/simple`);
+  }
   
 }

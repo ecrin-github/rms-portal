@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-7">
                 <h2>{{ isView ? 'Viewing ' + dupData?.coreDup.displayName + ' data use process' : isEdit ? 'Edit '+
-                    dupData?.coreDup.displayName + ' data use process' : 'Add new data use process'}}</h2>
+                    dupData?.coreDup.displayName + ' data use process' : 'Adding new data use process'}}</h2>
             </div>
             <div class="col-md-5 text-right" *ngIf="isView">
                 <a [routerLink]="['/data-use', id, 'edit']" class="btn btn-primary mr-5" target="_blank">
@@ -434,10 +434,11 @@
                                                         (click)="deleteDupNote(i)" *ngIf="!isView"></i>
                                                     <i class="fa fa-check float-right pr-2 text-success" style="cursor: pointer;"
                                                         (click)="saveDupNote(note)" *ngIf="!isView"></i>
+                                                    <h6>{{findPeopleById(dupData.dupNotes[i].author)}} <small>{{dupData.dupNotes[i].createdOn | date}}</small></h6>
                                                     <textarea id="notes" cols="30" rows="3" class="form-control" formControlName="text"
                                                         *ngIf="!isView"></textarea>
-                                                    <h6 style="font-weight: 100;" *ngIf="isView">
-                                                        {{dupData?.dupNotes[i].text}}</h6>
+                                                    <span style="font-weight: 100;" *ngIf="isView">
+                                                        {{dupData?.dupNotes[i].text}}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -515,13 +516,13 @@
                                     <label for="preReqId" class="font-style text-capitalize">{{(preReqs()?.controls[i-1]?.value?.sdOid ===
                                         preReqs()?.controls[i]?.value?.sdOid) && i!==0 ? '' : 'Pre-Requisite for Data Object' +
                                         preReq.value.sdOid}}</label>
-                                    <mat-expansion-panel [expanded]="isView ? 'true' : 'false'">
+                                    <mat-expansion-panel [expanded]="isView ? 'true' : 'true'">
                                         <mat-expansion-panel-header> {{findPrereqType(dupData.dupPrereqs[i].preRequisiteId)}}
                                         </mat-expansion-panel-header>
                                         <div class="row form-group">
                                             <div class="col-md-6" *ngIf="!isView">
                                                 <label for="notes" class="font-style text-capitalize">Pre-Requisite Type</label>
-                                                <select id="preReqId" formControlName="preRequisiteId" class="form-control" *ngIf="!isView">
+                                                <select id="preReqId" formControlName="preRequisiteId" class="form-control" *ngIf="!isView" disabled>
                                                     <option [value]=preReqType.id *ngFor="let preReqType of preRequTypes">
                                                         {{preReqType.name}}</option>
                                                 </select>
@@ -531,7 +532,7 @@
                                             <div class="col-md-6">
                                                 <label for="notes" class="font-style text-capitalize">Note</label>
                                                 <textarea id="notes" cols="30" rows="3" class="form-control" formControlName="preRequisiteNotes"
-                                                    *ngIf="!isView"></textarea>
+                                                    *ngIf="!isView" disabled></textarea>
                                                 <h6 style="font-weight: 100;" *ngIf="isView">{{dupData.dupPrereqs[i].preRequisiteNotes}}
                                                 </h6>
                                             </div>

@@ -359,7 +359,7 @@ export class UpsertDupComponent implements OnInit {
   }
   stringTodate(date) {
     const dateArray = new Date(date);
-    return date ? { year: dateArray.getFullYear(), month: dateArray. getMonth()+1, day: dateArray. getDate()+1} : null;
+    return date ? { year: dateArray.getFullYear(), month: dateArray. getMonth()+1, day: dateArray. getDate()} : null;
   }
   viewDate(date) {
     const dateArray = new Date(date);
@@ -528,7 +528,8 @@ export class UpsertDupComponent implements OnInit {
     return statusArray && statusArray.length ? statusArray[0].name : '';
   }
   close() {
-    window.close();
+    // window.close();
+    this.patchForm(this.dupData);
   }
   addStudy() {
     const studyModal = this.modalService.open(CommonModalComponent, { size: 'xl', backdrop: 'static' });
