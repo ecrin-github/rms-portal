@@ -14,6 +14,8 @@ import { CommonModalComponent } from '../../common-modal/common-modal.component'
 import { ConfirmationWindow1Component } from '../../confirmation-window1/confirmation-window1.component';
 import { ConfirmationWindowComponent } from '../../confirmation-window/confirmation-window.component';
 import { AddModalComponent } from '../../add-modal/add-modal.component';
+import { PdfGeneratorService } from 'src/app/_rms/services/entities/pdf-generator/pdf-generator.service';
+import { JsonGeneratorService } from 'src/app/_rms/services/entities/json-generator/json-generator.service';
 
 @Component({
   selector: 'app-upsert-dtp',
@@ -50,10 +52,11 @@ export class UpsertDtpComponent implements OnInit {
   showButton: boolean = true;
   selectedSdSid: [] = [];
   accessStatusTypes: [] = [];
+  dtpArr: any;
 
   constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService,
-    private objectLookupService: ObjectLookupService) { 
+    private objectLookupService: ObjectLookupService, private pdfGeneratorService: PdfGeneratorService, private jsonGenerator: JsonGeneratorService) { 
     this.form = this.fb.group({
       orgId: ['', Validators.required],
       displayName: ['', Validators.required],
@@ -464,15 +467,15 @@ export class UpsertDtpComponent implements OnInit {
   }
   findPrereqType(id) {
     const arr: any = this.preRequTypes.filter((item: any) => item.id === id);
-    return arr && arr.length ? arr[0].name : '';
+    return arr && arr.length ? arr[0].name : 'None';
   }
   findAccessType(id) {
     const arr: any = this.accessTypes.filter((item: any) => item.id === id);
-    return arr && arr.length ? arr[0].name : '';
+    return arr && arr.length ? arr[0].name : 'None';
   }
   findCheckSatus(id) {
     const arr: any = this.accessStatusTypes.filter((item: any) => item.id === id);
-    return arr && arr.length ? arr[0].name : '';
+    return arr && arr.length ? arr[0].name : 'None';
   }
   onClickControllTab() {
     this.getPrereqTypes();
@@ -731,10 +734,21 @@ export class UpsertDtpComponent implements OnInit {
       this.toastr.error(error.error.title);
     })
   }
-  removeDtpStudy(id) {
-    this.dtpService.deleteDtpStudy(id, this.id).subscribe((res: any) => {
-      this.toastr.success('Study has been disassociated successfully');
-      this.getDtpStudies(this.id);
+  removeDtpStudy(id, sdSid) {
+    this.commonLookup.objectInvolvement(sdSid).subscribe((res: any) => {
+      if (res && res.data) {
+        this.dtpArr = res.data.filter((item: any) => item.statType === 'DtpTotal');
+      }
+      if (this.dtpArr.length && this.dtpArr[0].statValue > 0) {
+        this.toastr.error(`Objects linked to this study is linked to this DTP. So, delete the objects before deleting this study`);
+      } else {
+        this.dtpService.deleteDtpStudy(id, this.id).subscribe((res: any) => {
+          this.toastr.success('Study has been disassociated successfully');
+          this.getDtpStudies(this.id);
+        }, error => {
+          this.toastr.error(error.error.title);
+        })
+      }
     }, error => {
       this.toastr.error(error.error.title);
     })
@@ -804,7 +818,7 @@ export class UpsertDtpComponent implements OnInit {
   }
   findPeopleById(id) {
     const arr: any = this.associatedUser.filter((item: any) => item.personId === id);
-    return arr && arr.length ? arr[0].personName : '';
+    return arr && arr.length ? arr[0].personName : 'None';
   }
   removeDtpUser(id) {
     this.dtpService.deleteDtpPerson(id, this.id).subscribe((res: any) => {
@@ -815,7 +829,66 @@ export class UpsertDtpComponent implements OnInit {
     })
   }
   printDocument() {
-    window.print();
+    const payload = JSON.parse(JSON.stringify(this.dtpData));
+    payload.coreDtp.orgId = this.findOrganization(payload.coreDtp.orgId);
+    payload.coreDtp.statusId = this.findStatus(payload.coreDtp.statusId);
+    payload.coreDtp.initialContactDate = this.viewDate(payload.coreDtp.initialContactDate);
+    payload.coreDtp.setUpCompleted = this.viewDate(payload.coreDtp.setUpCompleted);
+    payload.coreDtp.mdAccessGranted = this.viewDate(payload.coreDtp.mdAccessGranted);
+    payload.coreDtp.mdCompleteDate = this.viewDate(payload.coreDtp.mdCompleteDate);
+    payload.coreDtp.dtaAgreedDate = this.viewDate(payload.coreDtp.dtaAgreedDate);
+    payload.coreDtp.uploadAccessRequested = this.viewDate(payload.coreDtp.uploadAccessRequested);
+    payload.coreDtp.uploadAccessConfirmed = this.viewDate(payload.coreDtp.uploadAccessConfirmed);
+    payload.coreDtp.uploadsComplete = this.viewDate(payload.coreDtp.uploadsComplete);
+    payload.coreDtp.qcChecksCompleted = this.viewDate(payload.coreDtp.qcChecksCompleted);
+    payload.coreDtp.mdIntegratedWithMdr = this.viewDate(payload.coreDtp.mdIntegratedWithMdr);
+    payload.coreDtp.availabilityRequested = this.viewDate(payload.coreDtp.availabilityRequested);
+    payload.coreDtp.availabilityConfirmed = this.viewDate(payload.coreDtp.availabilityConfirmed);
+    payload.dtas[0].repoSignatory1 = this.findPeopleById(payload.dtas[0].repoSignatory1);
+    payload.dtas[0].repoSignatory2 = this.findPeopleById(payload.dtas[0].repoSignatory2);
+    payload.dtas[0].repoSignatory3 = this.findPeopleById(payload.dtas[0].repoSignatory3);
+    payload.dtas[0].repoSignatory4 = this.findPeopleById(payload.dtas[0].repoSignatory4);
+    payload.dtpNotes.map(item => {
+      item.author = this.findPeopleById(item.author);
+      item.createdOn = this.viewDate(item.createdOn);
+    })
+    payload.dtpObjects.map(item => {
+      item.accessTypeId = this.findAccessType(payload.accessTypeId);
+      item.accessCheckStatusId = this.findCheckSatus(item.accessCheckStatusId);
+      item.accessCheckBy = this.findPeopleById(item.accessCheckBy);
+    });
+    this.pdfGeneratorService.dtpPdfGenerator(payload, this.associatedUser);
+  }
+  jsonExport() {
+    const payload = JSON.parse(JSON.stringify(this.dtpData));
+    payload.coreDtp.orgId = this.findOrganization(payload.coreDtp.orgId);
+    payload.coreDtp.statusId = this.findStatus(payload.coreDtp.statusId);
+    payload.coreDtp.initialContactDate = this.viewDate(payload.coreDtp.initialContactDate);
+    payload.coreDtp.setUpCompleted = this.viewDate(payload.coreDtp.setUpCompleted);
+    payload.coreDtp.mdAccessGranted = this.viewDate(payload.coreDtp.mdAccessGranted);
+    payload.coreDtp.mdCompleteDate = this.viewDate(payload.coreDtp.mdCompleteDate);
+    payload.coreDtp.dtaAgreedDate = this.viewDate(payload.coreDtp.dtaAgreedDate);
+    payload.coreDtp.uploadAccessRequested = this.viewDate(payload.coreDtp.uploadAccessRequested);
+    payload.coreDtp.uploadAccessConfirmed = this.viewDate(payload.coreDtp.uploadAccessConfirmed);
+    payload.coreDtp.uploadsComplete = this.viewDate(payload.coreDtp.uploadsComplete);
+    payload.coreDtp.qcChecksCompleted = this.viewDate(payload.coreDtp.qcChecksCompleted);
+    payload.coreDtp.mdIntegratedWithMdr = this.viewDate(payload.coreDtp.mdIntegratedWithMdr);
+    payload.coreDtp.availabilityRequested = this.viewDate(payload.coreDtp.availabilityRequested);
+    payload.coreDtp.availabilityConfirmed = this.viewDate(payload.coreDtp.availabilityConfirmed);
+    payload.dtas[0].repoSignatory1 = this.findPeopleById(payload.dtas[0].repoSignatory1);
+    payload.dtas[0].repoSignatory2 = this.findPeopleById(payload.dtas[0].repoSignatory2);
+    payload.dtas[0].repoSignatory3 = this.findPeopleById(payload.dtas[0].repoSignatory3);
+    payload.dtas[0].repoSignatory4 = this.findPeopleById(payload.dtas[0].repoSignatory4);
+    payload.dtpNotes.map(item => {
+      item.author = this.findPeopleById(item.author);
+      item.createdOn = this.viewDate(item.createdOn);
+    })
+    payload.dtpObjects.map(item => {
+      item.accessTypeId = this.findAccessType(payload.accessTypeId);
+      item.accessCheckStatusId = this.findCheckSatus(item.accessCheckStatusId);
+      item.accessCheckBy = this.findPeopleById(item.accessCheckBy);
+    });
+    this.jsonGenerator.jsonGenerator(payload, 'dtp');
   }
   resetAll() {
     const modal = this.modalService.open(ConfirmationWindow1Component, {size: 'lg', backdrop:'static'});

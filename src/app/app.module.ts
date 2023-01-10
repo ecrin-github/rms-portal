@@ -23,6 +23,7 @@ import { MyinterceptorInterceptor } from './_rms/interceptor/myinterceptor.inter
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxPermissionsModule } from 'ngx-permissions';
+import { FileSaverModule } from 'ngx-filesaver';
 
 // #fake-end#
 
@@ -48,6 +49,7 @@ function appInitializer(authService: AuthService) {
     HttpClientModule,
     HighlightModule,
     ClipboardModule,
+    FileSaverModule,
     // #fake-start#
     environment.isMockEnabled
         ? HttpClientInMemoryWebApiModule.forRoot(FakeAPIService, {

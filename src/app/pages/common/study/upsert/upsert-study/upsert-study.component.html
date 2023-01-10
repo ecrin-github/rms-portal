@@ -3,10 +3,10 @@
         <h2 class="text-uppercase">{{ isView ? 'View study details' : isEdit ? 'Edit study details' : 'Add a new study'}}</h2>
         <div style="float: right; margin-top: -40px;" *ngIf="isView">
             <a [routerLink]="['/studies', id, 'edit']"
-               class="btn btn-primary mr-5" target="_blank">
+               class="btn btn-primary mr-1" target="_blank">
                 <i class="fa fa-edit"></i> Edit
             </a>
-            <button class="btn btn-primary mr-1">
+            <button class="btn btn-primary mr-1" (click)="print()">
                 <i class="fa fa-print"></i> Print
             </button>
             <button class="btn btn-primary">
@@ -163,14 +163,14 @@
             </div>
             <hr />
             <ng-container *ngIf="isEdit || isView">
-                <mat-expansion-panel>
+                <mat-expansion-panel [expanded]="true">
                     <mat-expansion-panel-header>
                         <h6 class="pt-3 font-style">Study identifier(s)</h6>
                     </mat-expansion-panel-header>
-                    <app-study-identifier [sdSid]="id" [isView]="isView" [isEdit]="isEdit"></app-study-identifier>
+                    <app-study-identifier [sdSid]="id" [isView]="isView" [isEdit]="isEdit" ></app-study-identifier>
                 </mat-expansion-panel>
                 <hr />
-                <mat-expansion-panel>
+                <mat-expansion-panel [expanded]="true">
                     <mat-expansion-panel-header>
                         <h6 class="pt-3 font-style">Study title(s)</h6>
                     </mat-expansion-panel-header>
@@ -178,7 +178,7 @@
                 </mat-expansion-panel>
                 <hr />
                 <ng-container *ngIf="studyType">
-                    <mat-expansion-panel>
+                    <mat-expansion-panel [expanded]="true">
                         <mat-expansion-panel-header>
                             <h6 class="pt-3 font-style">Study feature(s)</h6>
                         </mat-expansion-panel-header>
@@ -186,21 +186,21 @@
                     </mat-expansion-panel>
                     <hr />
                 </ng-container>
-                <mat-expansion-panel>
+                <mat-expansion-panel [expanded]="true">
                     <mat-expansion-panel-header>
                         <h6 class="pt-3 font-style">Study topic(s)</h6>
                     </mat-expansion-panel-header>
                     <app-study-topic [sdSid]="id" [isView]="isView" [isEdit]="isEdit" ></app-study-topic>
                 </mat-expansion-panel>
                 <hr />
-                <mat-expansion-panel>
+                <mat-expansion-panel [expanded]="true">
                     <mat-expansion-panel-header>
                         <h6 class="pt-3 font-style">Study relationship(s)</h6>
                     </mat-expansion-panel-header>
                     <app-study-relationship [sdSid]="id" [isView]="isView" [isEdit]="isEdit"></app-study-relationship>
                 </mat-expansion-panel>
                 <hr />
-                <mat-expansion-panel>
+                <mat-expansion-panel [expanded]="true">
                     <mat-expansion-panel-header>
                         <h6 class="pt-3 font-style">Study contributor(s)</h6>
                     </mat-expansion-panel-header>

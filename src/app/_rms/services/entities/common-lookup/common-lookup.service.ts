@@ -34,4 +34,9 @@ export class CommonLookupService {
   getLanguageCodes(nameLang) {
     return this.http.get(`${base}/lookup/major-langs/${nameLang}`);
   }
+
+  //  checks if an object is linked to a dtp/dup withou associated study
+  objectInvolvement(sdSid) {
+    return this.http.get(`${base}/studies/${sdSid}/object-involvement`);
+  }
 }

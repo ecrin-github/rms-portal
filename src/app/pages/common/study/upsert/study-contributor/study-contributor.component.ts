@@ -24,6 +24,10 @@ export class StudyContributorComponent implements OnInit {
   @Input() isEdit: boolean;
   studyContributor: StudyContributorInterface;
   isIndividual = [];
+  notindividualArr: [] = [];
+  individualArr: [] = [];
+  notIndividualColumns = ['contribTypeId', 'organisationName'];
+  individualColumns = ['contribTypeId', 'personGivenName', 'orcidId', 'organisationName', 'personAffiliation'];
   @Input() set initiateEmit(initiateEmit: any) {
     if (initiateEmit) {
       this.emitData();
@@ -140,6 +144,10 @@ export class StudyContributorComponent implements OnInit {
         alreadyExist: true
       }))
     });
+    if (this.isView) {
+      this.individualArr = contributors.filter((item: any) => item.isIndividual === true);
+      this.notindividualArr = contributors.filter((item: any) => item.isIndividual === false);
+    }
     return formArray;
   }
   addContributor(index) {

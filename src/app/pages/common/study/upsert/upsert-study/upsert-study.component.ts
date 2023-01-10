@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { StudyInterface } from 'src/app/_rms/interfaces/study/study.interface';
+import { PdfGeneratorService } from 'src/app/_rms/services/entities/pdf-generator/pdf-generator.service';
 import { StudyLookupService } from 'src/app/_rms/services/entities/study-lookup/study-lookup.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 
@@ -44,7 +45,7 @@ export class UpsertStudyComponent implements OnInit {
   trialId: string;
 
   constructor(private fb: FormBuilder, private router: Router, private studyLookupService: StudyLookupService, private studyService: StudyService, private activatedRoute: ActivatedRoute,
-    private spinner: NgxSpinnerService, private toastr: ToastrService) {
+    private spinner: NgxSpinnerService, private toastr: ToastrService, private pdfGenerator: PdfGeneratorService) {
     this.studyForm = this.fb.group({
       sdSid: '',
       displayTitle: '',
@@ -111,9 +112,11 @@ export class UpsertStudyComponent implements OnInit {
       if(res.data) {
         this.studyTypes = res.data;
       }
-      if(this.isView) {
-        const studyArray = this.studyTypes.filter((type: any) => type.id === this.studyForm.value.studyTypeId);
-        this.studyTypeView = studyArray && studyArray.length ? studyArray[0] : {name: ''};
+      if (this.isView) {
+        setTimeout(() => {
+          const studyArray = this.studyTypes.filter((type: any) => type.id === this.studyForm.value.studyTypeId);
+          this.studyTypeView = studyArray && studyArray.length ? studyArray[0] : { name: '' };
+        });
       }
     }, error => {
       this.spinner.hide();
@@ -130,9 +133,11 @@ export class UpsertStudyComponent implements OnInit {
       if(res.data) {
         this.studyStatuses = res.data;
       }
-      if(this.isView){
-        const statusArray = this.studyStatuses.filter((type: any) => type.id === this.studyForm.value.studyStatusId);
-        this.studyStatusView = statusArray && statusArray.length ? statusArray[0] : {name: ''}
+      if (this.isView) {
+        setTimeout(() => {
+          const statusArray = this.studyStatuses.filter((type: any) => type.id === this.studyData.studyStatusId);
+          this.studyStatusView = statusArray && statusArray.length ? statusArray[0] : { name: '' }
+        });
       }
     }, error => {
       this.spinner.hide();
@@ -149,9 +154,11 @@ export class UpsertStudyComponent implements OnInit {
       if (res.data) {
         this.genderEligibility = res.data;
       }
-      if(this.isView) {
-        const genderArray = this.genderEligibility.filter((type: any) => type.id === this.studyForm.value.studyGenderEligId);
-        this.studyGenderView = genderArray && genderArray.length ? genderArray[0] : {name: ''};
+      if (this.isView) {
+        setTimeout(() => {
+          const genderArray = this.genderEligibility.filter((type: any) => type.id === this.studyForm.value.studyGenderEligId);
+          this.studyGenderView = genderArray && genderArray.length ? genderArray[0] : { name: '' };
+        });
       }
     }, error => {
       this.spinner.hide();
@@ -168,11 +175,13 @@ export class UpsertStudyComponent implements OnInit {
       if(res.data) {
         this.timeUnits = res.data;
       }
-      if(this.isView) {
-        const minAgeArray = this.timeUnits.filter((type: any) => type.id === this.studyForm.value.minAgeUnitsId);
-        this.studyMinAgeView = minAgeArray && minAgeArray.length ? minAgeArray[0] : {name: ''};
-        const maxAgeArray = this.timeUnits.filter((type: any) => type.id === this.studyForm.value.maxAgeUnitsId);
-        this.studyMaxAgeView = maxAgeArray && maxAgeArray.length ? maxAgeArray[0] : {name: ''};
+      if (this.isView) {
+        setTimeout(() => {
+          const minAgeArray = this.timeUnits.filter((type: any) => type.id === this.studyForm.value.minAgeUnitsId);
+          this.studyMinAgeView = minAgeArray && minAgeArray.length ? minAgeArray[0] : { name: '' };
+          const maxAgeArray = this.timeUnits.filter((type: any) => type.id === this.studyForm.value.maxAgeUnitsId);
+          this.studyMaxAgeView = maxAgeArray && maxAgeArray.length ? maxAgeArray[0] : { name: '' };
+        });
       }
     }, error => {
       this.spinner.hide();
@@ -310,5 +319,14 @@ export class UpsertStudyComponent implements OnInit {
     const arrInterventional:any = this.studyTypes.filter((item: any) => item.name.toLowerCase() === 'interventional');
     const arrObservational:any = this.studyTypes.filter((item: any) => item.name.toLowerCase() === 'observational');
     this.studyType = parseInt(this.studyForm.value.studyTypeId) === arrInterventional[0].id ? 'interventional' : parseInt(this.studyForm.value.studyTypeId) === arrObservational[0].id ? 'observational': ''
+  }
+  print() {
+    this.studyService.getFullStudyById(this.id).subscribe((res: any) => {
+      if (res && res.data) {
+        this.pdfGenerator.studyPdfGenerator(res.data[0]);
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
   }
 }

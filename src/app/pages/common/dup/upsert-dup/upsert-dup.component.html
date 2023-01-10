@@ -9,10 +9,10 @@
                 <a [routerLink]="['/data-use', id, 'edit']" class="btn btn-primary mr-5" target="_blank">
                     <i class="fa fa-edit"></i> Edit
                 </a>
-                <button class="btn btn-primary mr-1">
+                <button class="btn btn-primary mr-1" (click)="printDocument()">
                     <i class="fa fa-print"></i> Print
                 </button>
-                <button class="btn btn-primary">
+                <button class="btn btn-primary" (click)="jsonExport()">
                     <i class="fa fa-code"></i> JSON
                 </button>
             </div>
@@ -74,8 +74,8 @@
                             </div>
                             <div class="row form-group" *ngIf="isEdit || isView">
                                 <div class="col-md-6">
-                                    <label for="" class="font-style text-capitalize">Status</label>
-                                    <button class="btn btn-danger btn-sm" *ngIf="!isView" (click)="resetAll()">Reset</button>
+                                    <label for="" class="font-style text-capitalize pr-5">Status</label>
+                                    <button class="btn btn-danger btn-sm" *ngIf="!isView" (click)="resetAll()">Change Submission Staus</button>
                                     <select class="form-control" formControlName="statusId" *ngIf="showStatus" (change)="onChange()">
                                         <option disabled selected value="">Select an option...</option>
                                         <option [value]=status.id *ngFor="let status of statusList">{{status.name}}
@@ -463,7 +463,7 @@
                                     <ul>
                                         <li *ngFor="let study of associatedStudies; let i = index" class="pl-4">
                                             {{study.studyName}}({{study.sdSid}})
-                                            <i class="fa fa-times pl-3" (click)="removeDupStudy(study.id)"
+                                            <i class="fa fa-times pl-3" (click)="removeDupStudy(study.id, study.sdSid)"
                                                 *ngIf="!isView"></i>
                                         </li>
                                     </ul>

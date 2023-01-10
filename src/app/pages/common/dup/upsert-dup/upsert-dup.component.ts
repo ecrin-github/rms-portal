@@ -7,6 +7,8 @@ import { ToastrService } from 'ngx-toastr';
 import { combineLatest } from 'rxjs';
 import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { DupService } from 'src/app/_rms/services/entities/dup/dup.service';
+import { JsonGeneratorService } from 'src/app/_rms/services/entities/json-generator/json-generator.service';
+import { PdfGeneratorService } from 'src/app/_rms/services/entities/pdf-generator/pdf-generator.service';
 import { ProcessLookupService } from 'src/app/_rms/services/entities/process-lookup/process-lookup.service';
 import KTWizard from '../../../../../assets/js/components/wizard'
 import { AddModalComponent } from '../../add-modal/add-modal.component';
@@ -43,9 +45,11 @@ export class UpsertDupComponent implements OnInit {
   preRequTypes: [] = [];
   sticky: boolean = false;
   showButton: boolean = true;
+  dupArr: any;
 
   constructor(private router: Router, private fb: FormBuilder, private dupService: DupService, private spinner: NgxSpinnerService, private toastr: ToastrService,
-    private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService) {
+    private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService, private pdfGeneratorService: PdfGeneratorService,
+    private jsonGenerator: JsonGeneratorService) {
     this.form = this.fb.group({
       orgId: ['', Validators.required],
       displayName: ['', Validators.required],
@@ -521,11 +525,11 @@ export class UpsertDupComponent implements OnInit {
   }
   findOrganization(id) {
     const organizationArray: any = this.organizationList.filter((type: any) => type.orgId === id);
-    return organizationArray && organizationArray.length ? organizationArray[0].name : ''
+    return organizationArray && organizationArray.length ? organizationArray[0].name : 'None'
   }
   findStatus(id) {
     const statusArray: any = this.statusList.filter((type: any) => type.id === id);
-    return statusArray && statusArray.length ? statusArray[0].name : '';
+    return statusArray && statusArray.length ? statusArray[0].name : 'None';
   }
   close() {
     // window.close();
@@ -563,10 +567,21 @@ export class UpsertDupComponent implements OnInit {
       this.toastr.error(error.error.title);
     })
   }
-  removeDupStudy(id) {
-    this.dupService.deleteDupStudy(id, this.id).subscribe((res: any) => {
-      this.toastr.success('Study has been disassociated successfully');
-      this.getDupStudies(this.id);
+  removeDupStudy(id, sdSid) {
+    this.commonLookup.objectInvolvement(sdSid).subscribe((res: any) => {
+      if (res && res.data) {
+        this.dupArr = res.data.filter((item: any) => item.statType === 'DupTotal');
+      }
+      if (this.dupArr.length && this.dupArr[0].statValue > 0) {
+        this.toastr.error(`Objects linked to this study is linked to this DUP. So, delete the objects before deleting this study`)
+      } else {
+        this.dupService.deleteDupStudy(id, this.id).subscribe((res: any) => {
+          this.toastr.success('Study has been disassociated successfully');
+          this.getDupStudies(this.id);
+        }, error => {
+          this.toastr.error(error.error.title);
+        })
+      }
     }, error => {
       this.toastr.error(error.error.title);
     })
@@ -636,7 +651,7 @@ export class UpsertDupComponent implements OnInit {
   }
   findPeopleById(id) {
     const arr: any = this.associatedUser.filter((item: any) => item.personId === id);
-    return arr && arr.length ? arr[0].personName : '';
+    return arr && arr.length ? arr[0].personName : 'None';
   }
   removeDupUser(id) {
     this.dupService.deleteDupPerson(id, this.id).subscribe((res: any) => {
@@ -702,5 +717,53 @@ export class UpsertDupComponent implements OnInit {
   }
   conformsToDefaultChange() {
     this.showVariations = this.form.value.conformsToDefault ? true : false
+  }
+  printDocument() {
+    const payload = JSON.parse(JSON.stringify(this.dupData));
+    payload.coreDup.orgId = this.findOrganization(payload.coreDup.orgId);
+    payload.coreDup.statusId = this.findStatus(payload.coreDup.statusId);
+    payload.coreDup.initialContactDate = this.viewDate(payload.coreDup.initialContactDate);
+    payload.coreDup.setUpCompleted = this.viewDate(payload.coreDup.setUpCompleted);
+    payload.coreDup.prereqsMet = this.viewDate(payload.coreDup.prereqsMet);
+    payload.coreDup.duaAgreedDate = this.viewDate(payload.coreDup.duaAgreedDate);
+    payload.coreDup.availabilityRequested = this.viewDate(payload.coreDup.availabilityRequested);
+    payload.coreDup.availabilityConfirmed = this.viewDate(payload.coreDup.availabilityConfirmed);
+    payload.coreDup.accessConfirmed = this.viewDate(payload.coreDup.accessConfirmed);
+    payload.duas[0].repoSignatory1 = this.findPeopleById(payload.duas[0].repoSignatory1);
+    payload.duas[0].repoSignatory2 = this.findPeopleById(payload.duas[0].repoSignatory2);
+    payload.duas[0].providerSignatory1 = this.findPeopleById(payload.duas[0].providerSignatory1);
+    payload.duas[0].providerSignatory2 = this.findPeopleById(payload.duas[0].providerSignatory2);
+    payload.duas[0].requesterSignatory1 = this.findPeopleById(payload.duas[0].requesterSignatory1);
+    payload.duas[0].requesterSignatory2 = this.findPeopleById(payload.duas[0].requesterSignatory2);
+
+    payload.dupNotes.map(item => {
+      item.author = this.findPeopleById(item.author);
+      item.createdOn = this.viewDate(item.createdOn);
+    });
+    this.pdfGeneratorService.dupPdfGenerator(payload, this.associatedUser);
+  }
+  jsonExport() {
+    const payload = JSON.parse(JSON.stringify(this.dupData));
+    payload.coreDup.orgId = this.findOrganization(payload.coreDup.orgId);
+    payload.coreDup.statusId = this.findStatus(payload.coreDup.statusId);
+    payload.coreDup.initialContactDate = this.viewDate(payload.coreDup.initialContactDate);
+    payload.coreDup.setUpCompleted = this.viewDate(payload.coreDup.setUpCompleted);
+    payload.coreDup.prereqsMet = this.viewDate(payload.coreDup.prereqsMet);
+    payload.coreDup.duaAgreedDate = this.viewDate(payload.coreDup.duaAgreedDate);
+    payload.coreDup.availabilityRequested = this.viewDate(payload.coreDup.availabilityRequested);
+    payload.coreDup.availabilityConfirmed = this.viewDate(payload.coreDup.availabilityConfirmed);
+    payload.coreDup.accessConfirmed = this.viewDate(payload.coreDup.accessConfirmed);
+    payload.duas[0].repoSignatory1 = this.findPeopleById(payload.duas[0].repoSignatory1);
+    payload.duas[0].repoSignatory2 = this.findPeopleById(payload.duas[0].repoSignatory2);
+    payload.duas[0].providerSignatory1 = this.findPeopleById(payload.duas[0].providerSignatory1);
+    payload.duas[0].providerSignatory2 = this.findPeopleById(payload.duas[0].providerSignatory2);
+    payload.duas[0].requesterSignatory1 = this.findPeopleById(payload.duas[0].requesterSignatory1);
+    payload.duas[0].requesterSignatory2 = this.findPeopleById(payload.duas[0].requesterSignatory2);
+
+    payload.dupNotes.map(item => {
+      item.author = this.findPeopleById(item.author);
+      item.createdOn = this.viewDate(item.createdOn);
+    });
+    this.jsonGenerator.jsonGenerator(payload, 'dup');
   }
 }
