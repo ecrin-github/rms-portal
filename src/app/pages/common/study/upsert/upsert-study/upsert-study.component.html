@@ -9,7 +9,7 @@
             <button class="btn btn-primary mr-1" (click)="print()">
                 <i class="fa fa-print"></i> Print
             </button>
-            <button class="btn btn-primary">
+            <button class="btn btn-primary" (click)="jsonExport()">
                 <i class="fa fa-code"></i> JSON
             </button>
         </div>
@@ -45,7 +45,10 @@
                     <div class="col-md-12">
                         <label for="displayTitle" class="font-style text-capitalize">Public title</label>
                         <textarea cols="30" rows="3" class="form-control" placeholder="Enter study display title..."
-                            formControlName="displayTitle" *ngIf="!isView" id="displayTitle" (change)="onChange()"></textarea>
+                            formControlName="displayTitle" *ngIf="!isView" id="displayTitle" (change)="onChange()" [ngClass]="{ 'is-invalid': isSubmitted && g.displayTitle.errors }"></textarea>
+                            <div class="col-md-12 invalid-feedback" *ngIf="isSubmitted && g.displayTitle.errors">
+                                <p *ngIf="isSubmitted && g.displayTitle.errors.required"> Please enter study title</p>
+                            </div>
                         <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.displayTitle}}</h6>
                     </div>
                 </div>

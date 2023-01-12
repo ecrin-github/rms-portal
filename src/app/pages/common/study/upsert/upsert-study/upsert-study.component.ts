@@ -1,10 +1,11 @@
 import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { StudyInterface } from 'src/app/_rms/interfaces/study/study.interface';
+import { JsonGeneratorService } from 'src/app/_rms/services/entities/json-generator/json-generator.service';
 import { PdfGeneratorService } from 'src/app/_rms/services/entities/pdf-generator/pdf-generator.service';
 import { StudyLookupService } from 'src/app/_rms/services/entities/study-lookup/study-lookup.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
@@ -34,7 +35,6 @@ export class UpsertStudyComponent implements OnInit {
   studyGenderView: any;
   studyMinAgeView: any;
   studyMaxAgeView: any;
-  // initiateEmit: boolean = false;
   count = 0;
   publicTitle: string = '';
   monthValues = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
@@ -45,10 +45,10 @@ export class UpsertStudyComponent implements OnInit {
   trialId: string;
 
   constructor(private fb: FormBuilder, private router: Router, private studyLookupService: StudyLookupService, private studyService: StudyService, private activatedRoute: ActivatedRoute,
-    private spinner: NgxSpinnerService, private toastr: ToastrService, private pdfGenerator: PdfGeneratorService) {
+    private spinner: NgxSpinnerService, private toastr: ToastrService, private pdfGenerator: PdfGeneratorService, private jsonGenerator: JsonGeneratorService) {
     this.studyForm = this.fb.group({
       sdSid: '',
-      displayTitle: '',
+      displayTitle: ['', Validators.required],
       briefDescription: '',
       dataSharingStatement: '',
       studyTypeId: null,
@@ -103,6 +103,7 @@ export class UpsertStudyComponent implements OnInit {
       this.getTrialRegistries();
     }
   }
+  get g() { return this.studyForm.controls; }
   getStudyType() {
     setTimeout(() => {
       this.spinner.show(); 
@@ -324,6 +325,15 @@ export class UpsertStudyComponent implements OnInit {
     this.studyService.getFullStudyById(this.id).subscribe((res: any) => {
       if (res && res.data) {
         this.pdfGenerator.studyPdfGenerator(res.data[0]);
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  jsonExport() {
+    this.studyService.getFullStudyById(this.id).subscribe((res: any) => {
+      if (res && res.data) {
+        this.jsonGenerator.jsonGenerator(res.data[0], 'study');
       }
     }, error => {
       this.toastr.error(error.error.title);
