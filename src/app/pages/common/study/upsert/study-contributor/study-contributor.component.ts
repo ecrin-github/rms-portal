@@ -75,10 +75,15 @@ export class StudyContributorComponent implements OnInit {
         this.arrLength = this.studyContributors().value.length;
         this.studyContributors().push(this.newStudyContributor());
       } else {
-        if (this.studyContributors().value[this.len-1].isIndividual === 'true' || this.studyContributors().value[this.len-1].isIndividual === true) {
-          this.toastr.info('Please provide Contributor Type, Organization, Persons First Name and Family Name in the previously added Study Contibutor');
+        if (this.studyContributors().value[this.len - 1].alreadyExist) {
+          this.arrLength = this.studyContributors().value.length;
+          this.studyContributors().push(this.newStudyContributor());
         } else {
-          this.toastr.info('Please provide Contributor Type and Organization in the previously added Study Contibutor');
+          if (this.studyContributors().value[this.len - 1].isIndividual === 'true' || this.studyContributors().value[this.len - 1].isIndividual === true) {
+            this.toastr.info('Please provide Contributor Type, Organization, Persons First Name and Family Name in the previously added Study Contibutor');
+          } else {
+            this.toastr.info('Please provide Contributor Type and Organization in the previously added Study Contibutor');
+          }
         }
       }
     } else {
@@ -161,6 +166,7 @@ export class StudyContributorComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Study Contributor added successfully');
+        this.getStudyContributor();
       } else {
         this.toastr.error(res.messages[0]);
       }
@@ -177,6 +183,7 @@ export class StudyContributorComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Study Contributor updated successfully');
+        this.getStudyContributor();
       } else {
         this.toastr.error(res.messages[0]);
       }
@@ -214,9 +221,13 @@ export class StudyContributorComponent implements OnInit {
     })
   }
   sameAsAbove() {
-    const preValue = this.studyContributors().at(this.arrLength-1).value;
+    const arr = this.studyContributors().value.filter(item => item.isIndividual === true);
+    const preValue = arr[arr.length - 1];
     this.studyContributors().at(this.arrLength).patchValue({
+      isIndividual: preValue.isIndividual,
       organisationName: preValue.organisationName,
+      contribTypeId: preValue.contribTypeId,
+      orcidId: preValue.orcidId,
       personAffiliation: preValue.personAffiliation,
       personFamilyName: preValue.personFamilyName,
       personGivenName: preValue.personGivenName

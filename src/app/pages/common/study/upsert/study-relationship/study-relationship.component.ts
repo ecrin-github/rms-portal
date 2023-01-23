@@ -65,7 +65,11 @@ export class StudyRelationshipComponent implements OnInit {
       if (this.studyRelationships().value[this.len-1].relationshipTypeId && this.studyRelationships().value[this.len-1].targetSdSid) {
         this.studyRelationships().push(this.newStudyRelation());
       } else {
-        this.toastr.info('Please provide the Relationship Type and Target study in the previously added Study Relationship');
+        if (this.studyRelationships().value[this.len-1].alreadyExist) {
+          this.studyRelationships().push(this.newStudyRelation());
+        } else {
+          this.toastr.info('Please provide the Relationship Type and Target study in the previously added Study Relationship');
+        }
       }
     } else {
       this.studyRelationships().push(this.newStudyRelation());
@@ -150,6 +154,7 @@ export class StudyRelationshipComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Study Relationship added successfully');
+        this.getStudyRelationship();
       } else {
         this.toastr.error(res.messages[0]);
       }
@@ -165,6 +170,7 @@ export class StudyRelationshipComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Study Relationship updated successfully');
+        this.getStudyRelationship();
       } else {
         this.toastr.error(res.messages[0]);
       }

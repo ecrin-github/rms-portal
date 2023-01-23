@@ -32,7 +32,7 @@ export class DataObjectService {
   // Object data - Object table data only 
 
   getDataObjectById(sdOid) {
-    return this.http.get(`${base}/data-objects/${sdOid}`);
+    return this.http.get(`${base}/data-objects/full/${sdOid}`);
   }
   addDataObject(sdSid, payload) {
     // note inclusion of parent sdSid in call

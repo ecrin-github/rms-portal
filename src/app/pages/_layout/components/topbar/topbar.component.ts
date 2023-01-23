@@ -126,24 +126,16 @@ export class TopbarComponent implements OnInit, AfterViewInit {
     });
   }
   getUserdate() {
-    // console.log('token', this.oidcSecurityService.getAccessToken())
-    // await this.oidcSecurityService.userData$.subscribe((data) => {
-    //   console.log('data1111', data)
-    //   console.log(this.oidcSecurityService.userData$)
-    // });
-    console.log('refresh token: ', this.oidcSecurityService.getRefreshToken());
-    this.userService.getUser().subscribe((res: any) => {
-      console.log('data11111', res);
-      if (res) {
-        this.userData = res;
-      }
-      // Elixir AAI
-      // if (res.data && res.data.length) {
-      //   this.userData = res.data[0];
-      // }
-    }, error => {
-      console.log('error', error);
-    })
-
+    if (localStorage.getItem('userData')) {
+      this.userData = JSON.parse(localStorage.getItem('userData'));
+    } else {
+      this.userService.getUser().subscribe((res: any) => {
+        if (res) {
+          this.userData = res;
+        }
+      }, error => {
+        console.log('error', error);
+      })
+    }
   }
 }

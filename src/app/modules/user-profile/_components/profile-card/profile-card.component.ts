@@ -20,16 +20,20 @@ export class ProfileCardComponent {
     this.getUserData();
   }
   getUserData() {
-    this.userService.getUser().subscribe((res: any) => {
-      if (res.data && res.data.length) {
-        this.user = res.data[0];
-        this.user.pic = './assets/media/svg/avatars/001-boy.svg';
-        this.user.companyName = '';
-        this.user.address = '';
-        this.user.phone = '';
-      }
-    }, error => {
-      console.log('error', error);
-    });
+    if (localStorage.getItem('userData')) {
+      this.user = JSON.parse(localStorage.getItem('userData'));
+    } else {
+      this.userService.getUser().subscribe((res: any) => {
+        if (res.data && res.data.length) {
+          this.user = res.data[0];
+          this.user.pic = './assets/media/svg/avatars/001-boy.svg';
+          this.user.companyName = '';
+          this.user.address = '';
+          this.user.phone = '';
+        }
+      }, error => {
+        console.log('error', error);
+      });
+    }
   }
 }

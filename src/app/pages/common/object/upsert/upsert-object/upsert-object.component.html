@@ -2,10 +2,10 @@
     <div class="card-header">
         <h2>{{ isView ? 'View data object' : isEdit ? 'Edit data object details' : 'Add new data object'}}</h2>
         <div style="float: right; margin-top: -40px;" *ngIf="isView">
-            <a [routerLink]="['/data-objects', id, 'edit']" class="btn btn-primary mr-5" target="_blank">
+            <a [routerLink]="['/data-objects', id, 'edit']" class="btn btn-primary mr-1" target="_blank">
                 <i class="fa fa-edit"></i> Edit
             </a>
-            <button class="btn btn-primary mr-1">
+            <button class="btn btn-primary mr-1" (click)="printPdf()">
                 <i class="fa fa-print"></i> Print
             </button>
             <button class="btn btn-primary">
@@ -13,22 +13,18 @@
             </button>
         </div>
         <div id="navbar" [ngClass]="sticky ? 'text-center' : ''">
-            <h6>{{objectData?.displayTitle}}</h6>
+            <h6>{{objectData?.coreObject?.displayTitle}}</h6>
         </div>
     </div>
 
     <div class="card-body">
         <form [formGroup]="objectForm">
-            <div class="row form-group" *ngIf="!(isView || isEdit)">
+            <div class="row form-group">
                 <div class="col-md-6">
                     <label for="studyId" class="font-style text-capitalize">parent study</label>
-                    <!-- <select id="studyId" class="form-control">
-                        <option selected disabled value="">Select an option...</option>
-                        <option [value]="study.sdSid" *ngFor="let study of studyList">{{study.displayTitle}}</option>
-                    </select> -->
-                    <ng-select id="study" [items]="studyList" bindLabel="sdSid" bindValue="sdSid" formControlName="linkedSdSid"
-                    [multiple]="true" [virtualScroll]="true" class="custom" notFoundText="No members found"
-                        placeholder="Select study" [searchFn]="customSearchFn">
+                    <ng-select id="study" [items]="studyList" bindLabel="sdSid" bindValue="sdSid" formControlName="SdSid"
+                    [multiple]="false" [virtualScroll]="true" class="custom" notFoundText="No members found"
+                        placeholder="Select study" [searchFn]="customSearchFn" [readonly]="isView || isEdit">
                         <ng-template ng-label-tmp let-item="item">
                             {{item.sdSid}}
                         </ng-template>
@@ -48,7 +44,7 @@
                     <label for="displayTitle" class="font-style text-capitalize">Display title</label>
                     <textarea id="displayTitle" cols="30" rows="3" class="form-control" placeholder="Enter display title..."
                     formControlName="displayTitle" *ngIf="!isView" ></textarea>
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.displayTitle}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.coreObject?.displayTitle}}</h6>
                 </div>
             </div>
             <div class="row form-group">
@@ -56,13 +52,13 @@
                     <label for="doi" class="font-style text-capitalize">DOI</label>
                     <input id="doi" type="text" class="form-control" placeholder="Enter DOI..." formControlName="doi"
                         *ngIf="!isView" />
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.doi}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.coreObject?.doi}}</h6>
                 </div>
                 <div class="col-md-6">
                     <label for="version" class="font-style text-capitalize">Version</label>
                     <input type="text" id="version" class="form-control" placeholder="Enter version..." formControlName="version"
                         *ngIf="!isView" />
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.version}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.coreObject?.version}}</h6>
                 </div>
             </div>
 
@@ -73,7 +69,7 @@
                         <option selected disabled value="">Select an option...</option>
                         <option [value]=class.id *ngFor="let class of objectClass">{{class.name}}</option>
                     </select>
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{findObjectClass(objectData?.objectClassId)}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{findObjectClass(objectData?.coreObject?.objectClassId)}}</h6>
                 </div>
                 <div class="col-md-6">
                     <label for="objectTypeId" class="font-style text-capitalize">Object type</label>
@@ -81,7 +77,7 @@
                         <option selected disabled value="">Select an option...</option>
                         <option [value]=type.id *ngFor="let type of objectType">{{type.name}}</option>
                     </select>
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{findobjectType(objectData?.objectTypeId)}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{findobjectType(objectData?.coreObject?.objectTypeId)}}</h6>
                 </div>
             </div>
 
@@ -90,7 +86,7 @@
                     <label for="publicationYear" class="font-style text-capitalize">Publication year</label>
                     <input id="publicationYear" type="text" class="form-control" placeholder="Enter publication year..."
                         formControlName="publicationYear" *ngIf="!isView" />
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.publicationYear}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.coreObject?.publicationYear}}</h6>
                 </div>
                 <div class="col-md-6">
                     <label for="langCode" class="font-style text-capitalize">Language</label>
@@ -98,7 +94,7 @@
                         <option selected disabled value="">Select an option...</option>
                         <option [value]="language.code" *ngFor="let language of languageCode">{{language.code}}</option>
                     </select>
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.langCode}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.coreObject?.langCode}}</h6>
                 </div>
             </div>
             <div class="row form-group">
@@ -106,7 +102,7 @@
                     <label for="managingOrg" class="font-style text-capitalize">Managing organisation</label>
                     <input id="managingOrg" type="text" class="form-control" placeholder="Enter managing organisation..."
                         formControlName="managingOrg" *ngIf="!isView" />
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.managingOrg}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.coreObject?.managingOrg}}</h6>
                 </div>
                 <div class="col-md-6">
                     <label for="accessTypeId" class="font-style text-capitalize">Access type</label>
@@ -114,7 +110,7 @@
                         <option selected disabled value="">Select an option...</option>
                         <option [value]=access.id *ngFor="let access of accessType">{{access.name}}</option>
                     </select>
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{findAccessType(objectData?.accessTypeId)}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{findAccessType(objectData?.coreObject?.accessTypeId)}}</h6>
                 </div>
             </div>
             <div class="row form-group">
@@ -124,13 +120,13 @@
                         <option selected disabled>Select an option...</option>
                         <option [value]=eosc *ngFor="let eosc of EoscCategory">{{eosc}}</option>
                     </select>
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.eoscCategory}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.coreObject?.eoscCategory}}</h6>
                 </div>
             </div>
             <hr />
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <h6 style="font-weight: 100;" class="pt-3 font-style">Access details</h6>
+                    <h6 style="font-weight: 100;" class="pt-3 font-style">Access Details</h6>
                 </div>
             </div>
             <br />
@@ -139,13 +135,13 @@
                     <label for="accessDetails" class="font-style text-capitalize">Description</label>
                     <textarea id="accessDetails" class="form-control" cols="30" rows="5" placeholder="Enter description..."
                         formControlName="accessDetails" *ngIf="!isView"></textarea>
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.accessDetails}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.coreObject?.accessDetails ? objectData?.coreObject?.accessDetails : 'None'}}</h6>
                 </div>
                 <div class="col-md-6">
                     <label for="accessDetailsUrl" class="font-style text-capitalize">URL</label>
                     <input id="accessDetailsUrl" type="text" class="form-control" placeholder="Enter a parameter..."
                         formControlName="accessDetailsUrl" *ngIf="!isView" />
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.accessDetailsUrl}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.coreObject?.accessDetailsUrl ? objectData?.coreObject?.accessDetails : 'None'}}</h6>
                 </div>
             </div>
             <hr />
@@ -163,13 +159,13 @@
                             <option selected disabled value="">Select an option...</option>
                             <option [value]=key.id *ngFor="let key of keyType">{{key.name}}</option>
                         </select>
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{findKeyType(objectData?.objectDatasets?.recordKeysTypeId)}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{findKeyType(objectData?.objectDatasets[0]?.recordKeysTypeId)}}</h6>
                     </div>
                     <div class="col-md-6">
                         <label for="recordKeysDetails" class="font-style text-capitalize">Keys details</label>
                         <textarea id="recordKeysDetails" class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
                             formControlName="recordKeysDetails" *ngIf="!isView"></textarea>
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.recordKeysDetails}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets[0]?.recordKeysDetails ? objectData?.objectDatasets[0]?.recordKeysDetails : 'None'}}</h6>
                     </div>
                 </div>
                 <hr />
@@ -189,19 +185,19 @@
                             <option [value]=identification.id *ngFor="let identification of deidentificationType">
                                 {{identification.name}}</option>
                         </select>
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{findDeidentificationType(objectData?.objectDatasets?.deidentTypeId)}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{findDeidentificationType(objectData?.objectDatasets[0]?.deidentTypeId)}}</h6>
                     </div>
                     <div class="col-md-4 form-check m-auto">
                         <label class="form-check-label font-style text-capitalize" for="deidentDirect">Direct ID's</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="deidentDirect" formControlName="deidentDirect" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.deidentDirect}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets[0]?.deidentDirect ? objectData?.objectDatasets[0]?.deidentDirect : 'False'}}</h6>
                     </div>
                     <div class="col-md-4 form-check m-auto">
                         <label class="form-check-label font-style text-capitalize" for="deidentHipaa">HIPAA Applied</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="deidentHipaa" formControlName="deidentHipaa" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.deidentHipaa}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets[0]?.deidentHipaa ? objectData?.objectDatasets[0]?.deidentHipaa : 'False'}}</h6>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -209,19 +205,19 @@
                         <label class="form-check-label font-style text-capitalize" for="deidentDates">Dates Rebased</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="deidentDates" formControlName="deidentDates" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.deidentDates}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets[0]?.deidentDates ? objectData?.objectDatasets[0]?.deidentDates : 'False'}}</h6>
                     </div>
                     <div class="col-md-4 form-check m-auto">
                         <label class="form-check-label font-style text-capitalize" for="deidentNonarr">No Narrative</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="deidentNonarr" formControlName="deidentNonarr" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.deidentNonarr}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets[0]?.deidentNonarr ? objectData?.objectDatasets[0]?.deidentNonarr : 'False'}}</h6>
                     </div>
                     <div class="col-md-4 form-check m-auto">
                         <label class="form-check-label font-style text-capitalize" for="deidentKanon">KANON Applied</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="deidentKanon" formControlName="deidentKanon" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.deidentKanon}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets[0]?.deidentKanon ? objectData?.objectDatasets[0]?.deidentKanon : 'False'}}</h6>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -230,7 +226,7 @@
                         <i class="fa fa-info-circle pl-1"></i>
                         <textarea id="deidentDetails" class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
                             formControlName="deidentDetails" *ngIf="!isView"></textarea>
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.deidentDetails}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets[0]?.deidentDetails}}</h6>
                     </div>
                 </div>
 
@@ -251,19 +247,19 @@
                             <option selected disabled value="">Select an option...</option>
                             <option [value]=consent.id *ngFor="let consent of consentType">{{consent.name}}</option>
                         </select>
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{findConsentType(objectData?.objectDatasets?.consentTypeId)}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{findConsentType(objectData?.objectDatasets[0]?.consentTypeId)}}</h6>
                     </div>
                     <div class="col-md-4 form-check m-auto">
                         <label class="form-check-label font-style text-capitalize" for="consentNoncommercial">Noncommercial only</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="consentNoncommercial" formControlName="consentNoncommercial" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.consentNoncommercial}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets[0]?.consentNoncommercial ? objectData?.objectDatasets[0]?.consentNoncommercial : 'False'}}</h6>
                     </div>
                     <div class="col-md-4 form-check m-auto">
                         <label class="form-check-label font-style text-capitalize" for="consentGeogRestrict">Geographic restrictions</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="consentGeogRestrict" formControlName="consentGeogRestrict" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.consentGeogRestrict}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets[0]?.consentGeogRestrict ? objectData?.objectDatasets[0]?.consentGeogRestrict : 'False'}}</h6>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -271,19 +267,19 @@
                         <label class="form-check-label font-style text-capitalize" for="consentResearchType">Research type related</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="consentResearchType" formControlName="consentResearchType" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.consentResearchType}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets[0]?.consentResearchType ? objectData?.objectDatasets[0]?.consentResearchType : 'False'}}</h6>
                     </div>
                     <div class="col-md-4 form-check m-auto">
                         <label class="form-check-label font-style text-capitalize" for="consentGeneticOnly">Genetic research only</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="consentGeneticOnly" formControlName="consentGeneticOnly" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.consentGeneticOnly}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets[0]?.consentGeneticOnly ? objectData?.objectDatasets[0]?.consentGeneticOnly : 'False'}}</h6>
                     </div>
                     <div class="col-md-4 form-check m-auto">
                         <label class="form-check-label font-style text-capitalize" for="consentNoMethods">No methods</label>
                         <i class="fa fa-info-circle pl-1"></i>
                         <input class="form-check-input ml-4" type="checkbox" id="consentNoMethods" formControlName="consentNoMethods" *ngIf="!isView">
-                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets?.consentNoMethods}}</h6>
+                        <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.objectDatasets[0]?.consentNoMethods ? objectData?.objectDatasets[0]?.consentNoMethods : 'False'}}</h6>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -292,7 +288,7 @@
                         <i class="fa fa-info-circle pl-1"></i>
                         <textarea id="consentDetails" class="form-control" cols="30" rows="5" placeholder="Enter a parameter"
                             formControlName="consentDetails" *ngIf="!isView"></textarea>
-                        <h6  style="font-weight: 100;"*ngIf="isView">{{objectData?.objectDatasets?.consentDetails}}</h6>
+                        <h6  style="font-weight: 100;"*ngIf="isView">{{objectData?.objectDatasets[0]?.consentDetails}}</h6>
                     </div>
                 </div>
             </div>
@@ -306,21 +302,21 @@
             </div>
             <hr>
             <ng-container *ngIf="isEdit || isView">
-                <mat-expansion-panel>
+                <mat-expansion-panel [expanded]="true">
                     <mat-expansion-panel-header>
                         <h6 class="pt-3 font-style">Object instance(s)</h6>
                     </mat-expansion-panel-header>
                     <app-object-instance [sdOid]="id" [isView]="isView" [isEdit]="isEdit"></app-object-instance>
                 </mat-expansion-panel>            
                 <hr />
-                <mat-expansion-panel>
+                <mat-expansion-panel [expanded]="true">
                     <mat-expansion-panel-header>
                         <h6 class="pt-3 font-style">Object title(s)</h6>
                     </mat-expansion-panel-header>
                     <app-object-title [sdOid]="id" [isView]="isView" [isEdit]="isEdit"></app-object-title>
                 </mat-expansion-panel>
                 <hr />
-                <mat-expansion-panel>
+                <mat-expansion-panel [expanded]="true">
                     <mat-expansion-panel-header>
                         <h6 class="pt-3 font-style">Object date(s)</h6>
                     </mat-expansion-panel-header>
@@ -328,7 +324,7 @@
                 </mat-expansion-panel>
                 <hr />
                 <ng-container *ngIf="showTopic">
-                    <mat-expansion-panel>
+                    <mat-expansion-panel [expanded]="true">
                         <mat-expansion-panel-header>
                             <h6 class="pt-3 font-style">Object contributor(s)</h6>
                         </mat-expansion-panel-header>
@@ -337,7 +333,7 @@
                     <hr />
                 </ng-container>
                 <ng-container *ngIf="showTopic">
-                    <mat-expansion-panel>
+                    <mat-expansion-panel [expanded]="true">
                         <mat-expansion-panel-header>
                             <h6 class="pt-3 font-style">Object topic(s)</h6>
                         </mat-expansion-panel-header>
@@ -345,28 +341,28 @@
                     </mat-expansion-panel>
                     <hr />
                 </ng-container>
-                <mat-expansion-panel>
+                <mat-expansion-panel [expanded]="true">
                     <mat-expansion-panel-header>
                         <h6 class="pt-3 font-style">Object identifier(s)</h6>
                     </mat-expansion-panel-header>
                     <app-object-identifier [sdOid]="id" [isView]="isView" [isEdit]="isEdit"></app-object-identifier>
                 </mat-expansion-panel>        
                 <hr />
-                <mat-expansion-panel>
+                <mat-expansion-panel [expanded]="true">
                     <mat-expansion-panel-header>
                         <h6 class="pt-3 font-style">Object descriptions(s)</h6>
                     </mat-expansion-panel-header>
                     <app-object-description [sdOid]="id" [isView]="isView" [isEdit]="isEdit"></app-object-description>
                 </mat-expansion-panel>
                 <hr />
-                <mat-expansion-panel>
+                <mat-expansion-panel [expanded]="true">
                     <mat-expansion-panel-header>
                         <h6 class="pt-3 font-style">Object right(s)</h6>
                     </mat-expansion-panel-header>
                     <app-object-right [sdOid]="id" [isView]="isView" [isEdit]="isEdit"></app-object-right>
                 </mat-expansion-panel>
                 <hr />
-                <mat-expansion-panel>
+                <mat-expansion-panel [expanded]="true">
                     <mat-expansion-panel-header>
                         <h6 class="pt-3 font-style">Object relationship(s)</h6>
                     </mat-expansion-panel-header>

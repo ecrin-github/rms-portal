@@ -69,11 +69,16 @@ export class StudyIdentifierComponent implements OnInit {
   addStudyIdentifier() {
     this.len = this.studyIdentifiers().value.length;
     if (this.len) {
-      if (this.studyIdentifiers().value[this.len - 1].identifierValue && this.studyIdentifiers().value[this.len - 1].identifierTypeId && this.studyIdentifiers().value[this.len - 1].identifierOrgId) {
+      if (this.studyIdentifiers().value[this.len - 1].identifierValue !== null && this.studyIdentifiers().value[this.len - 1].identifierTypeId !== null && this.studyIdentifiers().value[this.len - 1].identifierOrgId !== null) {
         this.studyIdentifiers().push(this.newStudyIdentifier());
         this.showIdentifierLinks.push(false);
       } else {
-        this.toastr.info('Please provide the Identifier Value, Identifier Type and Identifier Organization in the previously added Study Identifier');
+        if (this.studyIdentifiers().value[this.len - 1].alreadyExist) {
+          this.studyIdentifiers().push(this.newStudyIdentifier());
+          this.showIdentifierLinks.push(false);
+        } else {
+          this.toastr.info('Please provide the Identifier Value, Identifier Type and Identifier Organization in the previously added Study Identifier');
+        }
       }
     } else {
       this.studyIdentifiers().push(this.newStudyIdentifier());
@@ -170,6 +175,7 @@ export class StudyIdentifierComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Study Identifier added successfully');
+        this.getStudyIdentifier();
       } else {
         this.toastr.error(res.messages[0]);
       }
@@ -186,6 +192,7 @@ export class StudyIdentifierComponent implements OnInit {
       this.spinner.hide();
       if(res.statusCode === 200) {
         this.toastr.success('Study Identifier updated successfully');
+        this.getStudyIdentifier();
       } else {
         this.toastr.error(res.messages[0]);
       }

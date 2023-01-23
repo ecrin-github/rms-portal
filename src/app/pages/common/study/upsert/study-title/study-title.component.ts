@@ -73,10 +73,14 @@ export class StudyTitleComponent implements OnInit {
   addStudyTitle() {
     this.len = this.studyTitles().value.length;
     if (this.len) {
-      if (this.studyTitles().value[this.len-1].titleTypeId && this.studyTitles().value[this.len-1].titleText) {
+      if (this.studyTitles().value[this.len-1].titleTypeId !== null && this.studyTitles().value[this.len-1].titleText !== null) {
         this.studyTitles().push(this.newStudyTitle());
       } else {
-        this.toastr.info('Please provide the Title Type and Title Value in the previously added Study Title');
+        if (this.studyTitles().value[this.len-1].alreadyExist) {
+          this.studyTitles().push(this.newStudyTitle());
+        } else {
+          this.toastr.info('Please provide the Title Type and Title Value in the previously added Study Title');
+        }
       }
     } else {
       this.studyTitles().push(this.newStudyTitle());
@@ -191,6 +195,7 @@ export class StudyTitleComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Study Title added successfully');
+        this.getStudyTitle();
       } else {
         this.toastr.error(res.messages[0]);
       }
@@ -206,6 +211,7 @@ export class StudyTitleComponent implements OnInit {
       this.spinner.hide();
       if(res.statusCode === 200) {
         this.toastr.success('Study Title updated successfully');
+        this.getStudyTitle();
       } else {
         this.toastr.error(res.messages[0]);
       }

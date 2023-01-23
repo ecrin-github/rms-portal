@@ -64,10 +64,14 @@ export class StudyTopicComponent implements OnInit {
   addStudyTopic() {
     this.len = this.studyTopics().value.length;
     if (this.len) {
-      if (this.studyTopics().value[this.len-1].topicTypeId && this.studyTopics().value[this.len-1].meshValue) {
+      if (this.studyTopics().value[this.len-1].topicTypeId !== null && this.studyTopics().value[this.len-1].meshValue !== null) {
         this.studyTopics().push(this.newStudyTopic());
       } else {
-        this.toastr.info('Please provide the Topic Type and Topic Value in the previously added Study Topic');
+        if (this.studyTopics().value[this.len-1].alreadyExist) {
+          this.studyTopics().push(this.newStudyTopic());
+        } else {
+          this.toastr.info('Please provide the Topic Type and Topic Value in the previously added Study Topic');
+        }
       }
     } else {
       this.studyTopics().push(this.newStudyTopic());
@@ -116,6 +120,7 @@ export class StudyTopicComponent implements OnInit {
   getStudyTopic() {
     this.spinner.show();
     this.studyService.getStudyTopics(this.sdSid).subscribe((res: any) => {
+      this.spinner.hide();
       if (res && res.data) {
         this.studyTopic = res.data.length ? res.data : [];
         this.patchForm(this.studyTopic);
@@ -155,6 +160,7 @@ export class StudyTopicComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Study Topic added successfully');
+        this.getStudyTopic();
       } else {
         this.toastr.error(res.messages[0]);
       }
@@ -171,6 +177,7 @@ export class StudyTopicComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Study Topic updated successfully');
+        this.getStudyTopic();
       } else {
         this.toastr.error(res.messages[0]);
       }

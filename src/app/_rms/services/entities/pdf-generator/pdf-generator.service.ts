@@ -277,4 +277,162 @@ export class PdfGeneratorService {
     doc.save(studyData.coreStudy.displayTitle + '.pdf');
 
   }
+  objectPdfGenerator(objectData) {
+    const doc = new jsPDF();
+
+    const bodyData: Array<any> = [];
+
+    bodyData.push([{content: objectData.coreObject.displayTitle, colSpan: 4, rowSpan: 1, styles: {halign: 'left', fontStyle: 'bold', fontSize: 16}}]);
+    bodyData.push([
+      { content: 'DOI: ' + objectData.coreObject.doi, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+      { content: 'Version: ' + objectData.coreObject.version, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
+    ]);
+    bodyData.push([
+      { content: 'Object Class: ' + objectData.coreObject.objectClassId, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+      { content: 'Object Type: ' + objectData.coreObject.objectTypeId, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
+    ]);
+    bodyData.push([
+      { content: 'Publication Year: ' + objectData.coreObject.publicationYear, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+      { content: 'Language: ' + objectData.coreObject.objectTypeId, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+    ]);
+    bodyData.push([
+      { content: 'Managing Organization: ' + objectData.coreObject.managingOrg, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+      { content: 'Access Type: ' + objectData.coreObject.accessTypeId, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+    ]);
+    bodyData.push([
+      { content: 'EOSC Category: ' + objectData.coreObject.managingOrg, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+    ]);
+    bodyData.push([
+      { content: 'Access Details', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
+    ]);
+    bodyData.push([
+      { content: 'Description: ' + objectData.coreObject.accessDetails, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+      { content: 'URL: ' + objectData.coreObject.accessDetailsUrl, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+    ]);
+    if (objectData.objectDatasets.length > 0) {
+      bodyData.push([
+        { content: 'Dataset Record Key', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
+      ]);
+      bodyData.push([
+        { content: 'Keys Type: ' + objectData.objectDatasets[0].recordKeysTypeId, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+        { content: 'Keys Detail: ' + objectData.objectDatasets[0].recordKeysDetails, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+      ]);
+      bodyData.push([
+        { content: 'Dataset Deidentification Level', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
+      ]);
+      bodyData.push([
+        { content: 'Type: ' + objectData.objectDatasets[0].consentTypeId, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+        { content: 'Direct ID`s: ' + objectData.objectDatasets[0].deidentDirect, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+      ]);
+      bodyData.push([
+        { content: 'HIPAA Applied: ' + objectData.objectDatasets[0].deidentHipaa, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+        { content: 'Dates Rebased: ' + objectData.objectDatasets[0].deidentDates, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+      ]);
+      bodyData.push([
+        { content: 'Non Narrative: ' + objectData.objectDatasets[0].deidentNonarr, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+        { content: 'KANON Applied: ' + objectData.objectDatasets[0].deidentKanon, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+      ]);
+      bodyData.push([
+        { content: 'Details: ' + objectData.objectDatasets[0].deidentDetails, colSpan: 4, rowSpan: 1, styles: { halign: 'left' } },
+      ]);
+      bodyData.push([
+        { content: 'Dataset Consent', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
+      ]);
+      bodyData.push([
+        { content: 'Type: ' + objectData.objectDatasets[0].consentTypeId, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+        { content: 'Noncommercial Only: ' + objectData.objectDatasets[0].consentNoncommercial, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+      ]);
+      bodyData.push([
+        { content: 'Geographic Restrictions: ' + objectData.objectDatasets[0].consentGeogRestrict, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+        { content: 'Research Type Related: ' + objectData.objectDatasets[0].consentResearchType, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+      ]);
+      bodyData.push([
+        { content: 'Genetic Research Only: ' + objectData.objectDatasets[0].consentGeneticOnly, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+        { content: 'No Methods: ' + objectData.objectDatasets[0].consentNoMethods, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+      ]);
+      bodyData.push([
+        { content: 'Details: ' + objectData.objectDatasets[0].consentDetails, colSpan: 4, rowSpan: 1, styles: { halign: 'left' } },
+      ]);
+
+    }
+    bodyData.push([
+      { content: 'Object Instances', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
+    ]);  
+    for (let instance of objectData.objectInstances) {
+      let content = 'Repository Organisation: ' + instance.repositoryOrg + '  Access Details(Direct Access): ' + instance.urlAccessible + '  Access Details: ' + instance.url + '  Resource Details(Resource Type): ' + instance.resourceTypeId +
+                      '  Resource Details(Size): ' + instance.resourceTypeId + '  Comments: ' + instance.resourceComments;
+      bodyData.push([
+        { content: content, colSpan: 4, rowSpan: 1, styles: { halign: 'left' } },
+      ]);
+    }
+    bodyData.push([
+      { content: 'Object Titles', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
+    ]);  
+    for (let title of objectData.objectTitles) {
+      let content = 'Title Type: ' + title.titleTypeId + '  Title Text: ' + title.titleText + '  Language Code: ' + title.langCode;
+      bodyData.push([
+        { content: content, colSpan: 4, rowSpan: 1, styles: { halign: 'left' } },
+      ]);
+    }
+    bodyData.push([
+      { content: 'Object Dates', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
+    ]);  
+    for (let date of objectData.objectDates) {
+      let content = 'Date Type: ' + date.dateTypeId + '  Is Date Range: ' + date.dateIsRange + '  Start Date: ' + date.startDay+'-'+date.startMonth+'-'+date.startYear + date.dateIsRange ? '  End Date: ' + date.endDay+'-'+date.endMonth+'-'+date.endYear : '';
+      bodyData.push([
+        { content: content, colSpan: 4, rowSpan: 1, styles: { halign: 'left' } },
+      ]);
+    }
+    bodyData.push([
+      { content: 'Object Contributors', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
+    ]); 
+    for (let contibutor of objectData.objectContributors) {
+
+    } 
+    bodyData.push([
+      { content: 'Object Topics', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
+    ]);
+    for (let topic of objectData.objectTopics) {
+      let content = 'Topic Type: ' + topic.topicTypeId + '  Topic Value: ' + topic.originalValue + '  Controlled Terminology: ' + topic.meshValue + '  CT Code: ' + topic.meshCode + '  Mesh Coded: ' + topic.meshCoded;
+      bodyData.push([
+        { content: content, colSpan: 4, rowSpan: 1, styles: { halign: 'left' } },
+      ]);
+    }
+    bodyData.push([
+      { content: 'Object Identifiers', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
+    ]);
+    for (let identifier of objectData.objectIdentifiers) {
+      let content = 'Identifier Type: ' + identifier.identifierTypeId + '  Identifier Value: ' + identifier.identifierValue + '  Identifier Organization: ' + identifier.identifierOrg + '  Identifier Date: ' + identifier.identifierValue;
+      bodyData.push([
+        { content: content, colSpan: 4, rowSpan: 1, styles: { halign: 'left' } },
+      ]);
+    }
+    bodyData.push([
+      { content: 'Object Description', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
+    ]);
+    for (let description of objectData.objectDescriptions) {
+      let content = 'Description Type: ' + description.descriptionTypeId + '  Description Label: ' + description.label + '  Description Text: ' + description.descriptionText + '  Language Code: ' + description.langCode;
+      bodyData.push([
+        { content: content, colSpan: 4, rowSpan: 1, styles: { halign: 'left' } },
+      ]);
+    }
+    bodyData.push([
+      { content: 'Object Rights', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
+    ]);
+    for (let right of objectData.objectRights) {
+
+    }
+    bodyData.push([
+      { content: 'Object Relationship', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
+    ]);
+    for (let relation of objectData.objectRelationships) {
+      
+    }
+    autoTable(doc, {
+      startY: 20,
+      theme: 'plain',
+      body: bodyData,
+    })
+    doc.save(objectData.coreObject.displayTitle + '.pdf');
+  }
 }

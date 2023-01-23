@@ -75,7 +75,7 @@
                             <div class="row form-group" *ngIf="isEdit || isView">
                                 <div class="col-md-6">
                                     <label for="" class="font-style text-capitalize pr-5">Status</label>
-                                    <button class="btn btn-danger btn-sm" *ngIf="!isView" (click)="resetAll()">Change Submission Staus</button>
+                                    <button class="btn btn-danger btn-sm" *ngIf="!isView" (click)="resetAll()">Change Submission Status</button>
                                     <select class="form-control" formControlName="statusId" *ngIf="showStatus" (change)="onChange()">
                                         <option disabled selected value="">Select an option...</option>
                                         <option [value]=status.id *ngFor="let status of statusList">{{status.name}}

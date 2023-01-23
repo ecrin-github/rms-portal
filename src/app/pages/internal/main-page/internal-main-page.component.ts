@@ -56,19 +56,28 @@ export class InternalMainPageComponent implements OnInit {
   }
 
   getUserData() {
-    this.userService.getUser().subscribe(res => {
-      if (res) {
-        this.userData = res;
-        this.userService.getUserRoleInfo(this.userData).subscribe((res: any) => {
-          console.log('roleInfo', res);
-          this.permissionService.loadPermissions([res.role]);
-        }, error => {
-          console.log(error);
-        })
-      }
-    }, error => {
-      console.log('error', error);
-    })
+    if (localStorage.getItem('userData')) {
+      this.userData = JSON.parse(localStorage.getItem('userData'));
+      this.userService.getUserRoleInfo(this.userData).subscribe((res: any) => {
+        this.permissionService.loadPermissions([res.role]);
+      }, error => {
+        console.log(error);
+      })
+    } else {
+      this.userService.getUser().subscribe(res => {
+        if (res) {
+          localStorage.setItem('userData', JSON.stringify(res));
+          this.userData = res;
+          this.userService.getUserRoleInfo(this.userData).subscribe((res: any) => {
+            this.permissionService.loadPermissions([res.role]);
+          }, error => {
+            console.log(error);
+          })
+        }
+      }, error => {
+        console.log('error', error);
+      })
+    }
   }
 
   getDtpStatistics() {

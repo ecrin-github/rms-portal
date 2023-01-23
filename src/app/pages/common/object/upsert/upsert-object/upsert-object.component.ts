@@ -7,8 +7,10 @@ import { Subscription } from 'rxjs';
 import { DataObjectInterface } from 'src/app/_rms/interfaces/data-object/data-object.interface';
 import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
+import { JsonGeneratorService } from 'src/app/_rms/services/entities/json-generator/json-generator.service';
 import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 import { ObjectLookupService } from 'src/app/_rms/services/entities/object-lookup/object-lookup.service';
+import { PdfGeneratorService } from 'src/app/_rms/services/entities/pdf-generator/pdf-generator.service';
 
 @Component({
   selector: 'app-upsert-object',
@@ -41,9 +43,9 @@ export class UpsertObjectComponent implements OnInit {
   studyList: [] = [];
 
   constructor(private fb: FormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService,
-    private toastr: ToastrService, private activatedRoute: ActivatedRoute, private listService: ListService) {
+    private toastr: ToastrService, private activatedRoute: ActivatedRoute, private listService: ListService, private pdfGenerator: PdfGeneratorService, private jsonGenerator: JsonGeneratorService) {
     this.objectForm = this.fb.group({
-      linkedSdSid: '',
+      SdSid: '',
       doi: '',
       displayTitle: '',
       version: '',
@@ -252,44 +254,45 @@ export class UpsertObjectComponent implements OnInit {
   }
   patchObjectForm() {
     const arr: any = this.objectClass.filter((item:any) => item.name === 'Dataset');
-    this.showDatasetKey = this.objectData.objectClassId === arr[0].id ? true : false;
+    this.showDatasetKey = this.objectData.coreObject.objectClassId === arr[0].id ? true : false;
     const arrType: any = this.objectType.filter((item: any) => item.name.toLowerCase() === 'publication list' || item.name.toLowerCase() === 'journal article' || item.name.toLowerCase() === 'working paper / pre-print');
     arrType.map(item => {
-      if (item.id === this.objectData.objectTypeId) {
+      if (item.id === this.objectData.coreObject.objectTypeId) {
         this.showTopic = true;
         return;
       }
     });
     this.objectForm.patchValue({
-      doi: this.objectData.doi,
-      displayTitle: this.objectData.displayTitle,
-      version: this.objectData.version,
-      objectClassId: this.objectData.objectClassId,
-      objectTypeId: this.objectData.objectTypeId,
-      publicationYear: this.objectData.publicationYear,
-      langCode: this.objectData.langCode,
-      managingOrg: this.objectData.managingOrg,
-      accessTypeId: this.objectData.accessTypeId,
-      accessDetails: this.objectData.accessDetails,
-      accessDetailsUrl: this.objectData.accessDetailsUrl,
-      eoscCategory: this.objectData.eoscCategory,
+      SdSid: this.objectData.coreObject.sdSid,
+      doi: this.objectData.coreObject.doi,
+      displayTitle: this.objectData.coreObject.displayTitle,
+      version: this.objectData.coreObject.version,
+      objectClassId: this.objectData.coreObject.objectClassId,
+      objectTypeId: this.objectData.coreObject.objectTypeId,
+      publicationYear: this.objectData.coreObject.publicationYear,
+      langCode: this.objectData.coreObject.langCode,
+      managingOrg: this.objectData.coreObject.managingOrg,
+      accessTypeId: this.objectData.coreObject.accessTypeId,
+      accessDetails: this.objectData.coreObject.accessDetails,
+      accessDetailsUrl: this.objectData.coreObject.accessDetailsUrl,
+      eoscCategory: this.objectData.coreObject.eoscCategory,
       objectDatasets: {
-        recordKeysTypeId: this.objectData.objectDatasets ? this.objectData.objectDatasets.recordKeysTypeId :'',
-        recordKeysDetails: this.objectData.objectDatasets ? this.objectData.objectDatasets.recordKeysDetails :'',
-        deidentTypeId: this.objectData.objectDatasets ? this.objectData.objectDatasets.deidentTypeId :'',
-        deidentDirect: this.objectData.objectDatasets ? this.objectData.objectDatasets.deidentDirect : false,
-        deidentHipaa: this.objectData.objectDatasets ? this.objectData.objectDatasets.deidentHipaa : false,
-        deidentDates: this.objectData.objectDatasets ? this.objectData.objectDatasets.deidentDates : false,
-        deidentNonarr: this.objectData.objectDatasets ? this.objectData.objectDatasets.deidentNonarr : false,
-        deidentKanon: this.objectData.objectDatasets ? this.objectData.objectDatasets.deidentKanon : false,
-        deidentDetails: this.objectData.objectDatasets ? this.objectData.objectDatasets.deidentDetails :'',
-        consentTypeId: this.objectData.objectDatasets ? this.objectData.objectDatasets.consentTypeId :'',
-        consentNoncommercial: this.objectData.objectDatasets ? this.objectData.objectDatasets.consentNoncommercial : false,
-        consentGeogRestrict: this.objectData.objectDatasets ? this.objectData.objectDatasets.consentGeogRestrict : false,
-        consentResearchType: this.objectData.objectDatasets ? this.objectData.objectDatasets.consentResearchType : false,
-        consentGeneticOnly: this.objectData.objectDatasets ? this.objectData.objectDatasets.consentGeneticOnly : false,
-        consentNoMethods: this.objectData.objectDatasets ? this.objectData.objectDatasets.consentNoMethods : false,
-        consentDetails: this.objectData.objectDatasets ? this.objectData.objectDatasets.consentDetails :'',
+        recordKeysTypeId: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].recordKeysTypeId :'',
+        recordKeysDetails: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].recordKeysDetails :'',
+        deidentTypeId: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].deidentTypeId :'',
+        deidentDirect: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].deidentDirect : false,
+        deidentHipaa: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].deidentHipaa : false,
+        deidentDates: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].deidentDates : false,
+        deidentNonarr: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].deidentNonarr : false,
+        deidentKanon: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].deidentKanon : false,
+        deidentDetails: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].deidentDetails :'',
+        consentTypeId: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].consentTypeId :'',
+        consentNoncommercial: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].consentNoncommercial : false,
+        consentGeogRestrict: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].consentGeogRestrict : false,
+        consentResearchType: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].consentResearchType : false,
+        consentGeneticOnly: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].consentGeneticOnly : false,
+        consentNoMethods: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].consentNoMethods : false,
+        consentDetails: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets.consentDetails :'',
       },
       objectInstances: this.objectData.objectInstances ? this.objectData.objectInstances : [],
       objectTitles: this.objectData.objectTitles ? this.objectData.objectTitles : [],
@@ -347,7 +350,7 @@ export class UpsertObjectComponent implements OnInit {
           this.toastr.error(error.error.title);
         })
       } else {
-        this.objectService.addDataObject(payload.linkedSdSid, payload).subscribe((res: any) => {
+        this.objectService.addDataObject(payload.SdSid, payload).subscribe((res: any) => {
           this.spinner.hide();
           if (res.statusCode === 200) {
             this.toastr.success('Data Object added successfully');
@@ -379,15 +382,15 @@ export class UpsertObjectComponent implements OnInit {
   }
   findKeyType(id) {
     const keyTypeArray: any = this.keyType.filter((type: any) => type.id === id);
-    return keyTypeArray && keyTypeArray.length ? keyTypeArray[0].name : '';
+    return keyTypeArray && keyTypeArray.length ? keyTypeArray[0].name : 'None';
   }
   findDeidentificationType(id) {
     const deidentificationArray: any = this.deidentificationType.filter((type: any) => type.id === id);
-    return deidentificationArray && deidentificationArray.length ? deidentificationArray[0].name : '';
+    return deidentificationArray && deidentificationArray.length ? deidentificationArray[0].name : 'None';
   }
   findConsentType(id) {
     const consentTypeArray: any = this.consentType.filter((type: any) => type.id === id);
-    return consentTypeArray && consentTypeArray.length ?consentTypeArray[0].name : '';
+    return consentTypeArray && consentTypeArray.length ?consentTypeArray[0].name : 'None';
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -408,5 +411,8 @@ export class UpsertObjectComponent implements OnInit {
         return
       }
     });
+  }
+  printPdf() {
+    this.pdfGenerator.objectPdfGenerator(this.objectData);
   }
 }
