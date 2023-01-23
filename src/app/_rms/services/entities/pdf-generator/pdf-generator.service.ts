@@ -42,7 +42,7 @@ export class PdfGeneratorService {
       { content: 'MD integrated with MDR: ' + dtpData.coreDtp.mdIntegratedWithMdr, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
     ])
     bodyData.push([
-      { content: 'Availability Requested: ' + dtpData.coreDtp.availabilityRequested, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+      { content: 'Availability Requested by me: ' + dtpData.coreDtp.availabilityRequested, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
       { content: 'Availability Confirmed: ' + dtpData.coreDtp.availabilityConfirmed, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
     ]);
     bodyData.push([
@@ -282,7 +282,7 @@ export class PdfGeneratorService {
 
     const bodyData: Array<any> = [];
 
-    bodyData.push([{content: objectData.coreObject.displayTitle, colSpan: 4, rowSpan: 1, styles: {halign: 'left', fontStyle: 'bold', fontSize: 16}}]);
+    bodyData.push([{content: objectData.coreObject.displayTitle, colSpan: 4, rowSpan: 1, styles: {halign: 'left', fontStyle: 'bold', fontSize: 16}}]),
     bodyData.push([
       { content: 'DOI: ' + objectData.coreObject.doi, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
       { content: 'Version: ' + objectData.coreObject.version, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
@@ -293,11 +293,11 @@ export class PdfGeneratorService {
     ]);
     bodyData.push([
       { content: 'Publication Year: ' + objectData.coreObject.publicationYear, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
-      { content: 'Language: ' + objectData.coreObject.objectTypeId, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+      { content: 'Language: ' + objectData.coreObject.objectTypeId, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
     ]);
     bodyData.push([
       { content: 'Managing Organization: ' + objectData.coreObject.managingOrg, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
-      { content: 'Access Type: ' + objectData.coreObject.accessTypeId, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+      { content: 'Access Type: ' + objectData.coreObject.accessTypeId, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
     ]);
     bodyData.push([
       { content: 'EOSC Category: ' + objectData.coreObject.managingOrg, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
@@ -307,7 +307,7 @@ export class PdfGeneratorService {
     ]);
     bodyData.push([
       { content: 'Description: ' + objectData.coreObject.accessDetails, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
-      { content: 'URL: ' + objectData.coreObject.accessDetailsUrl, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+      { content: 'URL: ' + objectData.coreObject.accessDetailsUrl, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
     ]);
     if (objectData.objectDatasets.length > 0) {
       bodyData.push([
@@ -315,22 +315,22 @@ export class PdfGeneratorService {
       ]);
       bodyData.push([
         { content: 'Keys Type: ' + objectData.objectDatasets[0].recordKeysTypeId, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
-        { content: 'Keys Detail: ' + objectData.objectDatasets[0].recordKeysDetails, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+        { content: 'Keys Detail: ' + objectData.objectDatasets[0].recordKeysDetails, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
       ]);
       bodyData.push([
         { content: 'Dataset Deidentification Level', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
       ]);
       bodyData.push([
         { content: 'Type: ' + objectData.objectDatasets[0].consentTypeId, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
-        { content: 'Direct ID`s: ' + objectData.objectDatasets[0].deidentDirect, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+        { content: 'Direct ID`s: ' + objectData.objectDatasets[0].deidentDirect, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
       ]);
       bodyData.push([
         { content: 'HIPAA Applied: ' + objectData.objectDatasets[0].deidentHipaa, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
-        { content: 'Dates Rebased: ' + objectData.objectDatasets[0].deidentDates, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+        { content: 'Dates Rebased: ' + objectData.objectDatasets[0].deidentDates, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
       ]);
       bodyData.push([
         { content: 'Non Narrative: ' + objectData.objectDatasets[0].deidentNonarr, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
-        { content: 'KANON Applied: ' + objectData.objectDatasets[0].deidentKanon, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+        { content: 'KANON Applied: ' + objectData.objectDatasets[0].deidentKanon, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
       ]);
       bodyData.push([
         { content: 'Details: ' + objectData.objectDatasets[0].deidentDetails, colSpan: 4, rowSpan: 1, styles: { halign: 'left' } },
@@ -340,15 +340,15 @@ export class PdfGeneratorService {
       ]);
       bodyData.push([
         { content: 'Type: ' + objectData.objectDatasets[0].consentTypeId, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
-        { content: 'Noncommercial Only: ' + objectData.objectDatasets[0].consentNoncommercial, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+        { content: 'Noncommercial Only: ' + objectData.objectDatasets[0].consentNoncommercial, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
       ]);
       bodyData.push([
         { content: 'Geographic Restrictions: ' + objectData.objectDatasets[0].consentGeogRestrict, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
-        { content: 'Research Type Related: ' + objectData.objectDatasets[0].consentResearchType, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+        { content: 'Research Type Related: ' + objectData.objectDatasets[0].consentResearchType, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
       ]);
       bodyData.push([
         { content: 'Genetic Research Only: ' + objectData.objectDatasets[0].consentGeneticOnly, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
-        { content: 'No Methods: ' + objectData.objectDatasets[0].consentNoMethods, langCode: 2, rowSpan: 1, styles: { halign: 'left' } }
+        { content: 'No Methods: ' + objectData.objectDatasets[0].consentNoMethods, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
       ]);
       bodyData.push([
         { content: 'Details: ' + objectData.objectDatasets[0].consentDetails, colSpan: 4, rowSpan: 1, styles: { halign: 'left' } },
