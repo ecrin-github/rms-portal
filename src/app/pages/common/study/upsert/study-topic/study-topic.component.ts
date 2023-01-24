@@ -117,6 +117,10 @@ export class StudyTopicComponent implements OnInit {
       this.toastr.error(error.error.title);
     })
   }
+  findTopicVocabulary(id) {
+    const arr: any = this.controlledTerminology.filter((item: any) => item.id === id);
+    return arr && arr.length ? arr[0].name : 'None';
+  }
   getStudyTopic() {
     this.spinner.show();
     this.studyService.getStudyTopics(this.sdSid).subscribe((res: any) => {

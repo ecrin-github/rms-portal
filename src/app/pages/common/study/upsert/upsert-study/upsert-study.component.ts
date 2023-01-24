@@ -3,8 +3,9 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { StudyInterface } from 'src/app/_rms/interfaces/study/study.interface';
+import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { JsonGeneratorService } from 'src/app/_rms/services/entities/json-generator/json-generator.service';
 import { PdfGeneratorService } from 'src/app/_rms/services/entities/pdf-generator/pdf-generator.service';
 import { StudyLookupService } from 'src/app/_rms/services/entities/study-lookup/study-lookup.service';
@@ -43,9 +44,16 @@ export class UpsertStudyComponent implements OnInit {
   addType: string;
   registryId: number;
   trialId: string;
+  identifierTypes: [] = [];
+  titleType: [] = [];
+  featureTypes: [] = [];
+  featureValuesAll: [] = [];
+  topicTypes: [] = [];
+  controlledTerminology: [] = [];
+  relationshipType: [] = [];
 
   constructor(private fb: FormBuilder, private router: Router, private studyLookupService: StudyLookupService, private studyService: StudyService, private activatedRoute: ActivatedRoute,
-    private spinner: NgxSpinnerService, private toastr: ToastrService, private pdfGenerator: PdfGeneratorService, private jsonGenerator: JsonGeneratorService) {
+    private spinner: NgxSpinnerService, private toastr: ToastrService, private pdfGenerator: PdfGeneratorService, private jsonGenerator: JsonGeneratorService, private commonLookupService: CommonLookupService) {
     this.studyForm = this.fb.group({
       sdSid: '',
       displayTitle: ['', Validators.required],
@@ -91,6 +99,12 @@ export class UpsertStudyComponent implements OnInit {
     this.getStudyStatus();
     this.getGenderEligibility();
     this.getTimeUnits();
+    this.getIdentifierType();
+    this.getTitleType();
+    this.getFeature();
+    this.getTopicType();
+    this.getTopicVocabulary();
+    this.getRelationshipType();
 
     if (this.isEdit || this.isView) {
       this.id = this.activatedRoute.snapshot.params.id;
@@ -115,8 +129,7 @@ export class UpsertStudyComponent implements OnInit {
       }
       if (this.isView) {
         setTimeout(() => {
-          const studyArray = this.studyTypes.filter((type: any) => type.id === this.studyForm.value.studyTypeId);
-          this.studyTypeView = studyArray && studyArray.length ? studyArray[0] : { name: '' };
+          this.studyTypeView = this.findStudyTypeById(this.studyForm.value.studyTypeId);
         });
       }
     }, error => {
@@ -136,8 +149,7 @@ export class UpsertStudyComponent implements OnInit {
       }
       if (this.isView) {
         setTimeout(() => {
-          const statusArray = this.studyStatuses.filter((type: any) => type.id === this.studyData.studyStatusId);
-          this.studyStatusView = statusArray && statusArray.length ? statusArray[0] : { name: '' }
+          this.studyStatusView = this.findStudyStatusById(this.studyData.studyStatusId);
         });
       }
     }, error => {
@@ -157,8 +169,7 @@ export class UpsertStudyComponent implements OnInit {
       }
       if (this.isView) {
         setTimeout(() => {
-          const genderArray = this.genderEligibility.filter((type: any) => type.id === this.studyForm.value.studyGenderEligId);
-          this.studyGenderView = genderArray && genderArray.length ? genderArray[0] : { name: '' };
+          this.studyGenderView = this.findGenderEligibilityId(this.studyForm.value.studyGenderEligId);
         });
       }
     }, error => {
@@ -178,10 +189,8 @@ export class UpsertStudyComponent implements OnInit {
       }
       if (this.isView) {
         setTimeout(() => {
-          const minAgeArray = this.timeUnits.filter((type: any) => type.id === this.studyForm.value.minAgeUnitsId);
-          this.studyMinAgeView = minAgeArray && minAgeArray.length ? minAgeArray[0] : { name: '' };
-          const maxAgeArray = this.timeUnits.filter((type: any) => type.id === this.studyForm.value.maxAgeUnitsId);
-          this.studyMaxAgeView = maxAgeArray && maxAgeArray.length ? maxAgeArray[0] : { name: '' };
+          this.studyMinAgeView = this.findTimeUnitsById(this.studyForm.value.minAgeUnitsId);
+          this.studyMaxAgeView = this.findTimeUnitsById(this.studyForm.value.maxAgeUnitsId);
         });
       }
     }, error => {
@@ -205,6 +214,22 @@ export class UpsertStudyComponent implements OnInit {
       this.toastr.error(error.error.title);
     })
   }
+  findStudyStatusById(id) {
+    const statusArray = this.studyStatuses.filter((type: any) => type.id === id);
+    return statusArray && statusArray.length ? statusArray[0] : { name: '' }
+  }
+  findStudyTypeById(id) {
+    const studyArray = this.studyTypes.filter((type: any) => type.id === id);
+    return studyArray && studyArray.length ? studyArray[0] : { name: '' };
+  }
+  findGenderEligibilityId(id) {
+    const genderArray = this.genderEligibility.filter((type: any) => type.id === id);
+    return genderArray && genderArray.length ? genderArray[0] : { name: '' };
+  }
+  findTimeUnitsById(id) {
+    const ageArray = this.timeUnits.filter((type: any) => type.id === id);
+    return ageArray && ageArray.length ? ageArray[0] : { name: '' };
+}
   getTrialRegistries() {
     this.studyLookupService.getTrialRegistries().subscribe((res: any) => {
       if (res && res.data) {
@@ -324,7 +349,30 @@ export class UpsertStudyComponent implements OnInit {
   print() {
     this.studyService.getFullStudyById(this.id).subscribe((res: any) => {
       if (res && res.data) {
-        this.pdfGenerator.studyPdfGenerator(res.data[0]);
+        const payload = JSON.parse(JSON.stringify(res.data[0]));
+        payload.coreStudy.studyStatusId = this.findStudyStatusById(payload.coreStudy.studyStatusId);
+        payload.coreStudy.studyTypeId = this.findStudyTypeById(payload.coreStudy.studyTypeId);
+        payload.coreStudy.studyGenderEligId = this.findGenderEligibilityId(payload.coreStudy.studyGenderEligId);
+        payload.coreStudy.minAgeUnitsId = this.findTimeUnitsById(payload.coreStudy.minAgeUnitsId);
+        payload.coreStudy.maxAgeUnitsId = this.findTimeUnitsById(payload.coreStudy.maxAgeUnitsId);
+        payload.studyIdentifiers.map(item => {
+          item.identifierTypeId = this.findIdentifierType(item.identifierTypeId);
+        });
+        payload.studyTitles.map (item => {
+          item.titleTypeId = this.findTitleType(item.titleTypeId);
+        });
+        payload.studyFeatures.map(item => {
+          item.featureTypeId = this.findFeatureType(item.featureTypeId);
+          item.featureValueId = this.findFeatureValue(item.featureValueId);
+        });
+        payload.studyTopics.map(item => {
+          item.topicTypeId = this.findTopicType(item.topicTypeId);
+          item.originalCtId = this.findTopicVocabulary(item.originalCtId);
+        });
+        payload.studyRelationships.map(item => {
+          item.relationshipTypeId = this.findRelationshipType(item.relationshipTypeId);
+        });
+        this.pdfGenerator.studyPdfGenerator(payload);
       }
     }, error => {
       this.toastr.error(error.error.title);
@@ -338,5 +386,95 @@ export class UpsertStudyComponent implements OnInit {
     }, error => {
       this.toastr.error(error.error.title);
     })
+  }
+  getIdentifierType() {
+    this.studyLookupService.getStudyIdentifierTypes().subscribe((res: any) => {
+      if(res && res.data) {
+        this.identifierTypes = res.data;
+      }
+      this.spinner.hide();
+    }, error => {
+      this.toastr.error(error.error.title);
+    });
+  }
+  findIdentifierType(id) {
+    const identifierTypeArray:any = this.identifierTypes.filter((type: any) => type.id === id);
+    return identifierTypeArray && identifierTypeArray.length ? identifierTypeArray[0].name : ''
+  }
+  getTitleType() {
+    this.studyLookupService.getStudyTitleTypes().subscribe((res:any) => {
+      if(res.data) {
+        this.titleType = res.data;
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    });
+  }
+  findTitleType(id) {
+    const titleTypeArray: any = this.titleType.filter((type: any) => type.id === id);
+    return titleTypeArray && titleTypeArray.length ? titleTypeArray[0].name : '';
+  }
+  getFeature() {
+    const getFeatureType$ = this.studyLookupService.getFeatureTypes();
+    const getFeatureValue$ = this.studyLookupService.getFeatureValues();
+    const combine$ = combineLatest([getFeatureType$, getFeatureValue$]).subscribe(([featureType, featureValue] : [any, any]) => {
+      if (featureType.data) {
+        this.featureTypes = featureType.data;
+      }
+      if (featureValue.data) {
+        this.featureValuesAll = featureValue.data;
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  findFeatureType(id) {
+    const featureTypeArray: any = this.featureTypes.filter((type: any) => type.id === id);
+    return featureTypeArray && featureTypeArray.length ? featureTypeArray[0].name : '';
+  }
+  findFeatureValue(id) {
+    const featureValueArray: any = this.featureValuesAll.filter((type: any) => type.id === id);
+    return featureValueArray && featureValueArray.length ? featureValueArray[0].name : '';
+  }
+  getTopicType() {
+    this.commonLookupService.getTopicTypes().subscribe((res: any) => {
+      if (res.data) {
+        this.topicTypes = res.data;
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    });
+  }
+  findTopicType(id) {
+    const topicArray: any = this.topicTypes.filter((type: any) => type.id === id);
+    return topicArray && topicArray.length ? topicArray[0].name : '';
+  }
+  getTopicVocabulary() {
+    this.commonLookupService.getTopicVocabularies().subscribe((res: any) => {
+      this.spinner.hide();
+      if (res.data) {
+        this.controlledTerminology = res.data;
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
+  findTopicVocabulary(id) {
+    const arr: any = this.controlledTerminology.filter((item: any) => item.id === id);
+    return arr && arr.length ? arr[0].name : 'None';
+  }
+  getRelationshipType() {
+    this.studyLookupService.getStudyRelationshipTypes().subscribe((res: any) => {
+      if(res.data) {
+        this.relationshipType = res.data;
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    });
+  }
+  findRelationshipType(id) {
+    const relationArray: any = this.relationshipType.filter((type: any) => type.id === id);
+    return relationArray && relationArray.length ? relationArray[0].name : '';
   }
 }

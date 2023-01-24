@@ -42,7 +42,7 @@ export class PdfGeneratorService {
       { content: 'MD integrated with MDR: ' + dtpData.coreDtp.mdIntegratedWithMdr, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
     ])
     bodyData.push([
-      { content: 'Availability Requested by me: ' + dtpData.coreDtp.availabilityRequested, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+      { content: 'Availability Requested: ' + dtpData.coreDtp.availabilityRequested, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
       { content: 'Availability Confirmed: ' + dtpData.coreDtp.availabilityConfirmed, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
     ]);
     bodyData.push([
@@ -50,16 +50,18 @@ export class PdfGeneratorService {
     ]);
     bodyData.push([
       { content: 'Conforms To Default: ' + dtpData.dtas[0].conformsToDefault, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
-      { content: 'Variations: ' + dtpData.dtas[0].Variations, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
-      { content: 'DTA File Path: ' + dtpData.dtas[0].dtaFilePath, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
+      { content: 'Variations: ' + dtpData.dtas[0].variations, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
     ]);
+    bodyData.push([
+      { content: 'DTA File Path: ' + dtpData.dtas[0].dtaFilePath, colSpan: 4, rowSpan: 1, styles: { halign: 'left' } }
+    ])
     bodyData.push([
       { content: 'Repository Signatory 1: ' + dtpData.dtas[0].repoSignatory1, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
       { content: 'Repository Signatory 2: ' + dtpData.dtas[0].repoSignatory2, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
     ]);
     bodyData.push([
-      { content: 'Repository Signatory 3: ' + dtpData.dtas[0].repoSignatory3, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
-      { content: 'Repository Signatory 4: ' + dtpData.dtas[0].repoSignatory4, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+      { content: 'Repository Signatory 3: ' + dtpData.dtas[0].providerSignatory1, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+      { content: 'Repository Signatory 4: ' + dtpData.dtas[0].providerSignatory2, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
     ]);
     bodyData.push([
       { content: 'Notes', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
@@ -133,7 +135,7 @@ export class PdfGeneratorService {
     ]);
     bodyData.push([
       { content: 'Conforms To Default: ' + dupData.duas[0].conformsToDefault, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
-      { content: 'Variations: ' + dupData.duas[0].Variations, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+      { content: 'Variations: ' + dupData.duas[0].variations, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
     ]);
     bodyData.push([
       { content: 'Repo Is Proxy Provider: ' + dupData.duas[0].repoIsProxyProvider, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
@@ -206,20 +208,20 @@ export class PdfGeneratorService {
     ]);
     bodyData.push([{content: studyData.coreStudy.dataSharingStatement, colSpan: 4, rowSpan: 1}]);
     bodyData.push([
-      { content: 'Study Status: ' + studyData.coreStudy.studyStatusId, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
-      { content: 'Study Type: ' + studyData.coreStudy.studyTypeId, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
+      { content: 'Study Status: ' + studyData.coreStudy.studyStatusId.name, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+      { content: 'Study Type: ' + studyData.coreStudy.studyTypeId.name, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
     ]);
     bodyData.push([
       { content: 'Study Start Year: ' + studyData.coreStudy.studyStartYear, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
       { content: 'Study Start Month: ' + studyData.coreStudy.studyStartMonth, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
     ]);
     bodyData.push([
-      { content: 'Study Gender Eligibility: ' + studyData.coreStudy.studyGenderEligId, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+      { content: 'Study Gender Eligibility: ' + studyData.coreStudy.studyGenderEligId.name, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
       { content: 'Study Enrollement: ' + studyData.coreStudy.studyEnrolment, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
     ]);
     bodyData.push([
-      { content: 'Min Age: ' + studyData.coreStudy.minAge + ' ' + studyData.coreStudy.minAgeUnitsId, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
-      { content: 'Max Age: ' + studyData.coreStudy.maxAge + ' ' + studyData.coreStudy.maxAgeUnitsId, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
+      { content: 'Min Age: ' + studyData.coreStudy.minAge + ' ' + studyData.coreStudy.minAgeUnitsId.name, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+      { content: 'Max Age: ' + studyData.coreStudy.maxAge + ' ' + studyData.coreStudy.maxAgeUnitsId.name, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
     ]);
     bodyData.push([
       { content: 'Study Identifiers', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },

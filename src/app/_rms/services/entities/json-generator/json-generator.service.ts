@@ -10,7 +10,7 @@ export class JsonGeneratorService {
 
   jsonGenerator(data, type) {
     let filename: string;
-    filename = type === 'dtp' ? data.coreDtp.displayName + Date.now() + '.json' : type === 'dup' ? data.coreDup.displayName + Date.now() + '.json' : data.coreStudy.displayTitle + Date.now() + '.json';
+    filename = type === 'dtp' ? data.coreDtp.displayName + Date.now() + '.json' : type === 'dup' ? data.coreDup.displayName + Date.now() + '.json' : type === 'study' ? data.coreStudy.displayTitle + Date.now() + '.json' : data.coreObject.displayTitle + Date.now() + '.json';
     const fileType = this.fileSaver.genType(filename);
     const blob = new Blob([JSON.stringify(data)], {type: fileType});
     this.fileSaver.save(blob, filename);

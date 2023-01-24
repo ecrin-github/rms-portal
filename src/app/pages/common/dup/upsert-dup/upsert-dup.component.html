@@ -6,11 +6,11 @@
                     dupData?.coreDup.displayName + ' data use process' : 'Adding new data use process'}}</h2>
             </div>
             <div class="col-md-5 text-right" *ngIf="isView">
-                <a [routerLink]="['/data-use', id, 'edit']" class="btn btn-primary mr-5" target="_blank">
+                <a [routerLink]="['/data-use', id, 'edit']" class="btn btn-primary mr-1" target="_blank">
                     <i class="fa fa-edit"></i> Edit
                 </a>
                 <button class="btn btn-primary mr-1" (click)="printDocument()">
-                    <i class="fa fa-print"></i> Print
+                    <i class="fa fa-print"></i> PDF
                 </button>
                 <button class="btn btn-primary" (click)="jsonExport()">
                     <i class="fa fa-code"></i> JSON

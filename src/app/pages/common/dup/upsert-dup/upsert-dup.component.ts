@@ -8,6 +8,7 @@ import { combineLatest } from 'rxjs';
 import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { DupService } from 'src/app/_rms/services/entities/dup/dup.service';
 import { JsonGeneratorService } from 'src/app/_rms/services/entities/json-generator/json-generator.service';
+import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 import { PdfGeneratorService } from 'src/app/_rms/services/entities/pdf-generator/pdf-generator.service';
 import { ProcessLookupService } from 'src/app/_rms/services/entities/process-lookup/process-lookup.service';
 import KTWizard from '../../../../../assets/js/components/wizard'
@@ -46,10 +47,12 @@ export class UpsertDupComponent implements OnInit {
   sticky: boolean = false;
   showButton: boolean = true;
   dupArr: any;
+  studyList: [] = [];
+  objectList: [] = [];
 
   constructor(private router: Router, private fb: FormBuilder, private dupService: DupService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService, private pdfGeneratorService: PdfGeneratorService,
-    private jsonGenerator: JsonGeneratorService) {
+    private jsonGenerator: JsonGeneratorService, private listService: ListService) {
     this.form = this.fb.group({
       orgId: ['', Validators.required],
       displayName: ['', Validators.required],
@@ -95,6 +98,8 @@ export class UpsertDupComponent implements OnInit {
     this.todayDate = {year: todayDate.getFullYear(), month: todayDate.getMonth()+1, day: todayDate.getDate()};
     this.getOrganization();
     this.getStatus();
+    this.getStudyList();
+    this.getObjectList();
     this.isEdit = this.router.url.includes('edit') ? true : false;
     this.isView = this.router.url.includes('view') ? true : false;
     if(this.isEdit || this.isView) {
@@ -740,6 +745,12 @@ export class UpsertDupComponent implements OnInit {
       item.author = this.findPeopleById(item.author);
       item.createdOn = this.viewDate(item.createdOn);
     });
+    payload.dupObjects.map(item => {
+      item.objectName = this.findObjectById(item.sdOid);
+    });
+    payload.dupStudies.map(item => {
+      item.studyName = this.findStudyById(item.sdSid);
+    });
     this.pdfGeneratorService.dupPdfGenerator(payload, this.associatedUser);
   }
   jsonExport() {
@@ -766,4 +777,31 @@ export class UpsertDupComponent implements OnInit {
     });
     this.jsonGenerator.jsonGenerator(payload, 'dup');
   }
+  getStudyList() {
+    this.listService.getStudyList().subscribe((res: any) => {
+      if (res && res.data) {
+        this.studyList = res.data;
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  getObjectList() {
+    this.listService.getObjectList().subscribe((res: any) => {
+      if (res && res.data) {
+        this.objectList = res.data;
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  findStudyById(sdSid) {
+    const arr: any = this.studyList.filter((item: any) => item.sdSid === sdSid);
+    return arr && arr.length ? arr[0].displayTitle : 'None';
+  }
+  findObjectById(sdOid) {
+    const arr: any = this.objectList.filter((item: any) => item.sdOid === sdOid);
+    return arr && arr.length ? arr[0].displayTitle : 'None';
+  }
+
 }

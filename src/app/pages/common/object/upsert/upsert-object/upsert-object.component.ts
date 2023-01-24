@@ -415,4 +415,7 @@ export class UpsertObjectComponent implements OnInit {
   printPdf() {
     this.pdfGenerator.objectPdfGenerator(this.objectData);
   }
+  jsonExport() {
+    this.jsonGenerator.jsonGenerator(this.objectData, 'Object');
+  }
 }

@@ -16,6 +16,7 @@ import { ConfirmationWindowComponent } from '../../confirmation-window/confirmat
 import { AddModalComponent } from '../../add-modal/add-modal.component';
 import { PdfGeneratorService } from 'src/app/_rms/services/entities/pdf-generator/pdf-generator.service';
 import { JsonGeneratorService } from 'src/app/_rms/services/entities/json-generator/json-generator.service';
+import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 
 @Component({
   selector: 'app-upsert-dtp',
@@ -53,10 +54,12 @@ export class UpsertDtpComponent implements OnInit {
   selectedSdSid: [] = [];
   accessStatusTypes: [] = [];
   dtpArr: any;
+  studyList: [] = [];
+  objectList: [] = [];
 
   constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService,
-    private objectLookupService: ObjectLookupService, private pdfGeneratorService: PdfGeneratorService, private jsonGenerator: JsonGeneratorService) { 
+    private listService: ListService, private pdfGeneratorService: PdfGeneratorService, private jsonGenerator: JsonGeneratorService) { 
     this.form = this.fb.group({
       orgId: ['', Validators.required],
       displayName: ['', Validators.required],
@@ -106,6 +109,8 @@ export class UpsertDtpComponent implements OnInit {
     this.todayDate = {year: todayDate.getFullYear(), month: todayDate.getMonth()+1, day: todayDate.getDate()};
     this.getOrganization();
     this.getStatus();
+    this.getStudyList();
+    this.getObjectList();
     this.isEdit = this.router.url.includes('edit') ? true : false;
     this.isView = this.router.url.includes('view') ? true : false;
     if (this.isEdit || this.isView) {
@@ -846,13 +851,17 @@ export class UpsertDtpComponent implements OnInit {
     payload.coreDtp.availabilityConfirmed = this.viewDate(payload.coreDtp.availabilityConfirmed);
     payload.dtas[0].repoSignatory1 = this.findPeopleById(payload.dtas[0].repoSignatory1);
     payload.dtas[0].repoSignatory2 = this.findPeopleById(payload.dtas[0].repoSignatory2);
-    payload.dtas[0].repoSignatory3 = this.findPeopleById(payload.dtas[0].repoSignatory3);
-    payload.dtas[0].repoSignatory4 = this.findPeopleById(payload.dtas[0].repoSignatory4);
+    payload.dtas[0].providerSignatory1 = this.findPeopleById(payload.dtas[0].providerSignatory1);
+    payload.dtas[0].providerSignatory2 = this.findPeopleById(payload.dtas[0].providerSignatory2);
     payload.dtpNotes.map(item => {
       item.author = this.findPeopleById(item.author);
       item.createdOn = this.viewDate(item.createdOn);
     })
+    payload.dtpStudies.map(item => {
+      item.studyName = this.findStudyById(item.sdSid);
+    })
     payload.dtpObjects.map(item => {
+      item.objectName  =  this.findObjectById(item.sdOid);
       item.accessTypeId = this.findAccessType(payload.accessTypeId);
       item.accessCheckStatusId = this.findCheckSatus(item.accessCheckStatusId);
       item.accessCheckBy = this.findPeopleById(item.accessCheckBy);
@@ -877,16 +886,20 @@ export class UpsertDtpComponent implements OnInit {
     payload.coreDtp.availabilityConfirmed = this.viewDate(payload.coreDtp.availabilityConfirmed);
     payload.dtas[0].repoSignatory1 = this.findPeopleById(payload.dtas[0].repoSignatory1);
     payload.dtas[0].repoSignatory2 = this.findPeopleById(payload.dtas[0].repoSignatory2);
-    payload.dtas[0].repoSignatory3 = this.findPeopleById(payload.dtas[0].repoSignatory3);
-    payload.dtas[0].repoSignatory4 = this.findPeopleById(payload.dtas[0].repoSignatory4);
+    payload.dtas[0].providerSignatory1 = this.findPeopleById(payload.dtas[0].providerSignatory1);
+    payload.dtas[0].providerSignatory2 = this.findPeopleById(payload.dtas[0].providerSignatory2);
     payload.dtpNotes.map(item => {
       item.author = this.findPeopleById(item.author);
       item.createdOn = this.viewDate(item.createdOn);
     })
+    payload.dtpStudies.map(item => {
+      item.studyName = this.findStudyById(item.sdSid);
+    })
     payload.dtpObjects.map(item => {
-      item.accessTypeId = this.findAccessType(payload.accessTypeId);
+      item.accessTypeId = this.findAccessType(item.accessTypeId);
       item.accessCheckStatusId = this.findCheckSatus(item.accessCheckStatusId);
       item.accessCheckBy = this.findPeopleById(item.accessCheckBy);
+      item.objectName  =  this.findObjectById(item.sdOid);
     });
     this.jsonGenerator.jsonGenerator(payload, 'dtp');
   }
@@ -969,5 +982,31 @@ export class UpsertDtpComponent implements OnInit {
   }
   conformsToDefaultChange() {
     this.showVariations = this.form.value.conformsToDefaultChange ? true : false
+  }
+  getStudyList() {
+    this.listService.getStudyList().subscribe((res: any) => {
+      if (res && res.data) {
+        this.studyList = res.data;
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  getObjectList() {
+    this.listService.getObjectList().subscribe((res: any) => {
+      if (res && res.data) {
+        this.objectList = res.data;
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  findStudyById(sdSid) {
+    const arr: any = this.studyList.filter((item: any) => item.sdSid === sdSid);
+    return arr && arr.length ? arr[0].displayTitle : 'None';
+  }
+  findObjectById(sdOid) {
+    const arr: any = this.objectList.filter((item: any) => item.sdOid === sdOid);
+    return arr && arr.length ? arr[0].displayTitle : 'None';
   }
 }
