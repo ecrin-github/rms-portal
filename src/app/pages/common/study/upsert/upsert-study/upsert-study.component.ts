@@ -381,6 +381,29 @@ export class UpsertStudyComponent implements OnInit {
   jsonExport() {
     this.studyService.getFullStudyById(this.id).subscribe((res: any) => {
       if (res && res.data) {
+        const payload = JSON.parse(JSON.stringify(res.data[0]));
+        payload.coreStudy.studyStatusId = this.findStudyStatusById(payload.coreStudy.studyStatusId);
+        payload.coreStudy.studyTypeId = this.findStudyTypeById(payload.coreStudy.studyTypeId);
+        payload.coreStudy.studyGenderEligId = this.findGenderEligibilityId(payload.coreStudy.studyGenderEligId);
+        payload.coreStudy.minAgeUnitsId = this.findTimeUnitsById(payload.coreStudy.minAgeUnitsId);
+        payload.coreStudy.maxAgeUnitsId = this.findTimeUnitsById(payload.coreStudy.maxAgeUnitsId);
+        payload.studyIdentifiers.map(item => {
+          item.identifierTypeId = this.findIdentifierType(item.identifierTypeId);
+        });
+        payload.studyTitles.map (item => {
+          item.titleTypeId = this.findTitleType(item.titleTypeId);
+        });
+        payload.studyFeatures.map(item => {
+          item.featureTypeId = this.findFeatureType(item.featureTypeId);
+          item.featureValueId = this.findFeatureValue(item.featureValueId);
+        });
+        payload.studyTopics.map(item => {
+          item.topicTypeId = this.findTopicType(item.topicTypeId);
+          item.originalCtId = this.findTopicVocabulary(item.originalCtId);
+        });
+        payload.studyRelationships.map(item => {
+          item.relationshipTypeId = this.findRelationshipType(item.relationshipTypeId);
+        });
         this.jsonGenerator.jsonGenerator(res.data[0], 'study');
       }
     }, error => {

@@ -775,6 +775,12 @@ export class UpsertDupComponent implements OnInit {
       item.author = this.findPeopleById(item.author);
       item.createdOn = this.viewDate(item.createdOn);
     });
+    payload.dupObjects.map(item => {
+      item.objectName = this.findObjectById(item.sdOid);
+    });
+    payload.dupStudies.map(item => {
+      item.studyName = this.findStudyById(item.sdSid);
+    });
     this.jsonGenerator.jsonGenerator(payload, 'dup');
   }
   getStudyList() {

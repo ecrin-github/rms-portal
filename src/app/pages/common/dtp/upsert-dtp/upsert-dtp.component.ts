@@ -896,10 +896,10 @@ export class UpsertDtpComponent implements OnInit {
       item.studyName = this.findStudyById(item.sdSid);
     })
     payload.dtpObjects.map(item => {
-      item.accessTypeId = this.findAccessType(item.accessTypeId);
+      item.objectName  =  this.findObjectById(item.sdOid);
+      item.accessTypeId = this.findAccessType(payload.accessTypeId);
       item.accessCheckStatusId = this.findCheckSatus(item.accessCheckStatusId);
       item.accessCheckBy = this.findPeopleById(item.accessCheckBy);
-      item.objectName  =  this.findObjectById(item.sdOid);
     });
     this.jsonGenerator.jsonGenerator(payload, 'dtp');
   }
