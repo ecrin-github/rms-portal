@@ -6,7 +6,7 @@
                 <i class="fa fa-edit"></i> Edit
             </a>
             <button class="btn btn-primary mr-1" (click)="printPdf()">
-                <i class="fa fa-print"></i> Print
+                <i class="fa fa-print"></i> PDF
             </button>
             <button class="btn btn-primary" (click)="jsonExport()">
                 <i class="fa fa-code"></i> JSON
@@ -141,7 +141,7 @@
                     <label for="accessDetailsUrl" class="font-style text-capitalize">URL</label>
                     <input id="accessDetailsUrl" type="text" class="form-control" placeholder="Enter a parameter..."
                         formControlName="accessDetailsUrl" *ngIf="!isView" />
-                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.coreObject?.accessDetailsUrl ? objectData?.coreObject?.accessDetails : 'None'}}</h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.coreObject?.accessDetailsUrl ? objectData?.coreObject?.accessDetailsUrl : 'None'}}</h6>
                 </div>
             </div>
             <hr />

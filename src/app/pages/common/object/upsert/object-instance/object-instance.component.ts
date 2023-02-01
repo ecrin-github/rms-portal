@@ -189,7 +189,7 @@ export class ObjectInstanceComponent implements OnInit {
     return resourceArray && resourceArray.length ? resourceArray[0].name : '';
   }
   findSizeUnit(id) {
-    const sizeArray: any = this.sizeUnit.filter((type: any) => type.id === id);
+    const sizeArray: any = this.sizeUnit.filter((type: any) => type.id === parseInt(id));
     return sizeArray && sizeArray.length ? sizeArray[0].name : '';
   }
   emitData() {

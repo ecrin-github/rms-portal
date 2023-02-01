@@ -410,6 +410,8 @@ export class UpsertStudyComponent implements OnInit {
       this.toastr.error(error.error.title);
     })
   }
+  // code to get values for id for generating pdf 
+
   getIdentifierType() {
     this.studyLookupService.getStudyIdentifierTypes().subscribe((res: any) => {
       if(res && res.data) {

@@ -41,6 +41,13 @@ export class UpsertObjectComponent implements OnInit {
   sticky: boolean = false;
   EoscCategory = ['0', '1', '2', '3'];
   studyList: [] = [];
+  resourceType: [] = [];
+  sizeUnit: [] = [];
+  titleType: [] = [];
+  dateType: [] = [];
+  topicType: [] = [];
+  identifierType: [] = [];
+  descriptionType: [] = [];
 
   constructor(private fb: FormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService,
     private toastr: ToastrService, private activatedRoute: ActivatedRoute, private listService: ListService, private pdfGenerator: PdfGeneratorService, private jsonGenerator: JsonGeneratorService) {
@@ -112,6 +119,13 @@ export class UpsertObjectComponent implements OnInit {
     this.getDeidentificationType();
     this.getConsentType();
     this.getLanguageCode();
+    this.getResourceType();
+    this.getSizeUnit();
+    this.getTitleType();
+    this.getDateType();
+    this.getTopicType();
+    this.getIdentifierType();
+    this.getDescriptionType();
     if (this.isView || this.isEdit) {
       this.id = this.activatedRoute.snapshot.params.id;
       this.getObjectById(this.id);
@@ -413,9 +427,178 @@ export class UpsertObjectComponent implements OnInit {
     });
   }
   printPdf() {
-    this.pdfGenerator.objectPdfGenerator(this.objectData);
+    const payload = JSON.parse(JSON.stringify(this.objectData));
+    payload.coreObject.objectClassId = this.findObjectClass(payload.coreObject.objectClassId);
+    payload.coreObject.objectTypeId = this.findobjectType(payload.coreObject.objectTypeId);
+    payload.coreObject.accessTypeId = this.findAccessType(payload.coreObject.accessTypeId);
+    if (payload.objectDatasets.length > 0) {
+      payload.objectDatasets[0].recordKeysTypeId = this.findKeyType(payload.objectDatasets[0].recordKeysTypeId);
+      payload.objectDatasets[0].deidentTypeId = this.findDeidentificationType(payload.objectDatasets[0].deidentTypeId);
+      payload.objectDatasets[0].deidentDirect = payload.objectDatasets[0].deidentDirect ? payload.objectDatasets[0].deidentDirect : false;
+      payload.objectDatasets[0].deidentHipaa = payload.objectDatasets[0].deidentHipaa ? payload.objectDatasets[0].deidentHipaa : false;
+      payload.objectDatasets[0].deidentDates = payload.objectDatasets[0].deidentDates ? payload.objectDatasets[0].deidentDates : false;
+      payload.objectDatasets[0].deidentNonarr = payload.objectDatasets[0].deidentNonarr ? payload.objectDatasets[0].deidentNonarr : false;
+      payload.objectDatasets[0].deidentKanon = payload.objectDatasets[0].deidentKanon ? payload.objectDatasets[0].deidentKanon : false;
+      payload.objectDatasets[0].consentNoncommercial = payload.objectDatasets[0].consentNoncommercial ? payload.objectDatasets[0].consentNoncommercial : false;
+      payload.objectDatasets[0].consentGeogRestrict = payload.objectDatasets[0].consentGeogRestrict ? payload.objectDatasets[0].consentGeogRestrict : false;
+      payload.objectDatasets[0].consentResearchType = payload.objectDatasets[0].consentResearchType ? payload.objectDatasets[0].consentResearchType : false;
+      payload.objectDatasets[0].consentGeneticOnly = payload.objectDatasets[0].consentGeneticOnly ? payload.objectDatasets[0].consentGeneticOnly : false;
+      payload.objectDatasets[0].consentNoMethods = payload.objectDatasets[0].consentNoMethods ? payload.objectDatasets[0].consentNoMethods : false;
+      payload.objectDatasets[0].consentTypeId = this.findConsentType(payload.objectDatasets[0].consentTypeId);
+    }
+    payload.objectInstances.map(item => {
+      item.resourceTypeId = this.findResourceType(item.resourceTypeId);
+      item.resourceSizeUnits = this.findSizeUnit(item.resourceSizeUnits);
+    });
+    payload.objectTitles.map(item => {
+      item.titleTypeId = this.findTitleType(item.titleTypeId);
+    });
+    payload.objectDates.map(item => {
+      item.dateTypeId = this.findDateType(item.dateTypeId);
+    });
+    payload.objectTopics.map(item => {
+      item.topicTypeId = this.findTopicType(item.topicTypeId);
+    });
+    payload.objectIdentifiers.map(item => {
+      item.identifierTypeId = this.findIdentifierTyepe(item.identifierTypeId);
+    });
+    payload.objectDescriptions.map(item => {
+      item.descriptionTypeId = this.findDescriptionType(item.descriptionTypeId);
+    });
+    this.pdfGenerator.objectPdfGenerator(payload);
   }
   jsonExport() {
+    const payload = JSON.parse(JSON.stringify(this.objectData));
+    payload.coreObject.objectClassId = this.findObjectClass(payload.coreObject.objectClassId);
+    payload.coreObject.objectTypeId = this.findobjectType(payload.coreObject.objectTypeId);
+    payload.coreObject.accessTypeId = this.findAccessType(payload.coreObject.accessTypeId);
+    if (payload.objectDatasets.length > 0) {
+      payload.objectDatasets[0].recordKeysTypeId = this.findKeyType(payload.objectDatasets[0].recordKeysTypeId);
+      payload.objectDatasets[0].deidentTypeId = this.findDeidentificationType(payload.objectDatasets[0].deidentTypeId);
+      payload.objectDatasets[0].deidentDirect = payload.objectDatasets[0].deidentDirect ? payload.objectDatasets[0].deidentDirect : false;
+      payload.objectDatasets[0].deidentHipaa = payload.objectDatasets[0].deidentHipaa ? payload.objectDatasets[0].deidentHipaa : false;
+      payload.objectDatasets[0].deidentDates = payload.objectDatasets[0].deidentDates ? payload.objectDatasets[0].deidentDates : false;
+      payload.objectDatasets[0].deidentNonarr = payload.objectDatasets[0].deidentNonarr ? payload.objectDatasets[0].deidentNonarr : false;
+      payload.objectDatasets[0].deidentKanon = payload.objectDatasets[0].deidentKanon ? payload.objectDatasets[0].deidentKanon : false;
+      payload.objectDatasets[0].consentNoncommercial = payload.objectDatasets[0].consentNoncommercial ? payload.objectDatasets[0].consentNoncommercial : false;
+      payload.objectDatasets[0].consentGeogRestrict = payload.objectDatasets[0].consentGeogRestrict ? payload.objectDatasets[0].consentGeogRestrict : false;
+      payload.objectDatasets[0].consentResearchType = payload.objectDatasets[0].consentResearchType ? payload.objectDatasets[0].consentResearchType : false;
+      payload.objectDatasets[0].consentGeneticOnly = payload.objectDatasets[0].consentGeneticOnly ? payload.objectDatasets[0].consentGeneticOnly : false;
+      payload.objectDatasets[0].consentNoMethods = payload.objectDatasets[0].consentNoMethods ? payload.objectDatasets[0].consentNoMethods : false;
+      payload.objectDatasets[0].consentTypeId = this.findConsentType(payload.objectDatasets[0].consentTypeId);
+    }
+    payload.objectInstances.map(item => {
+      item.resourceTypeId = this.findResourceType(item.resourceTypeId);
+      item.resourceSizeUnits = this.findSizeUnit(item.resourceSizeUnits);
+    });
+    payload.objectTitles.map(item => {
+      item.titleTypeId = this.findTitleType(item.titleTypeId);
+    });
+    payload.objectDates.map(item => {
+      item.dateTypeId = this.findDateType(item.dateTypeId);
+    });
+    payload.objectTopics.map(item => {
+      item.topicTypeId = this.findTopicType(item.topicTypeId);
+    });
+    payload.objectIdentifiers.map(item => {
+      item.identifierTypeId = this.findIdentifierTyepe(item.identifierTypeId);
+    });
+    payload.objectDescriptions.map(item => {
+      item.descriptionTypeId = this.findDescriptionType(item.descriptionTypeId);
+    });
     this.jsonGenerator.jsonGenerator(this.objectData, 'Object');
+  }
+
+// code to get values for id for generating pdf and json
+  getSizeUnit() {
+    this.objectLookupService.getSizeUnits().subscribe((res: any) => {
+      if(res.data) {
+        this.sizeUnit = res.data;
+      }
+    }, error => {
+      console.log('error', error);
+    });
+  }
+  getResourceType() {
+    this.objectLookupService.getResourceTypes().subscribe((res: any) => {
+      if (res.data) {
+        this.resourceType = res.data;
+      }
+    }, error => {
+      console.log('error',error);
+    });
+  }
+  findResourceType(id) {
+    const resourceArray: any = this.resourceType.filter((type: any) => type.id === id);
+    return resourceArray && resourceArray.length ? resourceArray[0].name : '';
+  }
+  findSizeUnit(id) {
+    const sizeArray: any = this.sizeUnit.filter((type: any) => type.id === parseInt(id));
+    return sizeArray && sizeArray.length ? sizeArray[0].name : '';
+  }
+  getTitleType() {
+    this.objectLookupService.getObjectTitleTypes().subscribe((res:any) => {
+      if(res.data) {
+        this.titleType = res.data;
+      }
+    }, error => {
+      console.log('error', error);
+    });
+  }
+  findTitleType(id) {
+    const titleTypeArray: any = this.titleType.filter((type: any) => type.id === id);
+    return titleTypeArray && titleTypeArray.length ? titleTypeArray[0].name : ''
+  }
+  getDateType() {
+    this.objectLookupService.getDateTypes().subscribe((res: any) => {
+      if(res.data) {
+        this.dateType = res.data
+      }
+    }, error => {
+      console.log('error', error);
+    })
+  }
+  findDateType(id) {
+    const dateTypeArray: any = this.dateType.filter((type: any) => type.id === id);
+    return dateTypeArray && dateTypeArray.length ? dateTypeArray[0].name : '';
+  }
+  getTopicType() {
+    this.commonLookupService.getTopicTypes().subscribe((res: any) => {
+      if(res.data) {
+        this.topicType = res.data;
+      }
+    }, error => {
+      console.log('error', error);
+    });
+  }
+  findTopicType(id) {
+    const topicTypeArrray: any = this.topicType.filter((type: any) => type.id === id);
+    return topicTypeArrray && topicTypeArrray.length ? topicTypeArrray[0].name : '';
+  }
+  getIdentifierType() {
+    this.objectLookupService.getObjectIdentifierTypes().subscribe((res:any) => {
+      if(res.data) {
+        this.identifierType = res.data;
+      }
+    }, error => {
+      this.toastr.error(error.error.title);
+    });
+  }
+  findIdentifierTyepe(id) {
+    const identifierTypeArray: any = this.identifierType.filter((type: any) => type.id === id);
+    return identifierTypeArray && identifierTypeArray.length ? identifierTypeArray[0].name : '';
+  }
+  getDescriptionType() {
+    this.objectLookupService.getDescriptionTypes().subscribe((res: any) => {
+      if(res.data) {
+        this.descriptionType = res.data;
+      }
+    }, error => {
+      console.log('error', error);
+    });
+  }
+  findDescriptionType(id) {
+    const descriptionArray: any = this.descriptionType.filter((type: any) => type.id === id);
+    return descriptionArray && descriptionArray.length ? descriptionArray[0].name : '';
   }
 }

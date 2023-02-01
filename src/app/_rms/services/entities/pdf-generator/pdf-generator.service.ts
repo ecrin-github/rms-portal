@@ -295,14 +295,14 @@ export class PdfGeneratorService {
     ]);
     bodyData.push([
       { content: 'Publication Year: ' + objectData.coreObject.publicationYear, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
-      { content: 'Language: ' + objectData.coreObject.objectTypeId, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
+      { content: 'Language: ' + objectData.coreObject.langCode, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
     ]);
     bodyData.push([
       { content: 'Managing Organization: ' + objectData.coreObject.managingOrg, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
       { content: 'Access Type: ' + objectData.coreObject.accessTypeId, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } }
     ]);
     bodyData.push([
-      { content: 'EOSC Category: ' + objectData.coreObject.managingOrg, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
+      { content: 'EOSC Category: ' + objectData.coreObject.eoscCategory, colSpan: 2, rowSpan: 1, styles: { halign: 'left' } },
     ]);
     bodyData.push([
       { content: 'Access Details', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
@@ -362,7 +362,7 @@ export class PdfGeneratorService {
     ]);  
     for (let instance of objectData.objectInstances) {
       let content = 'Repository Organisation: ' + instance.repositoryOrg + '  Access Details(Direct Access): ' + instance.urlAccessible + '  Access Details: ' + instance.url + '  Resource Details(Resource Type): ' + instance.resourceTypeId +
-                      '  Resource Details(Size): ' + instance.resourceTypeId + '  Comments: ' + instance.resourceComments;
+                      '  Resource Details(Size): ' + instance.resourceSize + ' ' + instance.resourceSizeUnits + '  Comments: ' + instance.resourceComments;
       bodyData.push([
         { content: content, colSpan: 4, rowSpan: 1, styles: { halign: 'left' } },
       ]);
@@ -380,7 +380,7 @@ export class PdfGeneratorService {
       { content: 'Object Dates', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
     ]);  
     for (let date of objectData.objectDates) {
-      let content = 'Date Type: ' + date.dateTypeId + '  Is Date Range: ' + date.dateIsRange + '  Start Date: ' + date.startDay+'-'+date.startMonth+'-'+date.startYear + date.dateIsRange ? '  End Date: ' + date.endDay+'-'+date.endMonth+'-'+date.endYear : '';
+      let content = !date.dateIsRange ? 'Date Type: ' + date.dateTypeId + '  Is Date Range: ' + date.dateIsRange + '  Start Date: ' + date.startDay+'-'+date.startMonth+'-'+date.startYear : 'Date Type: ' + date.dateTypeId + '  Is Date Range: ' + date.dateIsRange + '  Start Date: ' + date.startDay+'-'+date.startMonth+'-'+date.startYear + date.dateIsRange + '  End Date: ' + date.endDay+'-'+date.endMonth+'-'+date.endYear ;
       bodyData.push([
         { content: content, colSpan: 4, rowSpan: 1, styles: { halign: 'left' } },
       ]);
@@ -404,7 +404,7 @@ export class PdfGeneratorService {
       { content: 'Object Identifiers', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
     ]);
     for (let identifier of objectData.objectIdentifiers) {
-      let content = 'Identifier Type: ' + identifier.identifierTypeId + '  Identifier Value: ' + identifier.identifierValue + '  Identifier Organization: ' + identifier.identifierOrg + '  Identifier Date: ' + identifier.identifierValue;
+      let content = 'Identifier Type: ' + identifier.identifierTypeId + '  Identifier Value: ' + identifier.identifierValue + '  Identifier Organization: ' + identifier.identifierOrg + '  Identifier Date: ' + identifier.identifierDate;
       bodyData.push([
         { content: content, colSpan: 4, rowSpan: 1, styles: { halign: 'left' } },
       ]);
@@ -422,7 +422,10 @@ export class PdfGeneratorService {
       { content: 'Object Rights', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
     ]);
     for (let right of objectData.objectRights) {
-
+      let content = 'Rights Name: ' + right.rightsName + '  Rights URL:' + right.rightsUri + '  Comments: ' + right.comments;
+      bodyData.push([
+        { content: content, colSpan: 4, rowSpan: 1, styles: { halign: 'left' } },
+      ]);
     }
     bodyData.push([
       { content: 'Object Relationship', colSpan: 4, rowSpan: 1, styles: { halign: 'left', fontStyle: 'bold', fontSize: 14 } },
