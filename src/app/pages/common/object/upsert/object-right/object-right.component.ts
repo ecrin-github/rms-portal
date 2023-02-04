@@ -58,7 +58,11 @@ export class ObjectRightComponent implements OnInit {
       if (this.objectRights().value[this.len-1].rightsName && this.objectRights().value[this.len-1].rightsUri) {
         this.objectRights().push(this.newObjectRight());
       } else {
-        this.toastr.info('Please provide the Rights Name and Rights URL in the previously added Object Right');
+        if (this.objectRights().value[this.len-1].alreadyExist) {
+          this.objectRights().push(this.newObjectRight());
+        } else {
+          this.toastr.info('Please provide the Rights Name and Rights URL in the previously added Object Right');
+        }
       }
     } else {
       this.objectRights().push(this.newObjectRight());
@@ -120,6 +124,7 @@ export class ObjectRightComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Object Right added successfully');
+        this.getObjectRight();
       } else {
         this.toastr.error(res.messages[0]);
       }
@@ -135,6 +140,7 @@ export class ObjectRightComponent implements OnInit {
       this.spinner.hide();
       if( res.statusCode === 200) {
         this.toastr.success('Object Right updated successfully');
+        this.getObjectRight();
       } else {
         this.toastr.error(res.messages[0]);
       }

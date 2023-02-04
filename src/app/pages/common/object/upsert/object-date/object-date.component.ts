@@ -74,7 +74,12 @@ export class ObjectDateComponent implements OnInit {
         this.objectDates().push(this.newObjectDate());
         this.showEndday.push(false);
       } else {
-        this.toastr.info('Please provide the Date Type and Start Year in the previously added Object Date');
+        if (this.objectDates().value[this.len-1].alreadyExist) {
+          this.objectDates().push(this.newObjectDate());
+          this.showEndday.push(false);
+        } else {
+          this.toastr.info('Please provide the Date Type and Start Year in the previously added Object Date');
+        }
       }
     } else {
       this.objectDates().push(this.newObjectDate());
@@ -160,6 +165,7 @@ export class ObjectDateComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Object Date added successfully');
+        this.getObjectDate();
       } else {
         this.toastr.error(res.messages[0]);
       }
@@ -178,6 +184,7 @@ export class ObjectDateComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Object Date update successfully');
+        this.getObjectDate();
       } else {
         this.toastr.error(res.messages[0]);
       }

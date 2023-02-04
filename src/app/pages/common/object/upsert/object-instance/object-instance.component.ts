@@ -69,10 +69,14 @@ export class ObjectInstanceComponent implements OnInit {
       if (this.objectInstances().value[this.len-1].urlAccessible === true || this.objectInstances().value[this.len-1].urlAccessible === 'true' ? this.objectInstances().value[this.len-1].repositoryOrg && this.objectInstances().value[this.len-1].url : this.objectInstances().value[this.len-1].repositoryOrg) {
         this.objectInstances().push(this.newObjectInstance());
       } else {
-        if (this.objectInstances().value[this.len-1].urlAccessible === true || this.objectInstances().value[this.len-1].urlAccessible === 'true') {
-          this.toastr.info('Please provide the Repository Organistion and URL in the previously added Object Instance');
+        if (this.objectInstances().value[this.len-1].alreadyExist) {
+          this.objectInstances().push(this.newObjectInstance());
         } else {
-          this.toastr.info('Please provide the Repository Organistion in the previously added Object Instance');
+          if (this.objectInstances().value[this.len-1].urlAccessible === true || this.objectInstances().value[this.len-1].urlAccessible === 'true') {
+            this.toastr.info('Please provide the Repository Organistion and URL in the previously added Object Instance');
+          } else {
+            this.toastr.info('Please provide the Repository Organistion in the previously added Object Instance');
+          }
         }
       }
     } else {
@@ -160,6 +164,7 @@ export class ObjectInstanceComponent implements OnInit {
       this.spinner.hide();
       if( res.statusCode === 200) {
         this.toastr.success('Object Instance added successfully');
+        this.getObjectInstance();
       } else {
         this.toastr.error(res.messages[0]);
       }
@@ -176,6 +181,7 @@ export class ObjectInstanceComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Object Instance updated successfully');
+        this.getObjectInstance();
       } else {
         this.toastr.error(res.messages[0]);
       }

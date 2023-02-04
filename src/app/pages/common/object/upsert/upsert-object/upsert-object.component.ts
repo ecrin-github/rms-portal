@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { DataObjectInterface } from 'src/app/_rms/interfaces/data-object/data-object.interface';
 import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
@@ -48,6 +48,7 @@ export class UpsertObjectComponent implements OnInit {
   topicType: [] = [];
   identifierType: [] = [];
   descriptionType: [] = [];
+  showAccessDetails: boolean = true;
 
   constructor(private fb: FormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService,
     private toastr: ToastrService, private activatedRoute: ActivatedRoute, private listService: ListService, private pdfGenerator: PdfGeneratorService, private jsonGenerator: JsonGeneratorService) {
@@ -276,6 +277,8 @@ export class UpsertObjectComponent implements OnInit {
         return;
       }
     });
+    const arrAccessType: any = this.accessType.filter((item: any) => item.name === 'Public on-screen access and download');
+    this.showAccessDetails =  this.objectData.coreObject.accessTypeId === arrAccessType[0].id ? false : true;
     this.objectForm.patchValue({
       SdSid: this.objectData.coreObject.sdSid,
       doi: this.objectData.coreObject.doi,
@@ -306,7 +309,7 @@ export class UpsertObjectComponent implements OnInit {
         consentResearchType: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].consentResearchType : false,
         consentGeneticOnly: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].consentGeneticOnly : false,
         consentNoMethods: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].consentNoMethods : false,
-        consentDetails: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets.consentDetails :'',
+        consentDetails: this.objectData.objectDatasets[0] ? this.objectData.objectDatasets[0].consentDetails :'',
       },
       objectInstances: this.objectData.objectInstances ? this.objectData.objectInstances : [],
       objectTitles: this.objectData.objectTitles ? this.objectData.objectTitles : [],
@@ -325,40 +328,41 @@ export class UpsertObjectComponent implements OnInit {
     }
     if (this.objectForm.valid) {
       const payload = JSON.parse(JSON.stringify(this.objectForm.value));
-      payload.objectDatasets.deidentDirect = payload.objectDatasets.deidentDirect;
-      payload.objectDatasets.deidentHipaa = payload.objectDatasets.deidentHipaa;
-      payload.objectDatasets.deidentDates = payload.objectDatasets.deidentDates;
-      payload.objectDatasets.deidentNonarr = payload.objectDatasets.deidentNonarr;
-      payload.objectDatasets.deidentKanon = payload.objectDatasets.deidentKanon;
-      payload.objectDatasets.consentNoncommercial = payload.objectDatasets.consentNoncommercial;
-      payload.objectDatasets.consentGeogRestrict = payload.objectDatasets.consentGeogRestrict;
-      payload.objectDatasets.consentResearchType = payload.objectDatasets.consentResearchType;
-      payload.objectDatasets.consentGeneticOnly = payload.objectDatasets.consentGeneticOnly;
-      payload.objectDatasets.consentNoMethods = payload.objectDatasets.consentNoMethods;
       payload.objectTypeId = payload.objectTypeId ? payload.objectTypeId : null;
       payload.objectClassId = payload.objectClassId ? payload.objectClassId : null;
       payload.accessTypeId = payload.accessTypeId ? payload.accessTypeId : null;
       payload.accessTypeId = payload.accessTypeId ? payload.accessTypeId : null;
-      payload.objectDatasets.recordKeysTypeId = payload.objectDatasets.recordKeysTypeId ? payload.objectDatasets.recordKeysTypeId : null;
-      payload.objectDatasets.deidentTypeId = payload.objectDatasets.deidentTypeId ? payload.objectDatasets.deidentTypeId : null;
-      payload.objectDatasets.consentTypeId = payload.objectDatasets.consentTypeId ? payload.objectDatasets.consentTypeId : null;
+      const datasetPayload = JSON.parse(JSON.stringify(this.objectForm.value));
+      datasetPayload.objectDatasets.deidentDirect = datasetPayload.objectDatasets.deidentDirect;
+      datasetPayload.objectDatasets.deidentHipaa = datasetPayload.objectDatasets.deidentHipaa;
+      datasetPayload.objectDatasets.deidentDates = datasetPayload.objectDatasets.deidentDates;
+      datasetPayload.objectDatasets.deidentNonarr = datasetPayload.objectDatasets.deidentNonarr;
+      datasetPayload.objectDatasets.deidentKanon = datasetPayload.objectDatasets.deidentKanon;
+      datasetPayload.objectDatasets.consentNoncommercial = datasetPayload.objectDatasets.consentNoncommercial;
+      datasetPayload.objectDatasets.consentGeogRestrict = datasetPayload.objectDatasets.consentGeogRestrict;
+      datasetPayload.objectDatasets.consentResearchType = datasetPayload.objectDatasets.consentResearchType;
+      datasetPayload.objectDatasets.consentGeneticOnly = datasetPayload.objectDatasets.consentGeneticOnly;
+      datasetPayload.objectDatasets.consentNoMethods = datasetPayload.objectDatasets.consentNoMethods;
+      datasetPayload.objectDatasets.recordKeysTypeId = datasetPayload.objectDatasets.recordKeysTypeId ? datasetPayload.objectDatasets.recordKeysTypeId : null;
+      datasetPayload.objectDatasets.deidentTypeId = datasetPayload.objectDatasets.deidentTypeId ? datasetPayload.objectDatasets.deidentTypeId : null;
+      datasetPayload.objectDatasets.consentTypeId = datasetPayload.objectDatasets.consentTypeId ? datasetPayload.objectDatasets.consentTypeId : null;
       if (this.isEdit) {
         payload.id = this.objectData.id;
         payload.sdOid = this.id;
-        if (this.objectData.objectDatasets) {
-          payload.objectDatasets['id'] = this.objectData.objectDatasets['id'];
-          payload.objectDatasets['sdOid'] = this.objectData.objectDatasets['sdOid'];
+        if (this.objectData.objectDatasets.length > 0) {
+          datasetPayload.objectDatasets['id'] = this.objectData.objectDatasets[0].id;
+          datasetPayload.objectDatasets['sdOid'] = this.objectData.objectDatasets[0].sdOid;
         }
+        const editDataObject$ = this.objectService.editDataObject(this.id, payload);
+        const editDataset$ = this.objectData.objectDatasets.length > 0 ? this.objectService.editObjecDataset(this.objectData.objectDatasets[0].id, this.id, datasetPayload.objectDatasets) : this.objectService.addObjectDatasete(this.id, datasetPayload);
         this.spinner.show();
-        this.objectService.editDataObject(this.id, payload).subscribe((res: any) => {
+        const combine$ = combineLatest([editDataObject$, editDataset$]).subscribe(([editRes, datasetRes] : [any, any]) => {
           this.spinner.hide();
-          if (res.statusCode === 200) {
+          if (editRes.statusCode === 200 && datasetRes.statusCode === 200) {
             this.toastr.success('Data Object updated successfully');
-            localStorage.setItem('updateObjectList', 'true');
-            this.getObjectById(this.id);
-          } else {
-            this.toastr.error(res.messages[0]);
           }
+          localStorage.setItem('updateObjectList', 'true');
+          this.getObjectById(this.id);
         }, error => {
           this.spinner.hide();
           this.toastr.error(error.error.title);
@@ -367,9 +371,18 @@ export class UpsertObjectComponent implements OnInit {
         this.objectService.addDataObject(payload.SdSid, payload).subscribe((res: any) => {
           this.spinner.hide();
           if (res.statusCode === 200) {
+            this.objectService.addObjectDatasete(res.data[0].sdOid, datasetPayload.objectDatasets).subscribe((res: any) => {
+              if (res.statusCode === 200) {
+                this.toastr.success('Dataset added successfully');
+              }
+            }, error => {
+              this.toastr.error(res.messages[0]);
+            })
             this.toastr.success('Data Object added successfully');
             localStorage.setItem('updateObjectList', 'true');
-            this.close();
+            setTimeout(() => {
+              this.close();
+            });
           } else {
             this.toastr.error(res.messages[0]);
           }
@@ -600,5 +613,9 @@ export class UpsertObjectComponent implements OnInit {
   findDescriptionType(id) {
     const descriptionArray: any = this.descriptionType.filter((type: any) => type.id === id);
     return descriptionArray && descriptionArray.length ? descriptionArray[0].name : '';
+  }
+  onChangeAccessType() {
+    const arr: any = this.accessType.filter((item: any) => item.name === 'Public on-screen access and download');
+    this.showAccessDetails = parseInt(this.objectForm.value.accessTypeId) === arr[0].id ? false : true;
   }
 }

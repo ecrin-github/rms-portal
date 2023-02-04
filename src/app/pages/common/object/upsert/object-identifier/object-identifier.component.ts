@@ -67,7 +67,11 @@ export class ObjectIdentifierComponent implements OnInit {
       if (this.objectIdentifiers().value[this.len-1].identifierTypeId && this.objectIdentifiers().value[this.len-1].identifierValue) {
         this.objectIdentifiers().push(this.newObjectIdentifier());
       } else {
-        this.toastr.info('Please provide the Identifier Type and Identifier Value in the previously added Object Identifier');
+        if (this.objectIdentifiers().value[this.len-1].alreadyExist) {
+          this.objectIdentifiers().push(this.newObjectIdentifier());
+        } else {
+          this.toastr.info('Please provide the Identifier Type and Identifier Value in the previously added Object Identifier');
+        }
       }
     } else {
       this.objectIdentifiers().push(this.newObjectIdentifier());
@@ -141,6 +145,7 @@ export class ObjectIdentifierComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Object Identifier added successfully');
+        this.getObjectIdentifier();
       } else {
         this.toastr.error(res.messages[0]);
       }
@@ -157,6 +162,7 @@ export class ObjectIdentifierComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Object Identifier updated successfully');
+        this.getObjectIdentifier();
       } else {
         this.toastr.error(res.messages[0]);
       }

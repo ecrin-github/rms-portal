@@ -67,7 +67,11 @@ export class ObjectTopicComponent implements OnInit {
       if (this.objectTopics().value[this.len-1].topicTypeId && this.objectTopics().value[this.len-1].meshValue) {
         this.objectTopics().push(this.newObjectTopic());
       } else {
-        this.toastr.info('Please provide the Topic Type and Topic Value in the previously added Object Topic');
+        if (this.objectTopics().value[this.len-1].alreadyExist) {
+          this.objectTopics().push(this.newObjectTopic());
+        } else {
+          this.toastr.info('Please provide the Topic Type and Topic Value in the previously added Object Topic');
+        }
       }
     } else {
       this.objectTopics().push(this.newObjectTopic());
@@ -144,6 +148,7 @@ export class ObjectTopicComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Obect Topic added successfully');
+        this.getObjectTopic();
       } else {
         this.toastr.error(res.messages[0]);
       }
@@ -160,6 +165,7 @@ export class ObjectTopicComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Object Topic updated successfully');
+        this.getObjectTopic();
       } else {
         this.toastr.error(res.messages[0]);
       }

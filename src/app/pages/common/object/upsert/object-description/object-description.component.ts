@@ -56,7 +56,7 @@ export class ObjectDescriptionComponent implements OnInit {
       descriptionTypeId: '',
       label: '',
       descriptionText: '',
-      langCode: '',
+      langCode: 'en',
       alreadyExist: false
     });
   }
@@ -64,10 +64,14 @@ export class ObjectDescriptionComponent implements OnInit {
   addObjectDescription() {
     this.len = this.objectDescriptions().value.length;
     if (this.len) {
-      if (this.objectDescriptions().value[this.len-1].descriptionTypeId && this.objectDescriptions().value[this.len-1].label) {
+      if (this.objectDescriptions().value[this.len-1].descriptionTypeId) {
         this.objectDescriptions().push(this.newObjectDescription());
       } else {
-        this.toastr.info('Please provide the Description Type and Description label in the previously added Object Description');
+        if (this.objectDescriptions().value[this.len-1].alreadyExist) {
+          this.objectDescriptions().push(this.newObjectDescription());
+        } else {
+          this.toastr.info('Please provide the Description Type and Description label in the previously added Object Description');
+        }
       }
     } else {
       this.objectDescriptions().push(this.newObjectDescription());
@@ -150,6 +154,7 @@ export class ObjectDescriptionComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Object Description added successfully');
+        this.getObjectDescription();
       } else {
         this.toastr.error(res.messages[0]);
       }
@@ -165,6 +170,7 @@ export class ObjectDescriptionComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Object Description updated successfully');
+        this.getObjectDescription();
       } else {
         this.toastr.error(res.messages[0]);
       }

@@ -20,7 +20,7 @@
     <div class="card-body">
         <form [formGroup]="objectForm">
             <div class="row form-group">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label for="studyId" class="font-style text-capitalize">parent study</label>
                     <ng-select id="study" [items]="studyList" bindLabel="sdSid" bindValue="sdSid" formControlName="SdSid"
                     [multiple]="false" [virtualScroll]="true" class="custom" notFoundText="No members found"
@@ -106,7 +106,7 @@
                 </div>
                 <div class="col-md-6">
                     <label for="accessTypeId" class="font-style text-capitalize">Access type</label>
-                    <select id="accessTypeId" class="form-control" formControlName="accessTypeId" *ngIf="!isView">
+                    <select id="accessTypeId" class="form-control" formControlName="accessTypeId" *ngIf="!isView" (change)="onChangeAccessType()">
                         <option selected disabled value="">Select an option...</option>
                         <option [value]=access.id *ngFor="let access of accessType">{{access.name}}</option>
                     </select>
@@ -124,13 +124,13 @@
                 </div>
             </div>
             <hr />
-            <div class="row">
+            <div class="row" *ngIf = "showAccessDetails">
                 <div class="col-md-12 text-center">
                     <h6 style="font-weight: 100;" class="pt-3 font-style">Access Details</h6>
                 </div>
             </div>
             <br />
-            <div class="row form-group">
+            <div class="row form-group" *ngIf = "showAccessDetails">
                 <div class="col-md-6">
                     <label for="accessDetails" class="font-style text-capitalize">Description</label>
                     <textarea id="accessDetails" class="form-control" cols="30" rows="5" placeholder="Enter description..."

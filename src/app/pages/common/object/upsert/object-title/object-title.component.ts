@@ -68,7 +68,11 @@ export class ObjectTitleComponent implements OnInit {
       if (this.objectTitles().value[this.len-1].titleTypeId && this.objectTitles().value[this.len-1].titleText) {
         this.objectTitles().push(this.newObjectTitle());
       } else {
-        this.toastr.info('Please provide the Title Type and Title text in the previously added Object Title');
+        if (this.objectTitles().value[this.len-1].alreadyExist) {
+          this.objectTitles().push(this.newObjectTitle());
+        } else {
+          this.toastr.info('Please provide the Title Type and Title text in the previously added Object Title');
+        }
       }
     } else {
       this.objectTitles().push(this.newObjectTitle());
@@ -151,6 +155,7 @@ export class ObjectTitleComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Object Title added successfully');
+        this.getObjectTitle();
       } else {
         this.toastr.error(res.messages[0]);
       }
@@ -166,6 +171,7 @@ export class ObjectTitleComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Object Title updated successfully');
+        this.getObjectTitle();
       } else {
         this.toastr.error(res.messages[0]);
       }

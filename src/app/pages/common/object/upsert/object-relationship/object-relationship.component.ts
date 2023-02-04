@@ -65,7 +65,11 @@ export class ObjectRelationshipComponent implements OnInit {
       if (this.objectRelationships().value[this.len-1].relationshipTypeId && this.objectRelationships().value[this.len-1].targetSdOid) {
         this.objectRelationships().push(this.newObjectRelation());
       } else {
-        this.toastr.info('Please provide the Relationship Type and Target Data Object in the previously added Object Relation');
+        if (this.objectRelationships().value[this.len-1].alreadyExist) {
+          this.objectRelationships().push(this.newObjectRelation());
+        } else {
+          this.toastr.info('Please provide the Relationship Type and Target Data Object in the previously added Object Relation');
+        }
       }
     } else {
       this.objectRelationships().push(this.newObjectRelation());

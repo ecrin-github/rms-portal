@@ -68,7 +68,11 @@ export class ObjectContributorComponent implements OnInit {
       if (this.objectContributors().value[this.len-1].contribTypeId) {
         this.objectContributors().push(this.newObjectContributor());
       } else {
-        this.toastr.info('Please provide the Contributor type in the previously added Object Contributor');
+        if (this.objectContributors().value[this.len-1].alreadyExist) {
+          this.objectContributors().push(this.newObjectContributor());
+        } else {
+          this.toastr.info('Please provide the Contributor type in the previously added Object Contributor');
+        }
       }
     } else {
       this.objectContributors().push(this.newObjectContributor());
@@ -145,6 +149,7 @@ export class ObjectContributorComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Object Contributor added successfully');
+        this.getObjectContributor();
       } else {
         this.toastr.error(res.messages[0]);
       }
@@ -161,6 +166,7 @@ export class ObjectContributorComponent implements OnInit {
       this.spinner.hide();
       if (res.statusCode === 200) {
         this.toastr.success('Object Contributor updated successfully');
+        this.getObjectContributor();
       } else {
         this.toastr.error(res.messages[0]);
       }
