@@ -8,6 +8,7 @@ import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 import { ConfirmationWindowComponent } from '../../confirmation-window/confirmation-window.component';
 import { DupListEntryInterface } from 'src/app/_rms/interfaces/dup/dup-listentry.interface';
 import { DupService } from 'src/app/_rms/services/entities/dup/dup.service';
+import { NgxPermissionsService } from 'ngx-permissions';
 
 @Component({
   selector: 'app-summary-dup',
@@ -22,6 +23,8 @@ export class SummaryDupComponent implements OnInit {
   searchText:string = '';
   dupLength: number = 0;
   warningModal: any;
+  orgId: any;
+  role: any;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild('deleteModal') deleteModal : TemplateRef<any>;
@@ -30,14 +33,22 @@ export class SummaryDupComponent implements OnInit {
                private spinner: NgxSpinnerService, 
                private toastr: ToastrService, 
                private modalService: NgbModal,
-               private dupService: DupService) {
+               private dupService: DupService,
+               private permissionService: NgxPermissionsService) {
   }
 
   ngOnInit() {
+    if (localStorage.getItem('role')) {
+      this.role = localStorage.getItem('role');
+      this.permissionService.loadPermissions([this.role]);
+    }
+    if (localStorage.getItem('organisationId')) {
+      this.orgId = localStorage.getItem('organisationId');
+    }
     this.getDupList();
   }
 
-  getDupList() {
+  getAllDupList() {
     this.spinner.show();
     this.listService.getDupList().subscribe((res: any) => {
       this.spinner.hide();
@@ -52,6 +63,29 @@ export class SummaryDupComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title);
     })
+  }
+  getDupListByOrg() {
+    this.spinner.show();
+    this.listService.getDupListByOrg(this.orgId).subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.dataSource = new MatTableDataSource<DupListEntryInterface>(res.data);
+      } else {
+        this.dataSource = new MatTableDataSource();
+      }
+      this.dataSource.paginator = this.paginator;
+      this.searchText = '';
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
+  getDupList() {
+    if (this.role === 'User') {
+      this.getDupListByOrg();
+    } else {
+      this.getAllDupList();
+    }
   }
   
   applyFilter(filterValue: string) {

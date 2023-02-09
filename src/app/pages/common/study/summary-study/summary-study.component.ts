@@ -9,6 +9,7 @@ import { StudyListEntryInterface } from 'src/app/_rms/interfaces/study/study-lis
 import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 import { combineLatest } from 'rxjs';
+import { NgxPermissionsService } from 'ngx-permissions';
 
 @Component({
   selector: 'app-summary-study',
@@ -25,6 +26,8 @@ export class SummaryStudyComponent implements OnInit {
   studyLength: number = 0;
   title: string = '';
   warningModal: any;
+  orgId: any;
+  role: any;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild('studyDeleteModal') studyDeleteModal : TemplateRef<any>;
@@ -33,14 +36,22 @@ export class SummaryStudyComponent implements OnInit {
                private spinner: NgxSpinnerService, 
                private toastr: ToastrService, 
                private modalService: NgbModal,
-               private studyService: StudyService) {
+               private studyService: StudyService,
+               private permissionService: NgxPermissionsService) {
   }
 
   ngOnInit(): void {
+    if (localStorage.getItem('role')) {
+      this.role = localStorage.getItem('role');
+      this.permissionService.loadPermissions([this.role]);
+    }
+    if(localStorage.getItem('organisationId')) {
+      this.orgId = localStorage.getItem('organisationId');
+    }
     this.getStudyList();
   }
 
-  getStudyList() {
+  getAllStudyList() {
     this.spinner.show();
     this.listService.getStudyList().subscribe((res: any) => {
       this.spinner.hide();
@@ -57,6 +68,31 @@ export class SummaryStudyComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title);
     })
+  }
+    getStudyListByOrg() {
+    this.spinner.show();
+    this.listService.getStudyListByOrg(this.orgId).subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.dataSource = new MatTableDataSource<StudyListEntryInterface>(res.data);
+        this.studyLength = res.total;
+      } else {
+        this.dataSource = new MatTableDataSource();
+        this.studyLength = res.total;
+      }
+      this.dataSource.paginator = this.paginator;
+      this.searchText = '';
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
+  getStudyList() {
+    if (this.role === 'User') {
+      this.getStudyListByOrg();
+    } else {
+      this.getAllStudyList();
+    }
   }
  
   applyFilter(filterValue: string) {

@@ -20,7 +20,7 @@ export class HeaderMobileComponent implements OnInit, AfterViewInit {
 
   constructor(private layout: LayoutService) {
     this.version = environment.appVersion;
-    this.status = `Beta version (${this.version})`;
+    this.status = `alpha version (${this.version}), in development`;
   }
 
   ngOnInit(): void {
@@ -45,14 +45,14 @@ export class HeaderMobileComponent implements OnInit, AfterViewInit {
   private getLogoUrl() {
     const headerSelfTheme = this.layout.getProp('header.self.theme') || '';
     const brandSelfTheme = this.layout.getProp('brand.self.theme') || '';
-    let result = 'ecrin-logo.png';
+    let result = 'crr-logo-blue.png';
     if (!this.asideSelfDisplay) {
       if (headerSelfTheme === 'light') {
-        result = 'ecrin-logo.png';
+        result = 'crr-logo-blue.png';
       }
     } else {
       if (brandSelfTheme === 'light') {
-        result = 'ecrin-logo.png';
+        result = 'crr-logo-blue.png';
       }
     }
     return `./assets/media/logos/${result}`;

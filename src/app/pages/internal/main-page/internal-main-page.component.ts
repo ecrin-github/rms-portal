@@ -29,6 +29,7 @@ export class InternalMainPageComponent implements OnInit {
   valuePer: any = {};
   valueNum: any = {};
   userData: any;
+  organisation: string = '';
   
   constructor( private layout: LayoutService, private dashboardService: DashboardService, private toastr: ToastrService, private permissionService: NgxPermissionsService, 
     private userService: UserService) { 
@@ -60,6 +61,9 @@ export class InternalMainPageComponent implements OnInit {
       this.userData = JSON.parse(localStorage.getItem('userData'));
       this.userService.getUserRoleInfo(this.userData).subscribe((res: any) => {
         this.permissionService.loadPermissions([res.role]);
+        this.organisation = res.organisation;
+        localStorage.setItem('role', res.role);
+        localStorage.setItem('organisationId', res.organisationId);
       }, error => {
         console.log(error);
       })
@@ -70,6 +74,9 @@ export class InternalMainPageComponent implements OnInit {
           this.userData = res;
           this.userService.getUserRoleInfo(this.userData).subscribe((res: any) => {
             this.permissionService.loadPermissions([res.role]);
+            this.organisation = res.organisation;
+            localStorage.setItem('role', res.role);
+            localStorage.setItem('organisationId', res.organisationId);
           }, error => {
             console.log(error);
           })

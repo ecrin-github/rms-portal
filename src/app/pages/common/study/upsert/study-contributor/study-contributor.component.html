@@ -60,14 +60,17 @@
                                     <option [value]=contributor.id *ngFor="let contributor of contributorType">
                                         {{contributor.name}}</option>
                                 </select>
-                                <!-- <h6 style="font-weight: 100;" *ngIf="isView">{{findContributorType(studyContributor.value.contribTypeId)}}</h6> -->
                             </div>
                             <div class="col-md-6">
                                 <label for="organisationName" class="font-style text-capitalize">Organisation</label>
-                                <input type="text" id="organisationName" class="form-control"
+                                <!-- <input type="text" id="organisationName" class="form-control"
                                     placeholder="Enter a parameter..." formControlName="organisationName"
-                                    *ngIf="!isView" />
-                                <!-- <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.organisationName}}</h6> -->
+                                    *ngIf="!isView" /> -->
+                                <ng-select [items]="organizationList" bindLabel="name" bindValue="orgId" formControlName="organisationId" [multiple]="false"
+                                    [virtualScroll]="true" class="custom" notFoundText="No members found" placeholder="Select Organisation"
+                                    *ngIf="!isView">
+                                </ng-select>
+
                             </div>
                         </div>
                         <div class="row form-group"
@@ -105,10 +108,13 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="organisationName" class="font-style text-capitalize">Organisation</label>
-                                <input type="text" id="organisationName" class="form-control"
+                                <!-- <input type="text" id="organisationName" class="form-control"
                                     placeholder="Enter a parameter..." formControlName="organisationName"
-                                    *ngIf="!isView" />
-                                <!-- <h6 style="font-weight: 100;" *ngIf="isView">{{studyContributor.value.organisationName}}</h6> -->
+                                    *ngIf="!isView" /> -->
+                                <ng-select [items]="organizationList" bindLabel="name" bindValue="orgId" formControlName="organisationId"
+                                    [multiple]="false" [virtualScroll]="true" class="custom" notFoundText="No members found"
+                                    placeholder="Select Organisation" *ngIf="!isView">
+                                </ng-select>
                             </div>
                         </div>
                         <mat-action-row *ngIf="!isView">

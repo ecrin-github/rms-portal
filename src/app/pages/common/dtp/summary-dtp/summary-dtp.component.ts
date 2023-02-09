@@ -8,6 +8,8 @@ import { ConfirmationWindowComponent } from '../../confirmation-window/confirmat
 import { DtpListEntryInterface } from 'src/app/_rms/interfaces/dtp/dtp-listentry.interface';
 import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
+import { NgxPermission } from 'ngx-permissions/lib/model/permission.model';
+import { NgxPermissionsService } from 'ngx-permissions';
 
 
 @Component({
@@ -23,6 +25,8 @@ export class SummaryDtpComponent implements OnInit {
   searchText:string = '';
   dtpLength: number = 0;
   warningModal: any;
+  orgId: any;
+  role: any;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild('exampleModal') exampleModal : TemplateRef<any>;
@@ -31,14 +35,38 @@ export class SummaryDtpComponent implements OnInit {
                private spinner: NgxSpinnerService, 
                private toastr: ToastrService, 
                private modalService: NgbModal,
-               private dtpService: DtpService) {
+               private dtpService: DtpService,
+               private permissionService: NgxPermissionsService) {
   }
 
   ngOnInit() {
+    if (localStorage.getItem('role')) {
+      this.role = localStorage.getItem('role');
+      this.permissionService.loadPermissions([this.role]);
+    }
+    if (localStorage.getItem('organisationId')) {
+      this.orgId = localStorage.getItem('organisationId');
+    }
     this.getDtpList();
   }
+  getDtplistByOrg() {
+    this.spinner.show();
+    this.listService.getDtpListByOrg(this.orgId).subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.dataSource = new MatTableDataSource<DtpListEntryInterface>(res.data);
+      } else {
+        this.dataSource = new MatTableDataSource();
+      }
+      this.dataSource.paginator = this.paginator;
+      this.searchText = '';
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title)
+    })
+  }
 
-  getDtpList() {
+  getAllDtpList() {
     this.spinner.show();
     this.listService.getDtpList().subscribe((res: any) => {
       this.spinner.hide();
@@ -53,6 +81,13 @@ export class SummaryDtpComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title)
     })
+  }
+  getDtpList() {
+    if (this.role === 'User') {
+      this.getDtplistByOrg();
+    } else {
+      this.getAllDtpList();
+    }
   }
   
   applyFilter(filterValue: string) {

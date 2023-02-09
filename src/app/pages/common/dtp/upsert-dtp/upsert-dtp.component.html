@@ -491,14 +491,14 @@
                                         <input class="form-check-input ml-4" type="checkbox" id="conformsToDefault"
                                             formControlName="conformsToDefaultChange" (change)="conformsToDefaultChange()" *ngIf="!isView">
                                         <h6 style="font-weight: 100;" *ngIf="isView">
-                                            {{dtpData?.dtas[0].conformsToDefault}}
+                                            {{dtpData?.dtas[0]?.conformsToDefault}}
                                         </h6>
                                     </div>
                                     <div class="col-md-6" *ngIf="!showVariations">
                                         <label for="variations" class="font-style text-capitalize">variations</label>
                                         <textarea cols="30" rows="3" class="form-control" id="variations" formControlName="variations"
                                             *ngIf="!isView"></textarea>
-                                        <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData?.dtas[0].variations}}
+                                        <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData?.dtas[0]?.variations}}
                                         </h6>
                                     </div>
                                 </div>
@@ -506,7 +506,7 @@
                                     <div class="col-md-6">
                                         <label for="filePath" class="font-style text-capitalize">DTA file path</label>
                                         <input type="text" class="form-control" id="filePath" formControlName="dtaFilePath" *ngIf="!isView">
-                                        <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData?.dtas[0].dtaFilePath}}
+                                        <h6 style="font-weight: 100;" *ngIf="isView">{{dtpData?.dtas[0]?.dtaFilePath}}
                                         </h6>
                                     </div>
                                 </div>
@@ -519,7 +519,7 @@
                                             <option [value]=user.personId *ngFor="let user of associatedUser">
                                                 {{user.personName}}</option>
                                         </select>
-                                        <h6 style="font-weight: 100;" *ngIf="isView">{{findPeopleById(dtpData?.dtas[0].repoSignatory1)}}
+                                        <h6 style="font-weight: 100;" *ngIf="isView">{{findPeopleById(dtpData?.dtas[0]?.repoSignatory1)}}
                                         </h6>
                                     </div>
                                     <div class="col-md-6">
@@ -530,7 +530,7 @@
                                             <option [value]="user.personId" *ngFor="let user of associatedUser">
                                                 {{user.personName}}</option>
                                         </select>
-                                        <h6 style="font-weight: 100;" *ngIf="isView">{{findPeopleById(dtpData?.dtas[0].repoSignatory2)}}
+                                        <h6 style="font-weight: 100;" *ngIf="isView">{{findPeopleById(dtpData?.dtas[0]?.repoSignatory2)}}
                                         </h6>
                                     </div>
                                 </div>
@@ -544,7 +544,7 @@
                                                 {{user.personName}}</option>
                                         </select>
                                         <h6 style="font-weight: 100;" *ngIf="isView">
-                                            {{findPeopleById(dtpData?.dtas[0].providerSignatory1)}}
+                                            {{findPeopleById(dtpData?.dtas[0]?.providerSignatory1)}}
                                         </h6>
                                     </div>
                                     <div class="col-md-6">
@@ -556,7 +556,7 @@
                                                 {{user.personName}}</option>
                                         </select>
                                         <h6 style="font-weight: 100;" *ngIf="isView">
-                                            {{findPeopleById(dtpData?.dtas[0].providerSignatory2)}}
+                                            {{findPeopleById(dtpData?.dtas[0]?.providerSignatory2)}}
                                         </h6>
                                     </div>
                                 </div>

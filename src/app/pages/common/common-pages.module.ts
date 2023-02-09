@@ -185,6 +185,6 @@ import { UsersComponent } from 'src/app/modules/user-management/users/users.comp
         NgxPermissionsModule.forChild()
     ],
     providers: [NgbActiveModal],
-    exports: [ SummaryDtpComponent, SummaryDupComponent, SummaryStudyComponent, SummaryObjectComponent]
+    exports: [ SummaryDtpComponent, SummaryDupComponent, SummaryStudyComponent, SummaryObjectComponent, SummaryUserComponent]
 })
 export class CommonPagesModule {}

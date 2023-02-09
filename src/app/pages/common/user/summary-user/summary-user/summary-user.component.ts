@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxPermissionsService } from 'ngx-permissions';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { ListService } from 'src/app/_rms/services/entities/list/list.service';
@@ -20,10 +21,14 @@ export class SummaryUserComponent implements OnInit {
   peopleLength: number = 0;
   searchText: string = '';
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  constructor( private listService: ListService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { }
+  constructor( private listService: ListService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private permissionService: NgxPermissionsService) { }
 
   ngOnInit(): void {
     this.getPeople();
+    if (localStorage.getItem('role')) {
+      const role = localStorage.getItem('role');
+      this.permissionService.loadPermissions([role]);
+    }
   }
   getPeople() {
     this.spinner.show();

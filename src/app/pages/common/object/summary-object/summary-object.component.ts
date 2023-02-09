@@ -2,6 +2,7 @@ import { Component, HostListener, Input, OnInit, TemplateRef, ViewChild } from '
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxPermissionsService } from 'ngx-permissions';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { ObjectListEntryInterface } from 'src/app/_rms/interfaces/data-object/data-object-listentry.interface';
@@ -23,6 +24,8 @@ export class SummaryObjectComponent implements OnInit {
   objectLength: number = 0;
   title: string = '';
   warningModal: any;
+  role: any;
+  orgId: any;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild('objectDeleteModal') objectDeleteModal : TemplateRef<any>;
@@ -31,14 +34,22 @@ export class SummaryObjectComponent implements OnInit {
                private spinner: NgxSpinnerService, 
                private toastr: ToastrService, 
                private modalService: NgbModal,
-               private dataObjectService: DataObjectService) {
+               private dataObjectService: DataObjectService,
+               private permissionService: NgxPermissionsService) {
   }
 
   ngOnInit(): void {
+    if (localStorage.getItem('role')) {
+      this.role = localStorage.getItem('role');
+      this.permissionService.loadPermissions([this.role]);
+    }
+    if (localStorage.getItem('organisationId')) {
+      this.orgId = localStorage.getItem('organisationId');
+    }
     this.getObjectList();
   }
   
-  getObjectList() {
+  getAllObjectList() {
     this.listService.getObjectList().subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
@@ -52,6 +63,28 @@ export class SummaryObjectComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title);
     })
+  }
+    getObjectListByOrg() {
+    this.listService.getObjectListByOrg(this.orgId).subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.dataSource = new MatTableDataSource<ObjectListEntryInterface>(res.data);
+      } else {
+        this.dataSource = new MatTableDataSource();
+      }
+      this.dataSource.paginator = this.paginator;
+      this.searchText = '';
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
+  getObjectList() {
+    if (this.role === 'User') {
+      this.getObjectListByOrg();
+    } else {
+      this.getAllObjectList();
+    }
   }
     
   applyFilter(filterValue: string) {

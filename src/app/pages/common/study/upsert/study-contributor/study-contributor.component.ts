@@ -18,6 +18,7 @@ import { ConfirmationWindowComponent } from '../../../confirmation-window/confir
 export class StudyContributorComponent implements OnInit {
   form: FormGroup;
   contributorType: [] = [];
+  organizationList: [] = [];
   subscription: Subscription = new Subscription();
   @Input() sdSid: string;
   @Input() isView: boolean;
@@ -37,7 +38,7 @@ export class StudyContributorComponent implements OnInit {
   arrLength = 0;
   len: any;
 
-  constructor( private fb: FormBuilder, private commonLookupService: CommonLookupService, private objectService: DataObjectService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
+  constructor( private fb: FormBuilder, private commonLookupService: CommonLookupService, private objectService: DataObjectService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private commonLookup: CommonLookupService) { 
     this.form = this.fb.group({
       studyContributors: this.fb.array([])
     });
@@ -45,6 +46,7 @@ export class StudyContributorComponent implements OnInit {
 
   ngOnInit(): void {
     this.getContributorType();
+    this.getOrganization();
     if (this.isEdit || this.isView) {
       this.getStudyContributor();
     }
@@ -60,6 +62,7 @@ export class StudyContributorComponent implements OnInit {
       contribTypeId: null,
       isIndividual: false,
       organisationName: '',
+      organisationId: null,
       personGivenName: '',
       personFamilyName: '',
       orcidId: null,
@@ -117,6 +120,18 @@ export class StudyContributorComponent implements OnInit {
     });
     this.subscription.add(getContributorType$);
   }
+  getOrganization() {
+    this.spinner.show();
+    this.commonLookup.getOrganizationList().subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.organizationList = res.data;
+      }
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
   getStudyContributor() {
     this.spinner.show();
     this.studyService.getStudyContributors(this.sdSid).subscribe((res: any) => {
@@ -142,6 +157,7 @@ export class StudyContributorComponent implements OnInit {
         contribTypeId: contributor.contribTypeId,
         isIndividual: contributor.isIndividual,
         organisationName: contributor.organisationName,
+        organisationId: contributor.organisationId,
         personGivenName: contributor.personGivenName,
         personFamilyName: contributor.personFamilyName,
         orcidId: contributor.orcidId,
@@ -160,6 +176,7 @@ export class StudyContributorComponent implements OnInit {
     const payload = this.form.value.studyContributors[index];
     payload.sdSid = this.sdSid;
     payload.isIndividual = payload.isIndividual === 'true' ? true : false;
+    payload.organisationName = this.findOrganization(payload.organisationId);
     delete payload.id;
 
     this.studyService.addStudyContributor(this.sdSid, payload).subscribe((res: any) => {
@@ -178,6 +195,7 @@ export class StudyContributorComponent implements OnInit {
   editContributor(contributorStudy) {
     const payload = contributorStudy.value;
     payload.isIndividual = payload.isIndividual === 'true' ? true : false;
+    payload.organisationName = this.findOrganization(payload.organisationId);
     this.spinner.show();
     this.studyService.editStudyContributor(payload.id, payload.sdSid, payload).subscribe((res: any) => {
       this.spinner.hide();
@@ -195,6 +213,10 @@ export class StudyContributorComponent implements OnInit {
   findContributorType(id) {
     const contributorArray: any = this.contributorType.filter((type: any) => type.id === id);
     return contributorArray && contributorArray.length ? contributorArray[0].name : '';
+  }
+  findOrganization(id) {
+    const organizationArray: any = this.organizationList.filter((type: any) => type.orgId === id);
+    return organizationArray && organizationArray.length ? organizationArray[0].name : '';
   }
   emitData() {
     const payload = this.form.value.studyContributors.map(item => {
@@ -214,6 +236,7 @@ export class StudyContributorComponent implements OnInit {
     this.studyContributors().at(index).patchValue({
       contribTypeId: '',
       organisationName: '',
+      organisationId: '',
       personGivenName: '',
       personFamilyName: '',
       orcidId: '',
@@ -226,6 +249,7 @@ export class StudyContributorComponent implements OnInit {
     this.studyContributors().at(this.arrLength).patchValue({
       isIndividual: preValue.isIndividual,
       organisationName: preValue.organisationName,
+      organisationId: preValue.organisationId,
       contribTypeId: preValue.contribTypeId,
       orcidId: preValue.orcidId,
       personAffiliation: preValue.personAffiliation,

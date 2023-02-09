@@ -326,27 +326,27 @@
                                             default</label>
                                         <input class="form-check-input ml-4" type="checkbox" id="conformsToDefault"
                                             formControlName="conformsToDefault" (change)="conformsToDefaultChange()" *ngIf="!isView">
-                                        <h6 style="font-weight: 100;" *ngIf="isView">{{dupData?.duas[0].conformsToDefault}}</h6>
+                                        <h6 style="font-weight: 100;" *ngIf="isView">{{dupData?.duas[0]?.conformsToDefault}}</h6>
                                     </div>
                                     <div class="col-md-4" *ngIf="!showVariations">
                                         <label for="variations" class="font-style text-capitalize">variations</label>
                                         <textarea cols="30" rows="3" class="form-control" id="variations" formControlName="variations"
                                             *ngIf="!isView"></textarea>
-                                        <h6 style="font-weight: 100;" *ngIf="isView">{{dupData?.duas[0].variations}}</h6>
+                                        <h6 style="font-weight: 100;" *ngIf="isView">{{dupData?.duas[0]?.variations}}</h6>
                                     </div>
                                     <div [ngClass]="{'col-md-4': !showVariations, 'col-md-6': showVariations}">
                                         <label class="form-check-label font-style text-capitalize" for="repolsProxyProvider">repo is proxy
                                             provider</label>
                                         <input class="form-check-input ml-4" type="checkbox" id="repolsProxyProvider"
                                             formControlName="repoIsProxyProvider" *ngIf="!isView">
-                                        <h6 style="font-weight: 100;" *ngIf="isView">{{dupData?.duas[0].repoIsProxyProvider}}</h6>
+                                        <h6 style="font-weight: 100;" *ngIf="isView">{{dupData?.duas[0]?.repoIsProxyProvider}}</h6>
                                     </div>
                                 </div>
                                 <div class="row form-group ">
                                     <div class="col-md-6">
                                         <label for="filePath" class="font-style text-capitalize">DTA file path</label>
                                         <input type="text" class="form-control" id="filePath" formControlName="duaFilePath" *ngIf="!isView">
-                                        <h6 style="font-weight: 100;" *ngIf="isView">{{dupData?.duas[0].duaFilePath}}</h6>
+                                        <h6 style="font-weight: 100;" *ngIf="isView">{{dupData?.duas[0]?.duaFilePath}}</h6>
                                     </div>
                                 </div>
                                 <div class="row form-group">
@@ -358,7 +358,7 @@
                                             <option [value]=user.personId *ngFor="let user of associatedUser">
                                                 {{user.personName}}</option>
                                         </select>
-                                        <h6 style="font-weight: 100;" *ngIf="isView">{{findPeopleById(dupData?.duas[0].repoSignatory1)}}</h6>
+                                        <h6 style="font-weight: 100;" *ngIf="isView">{{findPeopleById(dupData?.duas[0]?.repoSignatory1)}}</h6>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="rsignatory2" class="font-style text-capitalize">Repository Signatory
@@ -368,7 +368,7 @@
                                             <option [value]=user.personId *ngFor="let user of associatedUser">
                                                 {{user.personName}}</option>
                                         </select>
-                                        <h6 style="font-weight: 100;" *ngIf="isView">{{findPeopleById(dupData?.duas[0].repoSignatory2)}}</h6>
+                                        <h6 style="font-weight: 100;" *ngIf="isView">{{findPeopleById(dupData?.duas[0]?.repoSignatory2)}}</h6>
                                     </div>
                                 </div>
                                 <div class="row form-group">
@@ -380,7 +380,7 @@
                                             <option [value]=user.personId *ngFor="let user of associatedUser">
                                                 {{user.personName}}</option>
                                         </select>
-                                        <h6 style="font-weight: 100;" *ngIf="isView">{{findPeopleById(dupData?.duas[0].providerSignatory1)}}
+                                        <h6 style="font-weight: 100;" *ngIf="isView">{{findPeopleById(dupData?.duas[0]?.providerSignatory1)}}
                                         </h6>
                                     </div>
                                     <div class="col-md-6">
@@ -391,7 +391,7 @@
                                             <option [value]=user.personId *ngFor="let user of associatedUser">
                                                 {{user.personName}}</option>
                                         </select>
-                                        <h6 style="font-weight: 100;" *ngIf="isView">{{findPeopleById(dupData?.duas[0].providerSignatory2)}}
+                                        <h6 style="font-weight: 100;" *ngIf="isView">{{findPeopleById(dupData?.duas[0]?.providerSignatory2)}}
                                         </h6>
                                     </div>
                                 </div>
@@ -404,7 +404,7 @@
                                             <option [value]=user.personId *ngFor="let user of associatedUser">
                                                 {{user.personName}}</option>
                                         </select>
-                                        <h6 style="font-weight: 100;" *ngIf="isView">{{findPeopleById(dupData?.duas[0].requesterSignatory1)}}
+                                        <h6 style="font-weight: 100;" *ngIf="isView">{{findPeopleById(dupData?.duas[0]?.requesterSignatory1)}}
                                         </h6>
                                     </div>
                                     <div class="col-md-6">
@@ -415,7 +415,7 @@
                                             <option [value]=user.personId *ngFor="let user of associatedUser">
                                                 {{user.personName}}</option>
                                         </select>
-                                        <h6 style="font-weight: 100;" *ngIf="isView">{{findPeopleById(dupData?.duas[0].requesterSignatory2)}}
+                                        <h6 style="font-weight: 100;" *ngIf="isView">{{findPeopleById(dupData?.duas[0]?.requesterSignatory2)}}
                                         </h6>
                                     </div>
                                 </div>
