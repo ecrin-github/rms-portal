@@ -42,56 +42,18 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     public oidcSecurityService: OidcSecurityService
-  ) {
-    // this.isLoading$ = this.authService.isLoading$;
-    // redirect to home if already logged in
-    // if (this.statesService.currentUser) {
-    //   this.router.navigate(['/']);
-    // }
-  }
+  ) { }
 
-  ngOnInit(): void {
-    // get return url from route parameters or default to '/'
-    // this.returnUrl =
-    //     this.route.snapshot.queryParams['returnUrl'.toString()] || '/';
-    }
+  ngOnInit(): void { }
 
-  // convenience getter for easy access to form fields
   get f() {
     return this.loginForm.controls;
   }
-
-  // loginExternal() {
-  //   this.hasError = false;
-  //   const loginSubscr = this.authService
-  //     .login(this.externalAuth.email, this.externalAuth.password)
-  //     .pipe(first())
-  //     .subscribe((user: UserInterface) => {
-  //       if (user) {
-  //         this.router.navigate([this.returnUrl]);
-  //       } else {
-  //         this.hasError = true;
-  //       }
-  //     });
-  //   this.unsubscribe.push(loginSubscr);
-  // }
-
-  // loginInternal() {
-  //   this.hasError = false;
-  //   const loginSubscr = this.authService
-  //       .login(this.internalAuth.email, this.internalAuth.password)
-  //       .pipe(first())
-  //       .subscribe((user: UserInterface) => {
-  //         if (user) {
-  //           this.router.navigate([this.returnUrl]);
-  //         } else {
-  //           this.hasError = true;
-  //         }
-  //       });
-  //   this.unsubscribe.push(loginSubscr);
-
-  // }
   login() {
     this.oidcSecurityService.authorize();
   }
+  goToContact() {
+    this.router.navigate([])
+    .then(result => { window.open('/contactUs', '_blank'); });
+}
 }
