@@ -5,6 +5,12 @@ import {AuthGuard} from './_rms/guards/auth/auth.guard';
 
 export const routes: Routes = [
   {
+    path: 'browsing',
+    loadChildren: () =>
+    import('./pages/browsing/browsing/browsing.module').then((m) => m.BrowsingModule),
+
+  },
+  {
     path: '',
     canActivate: [AuthGuard], // enables permission in intenal main page, summary study/data object/dtp/dup
     loadChildren: () =>

@@ -54,6 +54,10 @@ export class LoginComponent implements OnInit {
   }
   goToContact() {
     this.router.navigate([])
-    .then(result => { window.open('/contactUs', '_blank'); });
-}
+      .then(result => { window.open('/contactUs', '_blank'); });
+  }
+  goToBrowse() {
+    this.router.navigate([])
+      .then(result => { window.open('/browsing', '_blank'); });
+  }
 }
