@@ -49,6 +49,8 @@ export class UpsertDupComponent implements OnInit {
   dupArr: any;
   studyList: [] = [];
   objectList: [] = [];
+  role: any;
+  showUploadButton: boolean = false;
 
   constructor(private router: Router, private fb: FormBuilder, private dupService: DupService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService, private pdfGeneratorService: PdfGeneratorService,
@@ -94,6 +96,9 @@ export class UpsertDupComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if(localStorage.getItem('role')) {
+      this.role = localStorage.getItem('role');
+    } 
     const todayDate = new Date();
     this.todayDate = {year: todayDate.getFullYear(), month: todayDate.getMonth()+1, day: todayDate.getDate()};
     this.getOrganization();
@@ -527,6 +532,10 @@ export class UpsertDupComponent implements OnInit {
       this.wizard.goTo(this.currentStatus);
     }
     this.showVariations = data.duas[0]?.conformsToDefault ? true : false;
+    if (this.form.value.initialContactDate !== null && this.form.value.initialContactDate !== '' && this.form.value.setUpCompleted !== null && this.form.value.setUpCompleted !== '' && this.form.value.prereqsMet !== null && this.form.value.prereqsMet !== '' &&
+    this.form.value.duaAgreedDate !== null && this.form.value.duaAgreedDate !== '' && this.form.value.availabilityRequested !== null && this.form.value.availabilityRequested !== '' && this.form.value.availabilityConfirmed !== null && this.form.value.availabilityConfirmed !== '') {
+      this.showUploadButton = this.role === 'User' ? true : false;
+    }
   }
   findOrganization(id) {
     const organizationArray: any = this.organizationList.filter((type: any) => type.orgId === id);

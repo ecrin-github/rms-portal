@@ -20,17 +20,23 @@ export class SummaryUserComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   peopleLength: number = 0;
   searchText: string = '';
+  orgId: any;
+  role: any;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   constructor( private listService: ListService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private permissionService: NgxPermissionsService) { }
 
   ngOnInit(): void {
-    this.getPeople();
     if (localStorage.getItem('role')) {
-      const role = localStorage.getItem('role');
-      this.permissionService.loadPermissions([role]);
+      this.role = localStorage.getItem('role');
+      this.permissionService.loadPermissions([this.role]);
     }
+    if (localStorage.getItem('organisationId')) {
+      this.orgId = localStorage.getItem('organisationId');
+    }
+    this.getPeople();
+
   }
-  getPeople() {
+  getAllPeople() {
     this.spinner.show();
     this.listService.getPeopleList().subscribe((res: any) => {
       this.spinner.hide();
@@ -45,6 +51,29 @@ export class SummaryUserComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title);
     })
+  }
+  getPeopleByOrg() {
+    this.spinner.show();
+    this.listService.getPeopleListByOrg(this.orgId).subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.dataSource = new MatTableDataSource<any>(res.data);
+      } else {
+        this.dataSource = new MatTableDataSource();
+      }
+      this.dataSource.paginator = this.paginator;
+      this.searchText = '';
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
+  getPeople() {
+    if (this.role === 'User') {
+      this.getPeopleByOrg();
+    } else {
+      this.getAllPeople();
+    }
   }
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace

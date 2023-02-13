@@ -56,6 +56,8 @@ export class UpsertDtpComponent implements OnInit {
   dtpArr: any;
   studyList: [] = [];
   objectList: [] = [];
+  role: any;
+  showUploadButton: boolean = false;
 
   constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService,
@@ -105,6 +107,9 @@ export class UpsertDtpComponent implements OnInit {
     }
   }
   ngOnInit(): void {
+    if(localStorage.getItem('role')) {
+      this.role = localStorage.getItem('role');
+    } 
     const todayDate = new Date();
     this.todayDate = {year: todayDate.getFullYear(), month: todayDate.getMonth()+1, day: todayDate.getDate()};
     this.getOrganization();
@@ -694,6 +699,11 @@ export class UpsertDtpComponent implements OnInit {
       this.wizard.goTo(this.currentStatus);
     }
     this.showVariations = data.dtas[0]?.conformsToDefault ? true : false;
+    if (this.form.value.initialContactDate !== null && this.form.value.initialContactDate !== '' && this.form.value.setUpCompleted !== null && this.form.value.setUpCompleted !== '' && this.form.value.mdAccessGranted !== null && this.form.value.mdAccessGranted !== '' && this.form.value.mdCompleteDate !== null && this.form.value.mdCompleteDate !== '' && this.form.value.dtaAgreedDate !== null && this.form.value.dtaAgreedDate !== '' && this.form.value.uploadAccessRequested !== null && this.form.value.uploadAccessRequested !== '' &&
+      this.form.value.uploadAccessConfirmed !== null && this.form.value.uploadAccessConfirmed !== '' && this.form.value.uploadsComplete !== null && this.form.value.uploadsComplete !== '' && this.form.value.qcChecksCompleted !== null && this.form.value.qcChecksCompleted !== '' && this.form.value.mdIntegratedWithMdr !== null && this.form.value.mdIntegratedWithMdr !== '' && this.form.value.availabilityRequested !== '' && this.form.value.availabilityRequested !== null && this.form.value.availabilityConfirmed !== '' && this.form.value.availabilityRequested !== null) {
+        this.showUploadButton = this.role === 'User' ? true : false;
+    }
+
   }
   findOrganization(id) {
     const organizationArray: any = this.organizationList.filter((type: any) => type.orgId === id);

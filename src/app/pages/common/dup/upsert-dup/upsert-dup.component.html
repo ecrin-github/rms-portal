@@ -6,6 +6,7 @@
                     dupData?.coreDup.displayName + ' data use process' : 'Adding new data use process'}}</h2>
             </div>
             <div class="col-md-5 text-right" *ngIf="isView">
+                <button class="btn btn-success mr-5" *ngIf="showUploadButton">Access Data</button>
                 <a [routerLink]="['/data-use', id, 'edit']" class="btn btn-primary mr-1" target="_blank">
                     <i class="fa fa-edit"></i> Edit
                 </a>

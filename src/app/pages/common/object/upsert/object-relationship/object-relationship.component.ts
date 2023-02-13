@@ -145,37 +145,45 @@ export class ObjectRelationshipComponent implements OnInit {
     return formArray;
   }
   addRelation(index) {
-    this.spinner.show();
-    const payload = this.form.value.objectRelationships[index];
-    payload.sdOid = this.sdOid;
-    delete payload.id;
+    if (this.form.value.objectRelationships[index].targetSdOid === this.sdOid) {
+      this.toastr.error('Data Object can not be put in relationship to itself');
+    } else {
+      this.spinner.show();
+      const payload = this.form.value.objectRelationships[index];
+      payload.sdOid = this.sdOid;
+      delete payload.id;
 
-    this.objectService.addObjectDescription(this.sdOid, payload).subscribe((res: any) => {
-      this.spinner.hide();
-      if (res.statusCode === 200) {
-        this.toastr.success('Object Relationship is added successfully');
-      } else {
-        this.toastr.error(res.messages[0]);
-      }
-    }, error => {
-      this.spinner.hide();
-      this.toastr.error(error.error.title);
-    })
+      this.objectService.addObjectDescription(this.sdOid, payload).subscribe((res: any) => {
+        this.spinner.hide();
+        if (res.statusCode === 200) {
+          this.toastr.success('Object Relationship is added successfully');
+        } else {
+          this.toastr.error(res.messages[0]);
+        }
+      }, error => {
+        this.spinner.hide();
+        this.toastr.error(error.error.title);
+      })
+    }
   }
   editRelation(relationObject) {
-    const payload = relationObject.value;
-    this.spinner.show();
-    this.objectService.editObjectRelationship(payload.id, payload.sdOid, payload).subscribe((res: any) => {
-      this.spinner.hide();
-      if (res.statusCode === 200) {
-        this.toastr.success('Object Relationship updated successfully');
-      } else {
-        this.toastr.error(res.messages[0]);
-      }
-    }, error => {
-      this.spinner.hide();
-      this.toastr.error(error.error.title);
-    })
+    if (relationObject.value.targetSdOid === this.sdOid) {
+      this.toastr.error('Data Object can not be put in relationship to itself');
+    } else {
+      const payload = relationObject.value;
+      this.spinner.show();
+      this.objectService.editObjectRelationship(payload.id, payload.sdOid, payload).subscribe((res: any) => {
+        this.spinner.hide();
+        if (res.statusCode === 200) {
+          this.toastr.success('Object Relationship updated successfully');
+        } else {
+          this.toastr.error(res.messages[0]);
+        }
+      }, error => {
+        this.spinner.hide();
+        this.toastr.error(error.error.title);
+      })
+    }
   }
   findRelationType(id) {
     const relationArray: any = this.relationshipType.filter((type: any) => type.id === id);

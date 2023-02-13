@@ -145,39 +145,47 @@ export class StudyRelationshipComponent implements OnInit {
     return formArray;
   }
   addRelationship(index) {
-    this.spinner.show();
-    const payload = this.form.value.studyRelationships[index];
-    payload.sdSid = this.sdSid;
-    delete payload.id;
+    if (this.form.value.studyRelationships[index].targetSdSid === this.sdSid) {
+      this.toastr.error('Study can not be put in relationship to itself');
+    } else {
+      this.spinner.show();
+      const payload = this.form.value.studyRelationships[index];
+      payload.sdSid = this.sdSid;
+      delete payload.id;
 
-    this.studyService.addStudyRelationship(this.sdSid, payload).subscribe((res: any) => {
-      this.spinner.hide();
-      if (res.statusCode === 200) {
-        this.toastr.success('Study Relationship added successfully');
-        this.getStudyRelationship();
-      } else {
-        this.toastr.error(res.messages[0]);
-      }
-    }, error => {
-      this.spinner.hide();
-      this.toastr.error(error.error.title);
-    })
+      this.studyService.addStudyRelationship(this.sdSid, payload).subscribe((res: any) => {
+        this.spinner.hide();
+        if (res.statusCode === 200) {
+          this.toastr.success('Study Relationship added successfully');
+          this.getStudyRelationship();
+        } else {
+          this.toastr.error(res.messages[0]);
+        }
+      }, error => {
+        this.spinner.hide();
+        this.toastr.error(error.error.title);
+      })
+    }
   }
   editRelationship(relationObject) {
-    const payload = relationObject.value;
-    this.spinner.show();
-    this.studyService.editStudyRelationship(payload.id, payload.sdSid, payload).subscribe((res: any) => {
-      this.spinner.hide();
-      if (res.statusCode === 200) {
-        this.toastr.success('Study Relationship updated successfully');
-        this.getStudyRelationship();
-      } else {
-        this.toastr.error(res.messages[0]);
-      }
-    }, error => {
-      this.spinner.hide();
-      this.toastr.error(error.error.title);
-    })
+    if (relationObject.value.targetSdSid === this.sdSid) {
+      this.toastr.error('Study can not be put in relationship to itself');
+    } else {
+      const payload = relationObject.value;
+      this.spinner.show();  
+      this.studyService.editStudyRelationship(payload.id, payload.sdSid, payload).subscribe((res: any) => {
+        this.spinner.hide();
+        if (res.statusCode === 200) {
+          this.toastr.success('Study Relationship updated successfully');
+          this.getStudyRelationship();
+        } else {
+          this.toastr.error(res.messages[0]);
+        }
+      }, error => {
+        this.spinner.hide();
+        this.toastr.error(error.error.title);
+      })
+    }
   }
   findRelationshipType(id) {
     const relationArray: any = this.relationshipType.filter((type: any) => type.id === id);
