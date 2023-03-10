@@ -49,6 +49,8 @@ export class UpsertObjectComponent implements OnInit {
   identifierType: [] = [];
   descriptionType: [] = [];
   showAccessDetails: boolean = true;
+  role: any;
+  orgId: any;
 
   constructor(private fb: FormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService,
     private toastr: ToastrService, private activatedRoute: ActivatedRoute, private listService: ListService, private pdfGenerator: PdfGeneratorService, private jsonGenerator: JsonGeneratorService) {
@@ -112,6 +114,12 @@ export class UpsertObjectComponent implements OnInit {
   ngOnInit(): void {
     this.isEdit = this.router.url.includes('edit') ? true : false;
     this.isView = this.router.url.includes('view') ? true : false;
+    if (localStorage.getItem('role')) {
+      this.role = localStorage.getItem('role');
+    }
+    if (localStorage.getItem('organisationId')) {
+      this.orgId = localStorage.getItem('organisationId');
+    }
     this.getStudyList();
     this.getObjectClass();
     this.getObjectType();
@@ -134,15 +142,27 @@ export class UpsertObjectComponent implements OnInit {
   }
   getStudyList() {
     this.spinner.show();
-    this.listService.getStudyList().subscribe((res: any) => {
-      this.spinner.hide();
-      if (res && res.data) {
-        this.studyList = res.data;
-      }
-    }, error => {
-      this.toastr.error(error.error.title);
-      this.spinner.hide();
-    })
+    if (this.role === 'User') {
+      this.listService.getStudyListByOrg(this.orgId).subscribe((res: any) => {
+        this.spinner.hide();
+        if (res && res.data) {
+          this.studyList = res.data;
+        }
+      }, error => {
+        this.toastr.error(error.error.title);
+        this.spinner.hide();
+      })
+    } else {
+      this.listService.getStudyList().subscribe((res: any) => {
+        this.spinner.hide();
+        if (res && res.data) {
+          this.studyList = res.data;
+        }
+      }, error => {
+        this.toastr.error(error.error.title);
+        this.spinner.hide();
+      })
+    }
   }
   customSearchFn(term: string, item) {
     term = term.toLocaleLowerCase();
