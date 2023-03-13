@@ -130,8 +130,8 @@
                                                 <i class="wizard-icon flaticon2-open-text-book"></i>
                                                 <h3 class="wizard-title">Access confirmed</h3>
                                                 <i class="fa fa-check-circle" style="color: green;"
-                                                    *ngIf="!(isEdit || isView) ? 5 < currentStatus : 5 < currentStatus"></i>
-                                                <i class="fa fa-exclamation-circle" style="color: orange;" *ngIf="5 === currentStatus"></i>
+                                                *ngIf="5 === currentStatus" ></i>
+                                                <i class="fa fa-exclamation-circle" style="color: orange;" *ngIf="!(isEdit || isView) ? 5 < currentStatus : 5 < currentStatus"></i>
                                             </div>
                                         </a>
                                     </div>

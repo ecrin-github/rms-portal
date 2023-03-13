@@ -21,7 +21,7 @@ export class SummaryStudyComponent implements OnInit {
 
   displayedColumns = ['id', 'title', 'type', 'status', 'actions'];
   dataSource: MatTableDataSource<StudyListEntryInterface>;
-  filterOption: string = '';
+  filterOption: string = 'title';
   searchText:string = '';
   studyLength: number = 0;
   title: string = '';

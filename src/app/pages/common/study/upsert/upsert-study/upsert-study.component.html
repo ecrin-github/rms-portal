@@ -43,7 +43,7 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-md-12">
-                        <label for="displayTitle" class="font-style text-capitalize">Public title</label>
+                        <label for="displayTitle" class="font-style text-capitalize">Title</label>
                         <textarea cols="30" rows="3" class="form-control" placeholder="Enter study display title..."
                             formControlName="displayTitle" *ngIf="!isView" id="displayTitle" (change)="onChange()" [ngClass]="{ 'is-invalid': isSubmitted && g.displayTitle.errors }"></textarea>
                             <div class="col-md-12 invalid-feedback" *ngIf="isSubmitted && g.displayTitle.errors">

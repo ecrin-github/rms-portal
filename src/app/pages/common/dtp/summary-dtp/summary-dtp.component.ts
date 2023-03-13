@@ -21,7 +21,7 @@ import { NgxPermissionsService } from 'ngx-permissions';
 export class SummaryDtpComponent implements OnInit {
   displayedColumns = ['id', 'organisation', 'title', 'status', 'actions'];
   dataSource: MatTableDataSource<DtpListEntryInterface>;
-  filterOption: string = '';
+  filterOption: string = 'title';
   searchText:string = '';
   dtpLength: number = 0;
   warningModal: any;
