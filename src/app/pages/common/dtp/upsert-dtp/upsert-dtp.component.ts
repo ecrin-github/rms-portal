@@ -1019,4 +1019,9 @@ export class UpsertDtpComponent implements OnInit {
     const arr: any = this.objectList.filter((item: any) => item.sdOid === sdOid);
     return arr && arr.length ? arr[0].displayTitle : 'None';
   }
+  goToTsd() {
+      this.router.navigate([])
+      .then(result => { window.open('https://covid-19-repo.usit.uio.no/', '_blank'); });
+  }
+
 }

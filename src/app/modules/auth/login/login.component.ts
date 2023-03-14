@@ -56,6 +56,10 @@ export class LoginComponent implements OnInit {
     this.router.navigate([])
       .then(result => { window.open('/contactUs', '_blank'); });
   }
+  goToAbout() {
+    this.router.navigate([])
+    .then(result => { window.open('https://crr.gitbook.io/crr/', '_blank'); });
+}
   goToBrowse() {
     // this.router.navigate([])
     //   .then(result => { window.open('/browsing', '_blank'); });
