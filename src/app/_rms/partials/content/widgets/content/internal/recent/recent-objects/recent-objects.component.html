@@ -34,7 +34,7 @@
 
       <ng-container matColumnDef="title">
           <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.displayTitle}} </mat-cell>
+          <mat-cell *matCellDef="let row"><a [routerLink]="['/data-objects', row.sdOid, 'view']" target="_blank">{{row.studyName}}</a></mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="type">
@@ -45,10 +45,7 @@
       <ng-container matColumnDef="linkedStudy">
           <mat-header-cell *matHeaderCellDef> Linked to studies </mat-header-cell>
           <mat-cell *matCellDef="let row">
-              {{row.studyName}}
-              <!-- <a [routerLink]="['/studies', row.linkedStudyId.toString(), 'view']" target="_blank">
-                  Study {{row.linkedStudyId.toString()}}
-              </a> -->
+               {{row.studyName}}
           </mat-cell>
       </ng-container>
 

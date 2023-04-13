@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { LayoutComponent } from './pages/_layout/layout.component';
 import {AuthGuard} from './_rms/guards/auth/auth.guard';
 
 
 export const routes: Routes = [
   {
     path: 'browsing',
+    component: LayoutComponent,
     loadChildren: () =>
     import('./pages/browsing/browsing/browsing.module').then((m) => m.BrowsingModule),
 

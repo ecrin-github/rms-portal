@@ -52,6 +52,7 @@ export class UpsertObjectComponent implements OnInit {
   role: any;
   orgId: any;
   isSubmitted: boolean = false;
+  isBrowsing: boolean = false;
 
   constructor(private fb: FormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService,
     private toastr: ToastrService, private activatedRoute: ActivatedRoute, private listService: ListService, private pdfGenerator: PdfGeneratorService, private jsonGenerator: JsonGeneratorService) {
@@ -115,6 +116,7 @@ export class UpsertObjectComponent implements OnInit {
   ngOnInit(): void {
     this.isEdit = this.router.url.includes('edit') ? true : false;
     this.isView = this.router.url.includes('view') ? true : false;
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     if (localStorage.getItem('role')) {
       this.role = localStorage.getItem('role');
     }

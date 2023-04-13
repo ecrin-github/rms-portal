@@ -41,7 +41,7 @@ import { NgxPermissionsModule } from 'ngx-permissions';
         component: SummaryStudyComponent
       },
       {
-        path: 'studies/view',
+        path: 'browsing/studies/:id/view',
         pathMatch: 'full',
         component: UpsertStudyComponent
       },
@@ -51,7 +51,7 @@ import { NgxPermissionsModule } from 'ngx-permissions';
         component: SummaryObjectComponent
       },
       {
-        path: 'data-objects/view',
+        path: 'browsing/data-objects/:id/view',
         pathMatch: 'full',
         component: UpsertObjectComponent
       }

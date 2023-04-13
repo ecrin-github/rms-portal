@@ -10,6 +10,8 @@ import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
 import { NgxPermission } from 'ngx-permissions/lib/model/permission.model';
 import { NgxPermissionsService } from 'ngx-permissions';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 
 @Component({
@@ -27,6 +29,8 @@ export class SummaryDtpComponent implements OnInit {
   warningModal: any;
   orgId: any;
   role: any;
+  deBouncedInputValue = this.searchText;
+  searchDebounec: Subject<string> = new Subject();
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild('exampleModal') exampleModal : TemplateRef<any>;
@@ -48,6 +52,7 @@ export class SummaryDtpComponent implements OnInit {
       this.orgId = localStorage.getItem('organisationId');
     }
     this.getDtpList();
+    this.setupSearchDeBouncer();
   }
   getDtplistByOrg() {
     this.spinner.show();
@@ -115,6 +120,9 @@ export class SummaryDtpComponent implements OnInit {
         this.toastr.error(error.error.title);
       })
     }
+    if (this.searchText === '') {
+      this.getDtpList();
+    }
   }
 
   @HostListener('window:storage', ['$event'])
@@ -145,5 +153,20 @@ export class SummaryDtpComponent implements OnInit {
   }
   closeModal() {
     this.warningModal.close();
+  }
+  onInputChange(e) {
+    const searchText = e.target.value;
+    if (!!searchText) {
+      this.searchDebounec.next(searchText);
+    }
+  }
+  setupSearchDeBouncer() {
+    const search$ = this.searchDebounec.pipe(
+      debounceTime(350),
+      distinctUntilChanged()
+    ).subscribe((term: string) => {
+      this.deBouncedInputValue = term;
+      this.filterSearch();
+    });
   }
 }

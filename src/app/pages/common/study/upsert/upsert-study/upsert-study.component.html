@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <h2 class="text-uppercase">{{ isView ? 'View study details' : isEdit ? 'Edit study details' : 'Add a new study'}}</h2>
+        <h2 class="text-uppercase">{{ isView ? 'Study Details' : isEdit ? 'Edit Study Details' : 'Add a new study'}}</h2>
         <div style="float: right; margin-top: -40px;" *ngIf="isView">
             <a [routerLink]="['/studies', id, 'edit']"
                class="btn btn-primary mr-1" target="_blank">
@@ -36,14 +36,17 @@
             <ng-container *ngIf="!(addType==='usingTrialId')">
                 <div class="row form-group" *ngIf="!(isView || isEdit)">
                     <div class="col-md-6">
-                        <label for="studyId" class="font-style text-capitalize">study id</label>
-                        <input type="text" class="form-control" id="studyId" formControlName="sdSid">
+                        <label for="studyId" class="font-style text-capitalize">study id <sup>*</sup> </label>
+                        <input type="text" class="form-control" id="studyId" formControlName="sdSid" [ngClass]="{ 'is-invalid': isSubmitted && g.sdSid.errors }">
                         <small>Kindly prefix the ID with 'RMS-'</small>
+                        <div *ngIf="isSubmitted && g.sdSid.errors" class="invalid-feedback">
+                            <p *ngIf="g.sdSid.errors.pattern">Please enter the ID in the correct pattern</p>
+                        </div>
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-md-12">
-                        <label for="displayTitle" class="font-style text-capitalize">Title</label>
+                        <label for="displayTitle" class="font-style text-capitalize">Title <sup>*</sup> </label>
                         <textarea cols="30" rows="3" class="form-control" placeholder="Enter study display title..."
                             formControlName="displayTitle" *ngIf="!isView" id="displayTitle" (change)="onChange()" [ngClass]="{ 'is-invalid': isSubmitted && g.displayTitle.errors }"></textarea>
                             <div class="col-md-12 invalid-feedback" *ngIf="isSubmitted && g.displayTitle.errors">

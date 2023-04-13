@@ -1,6 +1,7 @@
 import { Component, HostListener, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -26,6 +27,7 @@ export class SummaryObjectComponent implements OnInit {
   warningModal: any;
   role: any;
   orgId: any;
+  isBrowsing: boolean = false;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild('objectDeleteModal') objectDeleteModal : TemplateRef<any>;
@@ -35,7 +37,8 @@ export class SummaryObjectComponent implements OnInit {
                private toastr: ToastrService, 
                private modalService: NgbModal,
                private dataObjectService: DataObjectService,
-               private permissionService: NgxPermissionsService) {
+               private permissionService: NgxPermissionsService,
+               private router: Router) {
   }
 
   ngOnInit(): void {
@@ -46,6 +49,7 @@ export class SummaryObjectComponent implements OnInit {
     if (localStorage.getItem('organisationId')) {
       this.orgId = localStorage.getItem('organisationId');
     }
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     this.getObjectList();
   }
   
@@ -64,8 +68,23 @@ export class SummaryObjectComponent implements OnInit {
       this.toastr.error(error.error.title);
     })
   }
-    getObjectListByOrg() {
+  getObjectListByOrg() {
     this.listService.getObjectListByOrg(this.orgId).subscribe((res: any) => {
+      this.spinner.hide();
+      if (res && res.data) {
+        this.dataSource = new MatTableDataSource<ObjectListEntryInterface>(res.data);
+      } else {
+        this.dataSource = new MatTableDataSource();
+      }
+      this.dataSource.paginator = this.paginator;
+      this.searchText = '';
+    }, error => {
+      this.spinner.hide();
+      this.toastr.error(error.error.title);
+    })
+  }
+  getBrowsingObject() {
+    this.listService.getBrowsingObjectList().subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.dataSource = new MatTableDataSource<ObjectListEntryInterface>(res.data);
@@ -83,7 +102,11 @@ export class SummaryObjectComponent implements OnInit {
     if (this.role === 'User') {
       this.getObjectListByOrg();
     } else {
-      this.getAllObjectList();
+      if (this.isBrowsing) {
+        this.getBrowsingObject();
+      } else {
+        this.getAllObjectList();
+      }
     }
   }
     

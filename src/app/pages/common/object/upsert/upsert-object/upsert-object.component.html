@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <h2>{{ isView ? 'View data object' : isEdit ? 'Edit data object details' : 'Add new data object'}}</h2>
+        <h2>{{ isView ? 'Data Object Details' : isEdit ? 'Edit Data Object Details' : 'Add new data object'}}</h2>
         <div style="float: right; margin-top: -40px;" *ngIf="isView">
             <a [routerLink]="['/data-objects', id, 'edit']" class="btn btn-primary mr-1" target="_blank">
                 <i class="fa fa-edit"></i> Edit

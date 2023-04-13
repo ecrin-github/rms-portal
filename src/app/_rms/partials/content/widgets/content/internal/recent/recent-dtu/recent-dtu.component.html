@@ -39,10 +39,7 @@
           <ng-container matColumnDef="title">
             <mat-header-cell *matHeaderCellDef> Title</mat-header-cell>
             <mat-cell *matCellDef="let row">
-              {{row.displayName}}
-              <!-- <a [routerLink]="['/data-objects', row.id, 'view' ]" target="_blank">
-                            <strong>{{row.displayName}}</strong>
-                        </a> -->
+              <a [routerLink]="['/data-transfers', row.id, 'view']" target="_blank">{{row.displayName}}</a>
             </mat-cell>
           </ng-container>
       

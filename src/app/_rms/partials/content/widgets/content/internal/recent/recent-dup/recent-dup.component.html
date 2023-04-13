@@ -1,6 +1,4 @@
-<!--begin::Advance Table Widget 9-->
 <div class="card" [ngClass]="cssClass">
-  <!--begin::Header-->
   <div class="card-header border-0 py-5">
     <div class="row">
       <div class="col-7 col-sm-6 col-md-7">
@@ -15,28 +13,8 @@
         <a [routerLink]="['/data-use']" class="btn btn-info font-weight-bolder font-size-sm" target="_blank">See All</a>
       </div>
     </div>
-    <!-- <h3 class="card-title align-items-start flex-column">
-      <span class="card-label font-weight-bolder text-dark">Recent Data Use processes</span>
-      <span class="text-muted mt-3 font-weight-bold font-size-sm"
-        >5 recently added Data Use processes</span
-      >
-    </h3>
-    <div class="card-toolbar">
-      <a [routerLink]="['/data-use', 'add']"
-         class="btn btn-success font-weight-bolder font-size-sm mr-3"
-         target="_blank"
-      >Add</a
-      >
-      <a [routerLink]="['/data-use']"
-         class="btn btn-info font-weight-bolder font-size-sm"
-         target="_blank"
-        >See more</a
-      >
-    </div> -->
   </div>
-  <!--end::Header-->
 
-  <!--begin::Body-->
   <div class="card-body pt-0 pb-3" style="height: 500px; overflow: auto;">
     <div class="row">
       <div class="col-md-12 pr-0">
@@ -57,10 +35,7 @@
           <ng-container matColumnDef="title">
               <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
               <mat-cell *matCellDef="let row">
-                  {{row.displayName}}
-                  <!-- <a [routerLink]="['/data-objects', row.id, 'view' ]" target="_blank">
-                      <strong>{{row.dataObject}}</strong>
-                  </a> -->
+                  <a [routerLink]="['/data-use', row.id, 'view']" target="_blank">{{row.displayName}}</a>
               </mat-cell>
           </ng-container>
 
@@ -87,6 +62,4 @@
     </div>
     </div>
   </div>
-  <!--end::Body-->
 </div>
-<!--end::Advance Table Widget 9-->

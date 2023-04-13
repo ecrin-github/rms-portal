@@ -25,18 +25,13 @@
 
             <ng-container matColumnDef="name">
                 <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+                <mat-cell *matCellDef="let row"> <a [routerLink]="['/people', row.id, 'view']" target="_blank">{{row.name}}</a></mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="roleName">
                 <mat-header-cell *matHeaderCellDef> Role </mat-header-cell>
                 <mat-cell *matCellDef="let row"> {{row.roleName}} </mat-cell>
             </ng-container>
-
-            <!-- <ng-container matColumnDef="email">
-                <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.email}} </mat-cell>
-            </ng-container> -->
 
             <ng-container matColumnDef="orgName">
                 <mat-header-cell *matHeaderCellDef> Organization </mat-header-cell>
