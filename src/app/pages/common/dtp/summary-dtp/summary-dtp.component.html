@@ -2,7 +2,7 @@
     <div class="card-header">
         <h2>Data Transfers</h2>
         <div style="float: right; margin-top: -40px;" *ngxPermissionsOnly="['Admin', 'Manager']">
-            <a [routerLink]="['/data-transfers', 'add']" class="btn btn-success" target="_blank">
+            <a [routerLink]="['/data-transfers', 'add']" class="btn btn-success" target="tempTab">
                 <i class="fa fa-plus"></i> New data transfer
             </a>
         </div>
@@ -46,7 +46,7 @@
                 <mat-header-cell *matHeaderCellDef> Title</mat-header-cell>
                 <mat-cell *matCellDef="let row">
                     {{row.displayName}}
-                    <!-- <a [routerLink]="['/data-objects', row.id, 'view' ]" target="_blank">
+                    <!-- <a [routerLink]="['/data-objects', row.id, 'view' ]" target="tempTab">
                         <strong>{{row.displayName}}</strong>
                     </a> -->
                 </mat-cell>
@@ -60,10 +60,10 @@
             <ng-container matColumnDef="actions">
                 <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                 <mat-cell *matCellDef="let row">
-                    <a [routerLink]="['/data-transfers', row.id, 'view']" target="_blank">
+                    <a [routerLink]="['/data-transfers', row.id, 'view']" target="tempTab">
                         <i class="fa fa-eye mr-5" style="color:#0688fa;"></i>
                     </a>
-                    <a [routerLink]="['/data-transfers', row.id, 'edit']" target="_blank" *ngxPermissionsOnly="['Admin', 'Manager']">
+                    <a [routerLink]="['/data-transfers', row.id, 'edit']" target="tempTab" *ngxPermissionsOnly="['Admin', 'Manager']">
                         <i class="fa fa-edit mr-5" style="color:#0688fa;"></i>
                     </a>
                     <i class="fa fa-trash mr-5" style="color:#f24437; cursor: pointer;" (click)="deleteRecord(row.id)" *ngxPermissionsOnly="['Admin', 'Manager']">

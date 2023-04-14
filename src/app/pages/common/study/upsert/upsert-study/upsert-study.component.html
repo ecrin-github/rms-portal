@@ -3,7 +3,7 @@
         <h2 class="text-uppercase">{{ isView ? 'View study details' : isEdit ? 'Edit study details' : 'Add a new study'}}</h2>
         <div style="float: right; margin-top: -40px;" *ngIf="isView">
             <a [routerLink]="['/studies', id, 'edit']"
-               class="btn btn-primary mr-1" target="_blank">
+               class="btn btn-primary mr-1" target="tempTab">
                 <i class="fa fa-edit"></i> Edit
             </a>
             <button class="btn btn-primary mr-1" (click)="print()">

@@ -2,7 +2,7 @@
     <div class="card-header">
         <h2>People</h2>
         <div style="float: right; margin-top: -40px" *ngxPermissionsOnly="['Admin', 'Manager']">
-            <a [routerLink]="['/people', 'add']" class="btn btn-success" target="_blank">
+            <a [routerLink]="['/people', 'add']" class="btn btn-success" target="newTab">
                 <i class="fa fa-plus"></i> New Person
             </a>
         </div>
@@ -46,10 +46,10 @@
             <ng-container matColumnDef="actions">
                 <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                 <mat-cell *matCellDef="let row">
-                    <a [routerLink]="['/people', row.id, 'view']" target="_blank">
+                    <a [routerLink]="['/people', row.id, 'view']" target="tempTab">
                         <i class="fa fa-eye mr-5" style="color:#0688fa;"></i>
                     </a>
-                    <a [routerLink]="['/people', row.id, 'edit']" target="_blank" *ngxPermissionsOnly="['Admin', 'Manager']">
+                    <a [routerLink]="['/people', row.id, 'edit']" target="tempTab" *ngxPermissionsOnly="['Admin', 'Manager']">
                         <i class="fa fa-edit mr-5" style="color:#0688fa;"></i>
                     </a>
                     <i class="fa fa-trash mr-5" style="color:#f24437; cursor: pointer;" (click)="deleteRecord(row.id)" *ngxPermissionsOnly="['Admin', 'Manager']">

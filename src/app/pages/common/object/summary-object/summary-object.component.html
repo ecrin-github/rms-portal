@@ -2,7 +2,7 @@
     <div class="card-header">
         <h2>Data Objects list</h2>
         <div style="float: right; margin-top: -40px;" *ngxPermissionsOnly="['Admin', 'Manager']">
-            <a [routerLink]="['/data-objects', 'add']" class="btn btn-success" target="_blank">
+            <a [routerLink]="['/data-objects', 'add']" class="btn btn-success" target="tempTab">
                 <i class="fa fa-plus"></i> New data object
             </a>
         </div>
@@ -50,7 +50,7 @@
                 <mat-header-cell *matHeaderCellDef> Linked to studies </mat-header-cell>
                 <mat-cell *matCellDef="let row">
                     {{row.studyName}}
-                    <!-- <a [routerLink]="['/studies', row.linkedStudyId.toString(), 'view']" target="_blank">
+                    <!-- <a [routerLink]="['/studies', row.linkedStudyId.toString(), 'view']" target="tempTab">
                         Study {{row.linkedStudyId.toString()}}
                     </a> -->
                 </mat-cell>
@@ -59,10 +59,10 @@
             <ng-container matColumnDef="actions">
                 <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                 <mat-cell *matCellDef="let row">
-                    <a [routerLink]="['/data-objects', row.sdOid, 'view']" target="_blank">
+                    <a [routerLink]="['/data-objects', row.sdOid, 'view']" target="tempTab">
                         <i class="fa fa-eye mr-5" style="color:#0688fa;"></i>
                     </a>
-                    <a [routerLink]="['/data-objects', row.sdOid, 'edit']" target="_blank">
+                    <a [routerLink]="['/data-objects', row.sdOid, 'edit']" target="tempTab">
                         <i class="fa fa-edit mr-5" style="color:#0688fa;"></i>
                     </a>
                     <i class="fa fa-trash mr-5" style="color:#f24437; cursor: pointer;" (click)="deleteRecord(row.sdOid)">

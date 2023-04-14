@@ -8,7 +8,7 @@
             </div>
             <div class="col-md-5 text-right" *ngIf="isView">
                 <button class="btn btn-success mr-5" *ngIf="showUploadButton">Upload Data</button>
-                <a [routerLink]="['/data-transfers', id, 'edit']" class="btn btn-primary mr-5" target="_blank">
+                <a [routerLink]="['/data-transfers', id, 'edit']" class="btn btn-primary mr-5" target="tempTab">
                     <i class="fa fa-edit"></i> Edit
                 </a>
                 <button class="btn btn-primary mr-5" (click)="printDocument()">
