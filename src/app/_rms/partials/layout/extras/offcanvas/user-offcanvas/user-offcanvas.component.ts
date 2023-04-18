@@ -37,21 +37,22 @@ export class UserOffcanvasComponent implements OnInit {
     if (localStorage.getItem('userData')) {
       this.userData = JSON.parse(localStorage.getItem('userData'));
     } else {
-      this.userService.getUser().subscribe((res: any) => {
-        if (res) {
-          console.log(res);
-          this.userData = res;
-          this.userData.pic = './assets/media/svg/avatars/001-boy.svg';
-          this.userData.occupation = '';
-        }
-      }, error => {
-        console.log('error', error);
-      });
+        this.userService.getUser().subscribe((res: any) => {
+          if (res) {
+            console.log(res);
+            this.userData = res;
+            this.userData.pic = './assets/media/svg/avatars/001-boy.svg';
+            this.userData.occupation = '';
+          }
+        }, error => {
+          console.log('error', error);
+        });
     }
   }
 
   logout() {
     this.oidcSecurityService.logoff();
     document.location.reload();
+    localStorage.clear();
   }
 }

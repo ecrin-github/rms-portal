@@ -19,7 +19,7 @@ export class SummaryDupComponent implements OnInit {
 
   displayedColumns = ['id', 'organisation', 'title', 'status', 'actions'];
   dataSource: MatTableDataSource<DupListEntryInterface>;
-  filterOption: string = '';
+  filterOption: string = 'title';
   searchText:string = '';
   dupLength: number = 0;
   warningModal: any;

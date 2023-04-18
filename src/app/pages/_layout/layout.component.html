@@ -12,7 +12,7 @@
         <app-aside-external *ngIf="isExternalUser" #ktAside id="kt_aside"
           class="aside aside-left d-flex flex-column flex-row-auto" [ngClass]="asideCSSClasses"></app-aside-external>
 
-        <app-aside-internal *ngIf="isInternalUser" #ktAside id="kt_aside"
+        <app-aside-internal *ngIf="isInternalUser && !isBrowsing" #ktAside id="kt_aside"
           class="aside aside-left d-flex flex-column flex-row-auto" [ngClass]="asideCSSClasses"></app-aside-internal>
 
       </ng-container>
@@ -21,7 +21,7 @@
       <!--begin::Wrapper-->
       <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
         <!-- begin:: Header -->
-        <app-header #ktHeader id="kt_header" class="header" [ngClass]="headerCSSClasses"></app-header>
+        <app-header #ktHeader id="kt_header" class="header" [ngClass]="headerCSSClasses" [ngStyle]="isBrowsing ? {'left': '0px'} : ''"></app-header>
         <!-- end:: Header -->
 
         <!-- begin:: Content -->
@@ -61,7 +61,7 @@
     </ng-container>
 
     <ng-container *ngIf="extrasUserOffcanvasDisplay">
-      <app-user-offcanvas></app-user-offcanvas>
+      <app-user-offcanvas *ngIf="!isBrowsing"></app-user-offcanvas>
     </ng-container>
 
     <ng-container *ngIf="extrasScrollTopDisplay">

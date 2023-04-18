@@ -8,6 +8,7 @@ import {
 import { LayoutService, LayoutInitService } from '../../_rms';
 import KTLayoutContent from '../../../assets/js/layout/base/content';
 import {StatesService} from '../../_rms/services/states/states.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-layout',
@@ -47,11 +48,13 @@ export class LayoutComponent implements OnInit, AfterViewInit {
   // Role checker
   public isExternalUser = false;
   public isInternalUser = true;
+  isBrowsing: boolean = false;
 
   constructor(
     private initService: LayoutInitService,
     private layout: LayoutService,
-    private statesService: StatesService
+    private statesService: StatesService,
+    private router: Router
   ) {
     this.initService.init();
 
@@ -67,6 +70,7 @@ export class LayoutComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false
     // build view by layout config settings
     this.selfLayout = this.layout.getProp('self.layout');
     this.asideSelfDisplay = this.layout.getProp('aside.self.display');

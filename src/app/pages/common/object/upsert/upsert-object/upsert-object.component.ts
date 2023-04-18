@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -49,13 +49,17 @@ export class UpsertObjectComponent implements OnInit {
   identifierType: [] = [];
   descriptionType: [] = [];
   showAccessDetails: boolean = true;
+  role: any;
+  orgId: any;
+  isSubmitted: boolean = false;
+  isBrowsing: boolean = false;
 
   constructor(private fb: FormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService,
     private toastr: ToastrService, private activatedRoute: ActivatedRoute, private listService: ListService, private pdfGenerator: PdfGeneratorService, private jsonGenerator: JsonGeneratorService) {
     this.objectForm = this.fb.group({
-      SdSid: '',
+      SdSid: ['', Validators.required],
       doi: '',
-      displayTitle: '',
+      displayTitle: ['', Validators.required],
       version: '',
       objectClassId: null,
       objectTypeId: null,
@@ -112,6 +116,13 @@ export class UpsertObjectComponent implements OnInit {
   ngOnInit(): void {
     this.isEdit = this.router.url.includes('edit') ? true : false;
     this.isView = this.router.url.includes('view') ? true : false;
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
+    if (localStorage.getItem('role')) {
+      this.role = localStorage.getItem('role');
+    }
+    if (localStorage.getItem('organisationId')) {
+      this.orgId = localStorage.getItem('organisationId');
+    }
     this.getStudyList();
     this.getObjectClass();
     this.getObjectType();
@@ -132,17 +143,30 @@ export class UpsertObjectComponent implements OnInit {
       this.getObjectById(this.id);
     }
   }
+  get g() { return this.objectForm.controls; }
   getStudyList() {
     this.spinner.show();
-    this.listService.getStudyList().subscribe((res: any) => {
-      this.spinner.hide();
-      if (res && res.data) {
-        this.studyList = res.data;
-      }
-    }, error => {
-      this.toastr.error(error.error.title);
-      this.spinner.hide();
-    })
+    if (this.role === 'User') {
+      this.listService.getStudyListByOrg(this.orgId).subscribe((res: any) => {
+        this.spinner.hide();
+        if (res && res.data) {
+          this.studyList = res.data;
+        }
+      }, error => {
+        this.toastr.error(error.error.title);
+        this.spinner.hide();
+      })
+    } else {
+      this.listService.getStudyList().subscribe((res: any) => {
+        this.spinner.hide();
+        if (res && res.data) {
+          this.studyList = res.data;
+        }
+      }, error => {
+        this.toastr.error(error.error.title);
+        this.spinner.hide();
+      })
+    }
   }
   customSearchFn(term: string, item) {
     term = term.toLocaleLowerCase();
@@ -326,6 +350,7 @@ export class UpsertObjectComponent implements OnInit {
     if (localStorage.getItem('updateObjectList')) {
       localStorage.removeItem('updateObjectList');
     }
+    this.isSubmitted = true;
     if (this.objectForm.valid) {
       const payload = JSON.parse(JSON.stringify(this.objectForm.value));
       payload.objectTypeId = payload.objectTypeId ? payload.objectTypeId : null;

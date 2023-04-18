@@ -6,8 +6,8 @@
                     dupData?.coreDup.displayName + ' data use process' : 'Adding new data use process'}}</h2>
             </div>
             <div class="col-md-5 text-right" *ngIf="isView">
-                <button class="btn btn-success mr-5" *ngIf="showUploadButton">Access Data</button>
-                <a [routerLink]="['/data-use', id, 'edit']" class="btn btn-primary mr-1" target="tempTab">
+                <button class="btn btn-success mr-5" *ngIf="showUploadButton" (click)="goToTsd()">Access Data</button>
+                <a [routerLink]="['/data-use', id, 'edit']" class="btn btn-primary mr-1" target="tempTab" *ngIf="role !== 'User'">
                     <i class="fa fa-edit"></i> Edit
                 </a>
                 <button class="btn btn-primary mr-1" (click)="printDocument()">
@@ -130,8 +130,8 @@
                                                 <i class="wizard-icon flaticon2-open-text-book"></i>
                                                 <h3 class="wizard-title">Access confirmed</h3>
                                                 <i class="fa fa-check-circle" style="color: green;"
-                                                    *ngIf="!(isEdit || isView) ? 5 < currentStatus : 5 < currentStatus"></i>
-                                                <i class="fa fa-exclamation-circle" style="color: orange;" *ngIf="5 === currentStatus"></i>
+                                                *ngIf="5 === currentStatus" ></i>
+                                                <i class="fa fa-exclamation-circle" style="color: orange;" *ngIf="!(isEdit || isView) ? 5 < currentStatus : 5 < currentStatus"></i>
                                             </div>
                                         </a>
                                     </div>

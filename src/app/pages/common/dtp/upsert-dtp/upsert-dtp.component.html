@@ -7,8 +7,8 @@
                     transfer details' : 'Add new data transfer'}}</h2>
             </div>
             <div class="col-md-5 text-right" *ngIf="isView">
-                <button class="btn btn-success mr-5" *ngIf="showUploadButton">Upload Data</button>
-                <a [routerLink]="['/data-transfers', id, 'edit']" class="btn btn-primary mr-5" target="tempTab">
+                <button class="btn btn-success mr-5" *ngIf="showUploadButton" (click)="goToTsd()">Upload Data</button>
+                <a [routerLink]="['/data-transfers', id, 'edit']" class="btn btn-primary mr-5" target="tempTab" *ngIf="role !== 'User'">
                     <i class="fa fa-edit"></i> Edit
                 </a>
                 <button class="btn btn-primary mr-5" (click)="printDocument()">

@@ -32,6 +32,11 @@ export class ListService {
     return this.http.get(`${base}/studies/list/recent/${n}`);
   }
 
+  getBrowsingStudyList() {
+    return this.http.get(`${base}/browsing/studies/list`);
+  }
+
+
 
   // object lists
 
@@ -59,6 +64,10 @@ export class ListService {
 
   getRecentObjectsList(n :number) {
     return this.http.get(`${base}/data-objects/list/recent/${n}`);
+  }
+
+  getBrowsingObjectList() {
+    return this.http.get(`${base}/browsing/data-objects/list`);
   }
 
 

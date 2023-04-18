@@ -51,11 +51,12 @@ export class UpsertStudyComponent implements OnInit {
   topicTypes: [] = [];
   controlledTerminology: [] = [];
   relationshipType: [] = [];
+  isBrowsing: boolean = false;
 
   constructor(private fb: FormBuilder, private router: Router, private studyLookupService: StudyLookupService, private studyService: StudyService, private activatedRoute: ActivatedRoute,
     private spinner: NgxSpinnerService, private toastr: ToastrService, private pdfGenerator: PdfGeneratorService, private jsonGenerator: JsonGeneratorService, private commonLookupService: CommonLookupService) {
     this.studyForm = this.fb.group({
-      sdSid: '',
+      sdSid: ['RMS-', Validators.pattern(/^(RMS-)(?=[^0-9]*[0-9])/)],
       displayTitle: ['', Validators.required],
       briefDescription: '',
       dataSharingStatement: '',
@@ -95,6 +96,7 @@ export class UpsertStudyComponent implements OnInit {
     this.isEdit = this.router.url.includes('edit') ? true : false;
     this.isView = this.router.url.includes('view') ? true : false;
     this.isAdd = this.router.url.includes('add') ? true : false;
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     this.getStudyType();
     this.getStudyStatus();
     this.getGenderEligibility();
@@ -122,7 +124,8 @@ export class UpsertStudyComponent implements OnInit {
     setTimeout(() => {
       this.spinner.show(); 
     });
-    const getStudyType$ = this.studyLookupService.getStudyTypes().subscribe((res:any) => {
+    const getStudyType$ = this.isBrowsing ? this.studyLookupService.getStudyTypes() : this.studyLookupService.getStudyTypes();
+    getStudyType$.subscribe((res:any) => {
       this.spinner.hide();
       if(res.data) {
         this.studyTypes = res.data;
@@ -136,7 +139,7 @@ export class UpsertStudyComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title);
     });
-    this.subscription.add(getStudyType$);
+    // this.subscription.add(getStudyType$);
   }
   getStudyStatus() {
     setTimeout(() => {
@@ -270,6 +273,7 @@ export class UpsertStudyComponent implements OnInit {
     }
     if (this.addType === 'manual') {
       this.isSubmitted = true;
+      console.log('payload', this.studyForm);
       if (this.studyForm.valid) {
         const payload = JSON.parse(JSON.stringify(this.studyForm.value));
         this.spinner.show();

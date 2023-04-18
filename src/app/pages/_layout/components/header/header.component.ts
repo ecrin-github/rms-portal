@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   headerMenuHTMLAttributes: any = {};
   routerLoaderTimout: any;
   appVersion: string;
+  isBrowsing: boolean = false;
 
   @ViewChild('ktHeaderMenu', { static: true }) ktHeaderMenu: ElementRef;
   loader$: Observable<number>;
@@ -75,6 +76,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false
     this.headerContainerCSSClasses = this.layout.getStringCSSClasses(
       'header_container'
     );
