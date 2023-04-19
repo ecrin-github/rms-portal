@@ -9,6 +9,8 @@ import { ConfirmationWindowComponent } from '../../confirmation-window/confirmat
 import { DupListEntryInterface } from 'src/app/_rms/interfaces/dup/dup-listentry.interface';
 import { DupService } from 'src/app/_rms/services/entities/dup/dup.service';
 import { NgxPermissionsService } from 'ngx-permissions';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-summary-dup',
@@ -25,6 +27,8 @@ export class SummaryDupComponent implements OnInit {
   warningModal: any;
   orgId: any;
   role: any;
+  deBouncedInputValue = this.searchText;
+  searchDebounec: Subject<string> = new Subject();
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild('deleteModal') deleteModal : TemplateRef<any>;
@@ -46,6 +50,7 @@ export class SummaryDupComponent implements OnInit {
       this.orgId = localStorage.getItem('organisationId');
     }
     this.getDupList();
+    this.setupSearchDeBouncer();
   }
 
   getAllDupList() {
@@ -113,6 +118,9 @@ export class SummaryDupComponent implements OnInit {
         this.toastr.error(error.error.title);
       })
     }
+    if (this.searchText === '') {
+      this.getDupList();
+    }
   } 
   
   @HostListener('window:storage', ['$event'])
@@ -142,5 +150,20 @@ export class SummaryDupComponent implements OnInit {
   }
   closeModal() {
     this.warningModal.close();
+  }
+  onInputChange(e) {
+    const searchText = e.target.value;
+    if (!!searchText) {
+      this.searchDebounec.next(searchText);
+    }
+  }
+  setupSearchDeBouncer() {
+    const search$ = this.searchDebounec.pipe(
+      debounceTime(350),
+      distinctUntilChanged()
+    ).subscribe((term: string) => {
+      this.deBouncedInputValue = term;
+      this.filterSearch();
+    });
   }
 }

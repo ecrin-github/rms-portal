@@ -14,8 +14,8 @@
             Add
           </button>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="/studies/add?type=usingTrialId" target="_blank">Using Trial Registry</a>
-            <a class="dropdown-item" href="/studies/add?type=manual" target="_blank">Manually</a>
+            <a class="dropdown-item" href="/studies/add?type=usingTrialId" target="temptab">Using Trial Registry</a>
+            <a class="dropdown-item" href="/studies/add?type=manual" target="temptab">Manually</a>
           </div>
         </div>
         <a [routerLink]="['/studies']" target="_blank" class="btn btn-info font-weight-bolder font-size-sm">See All</a>
@@ -50,9 +50,9 @@
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef> </mat-header-cell>
         <mat-cell *matCellDef="let row">
-          <a [routerLink]="['/studies', row.sdSid, 'view']" target="_blank"
+          <a [routerLink]="['/studies', row.sdSid, 'view']" target="temptab"
             class="btn btn-light-primary font-weight-bolder font-size-sm mr-3">View</a>
-          <a [routerLink]="['/studies', row.sdSid, 'edit']" [queryParams]="{type: 'manual'}" target="_blank"
+          <a [routerLink]="['/studies', row.sdSid, 'edit']" [queryParams]="{type: 'manual'}" target="temptab"
             class="btn btn-light-success font-weight-bolder font-size-sm">Edit</a>
         </mat-cell>
       </ng-container>

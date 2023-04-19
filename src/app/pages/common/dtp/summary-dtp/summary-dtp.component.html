@@ -15,17 +15,17 @@
                     <option value="title">Title</option>
                 </select>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-9">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search DTP..." [(ngModel)]="searchText" (keydown)="onInputChange($event)"/>
+                    <input type="text" class="form-control" placeholder="Search Data Transfer Process..." [(ngModel)]="searchText" (keydown)="onInputChange($event)"/>
                 </div>
             </div>
-            <div class="col-md-3">
+            <!-- <div class="col-md-3">
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary" (click)="filterSearch()">Search</button>
                     <span class="pl-2"><button class="btn btn-warning" (click)="getDtpList()">Clear</button></span>
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <mat-table [dataSource]="dataSource">

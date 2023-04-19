@@ -10,6 +10,8 @@ import { ObjectListEntryInterface } from 'src/app/_rms/interfaces/data-object/da
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 import { ConfirmationWindowComponent } from '../../confirmation-window/confirmation-window.component';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-summary-object',
@@ -28,6 +30,8 @@ export class SummaryObjectComponent implements OnInit {
   role: any;
   orgId: any;
   isBrowsing: boolean = false;
+  deBouncedInputValue = this.searchText;
+  searchDebounec: Subject<string> = new Subject();
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild('objectDeleteModal') objectDeleteModal : TemplateRef<any>;
@@ -51,6 +55,7 @@ export class SummaryObjectComponent implements OnInit {
     }
     this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     this.getObjectList();
+    this.setupSearchDeBouncer();
   }
   
   getAllObjectList() {
@@ -135,6 +140,9 @@ export class SummaryObjectComponent implements OnInit {
         this.toastr.error(error.error.title);
       })
     }
+    if (this.searchText === '') {
+      this.getObjectList();
+    }
   }
 
   @HostListener('window:storage', ['$event'])
@@ -185,4 +193,20 @@ export class SummaryObjectComponent implements OnInit {
   closeModal() {
     this.warningModal.close();
   }
+  onInputChange(e) {
+    const searchText = e.target.value;
+    if (!!searchText) {
+      this.searchDebounec.next(searchText);
+    }
+  }
+  setupSearchDeBouncer() {
+    const search$ = this.searchDebounec.pipe(
+      debounceTime(350),
+      distinctUntilChanged()
+    ).subscribe((term: string) => {
+      this.deBouncedInputValue = term;
+      this.filterSearch();
+    });
+  }
+
 }

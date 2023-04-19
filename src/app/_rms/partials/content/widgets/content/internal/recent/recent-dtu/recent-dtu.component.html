@@ -11,7 +11,7 @@
       </div>
       <div class="col-5 col-sm-6 col-md-5 text-right">
         <a [routerLink]="['/data-transfers', 'add']" class="btn btn-success font-weight-bolder font-size-sm mr-3"
-          target="_blank">Add</a>
+          target="temptab">Add</a>
         <a [routerLink]="['/data-transfers']" class="btn btn-info font-weight-bolder font-size-sm" target="_blank">See All</a>
       </div>
     </div>
@@ -51,9 +51,9 @@
           <ng-container matColumnDef="actions">
             <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
             <mat-cell *matCellDef="let row">
-              <a [routerLink]="['/data-transfers', row.id, 'view']" target="_blank"
+              <a [routerLink]="['/data-transfers', row.id, 'view']" target="temptab"
                 class="btn btn-light-primary font-weight-bolder font-size-sm mr-3">View</a>
-              <a [routerLink]="['/data-transfers', row.id, 'edit']" target="_blank"
+              <a [routerLink]="['/data-transfers', row.id, 'edit']" target="temptab"
                 class="btn btn-light-success font-weight-bolder font-size-sm">Edit</a>
             </mat-cell>
           </ng-container>

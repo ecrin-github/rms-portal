@@ -31,6 +31,7 @@ export class UpsertStudyComponent implements OnInit {
   isSubmitted: boolean = false;
   id: any;
   studyData: StudyInterface;
+  studyFull: any;
   studyTypeView: any;
   studyStatusView: any;
   studyGenderView: any;
@@ -206,10 +207,12 @@ export class UpsertStudyComponent implements OnInit {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    this.studyService.getStudyById(id).subscribe((res: any) => {
+    this.studyService.getFullStudyById(id).subscribe((res: any) => {
+      console.log('data', res);
       this.spinner.hide();
       if (res && res.data && res.data.length) {
-        this.studyData = res.data[0];
+        this.studyFull = res.data[0];
+        this.studyData = res.data[0].coreStudy;
         this.patchStudyForm();
       }
     }, error => {

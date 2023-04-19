@@ -16,17 +16,17 @@
                     <option value="title">Title</option>
                 </select>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-9">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search data object..." [(ngModel)]="searchText" />
+                    <input type="text" class="form-control" placeholder="Search data object..." [(ngModel)]="searchText" (keydown)="onInputChange($event)"/>
                 </div>
             </div>
-            <div class="col-md-3">
+            <!-- <div class="col-md-3">
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary" (click)="filterSearch()">Search</button>
                     <span class="pl-2"><button class="btn btn-warning" (click)="getObjectList()">Clear</button></span>
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <mat-table [dataSource]="dataSource">
@@ -38,7 +38,7 @@
 
             <ng-container matColumnDef="title">
                 <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
-                <mat-cell *matCellDef="let row"><a [routerLink]="['/data-objects', row.sdOid, 'view']" target="_blank">{{row.studyName}}</a></mat-cell>
+                <mat-cell *matCellDef="let row"><a [routerLink]="['/data-objects', row.sdOid, 'view']" target="_blank">{{row.displayTitle}}</a></mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="type">
@@ -49,7 +49,7 @@
             <ng-container matColumnDef="linkedStudy">
                 <mat-header-cell *matHeaderCellDef> Linked to studies </mat-header-cell>
                 <mat-cell *matCellDef="let row">
-                    {{row.studyName}}
+                    <a [routerLink]="['/studies', row.sdSid, 'view']" target="_blank">{{row.studyName}}</a>
                 </mat-cell>
             </ng-container>
 

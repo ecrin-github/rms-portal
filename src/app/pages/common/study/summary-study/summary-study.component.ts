@@ -8,9 +8,10 @@ import { ConfirmationWindowComponent } from '../../confirmation-window/confirmat
 import { StudyListEntryInterface } from 'src/app/_rms/interfaces/study/study-listentry.interface';
 import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
-import { combineLatest } from 'rxjs';
+import { Subject, combineLatest } from 'rxjs';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { Router } from '@angular/router';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-summary-study',
@@ -30,6 +31,8 @@ export class SummaryStudyComponent implements OnInit {
   orgId: any;
   role: any;
   isBrowsing: boolean = false;
+  deBouncedInputValue = this.searchText;
+  searchDebounec: Subject<string> = new Subject();
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild('studyDeleteModal') studyDeleteModal : TemplateRef<any>;
@@ -53,6 +56,7 @@ export class SummaryStudyComponent implements OnInit {
     }
     this.isBrowsing = this.router.url.includes('browsing') ? true : false
     this.getStudyList();
+    this.setupSearchDeBouncer();
   }
 
   getAllStudyList() {
@@ -148,6 +152,9 @@ export class SummaryStudyComponent implements OnInit {
         this.toastr.error(error.error.title);
       })
     }
+    if (this.searchText === '') {
+      this.getStudyList();
+    }
   } 
 
   @HostListener('window:storage', ['$event'])
@@ -202,5 +209,20 @@ export class SummaryStudyComponent implements OnInit {
   }
   closeModal() {
     this.warningModal.close();
+  }
+  onInputChange(e) {
+    const searchText = e.target.value;
+    if (!!searchText) {
+      this.searchDebounec.next(searchText);
+    }
+  }
+  setupSearchDeBouncer() {
+    const search$ = this.searchDebounec.pipe(
+      debounceTime(350),
+      distinctUntilChanged()
+    ).subscribe((term: string) => {
+      this.deBouncedInputValue = term;
+      this.filterSearch();
+    });
   }
 }
