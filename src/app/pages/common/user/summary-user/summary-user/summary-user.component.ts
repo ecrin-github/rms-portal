@@ -8,6 +8,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 import { PeopleService } from 'src/app/_rms/services/entities/people/people.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-summary-user',
@@ -22,6 +24,9 @@ export class SummaryUserComponent implements OnInit {
   searchText: string = '';
   orgId: any;
   role: any;
+  deBouncedInputValue = this.searchText;
+  searchDebounec: Subject<string> = new Subject();
+
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   constructor( private listService: ListService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private permissionService: NgxPermissionsService) { }
 
@@ -34,7 +39,7 @@ export class SummaryUserComponent implements OnInit {
       this.orgId = localStorage.getItem('organisationId');
     }
     this.getPeople();
-
+    this.setupSearchDeBouncer();
   }
   getAllPeople() {
     this.spinner.show();
@@ -83,20 +88,25 @@ export class SummaryUserComponent implements OnInit {
   filterSearch() {
     let page = 1; let size = 10; // though not currently used
     let people_fragment = this.searchText;
-    this.spinner.show();
-    this.listService.getFilteredPeopleList(people_fragment, page, size).subscribe((res: any) => {
-      this.spinner.hide()
-      if (res && res.data) {
-        this.dataSource = new MatTableDataSource<any>(res.data);
-        this.peopleLength = res.total;
-      } else {
-        this.dataSource = new MatTableDataSource();
-      }
-      this.dataSource.paginator = this.paginator;
-    }, error => {
-      this.spinner.hide();
-      this.toastr.error(error.error.title);
-    })
+    if (this.searchText !== '') {
+      this.spinner.show();
+      this.listService.getFilteredPeopleList(people_fragment, page, size).subscribe((res: any) => {
+        this.spinner.hide()
+        if (res && res.data) {
+          this.dataSource = new MatTableDataSource<any>(res.data);
+          this.peopleLength = res.total;
+        } else {
+          this.dataSource = new MatTableDataSource();
+        }
+        this.dataSource.paginator = this.paginator;
+      }, error => {
+        this.spinner.hide();
+        this.toastr.error(error.error.title);
+      })
+    }
+    if (this.searchText === '') {
+      this.getPeople();
+    }
   }
   deleteRecord(id) {
     const  deleteModal = this.modalService.open(ConfirmationWindowComponent, {size: 'lg', backdrop: 'static'});
@@ -114,4 +124,20 @@ export class SummaryUserComponent implements OnInit {
     this.getPeople();
     localStorage.removeItem('updateUserList');
   }
+  onInputChange(e) {
+    const searchText = e.target.value;
+    if (!!searchText) {
+      this.searchDebounec.next(searchText);
+    }
+  }
+  setupSearchDeBouncer() {
+    const search$ = this.searchDebounec.pipe(
+      debounceTime(350),
+      distinctUntilChanged()
+    ).subscribe((term: string) => {
+      this.deBouncedInputValue = term;
+      this.filterSearch();
+    });
+  }
+
 }

@@ -546,8 +546,8 @@ export class UpsertDupComponent implements OnInit {
     return statusArray && statusArray.length ? statusArray[0].name : 'None';
   }
   close() {
-    // window.close();
-    this.patchForm(this.dupData);
+    window.close();
+    // this.patchForm(this.dupData);
   }
   addStudy() {
     const studyModal = this.modalService.open(CommonModalComponent, { size: 'xl', backdrop: 'static' });

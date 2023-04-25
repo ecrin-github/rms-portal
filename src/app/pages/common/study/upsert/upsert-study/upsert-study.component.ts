@@ -197,6 +197,13 @@ export class UpsertStudyComponent implements OnInit {
           this.studyMaxAgeView = this.findTimeUnitsById(this.studyForm.value.maxAgeUnitsId);
         });
       }
+      if (this.isAdd) {
+        const arr: any = this.timeUnits.filter((item: any) => item.name.toLowerCase() === "years");
+        this.studyForm.patchValue({
+          minAgeUnitsId: arr[0].id,
+          maxAgeUnitsId: arr[0].id
+        })
+      }
     }, error => {
       this.spinner.hide();
       this.toastr.error(error.error.title);

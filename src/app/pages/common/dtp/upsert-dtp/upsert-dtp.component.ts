@@ -714,7 +714,8 @@ export class UpsertDtpComponent implements OnInit {
     return statusArray && statusArray.length ? statusArray[0].name : '';
   }
   close() {
-    this.patchForm(this.dtpData);
+    // this.patchForm(this.dtpData);
+    window.close();
   }
   addStudy() {
     const studyModal = this.modalService.open(CommonModalComponent, { size: 'xl', backdrop: 'static' });
