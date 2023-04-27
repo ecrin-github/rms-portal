@@ -58,7 +58,6 @@ export class UpsertDtpComponent implements OnInit {
   objectList: [] = [];
   role: any;
   showUploadButton: boolean = false;
-  testVar: any;
 
   constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService,
