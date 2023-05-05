@@ -8,6 +8,7 @@ import { StudyTopicInterface } from 'src/app/_rms/interfaces/study/study-topic.i
 import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-study-topic',
@@ -30,14 +31,16 @@ export class StudyTopicComponent implements OnInit {
   studyTopic: StudyTopicInterface;
   controlledTerminology = [];
   len: any;
+  isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder, private commonLookupService: CommonLookupService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
+  constructor( private fb: FormBuilder, private router: Router, private commonLookupService: CommonLookupService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
       studyTopics: this.fb.array([])
     })
   }
 
   ngOnInit(): void {
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     this.getTopicType();
     this.getTopicVocabulary();
     if (this.isEdit || this.isView) {
@@ -94,20 +97,21 @@ export class StudyTopicComponent implements OnInit {
     }
   }
   getTopicType() {
-    const getTopicType$ = this.commonLookupService.getTopicTypes().subscribe((res: any) => {
+    const getTopicType$ = this.isBrowsing ? this.commonLookupService.getBrowsingTopicTypes() : this.commonLookupService.getTopicTypes();
+    getTopicType$.subscribe((res: any) => {
       if (res.data) {
         this.topicTypes = res.data;
       }
     }, error => {
       this.toastr.error(error.error.title);
     });
-    this.subscription.add(getTopicType$);
   }
   getTopicVocabulary() {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    this.commonLookupService.getTopicVocabularies().subscribe((res: any) => {
+    const getTopicVocabulary$ = this.isBrowsing ? this.commonLookupService.getBrowsingTopicVocabularies() : this.commonLookupService.getTopicVocabularies();
+    getTopicVocabulary$.subscribe((res: any) => {
       this.spinner.hide();
       if (res.data) {
         this.controlledTerminology = res.data;
@@ -122,8 +126,9 @@ export class StudyTopicComponent implements OnInit {
     return arr && arr.length ? arr[0].name : 'None';
   }
   getStudyTopic() {
+    const getStudyTopic$ = this.isBrowsing ? this.studyService.getBrowsingStudyTopics(this.sdSid) : this.studyService.getStudyTopics(this.sdSid);
     this.spinner.show();
-    this.studyService.getStudyTopics(this.sdSid).subscribe((res: any) => {
+    getStudyTopic$.subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.studyTopic = res.data.length ? res.data : [];

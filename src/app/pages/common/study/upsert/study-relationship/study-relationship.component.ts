@@ -9,6 +9,7 @@ import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 import { StudyLookupService } from 'src/app/_rms/services/entities/study-lookup/study-lookup.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-study-relationship',
@@ -31,14 +32,16 @@ export class StudyRelationshipComponent implements OnInit {
   @Output() emitRelation: EventEmitter<any> = new EventEmitter();
   studyRelationship: StudyRelationshipInterface;
   len: any;
+  isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder, private listService: ListService, private studyService: StudyService, private studyLookupService: StudyLookupService, private toastr: ToastrService, private spinner: NgxSpinnerService, private modalService: NgbModal) {
+  constructor( private fb: FormBuilder, private router: Router, private listService: ListService, private studyService: StudyService, private studyLookupService: StudyLookupService, private toastr: ToastrService, private spinner: NgxSpinnerService, private modalService: NgbModal) {
     this.form = this.fb.group({
       studyRelationships: this.fb.array([])
     });
    }
 
   ngOnInit(): void {
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     this.getRelationshipType();
     this.getStudyList();
     if (this.isEdit || this.isView) {
@@ -92,20 +95,21 @@ export class StudyRelationshipComponent implements OnInit {
     }
   }
   getRelationshipType() {
-    const getRelationshipType$ = this.studyLookupService.getStudyRelationshipTypes().subscribe((res: any) => {
+    const getRelationshipType$ = this.isBrowsing ? this.studyLookupService.getBrowsingStudyRelationshipTypes() : this.studyLookupService.getStudyRelationshipTypes();
+    getRelationshipType$.subscribe((res: any) => {
       if(res.data) {
         this.relationshipType = res.data;
       }
     }, error => {
       this.toastr.error(error.error.title);
     });
-    this.subscription.add(getRelationshipType$);
   }
   getStudyList() {
     setTimeout(() => {
       this.spinner.show();
     });
-    this.listService.getStudyList().subscribe((res: any) => {
+    const getStudyList$ = this.isBrowsing ? this.listService.getBrowsingStudyList() : this.listService.getStudyList();
+    getStudyList$.subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.studyType = res.data.length ? res.data : [];
@@ -116,8 +120,9 @@ export class StudyRelationshipComponent implements OnInit {
     })
   }
   getStudyRelationship() {
+    const getStudyRelationship$ = this.isBrowsing ? this.studyService.getBrowsingStudyRelationships(this.sdSid) : this.studyService.getStudyRelationships(this.sdSid);
     this.spinner.show();
-    this.studyService.getStudyRelationships(this.sdSid).subscribe((res: any) => {
+    getStudyRelationship$.subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.studyRelationship = res.data.length ? res.data : [];

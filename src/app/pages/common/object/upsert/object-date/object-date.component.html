@@ -55,7 +55,7 @@
                                 <label for="startMonth" class="font-style text-capitalize">Start Month</label>
                                 <select id="startMonth" class="form-control" formControlName="startMonth" *ngIf="!isView">
                                     <option selected disabled value="">Select an option...</option>
-                                    <option [value]="month" *ngFor="let month of monthValues">{{month}}</option>
+                                    <option [value]="month.id" *ngFor="let month of monthValues">{{month.name}}</option>
                                 </select>
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{objectDate.value.startMonth}}</h6>
                             </div>
@@ -79,7 +79,7 @@
                                 <label for="endMonth" class="font-style text-capitalize">End Month</label>
                                 <select id="endMonth" class="form-control" formControlName="endMonth" *ngIf="!isView">
                                     <option selected disabled value="">Select an option...</option>
-                                    <option [value]="month" *ngFor="let month of monthValues">{{month}}</option>
+                                    <option [value]="month.id" *ngFor="let month of monthValues">{{month.name}}</option>
                                 </select>
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{objectDate.value.endMonth}}</h6>
                             </div>

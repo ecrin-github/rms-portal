@@ -8,6 +8,7 @@ import { ObjectContributorInterface } from 'src/app/_rms/interfaces/data-object/
 import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-object-contributor',
@@ -30,14 +31,16 @@ export class ObjectContributorComponent implements OnInit {
   }
   @Output() emitContributor: EventEmitter<any> = new EventEmitter();
   len: any;
+  isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder,private commonLooupService: CommonLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
+  constructor( private fb: FormBuilder,private router: Router, private commonLooupService: CommonLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
       objectContributors: this.fb.array([])
     });
   }
 
   ngOnInit(): void {
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     this.getContributorType();
     if (this.isEdit || this.isView) {
       this.getObjectContributor();
@@ -95,18 +98,19 @@ export class ObjectContributorComponent implements OnInit {
     }
   }
   getContributorType() {
-    const getContributorType$ = this.commonLooupService.getContributorTypes().subscribe((res:any) => {
+    const getContributorType$ = this.isBrowsing ? this.commonLooupService.getBrowsingContributorTypes() : this.commonLooupService.getContributorTypes();
+    getContributorType$.subscribe((res:any) => {
       if(res.data) {
         this.contributorType = res.data;
       }
     }, error => {
       console.log('error', error);
     });
-    this.subscription.add(getContributorType$);
   }
   getObjectContributor() {
     this.spinner.show();
-    this.objectService.getObjectContributors(this.sdOid).subscribe((res: any) => {
+    const getObjectContributors$ = this.isBrowsing ? this.objectService.getBrowsingObjectContributors(this.sdOid) : this.objectService.getObjectContributors(this.sdOid);
+    getObjectContributors$.subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectContributor = res.data.length ? res.data : [];

@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-header">
         <h2 class="text-capitalize">{{ isView ? 'Study Details' : isEdit ? 'Edit Study Details' : 'Add a new study'}}</h2>
-        <div style="float: right; margin-top: -40px;" *ngIf="isView">
+        <div style="float: right; margin-top: -40px;" *ngIf="isView && !isBrowsing">
             <a [routerLink]="['/studies', id, 'edit']"
                class="btn btn-primary mr-1" target="tempTab">
                 <i class="fa fa-edit"></i> Edit
@@ -58,33 +58,42 @@
                 <div class="row form-group">
                     <div class="col-md-3">
                         <label for="studyStatusId" class="font-style text-capitalize">Study status</label>
-                        <select class="form-control" id="studyStatusId" formControlName="studyStatusId" *ngIf="!isView">
+                        <select class="form-control" id="studyStatusId" formControlName="studyStatusId" *ngIf="!isView" [ngClass]="{ 'is-invalid': isSubmitted && g.studyStatusId.errors }">
                             <option selected disabled value="null">Select an option...</option>
                             <option [value]=status.id *ngFor="let status of studyStatuses">{{status.name}}</option>
                         </select>
+                        <div class="col-md-12 invalid-feedback" *ngIf="isSubmitted && g.studyStatusId.errors">
+                            <p *ngIf="isSubmitted && g.studyStatusId.errors.required"> Please enter study status</p>
+                        </div>
                         <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyStatusView?.name}}</h6>
                     </div>
                     <div class="col-md-3">
                         <label for="studyTypeId" class="font-style text-capitalize">Study type</label>
                         <select class="form-control" id="studyTypeId" formControlName="studyTypeId" *ngIf="!isView"
-                            (change)="studyTypeChange()">
+                            (change)="studyTypeChange()" [ngClass]="{ 'is-invalid': isSubmitted && g.studyTypeId.errors }">
                             <option selected disabled value="null">Select an option...</option>
                             <option [value]=type.id *ngFor="let type of studyTypes">{{type.name}}</option>
                         </select>
+                        <div class="col-md-12 invalid-feedback" *ngIf="isSubmitted && g.studyTypeId.errors">
+                            <p *ngIf="isSubmitted && g.studyTypeId.errors.required"> Please enter study type</p>
+                        </div>
                         <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyTypeView?.name}}</h6>
                     </div>
                     <div class="col-md-3">
                         <label for="studyStartMonth" class="font-style text-capitalize">Study Start Month</label>
                         <select id="studyStartMonth" class="form-control" formControlName="studyStartMonth" *ngIf="!isView">
                             <option selected disabled value="null">Select an option...</option>
-                            <option [value]="month" *ngFor="let month of monthValues">{{month}}</option>
+                            <option [value]="month.id" *ngFor="let month of monthValues">{{month.name}}</option>
                         </select>
                         <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.studyStartMonth}}</h6>
                     </div>
                     <div class="col-md-3">
                         <label for="studyStartYear" class="font-style text-capitalize">Study Start Year</label>
                         <p-calendar id="studyStartYear" formControlName="studyStartYear" view="year" dateFormat="yy"
-                            *ngIf="!isView"></p-calendar>
+                            *ngIf="!isView" [ngClass]="{ 'is-invalid': isSubmitted && g.studyStartYear.errors }"></p-calendar>
+                        <div class="col-md-12 invalid-feedback" *ngIf="isSubmitted && g.studyStartYear.errors">
+                            <p *ngIf="isSubmitted && g.studyStartYear.errors.required"> Please enter study title</p>
+                        </div>
                         <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.studyStartYear}}</h6>
                     </div>
                 </div>

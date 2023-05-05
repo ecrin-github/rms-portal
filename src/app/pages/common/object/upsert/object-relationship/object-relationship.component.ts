@@ -9,6 +9,7 @@ import { DataObjectService } from 'src/app/_rms/services/entities/data-object/da
 import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 import { ObjectLookupService } from 'src/app/_rms/services/entities/object-lookup/object-lookup.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-object-relationship',
@@ -31,14 +32,16 @@ export class ObjectRelationshipComponent implements OnInit {
   }
   @Output() emitRelation: EventEmitter<any> = new EventEmitter();
   len: any;
+  isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder, private listService: ListService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: FormBuilder, private router: Router, private listService: ListService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectRelationships: this.fb.array([])
     });
    }
 
   ngOnInit(): void {
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     this.getRelationshipType();
     this.getObjectList();
     if (this.isView || this.isEdit) {
@@ -92,18 +95,19 @@ export class ObjectRelationshipComponent implements OnInit {
     }
   }
   getRelationshipType() {
-    const getRelationshipType$ = this.objectLookupService.getObjectRelationshipTypes().subscribe((res:any) => {
+    const getRelationshipType$ = this.isBrowsing ? this.objectLookupService.getBrowsingObjectRelationshipTypes() : this.objectLookupService.getObjectRelationshipTypes();
+    getRelationshipType$.subscribe((res:any) => {
       if(res.data) {
         this.relationshipType = res.data;
       }
     }, error => {
       console.log('error', error)
     });
-    this.subscription.add(getRelationshipType$);
   }
   getObjectRelation() {
     this.spinner.show();
-    this.objectService.getObjectRelationships(this.sdOid).subscribe((res: any) => {
+    const getObjectRelationships$ = this.isBrowsing ? this.objectService.getBrowsingObjectRelationships(this.sdOid) : this.objectService.getObjectRelationships(this.sdOid);
+    getObjectRelationships$.subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectRelation = res.data.length ? res.data : [];
@@ -118,7 +122,8 @@ export class ObjectRelationshipComponent implements OnInit {
     setTimeout(() => {
       this.spinner.show();
     });
-    this.listService.getObjectList().subscribe((res: any) => {
+    const getObjectList$ = this.isBrowsing ? this.listService.getBrowsingObjectList() : this.listService.getObjectList();
+    getObjectList$.subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectList = res.data.length ? res.data : [];

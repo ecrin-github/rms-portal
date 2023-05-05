@@ -8,6 +8,7 @@ import { ObjectTopicInterface } from 'src/app/_rms/interfaces/data-object/object
 import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-object-topic',
@@ -29,14 +30,16 @@ export class ObjectTopicComponent implements OnInit {
   }
   @Output() emitTopic: EventEmitter<any> = new EventEmitter();
   len: any;
+  isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder, private commonLookupService: CommonLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private objectService: DataObjectService, private modalService: NgbModal) {
+  constructor( private fb: FormBuilder,private router: Router, private commonLookupService: CommonLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private objectService: DataObjectService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectTopics: this.fb.array([])
     });
    }
 
   ngOnInit(): void {
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     this.getTopicType();
     if (this.isView || this.isEdit) {
       this.getObjectTopic();
@@ -94,18 +97,19 @@ export class ObjectTopicComponent implements OnInit {
     }
   }
   getTopicType() {
-    const getTopicType$ = this.commonLookupService.getTopicTypes().subscribe((res: any) => {
+    const getTopicType$ = this.isBrowsing ? this.commonLookupService.getBrowsingTopicTypes() : this.commonLookupService.getTopicTypes();
+    getTopicType$.subscribe((res: any) => {
       if(res.data) {
         this.topicType = res.data;
       }
     }, error => {
       console.log('error', error);
     });
-    this.subscription.add(getTopicType$);
   }
   getObjectTopic() {
+    const getObjectTopics$ = this.isBrowsing ? this.objectService.getBrowsingObjectTopics(this.sdOid) : this.objectService.getObjectTopics(this.sdOid);
     this.spinner.show();
-    this.objectService.getObjectTopics(this.sdOid).subscribe((res: any) => {
+    getObjectTopics$.subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectTopic = res.data.length ? res.data : [];

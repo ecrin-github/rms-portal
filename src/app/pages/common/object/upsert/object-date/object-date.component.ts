@@ -8,6 +8,7 @@ import { ObjectDateInterface } from 'src/app/_rms/interfaces/data-object/object-
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 import { ObjectLookupService } from 'src/app/_rms/services/entities/object-lookup/object-lookup.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-object-date',
@@ -28,18 +29,20 @@ export class ObjectDateComponent implements OnInit {
     }
   }
   @Output() emitDate: EventEmitter<any> = new EventEmitter();
-  monthValues = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+  monthValues = [{id:'1', name:'January'}, {id:'2', name:'February'}, {id:'3', name: 'March'}, {id:'4', name: 'April'}, {id:'5', name: 'May'}, {id:'6', name: 'June'}, {id:'7', name: 'July'}, {id:'8', name: 'August'}, {id:'9', name: 'September'}, {id:'10', name: 'October'}, {id:'11', name:'November'}, {id:'12', name: 'December'}];
   dayValues = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13','14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
   showEndday = [];
   len: any;
+  isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: FormBuilder, private router: Router, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectDates: this.fb.array([])
     })
    }
 
   ngOnInit(): void {
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     this.getDateType();
     if(this.isEdit || this.isView) {
       this.getObjectDate();
@@ -105,18 +108,19 @@ export class ObjectDateComponent implements OnInit {
     }
   }
   getDateType() {
-    const getDateType$ = this.objectLookupService.getDateTypes().subscribe((res: any) => {
+    const getDateType$ = this.isBrowsing ? this.objectLookupService.getBrowsingDateTypes() :this.objectLookupService.getDateTypes();
+    getDateType$.subscribe((res: any) => {
       if(res.data) {
         this.dateType = res.data
       }
     }, error => {
       console.log('error', error);
     })
-    this.subscription.add(getDateType$);
   }
   getObjectDate() {
     this.spinner.show();
-    this.objectService.getObjectDates(this.sdOid).subscribe((res: any) => {
+    const getObjectDates$ = this.isBrowsing ? this.objectService.getBrowsingObjectDates(this.sdOid) : this.objectService.getObjectDates(this.sdOid);
+    getObjectDates$.subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectDateData = res.data.length ? res.data : [];

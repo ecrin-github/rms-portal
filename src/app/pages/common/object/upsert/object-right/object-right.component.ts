@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ObjectRightInterface } from 'src/app/_rms/interfaces/data-object/object-right.interface';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-object-right',
@@ -25,14 +26,16 @@ export class ObjectRightComponent implements OnInit {
   }
   @Output() emitRight: EventEmitter<any> = new EventEmitter();
   len: any;
+  isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: FormBuilder, private router: Router, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectRights: this.fb.array([])
     });
    }
 
   ngOnInit(): void {
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     if (this.isEdit || this.isView) {
       this.getObjectRight();
     }
@@ -86,7 +89,8 @@ export class ObjectRightComponent implements OnInit {
   }
   getObjectRight() {
     this.spinner.show();
-    this.objectService.getObjectRights(this.sdOid).subscribe((res: any) => {
+    const getObjectRights$ = this.isBrowsing ? this.objectService.getBrowsingObjectRights(this.sdOid) : this.objectService.getObjectRights(this.sdOid);
+    getObjectRights$.subscribe((res: any) => {
       this.spinner.hide();
       if(res && res.data) {
         this.objectRight = res.data.length ? res.data : [];

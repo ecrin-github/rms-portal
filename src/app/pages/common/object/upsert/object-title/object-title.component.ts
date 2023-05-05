@@ -10,6 +10,7 @@ import { DataObjectService } from 'src/app/_rms/services/entities/data-object/da
 import { ObjectLookupService } from 'src/app/_rms/services/entities/object-lookup/object-lookup.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-object-title',
@@ -32,14 +33,16 @@ export class ObjectTitleComponent implements OnInit {
   }
   @Output() emitTitle: EventEmitter<any> = new EventEmitter();
   len: any;
+  isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder, private commonLookupService: CommonLookupService, private objectService: DataObjectService, private objectLookupService: ObjectLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: FormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectService: DataObjectService, private objectLookupService: ObjectLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectTitles: this.fb.array([])
     });
    }
 
   ngOnInit(): void {
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     this.getLanguageCode();
     this.getTitleType();
     if (this.isEdit || this.isView) {
@@ -95,28 +98,29 @@ export class ObjectTitleComponent implements OnInit {
     }
   }
   getLanguageCode() {
-    const getLanguageCode$ = this.commonLookupService.getLanguageCodes('en').subscribe((res:any) => {
+    const getLanguageCode$ = this.isBrowsing ? this.commonLookupService.getBrowsingLanguageCodes('en') : this.commonLookupService.getLanguageCodes('en');
+    getLanguageCode$.subscribe((res:any) => {
       if(res.data) {
         this.languageCode = res.data;
       }
     }, error => {
       console.log('error', error);
     });
-    this.subscription.add(getLanguageCode$);
   }
   getTitleType() {
-    const getTitleType$ = this.objectLookupService.getObjectTitleTypes().subscribe((res:any) => {
+    const getTitleType$ = this.isBrowsing ? this.objectLookupService.getBrowsingObjectTitleTypes() : this.objectLookupService.getObjectTitleTypes();
+    getTitleType$.subscribe((res:any) => {
       if(res.data) {
         this.titleType = res.data;
       }
     }, error => {
       console.log('error', error);
     });
-    this.subscription.add(getTitleType$);
   }
   getObjectTitle() {
+    const getObjectTitles$ = this.isBrowsing ? this.objectService.getBrowsingObjectTitles(this.sdOid) : this.objectService.getObjectTitles(this.sdOid);
     this.spinner.show();
-    this.objectService.getObjectTitles(this.sdOid).subscribe((res: any) => {
+    getObjectTitles$.subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectTitle = res.data.length ? res.data : [];

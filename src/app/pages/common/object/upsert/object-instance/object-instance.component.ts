@@ -8,6 +8,7 @@ import { DataObjectService } from 'src/app/_rms/services/entities/data-object/da
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 import { ObjectLookupService } from 'src/app/_rms/services/entities/object-lookup/object-lookup.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-object-instance',
@@ -23,6 +24,7 @@ export class ObjectInstanceComponent implements OnInit {
   @Input() isView: boolean;
   @Input() isEdit: boolean;
   objectInstance: ObjectInstanceInterface;
+  isBrowsing: boolean = false;
   @Input() set initiateEmit(initiateEmit: any) {
     if (initiateEmit) {
       this.emitData();
@@ -31,13 +33,14 @@ export class ObjectInstanceComponent implements OnInit {
   @Output() emitInstance: EventEmitter<any> = new EventEmitter();
   len: any;
 
-  constructor( private fb: FormBuilder, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
+  constructor( private fb: FormBuilder, private router: Router, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
       objectInstances: this.fb.array([])
     });
   }
 
   ngOnInit(): void {
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     this.getSizeUnit();
     this.getResourceType();
     if (this.isEdit || this.isView) {
@@ -100,28 +103,29 @@ export class ObjectInstanceComponent implements OnInit {
     }
   }
   getSizeUnit() {
-    const getSizeUnit$ = this.objectLookupService.getSizeUnits().subscribe((res: any) => {
+    const getSizeUnit$ = this.isBrowsing ? this.objectLookupService.getBrowsingSizeUnits() : this.objectLookupService.getSizeUnits();
+    getSizeUnit$.subscribe((res: any) => {
       if(res.data) {
         this.sizeUnit = res.data;
       }
     }, error => {
       console.log('error', error);
     });
-    this.subscription.add(getSizeUnit$)
   }
   getResourceType() {
-    const getResourceType$ = this.objectLookupService.getResourceTypes().subscribe((res: any) => {
+    const getResourceType$ = this.isBrowsing ? this.objectLookupService.getBrowsingResourceTypes() : this.objectLookupService.getResourceTypes();
+    getResourceType$.subscribe((res: any) => {
       if (res.data) {
         this.resourceType = res.data;
       }
     }, error => {
       console.log('error',error);
     });
-    this.subscription.add(getResourceType$);
   }
   getObjectInstance() {
+    const getObjectInstances$ = this.isBrowsing ? this.objectService.getBrowsingObjectInstances(this.sdOid) : this.objectService.getObjectInstances(this.sdOid);
     this.spinner.show();
-    this.objectService.getObjectInstances(this.sdOid).subscribe((res: any) => {
+    getObjectInstances$.subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectInstance = res.data.length ? res.data : [];

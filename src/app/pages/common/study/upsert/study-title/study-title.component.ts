@@ -9,6 +9,7 @@ import { CommonLookupService } from 'src/app/_rms/services/entities/common-looku
 import { StudyLookupService } from 'src/app/_rms/services/entities/study-lookup/study-lookup.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-study-title',
@@ -29,6 +30,7 @@ export class StudyTitleComponent implements OnInit {
     }
   }
   titleAdded = false;
+  isBrowsing: boolean = false;
   @Input() set publicTitle(title: any) {
     if (title) {
       this.createPublicTitle(title);
@@ -40,13 +42,14 @@ export class StudyTitleComponent implements OnInit {
   studyTitle: StudyTitleInterface
   len: any;
 
-  constructor( private fb: FormBuilder, private studyService: StudyService, private commonLookupService: CommonLookupService, private studyLookupService: StudyLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: FormBuilder, private studyService: StudyService, private commonLookupService: CommonLookupService, private studyLookupService: StudyLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private router: Router) {
     this.form = this.fb.group({
       studyTitles: this.fb.array([])
     });
    }
 
   ngOnInit(): void {
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     this.getTitleType();
     this.getLanguageCode();
     if (this.isEdit || this.isView) {
@@ -129,7 +132,8 @@ export class StudyTitleComponent implements OnInit {
     setTimeout(() => {
       this.spinner.show(); 
     });
-    const getTitleType$ = this.studyLookupService.getStudyTitleTypes().subscribe((res:any) => {
+    const getTitleType$ = this.isBrowsing ? this.studyLookupService.getBrowsingStudyTitleTypes() : this.studyLookupService.getStudyTitleTypes();
+    getTitleType$.subscribe((res:any) => {
       this.spinner.hide();
       if(res.data) {
         this.titleType = res.data;
@@ -138,13 +142,13 @@ export class StudyTitleComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title);
     });
-    this.subscription.add(getTitleType$);
   }
   getLanguageCode() {
     setTimeout(() => {
       this.spinner.show(); 
     });
-    this.commonLookupService.getLanguageCodes('en').subscribe((res: any) => {
+    const langCode$ = this.isBrowsing ? this.commonLookupService.getBrowsingLanguageCodes('en') : this.commonLookupService.getLanguageCodes('en');
+    langCode$.subscribe((res: any) => {
       this.spinner.hide();
       if (res.data) {
         this.languageCodes = res.data;
@@ -156,7 +160,8 @@ export class StudyTitleComponent implements OnInit {
   }
   getStudyTitle() {
     this.spinner.show();
-    this.studyService.getStudyTitles(this.sdSid).subscribe((res: any) => {
+    const getStudyTitles$ = this.isBrowsing ? this.studyService.getBrowsingStudyTitles(this.sdSid) : this.studyService.getStudyTitles(this.sdSid);
+    getStudyTitles$.subscribe((res: any) => {
       if (res && res.data) {
         this.studyTitle = res.data.length ? res.data : [];
         this.patchForm(this.studyTitle);

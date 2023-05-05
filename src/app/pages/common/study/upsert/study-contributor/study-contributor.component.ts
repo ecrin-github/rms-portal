@@ -9,6 +9,7 @@ import { CommonLookupService } from 'src/app/_rms/services/entities/common-looku
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-study-contributor',
@@ -37,14 +38,16 @@ export class StudyContributorComponent implements OnInit {
   @Output() emitContributor: EventEmitter<any> = new EventEmitter();
   arrLength = 0;
   len: any;
+  isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder, private commonLookupService: CommonLookupService, private objectService: DataObjectService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private commonLookup: CommonLookupService) { 
+  constructor( private fb: FormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectService: DataObjectService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private commonLookup: CommonLookupService) { 
     this.form = this.fb.group({
       studyContributors: this.fb.array([])
     });
   }
 
   ngOnInit(): void {
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     this.getContributorType();
     this.getOrganization();
     if (this.isEdit || this.isView) {
@@ -111,14 +114,14 @@ export class StudyContributorComponent implements OnInit {
     }
   }
   getContributorType() {
-    const getContributorType$ = this.commonLookupService.getContributorTypes().subscribe((res:any) => {
+    const getContributorType$ = this.isBrowsing ? this.commonLookupService.getBrowsingContributorTypes() : this.commonLookupService.getContributorTypes();
+    getContributorType$.subscribe((res:any) => {
       if(res.data) {
         this.contributorType = res.data;
       }
     }, error => {
       console.log('error', error);
     });
-    this.subscription.add(getContributorType$);
   }
   getOrganization() {
     this.spinner.show();
@@ -133,8 +136,9 @@ export class StudyContributorComponent implements OnInit {
     })
   }
   getStudyContributor() {
+    const getStudyContributor$ = this.isBrowsing ? this.studyService.getBrowsingStudyContributors(this.sdSid) : this.studyService.getStudyContributors(this.sdSid);
     this.spinner.show();
-    this.studyService.getStudyContributors(this.sdSid).subscribe((res: any) => {
+    getStudyContributor$.subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.studyContributor = res.data.length ? res.data : [];

@@ -15,6 +15,9 @@ export class StudyService {
   getFullStudyById(sdSid) {
     return this.http.get(`${base}/studies/full/${sdSid}`);
   }
+  getBrowsingFullStudyById(sdSid) {
+    return this.http.get(`${base}/browsing/studies/full/${sdSid}`);
+  }
 
   deleteFullStudyById(sdSid) {
     return this.http.delete(`${base}/studies/full/${sdSid}`);
@@ -55,6 +58,9 @@ export class StudyService {
   getStudyIdentifiers(sdSid) {
     return this.http.get(`${base}/studies/${sdSid}/identifiers`);
   }
+  getBrowsingStudyIdentifiers(sdSid) {
+    return this.http.get(`${base}/browsing/studies/${sdSid}/identifiers`);
+  }
   addStudyIdentifier(sdSid, payload) {
     return this.http.post(`${base}/studies/${sdSid}/identifiers`, payload);
   }
@@ -74,6 +80,9 @@ export class StudyService {
   getStudyTitles(sdSid) {
     return this.http.get(`${base}/studies/${sdSid}/titles`);
   }
+  getBrowsingStudyTitles(sdSid) {
+    return this.http.get(`${base}/browsing/studies/${sdSid}/titles`);
+  }
   addStudyTitle(sdSid, payload) {
     return this.http.post(`${base}/studies/${sdSid}/titles`, payload);
   }
@@ -91,6 +100,9 @@ export class StudyService {
   // study features
   getStudyFeatures(sdSid) {
     return this.http.get(`${base}/studies/${sdSid}/features`);
+  }
+  getBrowsingStudyFeatures(sdSid) {
+    return this.http.get(`${base}/browsing/studies/${sdSid}/features`);
   }
   addStudyFeature(sdSid, payload) {
     return this.http.post(`${base}/studies/${sdSid}/features`, payload);
@@ -110,6 +122,9 @@ export class StudyService {
   getStudyTopics(sdSid) {
     return this.http.get(`${base}/studies/${sdSid}/topics`);
   }
+  getBrowsingStudyTopics(sdSid) {
+    return this.http.get(`${base}/browsing/studies/${sdSid}/topics`);
+  }
   addStudyTopic(sdSid, payload) {
     return this.http.post(`${base}/studies/${sdSid}/topics`, payload);
   }
@@ -128,6 +143,9 @@ export class StudyService {
   getStudyRelationships(sdSid) {
     return this.http.get(`${base}/studies/${sdSid}/relationships`);
   }
+  getBrowsingStudyRelationships(sdSid) {
+    return this.http.get(`${base}/browsing/studies/${sdSid}/relationships`);
+  }
   addStudyRelationship(sdSid, payload) {
     return this.http.post(`${base}/studies/${sdSid}/relationships`, payload);
   }
@@ -145,6 +163,9 @@ export class StudyService {
   // study contributors
   getStudyContributors(sdSid) {
     return this.http.get(`${base}/studies/${sdSid}/contributors`);
+  }
+  getBrowsingStudyContributors(sdSid) {
+    return this.http.get(`${base}/browsing/studies/${sdSid}/contributors`);
   }
   addStudyContributor(sdSid, payload) {
     return this.http.post(`${base}/studies/${sdSid}/contributors`, payload);

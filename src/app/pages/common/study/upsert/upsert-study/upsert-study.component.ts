@@ -39,7 +39,7 @@ export class UpsertStudyComponent implements OnInit {
   studyMaxAgeView: any;
   count = 0;
   publicTitle: string = '';
-  monthValues = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+  monthValues = [{id:'1', name:'January'}, {id:'2', name:'February'}, {id:'3', name: 'March'}, {id:'4', name: 'April'}, {id:'5', name: 'May'}, {id:'6', name: 'June'}, {id:'7', name: 'July'}, {id:'8', name: 'August'}, {id:'9', name: 'September'}, {id:'10', name: 'October'}, {id:'11', name:'November'}, {id:'12', name: 'December'}];
   sticky: boolean = false;
   studyType: string = '';
   addType: string;
@@ -53,11 +53,12 @@ export class UpsertStudyComponent implements OnInit {
   controlledTerminology: [] = [];
   relationshipType: [] = [];
   isBrowsing: boolean = false;
+  role: any;
 
   constructor(private fb: FormBuilder, private router: Router, private studyLookupService: StudyLookupService, private studyService: StudyService, private activatedRoute: ActivatedRoute,
     private spinner: NgxSpinnerService, private toastr: ToastrService, private pdfGenerator: PdfGeneratorService, private jsonGenerator: JsonGeneratorService, private commonLookupService: CommonLookupService) {
     this.studyForm = this.fb.group({
-      sdSid: ['RMS-', Validators.pattern(/^(RMS-)(?=[^0-9]*[0-9])/)],
+      sdSid: 'RMS-',
       displayTitle: ['', Validators.required],
       briefDescription: '',
       dataSharingStatement: '',
@@ -94,10 +95,21 @@ export class UpsertStudyComponent implements OnInit {
 
 
   ngOnInit(): void {
+    if (localStorage.getItem('role')) {
+      this.role = localStorage.getItem('role');
+    }
     this.isEdit = this.router.url.includes('edit') ? true : false;
     this.isView = this.router.url.includes('view') ? true : false;
     this.isAdd = this.router.url.includes('add') ? true : false;
     this.isBrowsing = this.router.url.includes('browsing') ? true : false;
+    if (this.role === 'User') {
+      this.studyForm.get('studyTypeId').setValidators(Validators.required);
+      this.studyForm.get('studyStatusId').setValidators(Validators.required);
+      this.studyForm.get('studyStartYear').setValidators(Validators.required);
+    }
+    if (this.isAdd) {
+      this.studyForm.get('sdSid').setValidators(Validators.pattern(/^(RMS-)(?=[^0-9]*[0-9])/));
+    }
     this.getStudyType();
     this.getStudyStatus();
     this.getGenderEligibility();
@@ -125,7 +137,7 @@ export class UpsertStudyComponent implements OnInit {
     setTimeout(() => {
       this.spinner.show(); 
     });
-    const getStudyType$ = this.isBrowsing ? this.studyLookupService.getStudyTypes() : this.studyLookupService.getStudyTypes();
+    const getStudyType$ = this.isBrowsing ? this.studyLookupService.getBrowsingStudyTypes() : this.studyLookupService.getStudyTypes();
     getStudyType$.subscribe((res:any) => {
       this.spinner.hide();
       if(res.data) {
@@ -146,7 +158,8 @@ export class UpsertStudyComponent implements OnInit {
     setTimeout(() => {
       this.spinner.show(); 
     });
-    const getStudyStatus$ = this.studyLookupService.getStudyStatuses().subscribe((res: any) => {
+    const getStudyStatus$ = this.isBrowsing ? this.studyLookupService.getBrowsingStudyStatuses() : this.studyLookupService.getStudyStatuses();
+    getStudyStatus$.subscribe((res: any) => {
       this.spinner.hide();
       if(res.data) {
         this.studyStatuses = res.data;
@@ -160,13 +173,13 @@ export class UpsertStudyComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title);
     });
-    this.subscription.add(getStudyStatus$);
   }
   getGenderEligibility() {
     setTimeout(() => {
       this.spinner.show(); 
     });
-    const getGenderEligibility$ = this.studyLookupService.getGenderEligibilities().subscribe((res: any) => {
+    const getGenderEligibility$ = this.isBrowsing ? this.studyLookupService.getBrowsingGenderEligibilities() : this.studyLookupService.getGenderEligibilities();
+    getGenderEligibility$.subscribe((res: any) => {
       this.spinner.hide();
       if (res.data) {
         this.genderEligibility = res.data;
@@ -180,13 +193,13 @@ export class UpsertStudyComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title);
     });
-    this.subscription.add(getGenderEligibility$);
   }
   getTimeUnits() {
     setTimeout(() => {
       this.spinner.show(); 
     });
-    const getTimeUnits$ = this.studyLookupService.getTimeUnits().subscribe((res: any) => {
+    const getTimeUnits$ = this.isBrowsing ? this.studyLookupService.getBrowsingTimeUnits() : this.studyLookupService.getTimeUnits();
+    getTimeUnits$.subscribe((res: any) => {
       this.spinner.hide();
       if(res.data) {
         this.timeUnits = res.data;
@@ -208,13 +221,13 @@ export class UpsertStudyComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title);
     });
-    this.subscription.add(getTimeUnits$);
   }
   getStudyById(id) {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    this.studyService.getFullStudyById(id).subscribe((res: any) => {
+    const fullStudy$ = this.isBrowsing ? this.studyService.getBrowsingFullStudyById(id) : this.studyService.getFullStudyById(id);
+    fullStudy$.subscribe((res: any) => {
       console.log('data', res);
       this.spinner.hide();
       if (res && res.data && res.data.length) {
@@ -284,6 +297,10 @@ export class UpsertStudyComponent implements OnInit {
     if (this.addType === 'manual') {
       this.isSubmitted = true;
       console.log('payload', this.studyForm);
+      this.studyForm.patchValue({
+        maxAgeUnitsId: this.studyForm.value.maxAge === '' || null ? null : this.studyForm.value.maxAgeUnitsId,
+        minAgeUnitsId: this.studyForm.value.minAge === '' || null ? null : this.studyForm.value.minAgeUnitsId
+      })
       if (this.studyForm.valid) {
         const payload = JSON.parse(JSON.stringify(this.studyForm.value));
         this.spinner.show();
@@ -427,7 +444,8 @@ export class UpsertStudyComponent implements OnInit {
   // code to get values for id for generating pdf 
 
   getIdentifierType() {
-    this.studyLookupService.getStudyIdentifierTypes().subscribe((res: any) => {
+    const identifierType$ = this.isBrowsing ? this.studyLookupService.getBrowsingStudyIdentifierTypes() : this.studyLookupService.getStudyIdentifierTypes();
+    identifierType$.subscribe((res: any) => {
       if(res && res.data) {
         this.identifierTypes = res.data;
       }
@@ -441,7 +459,8 @@ export class UpsertStudyComponent implements OnInit {
     return identifierTypeArray && identifierTypeArray.length ? identifierTypeArray[0].name : ''
   }
   getTitleType() {
-    this.studyLookupService.getStudyTitleTypes().subscribe((res:any) => {
+    const titleType$ = this.isBrowsing ? this.studyLookupService.getBrowsingStudyTitleTypes() : this.studyLookupService.getStudyTitleTypes();
+    titleType$.subscribe((res:any) => {
       if(res.data) {
         this.titleType = res.data;
       }
@@ -454,8 +473,8 @@ export class UpsertStudyComponent implements OnInit {
     return titleTypeArray && titleTypeArray.length ? titleTypeArray[0].name : '';
   }
   getFeature() {
-    const getFeatureType$ = this.studyLookupService.getFeatureTypes();
-    const getFeatureValue$ = this.studyLookupService.getFeatureValues();
+    const getFeatureType$ = this.isBrowsing ? this.studyLookupService.getBrowsingFeatureTypes() : this.studyLookupService.getFeatureTypes();
+    const getFeatureValue$ = this.isBrowsing ?  this.studyLookupService.getBrowsingFeatureValues() : this.studyLookupService.getFeatureValues();
     const combine$ = combineLatest([getFeatureType$, getFeatureValue$]).subscribe(([featureType, featureValue] : [any, any]) => {
       if (featureType.data) {
         this.featureTypes = featureType.data;
@@ -476,7 +495,8 @@ export class UpsertStudyComponent implements OnInit {
     return featureValueArray && featureValueArray.length ? featureValueArray[0].name : '';
   }
   getTopicType() {
-    this.commonLookupService.getTopicTypes().subscribe((res: any) => {
+    const topicType$ = this.isBrowsing ? this.commonLookupService.getBrowsingTopicTypes() : this.commonLookupService.getTopicTypes();
+    topicType$.subscribe((res: any) => {
       if (res.data) {
         this.topicTypes = res.data;
       }
@@ -489,7 +509,8 @@ export class UpsertStudyComponent implements OnInit {
     return topicArray && topicArray.length ? topicArray[0].name : '';
   }
   getTopicVocabulary() {
-    this.commonLookupService.getTopicVocabularies().subscribe((res: any) => {
+    const topicVocabularies$ = this.isBrowsing ? this.commonLookupService.getBrowsingTopicVocabularies() : this.commonLookupService.getTopicVocabularies();
+    topicVocabularies$.subscribe((res: any) => {
       this.spinner.hide();
       if (res.data) {
         this.controlledTerminology = res.data;
@@ -504,7 +525,8 @@ export class UpsertStudyComponent implements OnInit {
     return arr && arr.length ? arr[0].name : 'None';
   }
   getRelationshipType() {
-    this.studyLookupService.getStudyRelationshipTypes().subscribe((res: any) => {
+    const relationshipType$ = this.isBrowsing ? this.studyLookupService.getBrowsingStudyRelationshipTypes() : this.studyLookupService.getStudyRelationshipTypes();
+    relationshipType$.subscribe((res: any) => {
       if(res.data) {
         this.relationshipType = res.data;
       }

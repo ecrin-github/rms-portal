@@ -64,10 +64,13 @@
                 </div>
                 <div class="col-md-6">
                     <label for="objectTypeId" class="font-style text-capitalize">Object type</label>
-                    <select id="objectTypeId" class="form-control" formControlName="objectTypeId" *ngIf="!isView" (change)="onTypeChange()">
+                    <select id="objectTypeId" class="form-control" formControlName="objectTypeId" *ngIf="!isView" (change)="onTypeChange()" [ngClass]="{ 'is-invalid': isSubmitted && g.objectTypeId.errors }">
                         <option selected disabled value="null">Select an option...</option>
                         <option [value]=type.id *ngFor="let type of objectType">{{type.name}}</option>
                     </select>
+                    <div class="col-md-12 invalid-feedback" *ngIf="isSubmitted && g.objectTypeId.errors">
+                        <p *ngIf="isSubmitted && g.objectTypeId.errors.required"> Please enter Object title</p>
+                    </div>  
                     <h6 style="font-weight: 100;" *ngIf="isView">{{findobjectType(objectData?.coreObject?.objectTypeId)}}</h6>
                 </div>
             </div>
@@ -76,7 +79,7 @@
                     <label for="doi" class="font-style text-capitalize">DOI</label>
                     <input id="doi" type="text" class="form-control" placeholder="Enter DOI..." formControlName="doi"
                         *ngIf="!isView" />
-                    <h6 style="font-weight: 100;" *ngIf="isView"><a [href]='"https://scholar.google.fr/scholar?q="+objectData?.coreObject?.doi' target="_blank">https://scholar.google.fr/scholar?q={{objectData?.coreObject?.doi}}</a> </h6>
+                    <h6 style="font-weight: 100;" *ngIf="isView"><a [href]='"https://scholar.google.fr/scholar?q="+objectData?.coreObject?.doi' target="_blank">{{objectData?.coreObject?.doi}}</a> </h6>
                 </div>
                 <div class="col-md-6">
                     <label for="version" class="font-style text-capitalize">Version</label>

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -24,6 +25,7 @@ export class StudyFeatureComponent implements OnInit {
   featureInterventional = [];
   featureObservational = [];
   selectedStudyType: any;
+  isBrowsing: boolean = false;
   subscription: Subscription = new Subscription();
   @Input() isView: boolean;
   @Input() isEdit: boolean;
@@ -43,13 +45,14 @@ export class StudyFeatureComponent implements OnInit {
   showAll: boolean = true;
 
 
-  constructor(private fb: FormBuilder, private studyService: StudyService, private studyLookupService: StudyLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor(private fb: FormBuilder, private router: Router, private studyService: StudyService, private studyLookupService: StudyLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       studyFeatures: this.fb.array([])
     });
   }
 
   ngOnInit(): void {
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     this.getFeature();
     if (this.isEdit || this.isView) {
       this.getStudyFeature()
@@ -71,7 +74,8 @@ export class StudyFeatureComponent implements OnInit {
   }
   getStudyFeature() {
     this.spinner.show();
-    this.studyService.getStudyFeatures(this.sdSid).subscribe((res: any) => {
+    const studyFeature$ = this.isBrowsing ? this.studyService.getBrowsingStudyFeatures(this.sdSid) : this.studyService.getStudyFeatures(this.sdSid);
+    studyFeature$.subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.studyFeature = res.data.length ? res.data : [];
@@ -93,8 +97,8 @@ export class StudyFeatureComponent implements OnInit {
     })
   }
   getFeature() {
-    const getFeatureType$ = this.studyLookupService.getFeatureTypes();
-    const getFeatureValue$ = this.studyLookupService.getFeatureValues();
+    const getFeatureType$ =  this.isBrowsing ? this.studyLookupService.getBrowsingFeatureTypes() : this.studyLookupService.getFeatureTypes();
+    const getFeatureValue$ = this.isBrowsing ? this.studyLookupService.getBrowsingFeatureValues() : this.studyLookupService.getFeatureValues();
     this.spinner.show();
     const combine$ = combineLatest([getFeatureType$, getFeatureValue$]).subscribe(([featureType, featureValue] : [any, any]) => {
       this.spinner.hide();

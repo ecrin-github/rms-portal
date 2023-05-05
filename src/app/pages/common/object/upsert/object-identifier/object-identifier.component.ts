@@ -9,6 +9,7 @@ import { StudyService } from 'src/app/_rms/services/entities/study/study.service
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 import { ObjectLookupService } from 'src/app/_rms/services/entities/object-lookup/object-lookup.service';
+import { Router } from '@angular/router';
 
 
 
@@ -32,14 +33,16 @@ export class ObjectIdentifierComponent implements OnInit {
   }
   @Output() emitIdentifier: EventEmitter<any> = new EventEmitter();
   len: any;
+  isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: FormBuilder, private router: Router, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectIdentifiers: this.fb.array([])
     });
    }
 
   ngOnInit(): void {
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     this.getIdentifierType();
     if (this.isEdit || this.isView) {
       this.getObjectIdentifier();
@@ -94,18 +97,19 @@ export class ObjectIdentifierComponent implements OnInit {
     }
   }
   getIdentifierType() {
-    const getIdentifierType$ = this.objectLookupService.getObjectIdentifierTypes().subscribe((res:any) => {
+    const getIdentifierType$ = this.isBrowsing ? this.objectLookupService.getBrowsingObjectIdentifierTypes() : this.objectLookupService.getObjectIdentifierTypes();
+    getIdentifierType$.subscribe((res:any) => {
       if(res.data) {
         this.identifierType = res.data;
       }
     }, error => {
       this.toastr.error(error.error.title);
     });
-    this.subscription.add(getIdentifierType$);
   }
   getObjectIdentifier() {
+    const getObjectIdentifiers$ = this.isBrowsing ? this.objectService.getBrowsingObjectIdentifiers(this.sdOid) : this.objectService.getObjectIdentifiers(this.sdOid);
     this.spinner.show();
-    this.objectService.getObjectIdentifiers(this.sdOid).subscribe((res: any) => {
+    getObjectIdentifiers$.subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectIdentifier = res.data.length ? res.data : [];

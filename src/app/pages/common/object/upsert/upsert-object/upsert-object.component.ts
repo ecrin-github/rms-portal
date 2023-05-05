@@ -123,6 +123,9 @@ export class UpsertObjectComponent implements OnInit {
     if (localStorage.getItem('organisationId')) {
       this.orgId = localStorage.getItem('organisationId');
     }
+    if (this.role === 'User') {
+      this.objectForm.get('objectTypeId').setValidators(Validators.required);
+    }
     this.getStudyList();
     this.getObjectClass();
     this.getObjectType();
@@ -157,7 +160,8 @@ export class UpsertObjectComponent implements OnInit {
         this.spinner.hide();
       })
     } else {
-      this.listService.getStudyList().subscribe((res: any) => {
+      const getStudyList$ = this.isBrowsing ? this.listService.getBrowsingStudyList() : this.listService.getStudyList();
+      getStudyList$.subscribe((res: any) => {
         this.spinner.hide();
         if (res && res.data) {
           this.studyList = res.data;
@@ -176,7 +180,8 @@ export class UpsertObjectComponent implements OnInit {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    const getObjectClass$ = this.objectLookupService.getObjectClasses().subscribe((res: any) => {
+    const getObjectClass$ = this.isBrowsing ? this.objectLookupService.getBrowsingObjectClasses() : this.objectLookupService.getObjectClasses()
+    getObjectClass$.subscribe((res: any) => {
       this.spinner.hide();
       if(res.data) {
         this.objectClass = res.data;
@@ -185,13 +190,13 @@ export class UpsertObjectComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title);
     });
-    this.subscription.add(getObjectClass$);
   }
   getObjectType() {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    const getObjectType$ = this.objectLookupService.getObjectTypes().subscribe((res: any) => {
+    const getObjectType$ = this.isBrowsing ? this.objectLookupService.getBrowsingObjectTitleTypes() : this.objectLookupService.getObjectTypes();
+    getObjectType$.subscribe((res: any) => {
       this.spinner.hide();
       if (res.data) {
         this.objectType = res.data;
@@ -200,13 +205,13 @@ export class UpsertObjectComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title);
     });
-    this.subscription.add(getObjectType$);
   }
   getAccessType() {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    const getAccessType$ = this.objectLookupService.getAccessTypes().subscribe((res: any) => {
+    const getAccessType$ = this.isBrowsing ? this.objectLookupService.getBrowsingAccessTypes() : this.objectLookupService.getAccessTypes();
+    getAccessType$.subscribe((res: any) => {
       this.spinner.hide();
       if(res.data) {
         this.accessType = res.data;
@@ -215,13 +220,13 @@ export class UpsertObjectComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title);
     });
-    this.subscription.add(getAccessType$);
   }
   getKeyType() {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    const getKeyType$ = this.objectLookupService.getRecordKeyTypes().subscribe((res: any) => {
+    const getKeyType$ = this.isBrowsing ? this.objectLookupService.getBrowsingRecordKeyTypes() : this.objectLookupService.getRecordKeyTypes();
+    getKeyType$.subscribe((res: any) => {
       this.spinner.hide();
       if (res.data) {
         this.keyType = res.data;
@@ -230,13 +235,13 @@ export class UpsertObjectComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title);
     });
-    this.subscription.add(getKeyType$);
   }
   getDeidentificationType() {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    const getDeidentificationType$ = this.objectLookupService.getDeidentificationTypes().subscribe((res: any) => {
+    const getDeidentificationType$ = this.isBrowsing ? this.objectLookupService.getBrowsingDeidentificationTypes() : this.objectLookupService.getDeidentificationTypes();
+    getDeidentificationType$.subscribe((res: any) => {
       this.spinner.hide();
       if (res.data) {
         this.deidentificationType = res.data
@@ -245,13 +250,13 @@ export class UpsertObjectComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title);
     });
-    this.subscription.add(getDeidentificationType$);
   }
   getConsentType() {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    const getConsentType$ = this.objectLookupService.getConsentTypes().subscribe((res:any) => {
+    const getConsentType$ = this.isBrowsing ? this.objectLookupService.getBrowsingConsentTypes() : this.objectLookupService.getConsentTypes();
+    getConsentType$.subscribe((res:any) => {
       this.spinner.hide();
       if(res.data) {
         this.consentType = res.data;
@@ -260,13 +265,13 @@ export class UpsertObjectComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title);
     });
-    this.subscription.add(getConsentType$);
   }
   getLanguageCode() {
     setTimeout(() => {
      this.spinner.show(); 
     });
-    this.commonLookupService.getLanguageCodes('en').subscribe((res: any) => {
+    const getLanguageCodes$ = this.isBrowsing ? this.commonLookupService.getBrowsingLanguageCodes('en') : this.commonLookupService.getLanguageCodes('en');
+    getLanguageCodes$.subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.languageCode = res.data;
@@ -280,7 +285,8 @@ export class UpsertObjectComponent implements OnInit {
     setTimeout(() => {
      this.spinner.show();
     });
-    this.objectService.getDataObjectById(id).subscribe((res: any) => {
+    const getDataObjectById$ = this.isBrowsing ? this.objectService.getBrowsingDataObjectById(id) : this.objectService.getDataObjectById(id);
+    getDataObjectById$.subscribe((res: any) => {
       this.spinner.hide();
       if(res && res.data && res.data.length) {
         this.objectData = res.data[0];
@@ -549,7 +555,8 @@ export class UpsertObjectComponent implements OnInit {
 
 // code to get values for id for generating pdf and json
   getSizeUnit() {
-    this.objectLookupService.getSizeUnits().subscribe((res: any) => {
+    const getSizeUnit$ = this.isBrowsing ? this.objectLookupService.getBrowsingSizeUnits() : this.objectLookupService.getSizeUnits();
+    getSizeUnit$.subscribe((res: any) => {
       if(res.data) {
         this.sizeUnit = res.data;
       }
@@ -558,7 +565,8 @@ export class UpsertObjectComponent implements OnInit {
     });
   }
   getResourceType() {
-    this.objectLookupService.getResourceTypes().subscribe((res: any) => {
+    const getResourceType$ = this.isBrowsing ? this.objectLookupService.getBrowsingResourceTypes() : this.objectLookupService.getResourceTypes();
+    getResourceType$.subscribe((res: any) => {
       if (res.data) {
         this.resourceType = res.data;
       }
@@ -575,7 +583,8 @@ export class UpsertObjectComponent implements OnInit {
     return sizeArray && sizeArray.length ? sizeArray[0].name : '';
   }
   getTitleType() {
-    this.objectLookupService.getObjectTitleTypes().subscribe((res:any) => {
+    const getTitleType$ = this.isBrowsing ? this.objectLookupService.getBrowsingObjectTitleTypes() : this.objectLookupService.getObjectTitleTypes();
+    getTitleType$.subscribe((res:any) => {
       if(res.data) {
         this.titleType = res.data;
       }
@@ -588,7 +597,8 @@ export class UpsertObjectComponent implements OnInit {
     return titleTypeArray && titleTypeArray.length ? titleTypeArray[0].name : ''
   }
   getDateType() {
-    this.objectLookupService.getDateTypes().subscribe((res: any) => {
+    const getDateTypes$ = this.isBrowsing ? this.objectLookupService.getBrowsingDateTypes() : this.objectLookupService.getDateTypes();
+    getDateTypes$.subscribe((res: any) => {
       if(res.data) {
         this.dateType = res.data
       }
@@ -601,7 +611,8 @@ export class UpsertObjectComponent implements OnInit {
     return dateTypeArray && dateTypeArray.length ? dateTypeArray[0].name : '';
   }
   getTopicType() {
-    this.commonLookupService.getTopicTypes().subscribe((res: any) => {
+    const getTopicTypes$ = this.isBrowsing ? this.commonLookupService.getBrowsingTopicTypes() : this.commonLookupService.getTopicTypes();
+    getTopicTypes$.subscribe((res: any) => {
       if(res.data) {
         this.topicType = res.data;
       }
@@ -614,7 +625,8 @@ export class UpsertObjectComponent implements OnInit {
     return topicTypeArrray && topicTypeArrray.length ? topicTypeArrray[0].name : '';
   }
   getIdentifierType() {
-    this.objectLookupService.getObjectIdentifierTypes().subscribe((res:any) => {
+    const getIdentifierTypes$ = this.isBrowsing ? this.objectLookupService.getBrowsingObjectIdentifierTypes() : this.objectLookupService.getObjectIdentifierTypes();
+    getIdentifierTypes$.subscribe((res:any) => {
       if(res.data) {
         this.identifierType = res.data;
       }
@@ -627,7 +639,8 @@ export class UpsertObjectComponent implements OnInit {
     return identifierTypeArray && identifierTypeArray.length ? identifierTypeArray[0].name : '';
   }
   getDescriptionType() {
-    this.objectLookupService.getDescriptionTypes().subscribe((res: any) => {
+    const getDescriptionTypes$ = this.isBrowsing ? this.objectLookupService.getBrowsingDescriptionTypes() : this.objectLookupService.getDescriptionTypes();
+    getDescriptionTypes$.subscribe((res: any) => {
       if(res.data) {
         this.descriptionType = res.data;
       }

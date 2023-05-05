@@ -9,6 +9,7 @@ import { CommonLookupService } from 'src/app/_rms/services/entities/common-looku
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 import { ObjectLookupService } from 'src/app/_rms/services/entities/object-lookup/object-lookup.service';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-object-description',
@@ -31,14 +32,16 @@ export class ObjectDescriptionComponent implements OnInit {
   }
   @Output() emitDescription: EventEmitter<any> = new EventEmitter();
   len: any;
+  isBrowsing: boolean = false;
   
-  constructor( private fb: FormBuilder, private commonLookupService: CommonLookupService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: FormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectDescriptions: this.fb.array([])
     })
    }
 
   ngOnInit(): void {
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     this.getDescriptionType();
     this.getLanguageCode();
     if (this.isEdit || this.isView) {
@@ -94,28 +97,29 @@ export class ObjectDescriptionComponent implements OnInit {
     }
   }
   getDescriptionType() {
-    const getDescriptionType$ = this.objectLookupService.getDescriptionTypes().subscribe((res: any) => {
+    const getDescriptionType$ = this.isBrowsing ? this.objectLookupService.getBrowsingDescriptionTypes() : this.objectLookupService.getDescriptionTypes();
+    getDescriptionType$.subscribe((res: any) => {
       if(res.data) {
         this.descriptionType = res.data;
       }
     }, error => {
       console.log('error', error);
     });
-    this.subscription.add(getDescriptionType$);
   }
   getLanguageCode() {
-    const getLanguageCode$ = this.commonLookupService.getLanguageCodes('en').subscribe((res:any) => {
+    const getLanguageCode$ = this.isBrowsing ? this.commonLookupService.getBrowsingLanguageCodes('en') : this.commonLookupService.getLanguageCodes('en')
+    getLanguageCode$.subscribe((res:any) => {
       if(res.data) {
         this.languageCode = res.data;
       }
     }, error => {
       console.log('error', error);
     });
-    this.subscription.add(getLanguageCode$);
   }
   getObjectDescription() {
+    const getObjectDescriptions$ = this.isBrowsing ? this.objectService.getBrowsingObjectDescriptions(this.sdOid) : this.objectService.getObjectDescriptions(this.sdOid);
     this.spinner.show();
-    this.objectService.getObjectDescriptions(this.sdOid).subscribe((res: any) => {
+    getObjectDescriptions$.subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.objectDescription = res.data.length ? res.data : [];

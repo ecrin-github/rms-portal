@@ -34,6 +34,9 @@ export class DataObjectService {
   getDataObjectById(sdOid) {
     return this.http.get(`${base}/data-objects/full/${sdOid}`);
   }
+  getBrowsingDataObjectById(sdOid) {
+    return this.http.get(`${base}/browsing/data-objects/full/${sdOid}`);
+  }
   addDataObject(sdSid, payload) {
     // note inclusion of parent sdSid in call
     return this.http.post(`${base}/data-objects/${sdSid}`, payload);
@@ -51,6 +54,9 @@ export class DataObjectService {
 
   getObjectInstances(sdOid) {
     return this.http.get(`${base}/data-objects/${sdOid}/instances`);
+  }
+  getBrowsingObjectInstances(sdOid) {
+    return this.http.get(`${base}/browsing/data-objects/${sdOid}/instances`);
   }
   addObjectInstance(sdOid, payload) {
     return this.http.post(`${base}/data-objects/${sdOid}/instances`, payload);
@@ -71,6 +77,9 @@ export class DataObjectService {
   getObjectTitles(sdOid) {
     return this.http.get(`${base}/data-objects/${sdOid}/titles`);
   }
+  getBrowsingObjectTitles(sdOid) {
+    return this.http.get(`${base}/browsing/data-objects/${sdOid}/titles`);
+  }
   addObjectTitle(sdOid, payload) {
     return this.http.post(`${base}/data-objects/${sdOid}/titles`, payload);
   }
@@ -89,6 +98,9 @@ export class DataObjectService {
 
   getObjectDates(sdOid) {
     return this.http.get(`${base}/data-objects/${sdOid}/dates`);
+  }
+  getBrowsingObjectDates(sdOid) {
+    return this.http.get(`${base}/browsing/data-objects/${sdOid}/dates`);
   }
   addObjectDate(sdOid, payload) {
     return this.http.post(`${base}/data-objects/${sdOid}/dates`, payload);
@@ -128,6 +140,9 @@ export class DataObjectService {
   getObjectTopics(sdOid) {
     return this.http.get(`${base}/data-objects/${sdOid}/topics`);
   }
+  getBrowsingObjectTopics(sdOid) {
+    return this.http.get(`${base}/browsing/data-objects/${sdOid}/topics`);
+  }
   addObjectTopic(sdOid, payload) {
     return this.http.post(`${base}/data-objects/${sdOid}/topics`, payload);
   }
@@ -146,6 +161,9 @@ export class DataObjectService {
 
   getObjectRelationships(sdOid) {
     return this.http.get(`${base}/data-objects/${sdOid}/relationships`);
+  }
+  getBrowsingObjectRelationships(sdOid) {
+    return this.http.get(`${base}/browsing/data-objects/${sdOid}/relationships`);
   }
   addObjectRelationship(sdOid, payload) {
     return this.http.post(`${base}/data-objects/${sdOid}/relationships`, payload);
@@ -166,6 +184,9 @@ export class DataObjectService {
   getObjectContributors(sdOid) {
     return this.http.get(`${base}/data-objects/${sdOid}/contributors`);
   }
+  getBrowsingObjectContributors(sdOid) {
+    return this.http.get(`${base}/browsing/data-objects/${sdOid}/contributors`);
+  }
   addObjectContributor(sdOid, payload) {
     return this.http.post(`${base}/data-objects/${sdOid}/contributors`, payload);
   }
@@ -184,6 +205,9 @@ export class DataObjectService {
 
   getObjectDescriptions(sdOid) {
     return this.http.get(`${base}/data-objects/${sdOid}/descriptions`);
+  }
+  getBrowsingObjectDescriptions(sdOid) {
+    return this.http.get(`${base}/browsing/data-objects/${sdOid}/descriptions`);
   }
   addObjectDescription(sdOid, payload) {
     return this.http.post(`${base}/data-objects/${sdOid}/descriptions`, payload);
@@ -204,6 +228,9 @@ export class DataObjectService {
   getObjectRights(sdOid) {
     return this.http.get(`${base}/data-objects/${sdOid}/rights`);
   }
+  getBrowsingObjectRights(sdOid) {
+    return this.http.get(`${base}/browsing/data-objects/${sdOid}/rights`);
+  }
   addObjectRight(sdOid, payload) {
     return this.http.post(`${base}/data-objects/${sdOid}/rights`, payload);
   }
@@ -222,6 +249,9 @@ export class DataObjectService {
 
   getObjectIdentifiers(sdOid) {
     return this.http.get(`${base}/data-objects/${sdOid}/identifiers`);
+  }
+  getBrowsingObjectIdentifiers(sdOid) {
+    return this.http.get(`${base}/browsing/data-objects/${sdOid}/identifiers`);
   }
   addObjectIdentifier(sdOid, payload) {
     return this.http.post(`${base}/data-objects/${sdOid}/identifiers`, payload);

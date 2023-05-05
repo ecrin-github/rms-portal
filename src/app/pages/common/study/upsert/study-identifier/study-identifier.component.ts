@@ -8,9 +8,9 @@ import { StudyService } from 'src/app/_rms/services/entities/study/study.service
 import * as _ from 'lodash';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
-import { DtpService } from 'src/app/_rms/services/entities/dtp/dtp.service';
 import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { StudyLookupService } from 'src/app/_rms/services/entities/study-lookup/study-lookup.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-study-identifier',
@@ -33,16 +33,18 @@ export class StudyIdentifierComponent implements OnInit {
     }
   }
   len: any;
+  isBrowsing: boolean = false;
   @Output() emitIdentifier: EventEmitter<any> = new EventEmitter();
   @ViewChildren("panel", { read: ElementRef }) panel: QueryList<ElementRef>;
 
-  constructor( private fb: FormBuilder, private studyService: StudyService, private studyLookupService: StudyLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private dtpService: DtpService, private commonLookup: CommonLookupService) { 
+  constructor( private fb: FormBuilder, private studyService: StudyService, private studyLookupService: StudyLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private router: Router, private commonLookup: CommonLookupService) { 
     this.form = this.fb.group({
       studyIdentifiers: this.fb.array([])
     });
   }
 
   ngOnInit(): void {
+    this.isBrowsing = this.router.url.includes('browsing') ? true : false;
     this.getIdentifierType();
     this.getOrganization();
     if(this.isEdit || this.isView) {
@@ -119,7 +121,8 @@ export class StudyIdentifierComponent implements OnInit {
     setTimeout(() => {
       this.spinner.show(); 
     });
-    const getIdentifierType$ = this.studyLookupService.getStudyIdentifierTypes().subscribe((res: any) => {
+    const getIdentifierType$ = this.isBrowsing ? this.studyLookupService.getBrowsingStudyIdentifierTypes() : this.studyLookupService.getStudyIdentifierTypes();
+    getIdentifierType$.subscribe((res: any) => {
       if(res && res.data) {
         this.identifierTypes = res.data;
       }
@@ -128,11 +131,11 @@ export class StudyIdentifierComponent implements OnInit {
       this.spinner.hide();
       this.toastr.error(error.error.title);
     });
-    this.subscription.add(getIdentifierType$);
   }
   getStudyIdentifier() {
+    const studyIdentifier$ = this.isBrowsing ? this.studyService.getBrowsingStudyIdentifiers(this.sdSid) : this.studyService.getStudyIdentifiers(this.sdSid);
     this.spinner.show();
-    this.studyService.getStudyIdentifiers(this.sdSid).subscribe((res:any) => {
+    studyIdentifier$.subscribe((res:any) => {
       if(res && res.data) {
         this.studyIdentifier = res.data.length ? res.data : [];
         this.patchForm(this.studyIdentifier);
