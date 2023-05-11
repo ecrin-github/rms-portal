@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
   selector: 'app-auth',
@@ -11,14 +12,28 @@ export class AuthComponent implements OnInit {
   today: Date = new Date();
   showFooter: boolean = true;
 
-  constructor( private router: Router) { }
+  constructor( private router: Router, public oidcSecurityService: OidcSecurityService) { }
 
   ngOnInit(): void {
     this.showFooter = this.router.url.includes('contactUs') ? false : true;
   }
+  login() {
+    this.oidcSecurityService.authorize();
+  }
   goToContact() {
     this.router.navigate([])
-    .then(result => { window.open('/contactUs', '_blank'); });
+      .then(result => { window.open('/contactUs', '_blank'); });
+  }
+  goToUserGuide() {
+    this.router.navigate([])
+    .then(result => { window.open('https://crr.gitbook.io/crr/', '_blank'); });
 }
-
+  goToBrowse() {
+    this.router.navigate([])
+      .then(result => { window.open('/browsing', '_blank'); });
+  }
+  goToMdr() {
+      this.router.navigate([])
+      .then(result => { window.open('https://crmdr.org/', '_blank'); });
+  }
 }

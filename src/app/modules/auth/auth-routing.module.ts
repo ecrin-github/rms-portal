@@ -9,7 +9,6 @@ import {LogoutComponent} from './logout/logout.component';
 const routes: Routes = [
   {
     path: '',
-    component: AuthComponent,
     children: [
       {
         path: '',
@@ -18,7 +17,7 @@ const routes: Routes = [
       },
       {
         path: 'login',
-        component: LoginComponent,
+        component: AuthComponent,
         // data: {returnUrl: window.location.pathname}
       },
       {

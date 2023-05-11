@@ -1,4 +1,4 @@
-<div class="d-flex flex-column flex-root h-100" id="kt_login_wrapper">
+<!-- <div class="d-flex flex-column flex-root h-100" id="kt_login_wrapper">
   <div class="login login-1 login-signin-on d-flex flex-column flex-lg-row flex-column-fluid bg-white" id="kt_login">
     <div class="login-aside d-flex flex-column flex-row-auto" style="background-color: #FFFFFF;">
       <div class="d-flex flex-column-auto flex-column">
@@ -26,6 +26,75 @@
       <div class="d-flex flex-column-fluid">
         <router-outlet></router-outlet>
       </div>
+    </div>
+  </div>
+</div> -->
+<div class="header" style="height: 80px;">
+  <div class="dropdown show mt-auto">
+    <i class="fas fa-align-justify dropdown-toggle" style="cursor: pointer;" aria-hidden="true" data-toggle="dropdown"
+      aria-haspopup="true" aria-expanded="false"></i>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+      <a class="dropdown-item" href="javascript:void(0)">About</a>
+      <a class="dropdown-item" href="javascript:void(0)" (click)="goToUserGuide()">User Guide</a>
+      <a class="dropdown-item" href="javascript:void(0)" (click)="goToMdr()">MDR</a>
+      <a class="dropdown-item" href="javascript:void(0)">Legal Notice</a>
+      <a class="dropdown-item" href="javascript:void(0)">Data Privacy Policy</a>
+    </div>
+  </div>
+  <div class="header-right">
+    <img src="./assets/media/logos/ecrin-logo.png" style="height: 55px;" />
+    <img src="./assets/media/logos/uio-english.jpg" style="height: 55px;" />
+  </div>
+</div>
+<div class="row" style="height: 75vh; width: 101vw;">
+  <div class="col-md-6">
+
+  </div>
+  <div class="col-md-6">
+    <div class="row pt-10">
+      <div class="col-md-3 text-center p-0">
+        <img src="./assets/media/logos/icon-blue.png" alt="">
+      </div>
+      <div class="col-md-9 m-auto p-0">
+        <span class="text-uppercase" style="font-size: 35px; font-weight: bold;">Clinical Research Repository</span>
+      </div>
+    </div>
+    <div class="row pt-10">
+      <div class="col-md-12 text-center">
+        <span style="font-size: 14px;">Supporting clinical researchersin sharing their data for re-analysis and
+          secondary analysis.</span>
+      </div>
+    </div>
+    <div class="row pt-10">
+      <div class="col-md-4 text-center"><button class="btn btn-primary" style="background: #000091;"
+          (click)="login()">Login</button></div>
+      <div class="col-md-4 text-center"><button class="btn btn-primary" style="background: #000091;"
+          (click)="goToContact()">Contact Us</button></div>
+      <div class="col-md-4 text-center"><button class="btn btn-primary" style="background: #000091;"
+          (click)="goToBrowse()">Browse</button></div>
+    </div>
+  </div>
+</div>
+<div class="row" style="background-color: #000091; height: 70px; width: 101vw;">
+  <div class="col-2 col-md-2 m-auto" style="background: white;">
+    <img src="./assets/media/logos/funded.png" alt="" class="img-fluid">
+  </div>
+  <div class="col-2 col-md-2 m-auto">
+    <ul style="color: white; list-style: none; font-size: 10px;">
+      <li style="cursor: pointer;">About</li>
+      <li style="cursor: pointer;" (click)="goToUserGuide()">User Guide</li>
+      <li style="cursor: pointer;" (click)="goToMdr()">MDR</li>
+    </ul>
+  </div>
+  <div class="col-5 col-md-5 text-right">
+    <span style="font-size: 9px; color: white;">All Projects are supported by the Horizon Europe and Horizon 2020
+      Programme.<br> Canserv under GA 101058620, BY-COVID under GA 101046203 <br> EOSC-Life under GA 824087</span>
+  </div>
+  <div class="col-3 col-md-3 m-auto">
+    <div class="row">
+      <div class="col-4 col-md-4"><img src="./assets/media/logos/eoscBW.png" alt="" class="img-fluid"></div>
+      <div class="col-4 col-md-4"><img src="./assets/media/logos/bycovdBW.png" alt="" class="img-fluid"></div>
+      <div class="col-4 col-md-4"><img src="./assets/media/logos/canservBW.png" alt="" class="img-fluid"></div>
     </div>
   </div>
 </div>

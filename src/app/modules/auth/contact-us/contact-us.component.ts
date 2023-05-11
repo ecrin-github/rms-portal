@@ -26,5 +26,6 @@ export class ContactUsComponent implements OnInit {
   onChange() {
     this.reason = this.contactForm.value.reason
   }
-
+  goToUserGuide() {}
+  goToMdr() {}
 }
