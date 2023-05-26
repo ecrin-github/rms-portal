@@ -45,13 +45,16 @@ export class CommonLookupService {
   getOrganizationList() {
     return this.http.get(`${base}/context/orgnames`);
   }
+  getBrowsingOrganizationList() {
+    return this.http.get(`${base}/browsing/context/orgnames`);
+  }
+
 
   getLanguageCodes(nameLang) {
     return this.http.get(`${base}/lookup/major-langs/${nameLang}`);
   }
   getBrowsingLanguageCodes(nameLang) {
-    return this.http.get(`${base}/lookup/major-langs/${nameLang}`);
-    // return this.http.get(`${base}/browsing/lookup/major-langs/${nameLang}`);
+    return this.http.get(`${base}/browsing/lookup/major-langs/${nameLang}`);
   }
 
   //  checks if an object is linked to a dtp/dup withou associated study

@@ -125,7 +125,8 @@ export class StudyContributorComponent implements OnInit {
   }
   getOrganization() {
     this.spinner.show();
-    this.commonLookup.getOrganizationList().subscribe((res: any) => {
+    const getOrganisationList$ = this.isBrowsing ? this.commonLookupService.getBrowsingOrganizationList() : this.commonLookupService.getOrganizationList()
+    getOrganisationList$.subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.organizationList = res.data;

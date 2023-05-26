@@ -107,7 +107,8 @@ export class StudyIdentifierComponent implements OnInit {
   }
   getOrganization() {
     this.spinner.show();
-    this.commonLookup.getOrganizationList().subscribe((res: any) => {
+    const getOrganisationList$ = this.isBrowsing ? this.commonLookup.getBrowsingOrganizationList() : this.commonLookup.getOrganizationList();
+    getOrganisationList$.subscribe((res: any) => {
       this.spinner.hide();
       if (res && res.data) {
         this.organizationList = res.data;

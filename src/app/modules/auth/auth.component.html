@@ -31,7 +31,7 @@
 </div> -->
 <div class="header" style="height: 80px;">
   <div class="dropdown show mt-auto">
-    <i class="fas fa-align-justify dropdown-toggle" style="cursor: pointer;" aria-hidden="true" data-toggle="dropdown"
+    <i class="fas fa-align-justify dropdown-toggle" style="cursor: pointer; font-size: 25px;" aria-hidden="true" data-toggle="dropdown"
       aria-haspopup="true" aria-expanded="false"></i>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
       <a class="dropdown-item" href="javascript:void(0)">About</a>
@@ -42,8 +42,8 @@
     </div>
   </div>
   <div class="header-right">
-    <img src="./assets/media/logos/ecrin-logo.png" style="height: 55px;" />
-    <img src="./assets/media/logos/uio-english.jpg" style="height: 55px;" />
+    <a href="https://ecrin.org/" target="_blank"><img src="./assets/media/logos/ecrin-logo.png" style="height: 55px;" /></a>
+    <a href="https://www.uio.no/english/services/it/research/sensitive-data/" target="_blank"><img src="./assets/media/logos/uio-english.jpg" style="height: 55px;" /></a>
   </div>
 </div>
 <div class="row" style="height: 75vh; width: 101vw;">
@@ -66,21 +66,21 @@
       </div>
     </div>
     <div class="row pt-10">
-      <div class="col-md-4 text-center"><button class="btn btn-primary" style="background: #000091;"
+      <div class="col-md-4 text-center"><button class="btn btn-primary" style="background: #000091; font-weight: bold;"
           (click)="login()">Login</button></div>
-      <div class="col-md-4 text-center"><button class="btn btn-primary" style="background: #000091;"
+      <div class="col-md-4 text-center"><button class="btn btn-primary" style="background: #000091; font-weight: bold;"
           (click)="goToContact()">Contact Us</button></div>
-      <div class="col-md-4 text-center"><button class="btn btn-primary" style="background: #000091;"
+      <div class="col-md-4 text-center"><button class="btn btn-primary" style="background: #000091; font-weight: bold;"
           (click)="goToBrowse()">Browse</button></div>
     </div>
   </div>
 </div>
 <div class="row" style="background-color: #000091; height: 70px; width: 101vw;">
-  <div class="col-2 col-md-2 m-auto" style="background: white;">
+  <div class="col-2 col-md-2 m-auto p-0" style="background: white;">
     <img src="./assets/media/logos/funded.png" alt="" class="img-fluid">
   </div>
   <div class="col-2 col-md-2 m-auto">
-    <ul style="color: white; list-style: none; font-size: 10px;">
+    <ul style="color: white; list-style: none; font-size: 14px; margin-bottom: 0;">
       <li style="cursor: pointer;">About</li>
       <li style="cursor: pointer;" (click)="goToUserGuide()">User Guide</li>
       <li style="cursor: pointer;" (click)="goToMdr()">MDR</li>
@@ -92,9 +92,9 @@
   </div>
   <div class="col-3 col-md-3 m-auto">
     <div class="row">
-      <div class="col-4 col-md-4"><img src="./assets/media/logos/eoscBW.png" alt="" class="img-fluid"></div>
-      <div class="col-4 col-md-4"><img src="./assets/media/logos/bycovdBW.png" alt="" class="img-fluid"></div>
-      <div class="col-4 col-md-4"><img src="./assets/media/logos/canservBW.png" alt="" class="img-fluid"></div>
+      <div class="col-4 col-md-4 p-0"><a href="https://www.eosc-life.eu/" target="_blank"><img src="./assets/media/logos/eoscBW.png" alt="" class="img-fluid"></a></div>
+      <div class="col-4 col-md-4 p-0"><a href="https://by-covid.org/" target="_blank"><img src="./assets/media/logos/bycovdBW.png" alt="" class="img-fluid"></a></div>
+      <div class="col-4 col-md-4 p-0"><a href="https://www.canserv.eu/" target="_blank"><img src="./assets/media/logos/canservBW.png" alt="" class="img-fluid"></a></div>
     </div>
   </div>
 </div>
