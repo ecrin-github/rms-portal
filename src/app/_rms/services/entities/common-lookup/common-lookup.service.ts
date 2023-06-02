@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 const base = environment.baseUrl;
+const contactUrl = 'https://api-v2.ecrin-rms.org';
 
 @Injectable({
   providedIn: 'root'
@@ -60,5 +61,8 @@ export class CommonLookupService {
   //  checks if an object is linked to a dtp/dup withou associated study
   objectInvolvement(sdSid) {
     return this.http.get(`${base}/studies/${sdSid}/object-involvement`);
+  }
+  emailAPI(payload) {
+    return this.http.post(`${contactUrl}/service-controller/send-email`, payload);
   }
 }

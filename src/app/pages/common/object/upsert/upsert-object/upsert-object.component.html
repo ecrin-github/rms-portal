@@ -69,7 +69,7 @@
                         <option [value]=type.id *ngFor="let type of objectType">{{type.name}}</option>
                     </select>
                     <div class="col-md-12 invalid-feedback" *ngIf="isSubmitted && g.objectTypeId.errors">
-                        <p *ngIf="isSubmitted && g.objectTypeId.errors.required"> Please enter Object title</p>
+                        <p *ngIf="isSubmitted && g.objectTypeId.errors.required"> Please enter the data object type</p>
                     </div>  
                     <h6 style="font-weight: 100;" *ngIf="isView">{{findobjectType(objectData?.coreObject?.objectTypeId)}}</h6>
                 </div>

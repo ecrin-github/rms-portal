@@ -423,6 +423,8 @@ export class UpsertObjectComponent implements OnInit {
           this.toastr.error(error.error.title);
         })
       }
+    } else {
+      this.gotoTop();
     }
     this.count = 0;
   }
@@ -655,5 +657,12 @@ export class UpsertObjectComponent implements OnInit {
   onChangeAccessType() {
     const arr: any = this.accessType.filter((item: any) => item.name === 'Public on-screen access and download');
     this.showAccessDetails = parseInt(this.objectForm.value.accessTypeId) === arr[0].id ? false : true;
+  }
+  gotoTop() {
+    window.scroll({ 
+      top: 0, 
+      left: 0, 
+      behavior: 'smooth' 
+    });
   }
 }

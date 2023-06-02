@@ -63,7 +63,7 @@
                             <option [value]=status.id *ngFor="let status of studyStatuses">{{status.name}}</option>
                         </select>
                         <div class="col-md-12 invalid-feedback" *ngIf="isSubmitted && g.studyStatusId.errors">
-                            <p *ngIf="isSubmitted && g.studyStatusId.errors.required"> Please enter study status</p>
+                            <p *ngIf="isSubmitted && g.studyStatusId.errors.required"> Please enter the study status</p>
                         </div>
                         <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyStatusView?.name}}</h6>
                     </div>
@@ -75,7 +75,7 @@
                             <option [value]=type.id *ngFor="let type of studyTypes">{{type.name}}</option>
                         </select>
                         <div class="col-md-12 invalid-feedback" *ngIf="isSubmitted && g.studyTypeId.errors">
-                            <p *ngIf="isSubmitted && g.studyTypeId.errors.required"> Please enter study type</p>
+                            <p *ngIf="isSubmitted && g.studyTypeId.errors.required"> Please enter the study type</p>
                         </div>
                         <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyTypeView?.name}}</h6>
                     </div>
@@ -92,7 +92,7 @@
                         <p-calendar id="studyStartYear" formControlName="studyStartYear" view="year" dateFormat="yy"
                             *ngIf="!isView" [ngClass]="{ 'is-invalid': isSubmitted && g.studyStartYear.errors }"></p-calendar>
                         <div class="col-md-12 invalid-feedback" *ngIf="isSubmitted && g.studyStartYear.errors">
-                            <p *ngIf="isSubmitted && g.studyStartYear.errors.required"> Please enter study title</p>
+                            <p *ngIf="isSubmitted && g.studyStartYear.errors.required"> Please enter the study start year</p>
                         </div>
                         <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.studyStartYear}}</h6>
                     </div>

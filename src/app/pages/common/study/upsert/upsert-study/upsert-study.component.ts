@@ -337,6 +337,8 @@ export class UpsertStudyComponent implements OnInit {
             this.toastr.error(error.error.title);
           })
         }
+      } else {
+        this.gotoTop();
       }
       this.count = 0;
     }
@@ -537,5 +539,12 @@ export class UpsertStudyComponent implements OnInit {
   findRelationshipType(id) {
     const relationArray: any = this.relationshipType.filter((type: any) => type.id === id);
     return relationArray && relationArray.length ? relationArray[0].name : '';
+  }
+  gotoTop() {
+    window.scroll({ 
+      top: 0, 
+      left: 0, 
+      behavior: 'smooth' 
+    });
   }
 }
