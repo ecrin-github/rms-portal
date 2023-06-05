@@ -35,7 +35,7 @@
                                 <label for="langCode" class="font-style text-capitalize">Language code</label>
                                 <select class="form-control" id="langCode" formControlName="langCode" *ngIf="!isView">
                                     <option disabled selected value=""></option>
-                                    <option [value]=language.code *ngFor="let language of languageCodes">{{language.code}}</option>
+                                    <option [value]=language.code *ngFor="let language of languageCodes">{{language.name}}</option>
                                 </select>
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{studyTitle.value.langCode}}</h6>
                             </div>
