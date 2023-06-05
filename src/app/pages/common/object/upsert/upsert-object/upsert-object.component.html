@@ -91,8 +91,10 @@
             <div class="row form-group">
                 <div class="col-md-6">
                     <label for="publicationYear" class="font-style text-capitalize">Publication year</label>
-                    <input id="publicationYear" type="text" class="form-control" placeholder="Enter publication year..."
-                        formControlName="publicationYear" *ngIf="!isView" />
+                    <!-- <input id="publicationYear" type="text" class="form-control" placeholder="Enter publication year..."
+                        formControlName="publicationYear" *ngIf="!isView" /> -->
+                    <p-calendar id="publicationYear" formControlName="publicationYear" view="year" dateFormat="yy"
+                        *ngIf="!isView"></p-calendar>
                     <h6 style="font-weight: 100;" *ngIf="isView">{{objectData?.coreObject?.publicationYear}}</h6>
                 </div>
                 <div class="col-md-6">

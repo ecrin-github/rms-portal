@@ -181,7 +181,7 @@
                                                             #initialContactDate="ngbDatepicker"
                                                             [ngClass]="{ 'is-invalid': submitted && g.initialContactDate.errors }"
                                                             (click)="initialContactDate.toggle()"
-                                                            formControlName="initialContactDate" [maxDate]="todayDate">
+                                                            formControlName="initialContactDate" [maxDate]="todayDate" container='body'>
                                                         <div class="input-group-append">
                                                             <button class="btn btn-primary"
                                                                 (click)="initialContactDate.toggle()" type="button">
@@ -206,7 +206,7 @@
                                                             #setUpCompleted="ngbDatepicker"
                                                             [ngClass]="{ 'is-invalid': submitted && g.setUpCompleted.errors }"
                                                             (click)="setUpCompleted.toggle()"
-                                                            formControlName="setUpCompleted" [maxDate]="todayDate">
+                                                            formControlName="setUpCompleted" [maxDate]="todayDate" container='body'>
                                                         <div class="input-group-append">
                                                             <button class="btn btn-primary"
                                                                 (click)="setUpCompleted.toggle()" type="button">
@@ -232,7 +232,7 @@
                                                             #mdAccessGranted="ngbDatepicker"
                                                             [ngClass]="{ 'is-invalid': submitted && g.mdAccessGranted.errors }"
                                                             (click)="mdAccessGranted.toggle()"
-                                                            formControlName="mdAccessGranted" [maxDate]="todayDate">
+                                                            formControlName="mdAccessGranted" [maxDate]="todayDate" container='body'>
                                                         <div class="input-group-append">
                                                             <button class="btn btn-primary"
                                                                 (click)="mdAccessGranted.toggle()" type="button">
@@ -254,7 +254,7 @@
                                                             #mdCompleteDate="ngbDatepicker"
                                                             [ngClass]="{ 'is-invalid': submitted && g.mdCompleteDate.errors }"
                                                             (click)="mdCompleteDate.toggle()"
-                                                            formControlName="mdCompleteDate" [maxDate]="todayDate">
+                                                            formControlName="mdCompleteDate" [maxDate]="todayDate" container='body'>
                                                         <div class="input-group-append">
                                                             <button class="btn btn-primary"
                                                                 (click)="mdCompleteDate.toggle()" type="button">
@@ -277,7 +277,7 @@
                                                             #dtaAgreedDate="ngbDatepicker"
                                                             [ngClass]="{ 'is-invalid': submitted && g.dtaAgreedDate.errors }"
                                                             (click)="dtaAgreedDate.toggle()"
-                                                            formControlName="dtaAgreedDate" [maxDate]="todayDate">
+                                                            formControlName="dtaAgreedDate" [maxDate]="todayDate" container='body'>
                                                         <div class="input-group-append">
                                                             <button class="btn btn-primary"
                                                                 (click)="dtaAgreedDate.toggle()" type="button">
@@ -304,7 +304,7 @@
                                                             [ngClass]="{ 'is-invalid': submitted && g.uploadAccessRequested.errors }"
                                                             (click)="uploadAccessRequested.toggle()"
                                                             formControlName="uploadAccessRequested"
-                                                            [maxDate]="todayDate">
+                                                            [maxDate]="todayDate" container='body'>
                                                         <div class="input-group-append">
                                                             <button class="btn btn-primary"
                                                                 (click)="uploadAccessRequested.toggle()" type="button">
@@ -327,7 +327,7 @@
                                                             [ngClass]="{ 'is-invalid': submitted && g.uploadAccessConfirmed.errors }"
                                                             (click)="uploadAccessConfirmed.toggle()"
                                                             formControlName="uploadAccessConfirmed"
-                                                            [maxDate]="todayDate">
+                                                            [maxDate]="todayDate" container='body'>
                                                         <div class="input-group-append">
                                                             <button class="btn btn-primary"
                                                                 (click)="uploadAccessConfirmed.toggle()" type="button">
@@ -350,7 +350,7 @@
                                                             #uploadsComplete="ngbDatepicker"
                                                             [ngClass]="{ 'is-invalid': submitted && g.uploadsComplete.errors }"
                                                             (click)="uploadsComplete.toggle()"
-                                                            formControlName="uploadsComplete" [maxDate]="todayDate">
+                                                            formControlName="uploadsComplete" [maxDate]="todayDate" container='body'>
                                                         <div class="input-group-append">
                                                             <button class="btn btn-primary"
                                                                 (click)="uploadsComplete.toggle()" type="button">
@@ -376,7 +376,7 @@
                                                             #qcChecksCompleted="ngbDatepicker"
                                                             [ngClass]="{ 'is-invalid': submitted && g.qcChecksCompleted.errors }"
                                                             (click)="qcChecksCompleted.toggle()"
-                                                            formControlName="qcChecksCompleted" [maxDate]="todayDate">
+                                                            formControlName="qcChecksCompleted" [maxDate]="todayDate" container='body'>
                                                         <div class="input-group-append">
                                                             <button class="btn btn-primary"
                                                                 (click)="qcChecksCompleted.toggle()" type="button">
@@ -398,7 +398,7 @@
                                                             #mdIntegratedWithMdr="ngbDatepicker"
                                                             [ngClass]="{ 'is-invalid': submitted && g.mdIntegratedWithMdr.errors }"
                                                             (click)="mdIntegratedWithMdr.toggle()"
-                                                            formControlName="mdIntegratedWithMdr" [maxDate]="todayDate">
+                                                            formControlName="mdIntegratedWithMdr" [maxDate]="todayDate" container='body'>
                                                         <div class="input-group-append">
                                                             <button class="btn btn-primary"
                                                                 (click)="mdIntegratedWithMdr.toggle()" type="button">
@@ -424,7 +424,7 @@
                                                             [ngClass]="{ 'is-invalid': submitted && g.availabilityRequested.errors }"
                                                             (click)="availabilityRequested.toggle()"
                                                             formControlName="availabilityRequested"
-                                                            [maxDate]="todayDate">
+                                                            [maxDate]="todayDate" container='body' container='body'>
                                                         <div class="input-group-append">
                                                             <button class="btn btn-primary"
                                                                 (click)="availabilityRequested.toggle()" type="button">
@@ -447,7 +447,7 @@
                                                             [ngClass]="{ 'is-invalid': submitted && g.availabilityConfirmed.errors }"
                                                             (click)="availabilityConfirmed.toggle()"
                                                             formControlName="availabilityConfirmed"
-                                                            [maxDate]="todayDate">
+                                                            [maxDate]="todayDate" container='body'>
                                                         <div class="input-group-append">
                                                             <button class="btn btn-primary"
                                                                 (click)="availabilityConfirmed.toggle()" type="button">
@@ -720,7 +720,7 @@
                                                 name="accessCheckDate" ngbDatepicker
                                                 #accessCheckDate="ngbDatepicker"
                                                 (click)="accessCheckDate.toggle()"
-                                                formControlName="accessCheckDate" [maxDate]="todayDate" *ngIf="!isView">
+                                                formControlName="accessCheckDate" [maxDate]="todayDate" *ngIf="!isView" container='body'>
                                                 <h6 style="font-weight: 100;" *ngIf="isView">{{viewDate(dtpData.dtpObjects[i].accessCheckDate)}}</h6>
                                             </div>
                                         </div>

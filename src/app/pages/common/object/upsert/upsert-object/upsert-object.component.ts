@@ -316,7 +316,7 @@ export class UpsertObjectComponent implements OnInit {
       version: this.objectData.coreObject.version,
       objectClassId: this.objectData.coreObject.objectClassId,
       objectTypeId: this.objectData.coreObject.objectTypeId,
-      publicationYear: this.objectData.coreObject.publicationYear,
+      publicationYear: this.objectData.coreObject.publicationYear ? new Date(`01/01/${this.objectData.coreObject.publicationYear}`) : '',
       langCode: this.objectData.coreObject.langCode,
       managingOrg: this.objectData.coreObject.managingOrg,
       accessTypeId: this.objectData.coreObject.accessTypeId,
@@ -363,6 +363,7 @@ export class UpsertObjectComponent implements OnInit {
       payload.objectClassId = payload.objectClassId ? payload.objectClassId : null;
       payload.accessTypeId = payload.accessTypeId ? payload.accessTypeId : null;
       payload.accessTypeId = payload.accessTypeId ? payload.accessTypeId : null;
+      payload.publicationYear = this.objectForm.value.publicationYear ? this.objectForm.value.publicationYear.getFullYear() : null;
       const datasetPayload = JSON.parse(JSON.stringify(this.objectForm.value));
       datasetPayload.objectDatasets.deidentDirect = datasetPayload.objectDatasets.deidentDirect;
       datasetPayload.objectDatasets.deidentHipaa = datasetPayload.objectDatasets.deidentHipaa;
