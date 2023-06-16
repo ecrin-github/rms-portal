@@ -7,7 +7,6 @@
                     transfer details' : 'Add new data transfer'}}</h2>
             </div>
             <div class="col-md-5 text-right" *ngIf="isView">
-                <button class="btn btn-success mr-5" *ngIf="showUploadButton" (click)="goToTsd()">Upload Data</button>
                 <a [routerLink]="['/data-transfers', id, 'edit']" class="btn btn-primary mr-5" target="tempTab" *ngIf="role !== 'User'">
                     <i class="fa fa-edit"></i> Edit
                 </a>
@@ -624,6 +623,20 @@
                                             {{object.sdOid}}<span title="{{object.objectName}}">({{object.objectName | slice:0:50}}...)</span>
                                             <i class="fa fa-times pl-3" (click)="removeDtpObject(object.id)"
                                                 *ngIf="!isView"></i>
+                                            <ng-container *ngIf="instanceArray[i]?.length <= 0">
+                                                <ul style="list-style-type: none;">
+                                                    <li><small>currently there is no instances related to the data object, please create some first</small> <span class="pl-2"><button class="btn btn-success btn-sm"(click)="goToDo(object)">Create one</button></span></li>
+                                                </ul>
+                                            </ng-container>
+                                            <ng-container *ngIf="instanceArray[i]?.length > 0">
+                                                <ul style="list-style-type: square;">
+                                                    <li *ngFor="let instance of instanceArray[i]">
+                                                        {{instance.resourceComments}} ({{instance.id}}) <span class="pl-2"><button class="btn btn-success btn-sm"
+                                                                *ngIf="showUploadButton" (click)="goToTsd(instance, object)">Upload</button></span>
+                                                    </li>
+                                                </ul>
+                                            </ng-container>
+        
                                         </li>
                                     </ul>
                                 </ng-container>

@@ -17,6 +17,9 @@ import { AddModalComponent } from '../../add-modal/add-modal.component';
 import { PdfGeneratorService } from 'src/app/_rms/services/entities/pdf-generator/pdf-generator.service';
 import { JsonGeneratorService } from 'src/app/_rms/services/entities/json-generator/json-generator.service';
 import { ListService } from 'src/app/_rms/services/entities/list/list.service';
+import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-upsert-dtp',
@@ -58,10 +61,11 @@ export class UpsertDtpComponent implements OnInit {
   objectList: [] = [];
   role: any;
   showUploadButton: boolean = false;
+  instanceArray = [];
 
   constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService,
-    private listService: ListService, private pdfGeneratorService: PdfGeneratorService, private jsonGenerator: JsonGeneratorService) { 
+    private listService: ListService, private pdfGeneratorService: PdfGeneratorService, private jsonGenerator: JsonGeneratorService, private dataObjectService: DataObjectService, private oidcSecurityService: OidcSecurityService, private http: HttpClient) { 
     this.form = this.fb.group({
       orgId: ['', Validators.required],
       displayName: ['', Validators.required],
@@ -795,6 +799,15 @@ export class UpsertDtpComponent implements OnInit {
     this.dtpService.getDtpObjectsWfkn(id).subscribe((res: any) => {
       if (res) {
         this.associatedObject = res.data ? res.data : [];
+        this.associatedObject.map( (item, index) => {
+          this.dataObjectService.getObjectInstances(item.sdOid).subscribe((res:any) => {
+            console.log('object instances', res);
+            this.instanceArray[index] = res.data;
+            console.log('instarr', this.instanceArray);
+          }, error => {
+            this.toastr.error(error.error.title);
+          })
+        })
       }
     }, error => {
       this.toastr.error(error.error.title);
@@ -1020,9 +1033,34 @@ export class UpsertDtpComponent implements OnInit {
     const arr: any = this.objectList.filter((item: any) => item.sdOid === sdOid);
     return arr && arr.length ? arr[0].displayTitle : 'None';
   }
-  goToTsd() {
-      this.router.navigate([])
-      .then(result => { window.open('https://covid-19-repo.usit.uio.no/', '_blank'); });
+  goToTsd(instance, object) {
+    console.log(instance);
+    let token = this.oidcSecurityService.getAccessToken();
+    // const headers = new HttpHeaders({
+    //   'Content-Type': 'application/json',
+    //   Authorization: `Bearer ${token}`
+    // });
+    
+  // const requestOptions = { headers: headers };
+  var header = {
+    headers: new HttpHeaders()
+      .set('Authorization',  `Bearer ${token}`)
+  }
+  
+  // this.http.get(url, header)
+    
+  return this.http
+      .get(`https://covid-19-repo.usit.uio.no/direct/${object.id}/${instance.id}`, header)
+      .subscribe((res: any) => {
+          console.log(res);
+      });
+
+    // this.router.navigate([])
+    //   .then(result => { window.open(`https://covid-19-repo.usit.uio.no/direct/${instance.sdOid}/${instance.id}`, '_blank'); });
+  }
+  goToDo(object) {
+    console.log(object);
+    this.router.navigate([`/data-objects/${object.sdOid}/edit`]);
   }
 
 }

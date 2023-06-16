@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 
@@ -13,7 +14,7 @@ export class ContactUsComponent implements OnInit {
   reason: any;
   isSubmitted: boolean = false;
 
-  constructor( private fb: FormBuilder, private commonLookUpService: CommonLookupService, private toastr: ToastrService) { 
+  constructor( private fb: FormBuilder, private commonLookUpService: CommonLookupService, private toastr: ToastrService, private router: Router) { 
     this.contactForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -30,8 +31,14 @@ export class ContactUsComponent implements OnInit {
   onChange() {
     this.reason = this.contactForm.value.reason
   }
-  goToUserGuide() {}
-  goToMdr() {}
+  goToUserGuide() {
+    this.router.navigate([])
+    .then(result => { window.open('https://crr.gitbook.io/crr/', '_blank'); });
+  }
+  goToMdr() {
+    this.router.navigate([])
+    .then(result => { window.open('https://crmdr.org/', '_blank'); });
+  }
   submitContact() {
     this.isSubmitted = true;
     if (this.contactForm.valid) {
