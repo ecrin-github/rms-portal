@@ -20,6 +20,7 @@ import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 import { DataObjectService } from 'src/app/_rms/services/entities/data-object/data-object.service';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {RedirectService} from './redirect-service';
 
 @Component({
   selector: 'app-upsert-dtp',
@@ -65,7 +66,9 @@ export class UpsertDtpComponent implements OnInit {
 
   constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService,
-    private listService: ListService, private pdfGeneratorService: PdfGeneratorService, private jsonGenerator: JsonGeneratorService, private dataObjectService: DataObjectService, private oidcSecurityService: OidcSecurityService, private http: HttpClient) { 
+    private listService: ListService, private pdfGeneratorService: PdfGeneratorService, private jsonGenerator: JsonGeneratorService,
+               private dataObjectService: DataObjectService, private oidcSecurityService: OidcSecurityService, private http: HttpClient,
+               private redirectService: RedirectService) {
     this.form = this.fb.group({
       orgId: ['', Validators.required],
       displayName: ['', Validators.required],
@@ -96,7 +99,7 @@ export class UpsertDtpComponent implements OnInit {
     });
     this.objectEmbargoForm = this.fb.group({
       embargo: this.fb.array([])
-    })
+    });
   }
   @HostListener('window:scroll', ['$event'])
   onScroll() {
@@ -1033,34 +1036,22 @@ export class UpsertDtpComponent implements OnInit {
     const arr: any = this.objectList.filter((item: any) => item.sdOid === sdOid);
     return arr && arr.length ? arr[0].displayTitle : 'None';
   }
-  goToTsd(instance, object) {
-    console.log(instance);
-    let token = this.oidcSecurityService.getAccessToken();
-    // const headers = new HttpHeaders({
-    //   'Content-Type': 'application/json',
-    //   Authorization: `Bearer ${token}`
-    // });
-    
-  // const requestOptions = { headers: headers };
-  var header = {
-    headers: new HttpHeaders()
-      .set('Authorization',  `Bearer ${token}`)
-  }
-  
-  // this.http.get(url, header)
-    
-  return this.http
-      .get(`https://covid-19-repo.usit.uio.no/direct/${object.id}/${instance.id}`, header)
-      .subscribe((res: any) => {
-          console.log(res);
-      });
+  goToTsd(instance) {
+    const userToken = this.oidcSecurityService.getAccessToken();
 
-    // this.router.navigate([])
-    //   .then(result => { window.open(`https://covid-19-repo.usit.uio.no/direct/${instance.sdOid}/${instance.id}`, '_blank'); });
+    const headers = new HttpHeaders();
+    headers.set('Authorization', userToken);
+
+    this.http.get(`https://api-v2.ecrin-rms.org/api/data-objects/${instance.sdOid}`, {headers}).subscribe(res => {
+      // @ts-ignore
+      const objectId = res['data'][0].id;
+      this.redirectService.postRedirect(instance.id, objectId, userToken);
+    });
   }
   goToDo(object) {
     console.log(object);
     this.router.navigate([`/data-objects/${object.sdOid}/edit`]);
   }
 
+  protected readonly window = window;
 }
