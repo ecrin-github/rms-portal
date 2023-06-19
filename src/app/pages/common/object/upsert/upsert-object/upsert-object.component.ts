@@ -405,16 +405,16 @@ export class UpsertObjectComponent implements OnInit {
           if (res.statusCode === 200) {
             this.objectService.addObjectDatasete(res.data[0].sdOid, datasetPayload.objectDatasets).subscribe((res: any) => {
               if (res.statusCode === 200) {
-                this.toastr.success('Dataset added successfully');
+                // this.toastr.success('Dataset added successfully');
               }
             }, error => {
               this.toastr.error(res.messages[0]);
             })
-            this.toastr.success('Data Object added successfully');
+            this.toastr.success('Data Object added successfully and this window will close shortly.');
             localStorage.setItem('updateObjectList', 'true');
             setTimeout(() => {
               this.close();
-            });
+            }, 3000);
           } else {
             this.toastr.error(res.messages[0]);
           }

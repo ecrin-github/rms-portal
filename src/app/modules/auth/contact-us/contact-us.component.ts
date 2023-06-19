@@ -39,6 +39,14 @@ export class ContactUsComponent implements OnInit {
     this.router.navigate([])
     .then(result => { window.open('https://crmdr.org/', '_blank'); });
   }
+  goToLegalNotice() {
+    this.router.navigate([])
+    .then(result => { window.open('https://crr.gitbook.io/crr/legal-notice', '_blank'); });
+  }
+  goToPrivacy() {
+    this.router.navigate([])
+    .then(result => { window.open('https://crr.gitbook.io/crr/data-privacy-policy', '_blank'); });
+  }
   submitContact() {
     this.isSubmitted = true;
     if (this.contactForm.valid) {
