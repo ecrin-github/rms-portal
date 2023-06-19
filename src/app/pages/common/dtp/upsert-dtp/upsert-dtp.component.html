@@ -632,7 +632,7 @@
                                                 <ul style="list-style-type: square;">
                                                     <li *ngFor="let instance of instanceArray[i]">
                                                         {{instance.resourceComments}} ({{instance.id}}) <span class="pl-2"><button class="btn btn-success btn-sm"
-                                                                *ngIf="showUploadButton" (click)="goToTsd(instance, object)">Upload</button></span>
+                                                             (click)="goToTsd(instance)">Upload</button></span>
                                                     </li>
                                                 </ul>
                                             </ng-container>
