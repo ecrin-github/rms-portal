@@ -11,6 +11,10 @@ import { SplashScreenService } from './_rms/partials/layout/splash-screen/splash
 import { Router, NavigationEnd, NavigationError } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TableExtendedService } from './_rms/shared/crud-table';
+import * as signalR from '@microsoft/signalr';
+import {ToastrService} from 'ngx-toastr';
+import {Notification} from './_rms/services/notifications/notification';
+import {SignalrService} from './_rms/services/notifications/signalr.service';
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'body[root]',
@@ -25,12 +29,14 @@ export class AppComponent implements OnInit, OnDestroy {
     private translationService: TranslationService,
     private splashScreenService: SplashScreenService,
     private router: Router,
-    private tableService: TableExtendedService
+    private tableService: TableExtendedService,
+    private signalrService: SignalrService
   ) {
     // register translations
     this.translationService.loadTranslations(
       enLang,
     );
+    this.signalrService.startConnection();
   }
 
   ngOnInit() {
