@@ -14,7 +14,7 @@ export class SignalrService {
     public startConnection = () => {
         this.hubConnection = new signalR.HubConnectionBuilder()
             .withUrl(
-                'https://localhost:5001/push',
+                'https://api-v2.ecrin-rms.org/push',
                 {
                     skipNegotiation: true,
                     transport: signalR.HttpTransportType.WebSockets
