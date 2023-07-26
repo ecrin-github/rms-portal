@@ -22,7 +22,7 @@ export class AuthComponent implements OnInit {
   }
   goToContact() {
     this.router.navigate([])
-      .then(result => { window.open('/contactUs', '_blank'); });
+      .then(result => { window.open('/contactUs', '_self'); });
   }
   goToUserGuide() {
     this.router.navigate([])
@@ -30,7 +30,7 @@ export class AuthComponent implements OnInit {
 }
   goToBrowse() {
     this.router.navigate([])
-      .then(result => { window.open('/browsing', '_blank'); });
+      .then(result => { window.open('/browsing', '_self'); });
   }
   goToMdr() {
       this.router.navigate([])

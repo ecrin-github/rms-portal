@@ -47,7 +47,7 @@
 
             <ng-container matColumnDef="title">
                 <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
-                <mat-cell *matCellDef="let row"><a [routerLink]="['/studies', row.sdSid, 'view']" target="_blank">{{row.displayTitle}}</a></mat-cell>
+                <mat-cell *matCellDef="let row"><a [routerLink]="isBrowsing ? ['/browsing/studies', row.sdSid, 'view'] : ['/studies', row.sdSid, 'view']" target="_blank">{{row.displayTitle}}</a></mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="type">

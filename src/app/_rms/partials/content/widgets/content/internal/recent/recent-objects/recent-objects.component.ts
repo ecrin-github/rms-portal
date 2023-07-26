@@ -1,5 +1,6 @@
 import { Component, HostListener, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgxPermissionsService } from 'ngx-permissions';
 import { ToastrService } from 'ngx-toastr';
 import { ObjectListEntryInterface } from 'src/app/_rms/interfaces/data-object/data-object-listentry.interface';
 import { DashboardService } from 'src/app/_rms/services/entities/dashboard/dashboard.service';
@@ -14,12 +15,17 @@ export class RecentObjectsComponent {
   @Input() objectTotal: number = 0;
   displayedColumns = ['id', 'title', 'type', 'linkedStudy', 'actions'];
   dataSource: MatTableDataSource<ObjectListEntryInterface>;
+  role: any;
 
   constructor(private toastr: ToastrService, 
-              private dashboardService: DashboardService) { }
+              private dashboardService: DashboardService, private permissionService: NgxPermissionsService) { }
 
   ngOnInit(): void {
     this.getObjectList();
+    if (localStorage.getItem('role')) {
+      this.role = localStorage.getItem('role');
+      this.permissionService.loadPermissions([this.role]);
+    }
   }
   
   getObjectList() {

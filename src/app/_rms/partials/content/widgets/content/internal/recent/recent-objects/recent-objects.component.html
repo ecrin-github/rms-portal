@@ -11,7 +11,7 @@
     <div class="card-toolbar">
       <a [routerLink]="['/data-objects', 'add']"
          class="btn btn-success font-weight-bolder font-size-sm mr-3"
-         target="_blank"
+         target="_blank" *ngIf="role === 'User'"
       >Add</a
       >
       <a [routerLink]="['/data-objects']"

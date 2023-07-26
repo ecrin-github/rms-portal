@@ -47,6 +47,10 @@ export class ContactUsComponent implements OnInit {
     this.router.navigate([])
     .then(result => { window.open('https://crr.gitbook.io/crr/data-privacy-policy', '_blank'); });
   }
+  goToLogin() {
+    this.router.navigate([])
+    .then(result => { window.open('https://ecrin-rms.org', '_self'); });
+  }
   submitContact() {
     this.isSubmitted = true;
     if (this.contactForm.valid) {
