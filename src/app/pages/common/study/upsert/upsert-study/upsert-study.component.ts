@@ -7,6 +7,7 @@ import { combineLatest, Subscription } from 'rxjs';
 import { StudyInterface } from 'src/app/_rms/interfaces/study/study.interface';
 import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
 import { JsonGeneratorService } from 'src/app/_rms/services/entities/json-generator/json-generator.service';
+import { ListService } from 'src/app/_rms/services/entities/list/list.service';
 import { PdfGeneratorService } from 'src/app/_rms/services/entities/pdf-generator/pdf-generator.service';
 import { StudyLookupService } from 'src/app/_rms/services/entities/study-lookup/study-lookup.service';
 import { StudyService } from 'src/app/_rms/services/entities/study/study.service';
@@ -54,9 +55,10 @@ export class UpsertStudyComponent implements OnInit {
   relationshipType: [] = [];
   isBrowsing: boolean = false;
   role: any;
+  associatedObjects: any;
 
   constructor(private fb: FormBuilder, private router: Router, private studyLookupService: StudyLookupService, private studyService: StudyService, private activatedRoute: ActivatedRoute,
-    private spinner: NgxSpinnerService, private toastr: ToastrService, private pdfGenerator: PdfGeneratorService, private jsonGenerator: JsonGeneratorService, private commonLookupService: CommonLookupService) {
+    private spinner: NgxSpinnerService, private toastr: ToastrService, private pdfGenerator: PdfGeneratorService, private jsonGenerator: JsonGeneratorService, private commonLookupService: CommonLookupService, private listService: ListService) {
     this.studyForm = this.fb.group({
       sdSid: 'RMS-',
       displayTitle: ['', Validators.required],
@@ -130,6 +132,9 @@ export class UpsertStudyComponent implements OnInit {
     })
     if (this.addType === 'usingTrialId') {
       this.getTrialRegistries();
+    }
+    if (this.isBrowsing) {
+      this.getAssociatedObject();
     }
   }
   get g() { return this.studyForm.controls; }
@@ -546,5 +551,16 @@ export class UpsertStudyComponent implements OnInit {
       left: 0, 
       behavior: 'smooth' 
     });
+  }
+  getAssociatedObject() {
+    this.listService.getBrowsingObjectByMultiStudies(this.id).subscribe((res: any) => {
+      this.associatedObjects = res.data;
+    }, error => {
+      this.toastr.error(error.error.title);
+    })
+  }
+  goToObject(sdOid) {
+    this.router.navigate([])
+    .then(result => { window.open(`/browsing/data-objects/${sdOid}/view`, '_blank'); });
   }
 }

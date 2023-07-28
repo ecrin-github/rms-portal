@@ -8,9 +8,13 @@
             <button class="btn btn-primary mr-1" (click)="printPdf()">
                 <i class="fa fa-print"></i> PDF
             </button>
-            <button class="btn btn-primary" (click)="jsonExport()">
+            <button class="btn btn-primary mr-1" (click)="jsonExport()">
                 <i class="fa fa-code"></i> JSON
             </button>
+            <button class="btn btn-warning" (click)="close()"> {{isView ? 'Back' : 'Cancel'}}</button>
+        </div>
+        <div style="float: right; margin-top: -40px;" *ngIf="isView && isBrowsing">
+            <button class="btn btn-warning" (click)="close()"> {{isView ? 'Back' : 'Cancel'}}</button>
         </div>
         <div id="navbar" [ngClass]="sticky ? 'text-center' : ''">
             <h6>{{objectData?.coreObject?.displayTitle}}</h6>
@@ -291,9 +295,9 @@
                 </div>
             </div>
             <hr />
-            <div class="row">
+            <div class="row" *ngIf="!isView">
                 <div class="col-md-12 justify-content-center text-center">
-                    <button class="btn btn-success mr-5" *ngIf="!isView" (click)="onSave()">{{isEdit ? 'Apply Changes'
+                    <button class="btn btn-success mr-5" (click)="onSave()">{{isEdit ? 'Apply Changes'
                         : 'Save'}}</button>
                     <button class="btn btn-warning" (click)="close()"> {{isView ? 'Back' : 'Cancel'}}</button>
                 </div>

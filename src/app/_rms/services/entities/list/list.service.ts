@@ -57,6 +57,10 @@ export class ListService {
   getObjectByMultiStudies(sdSid) {
     return this.http.get(`${base}/multi-studies/objects?sdSids=${sdSid}`);
   }
+  getBrowsingObjectByMultiStudies(sdSid) {
+    return this.http.get(`${base}/browsing/multi-studies/objects?sdSids=${sdSid}`);
+  }
+
 
   getObjectListByOrg(orgId :number) {
     return this.http.get(`${base}/data-objects/list/by-org/${orgId}`);
