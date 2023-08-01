@@ -365,6 +365,12 @@ export class UpsertDupComponent implements OnInit {
   }
   dateToString(date) {
     if (date) {
+      if (date.month<10) {
+        date.month = '0'+ date.month
+      }
+      if (date.day < 10) {
+        date.day = '0' + date.day
+      }
       const dateString =  date.year + '-' + date.month + '-' + date.day;
       return new Date(dateString).toISOString();
     } else {
