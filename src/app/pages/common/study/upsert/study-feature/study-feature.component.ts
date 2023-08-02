@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -14,7 +14,7 @@ import { StudyService } from 'src/app/_rms/services/entities/study/study.service
   styleUrls: ['./study-feature.component.scss']
 })
 export class StudyFeatureComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   // featureTypes: [] = [];
   featureTypes = [{id:20, name:"Phase",context: 'interventional'},{id:21, name :"Primary purpose", context: 'interventional'},{id:22, name:"Allocation type", context: 'interventional'},{id:23, name:"Intervention model", context: 'interventional'},{id:24, name:"Masking", context: 'interventional'},{id:30, name:"Observational model", context: 'observational'},{id:31, name:"Time perspective", context: 'observational'},{id:32, name:"Biospecimens retained", context: 'observational'}];
   // featureValues = [];
@@ -45,7 +45,7 @@ export class StudyFeatureComponent implements OnInit {
   showAll: boolean = true;
 
 
-  constructor(private fb: FormBuilder, private router: Router, private studyService: StudyService, private studyLookupService: StudyLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor(private fb: UntypedFormBuilder, private router: Router, private studyService: StudyService, private studyLookupService: StudyLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       studyFeatures: this.fb.array([])
     });
@@ -59,11 +59,11 @@ export class StudyFeatureComponent implements OnInit {
     }
   }
 
-  studyFeatures(): FormArray {
-    return this.form.get('studyFeatures') as FormArray;
+  studyFeatures(): UntypedFormArray {
+    return this.form.get('studyFeatures') as UntypedFormArray;
   }
 
-  newStudyFeature(featureTypeId): FormGroup {
+  newStudyFeature(featureTypeId): UntypedFormGroup {
     return this.fb.group({
       id: '',
       sdSid: '',
@@ -118,9 +118,9 @@ export class StudyFeatureComponent implements OnInit {
     this.featureInterventional = this.featureTypes.filter((item: any) => item.context === 'interventional');
     this.featureObservational = this.featureTypes.filter((item: any) => item.context === 'observational');
     if (this.form.value.studyFeatures) {
-      (this.form.get('studyFeatures') as FormArray).clear()
+      (this.form.get('studyFeatures') as UntypedFormArray).clear()
     }
-    console.log(this.form.get('studyFeatures') as FormArray);
+    console.log(this.form.get('studyFeatures') as UntypedFormArray);
     if (this.selectedStudyType === 'interventional') {
       this.featureInterventional.map((item1, index) => {
         this.featureValInter[index] = this.featureValuesAll.filter((item: any) => item.featureTypeId === item1.id);

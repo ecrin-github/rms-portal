@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./object-identifier.component.scss']
 })
 export class ObjectIdentifierComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   identifierType: [] = [];
   subscription: Subscription = new Subscription();
   @Input() sdOid: string;
@@ -35,7 +35,7 @@ export class ObjectIdentifierComponent implements OnInit {
   len: any;
   isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder, private router: Router, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: UntypedFormBuilder, private router: Router, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectIdentifiers: this.fb.array([])
     });
@@ -48,11 +48,11 @@ export class ObjectIdentifierComponent implements OnInit {
       this.getObjectIdentifier();
     }
   }
-  objectIdentifiers(): FormArray {
-    return this.form.get('objectIdentifiers') as FormArray;
+  objectIdentifiers(): UntypedFormArray {
+    return this.form.get('objectIdentifiers') as UntypedFormArray;
   }
 
-  newObjectIdentifier(): FormGroup {
+  newObjectIdentifier(): UntypedFormGroup {
     return this.fb.group({
       id: '',
       sdOid: '',
@@ -123,8 +123,8 @@ export class ObjectIdentifierComponent implements OnInit {
   patchForm(identifiers) {
     this.form.setControl('objectIdentifiers', this.patchArray(identifiers));
   }
-  patchArray(identifiers): FormArray {
-    const formArray = new FormArray([]);
+  patchArray(identifiers): UntypedFormArray {
+    const formArray = new UntypedFormArray([]);
     identifiers.forEach(identifier => {
       formArray.push(this.fb.group({
         id: identifier.id,

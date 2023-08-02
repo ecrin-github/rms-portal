@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -14,9 +14,9 @@ import { ListService } from 'src/app/_rms/services/entities/list/list.service';
   styleUrls: ['./common-modal.component.scss']
 })
 export class CommonModalComponent implements OnInit {
-  studyForm: FormGroup;
-  objectForm: FormGroup;
-  userForm: FormGroup;
+  studyForm: UntypedFormGroup;
+  objectForm: UntypedFormGroup;
+  userForm: UntypedFormGroup;
   title: string = '';
   type: string = '';
   dtpId: number;
@@ -27,7 +27,7 @@ export class CommonModalComponent implements OnInit {
   sdSidArray: any;
 
   constructor( private activeModal: NgbActiveModal, private listService: ListService, private spinner: NgxSpinnerService, 
-    private toastr: ToastrService, private objectService: DataObjectService, private fb: FormBuilder, private dtpService: DtpService, private dupService: DupService) { 
+    private toastr: ToastrService, private objectService: DataObjectService, private fb: UntypedFormBuilder, private dtpService: DtpService, private dupService: DupService) { 
       this.studyForm = this.fb.group({
         targetSdSid: ''
       });

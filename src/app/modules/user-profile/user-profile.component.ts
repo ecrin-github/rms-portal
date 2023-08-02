@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/_rms/services/user/user.service';
 
 @Component({
@@ -8,10 +8,10 @@ import { UserService } from 'src/app/_rms/services/user/user.service';
   styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   avatarPic = 'none';
   user: any;
-  constructor( private fb: FormBuilder, private userService: UserService) { 
+  constructor( private fb: UntypedFormBuilder, private userService: UserService) { 
     this.form = this.fb.group({
       pic: ['', Validators.required],
       userName: ['', Validators.required],

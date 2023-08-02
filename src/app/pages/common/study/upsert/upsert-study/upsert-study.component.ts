@@ -1,5 +1,5 @@
 import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -19,7 +19,7 @@ import { StudyService } from 'src/app/_rms/services/entities/study/study.service
 })
 export class UpsertStudyComponent implements OnInit {
   public isCollapsed: boolean = false;
-  studyForm: FormGroup;
+  studyForm: UntypedFormGroup;
   isEdit: boolean = false;
   isView: boolean = false;
   isAdd: boolean = false;
@@ -57,7 +57,7 @@ export class UpsertStudyComponent implements OnInit {
   role: any;
   associatedObjects: any;
 
-  constructor(private fb: FormBuilder, private router: Router, private studyLookupService: StudyLookupService, private studyService: StudyService, private activatedRoute: ActivatedRoute,
+  constructor(private fb: UntypedFormBuilder, private router: Router, private studyLookupService: StudyLookupService, private studyService: StudyService, private activatedRoute: ActivatedRoute,
     private spinner: NgxSpinnerService, private toastr: ToastrService, private pdfGenerator: PdfGeneratorService, private jsonGenerator: JsonGeneratorService, private commonLookupService: CommonLookupService, private listService: ListService) {
     this.studyForm = this.fb.group({
       sdSid: 'RMS-',

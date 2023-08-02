@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
@@ -10,11 +10,11 @@ import { CommonLookupService } from 'src/app/_rms/services/entities/common-looku
   styleUrls: ['./contact-us.component.scss']
 })
 export class ContactUsComponent implements OnInit {
-  contactForm: FormGroup
+  contactForm: UntypedFormGroup
   reason: any;
   isSubmitted: boolean = false;
 
-  constructor( private fb: FormBuilder, private commonLookUpService: CommonLookupService, private toastr: ToastrService, private router: Router) { 
+  constructor( private fb: UntypedFormBuilder, private commonLookUpService: CommonLookupService, private toastr: ToastrService, private router: Router) { 
     this.contactForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],

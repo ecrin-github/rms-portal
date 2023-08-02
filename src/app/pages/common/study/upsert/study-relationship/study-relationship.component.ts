@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./study-relationship.component.scss']
 })
 export class StudyRelationshipComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   relationshipType: [] = [];
   studyType:[] = [];
   subscription: Subscription = new Subscription();
@@ -34,7 +34,7 @@ export class StudyRelationshipComponent implements OnInit {
   len: any;
   isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder, private router: Router, private listService: ListService, private studyService: StudyService, private studyLookupService: StudyLookupService, private toastr: ToastrService, private spinner: NgxSpinnerService, private modalService: NgbModal) {
+  constructor( private fb: UntypedFormBuilder, private router: Router, private listService: ListService, private studyService: StudyService, private studyLookupService: StudyLookupService, private toastr: ToastrService, private spinner: NgxSpinnerService, private modalService: NgbModal) {
     this.form = this.fb.group({
       studyRelationships: this.fb.array([])
     });
@@ -48,11 +48,11 @@ export class StudyRelationshipComponent implements OnInit {
       this.getStudyRelationship()
     }
   }
-  studyRelationships(): FormArray {
-    return this.form.get('studyRelationships') as FormArray;
+  studyRelationships(): UntypedFormArray {
+    return this.form.get('studyRelationships') as UntypedFormArray;
   }
 
-  newStudyRelation(): FormGroup {
+  newStudyRelation(): UntypedFormGroup {
     return this.fb.group({
       id: '',
       sdSid: '',
@@ -136,8 +136,8 @@ export class StudyRelationshipComponent implements OnInit {
   patchForm(relationhips) {
     this.form.setControl('studyRelationships', this.patchArray(relationhips));
   }
-  patchArray(relationships): FormArray {
-    const formArray = new FormArray([]);
+  patchArray(relationships): UntypedFormArray {
+    const formArray = new UntypedFormArray([]);
     relationships.forEach(relationship => {
       formArray.push(this.fb.group({
         id: relationship.id,

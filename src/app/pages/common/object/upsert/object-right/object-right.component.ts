@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./object-right.component.scss']
 })
 export class ObjectRightComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   @Input() sdOid: string;
   @Input() isView: boolean;
   @Input() isEdit: boolean;
@@ -28,7 +28,7 @@ export class ObjectRightComponent implements OnInit {
   len: any;
   isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder, private router: Router, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: UntypedFormBuilder, private router: Router, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectRights: this.fb.array([])
     });
@@ -40,11 +40,11 @@ export class ObjectRightComponent implements OnInit {
       this.getObjectRight();
     }
   }
-  objectRights(): FormArray {
-    return this.form.get('objectRights') as FormArray;
+  objectRights(): UntypedFormArray {
+    return this.form.get('objectRights') as UntypedFormArray;
   }
 
-  newObjectRight(): FormGroup {
+  newObjectRight(): UntypedFormGroup {
     return this.fb.group({
       id: '',
       sdOid: '',
@@ -104,8 +104,8 @@ export class ObjectRightComponent implements OnInit {
   patchForm(rights) {
     this.form.setControl('objectRights', this.patchArray(rights));
   }
-  patchArray(rights): FormArray {
-    const formArray = new FormArray([]);
+  patchArray(rights): UntypedFormArray {
+    const formArray = new UntypedFormArray([]);
     rights.forEach(right => {
       formArray.push(this.fb.group({
         id: right.id,

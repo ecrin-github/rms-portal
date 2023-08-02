@@ -18,7 +18,6 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/rms-portal",
-            "showCircularDependencies": false,
             "allowedCommonJsDependencies": [
               "object-path",
               "apexcharts",
@@ -132,7 +131,6 @@
       }
     }
   },
-  "defaultProject": "rms-portal",
   "cli": {
     "analytics": false
   }

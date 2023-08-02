@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -13,14 +13,14 @@ import { PeopleService } from 'src/app/_rms/services/entities/people/people.serv
 })
 export class UpsertUserComponent implements OnInit {
   organizationList: [] = [];
-  userForm: FormGroup;
+  userForm: UntypedFormGroup;
   isEdit: boolean = false;
   isView: boolean = false;
   id: any;
   userData: any;
   submitte: boolean = false;
 
-  constructor( private fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private peopleService: PeopleService, private spinner: NgxSpinnerService,
+  constructor( private fb: UntypedFormBuilder, private router: Router, private activatedRoute: ActivatedRoute, private peopleService: PeopleService, private spinner: NgxSpinnerService,
     private toastr: ToastrService, private commonLookup: CommonLookupService) {
     this.userForm = this.fb.group({
       familyName: '',

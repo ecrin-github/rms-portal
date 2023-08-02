@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./study-contributor.component.scss']
 })
 export class StudyContributorComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   contributorType: [] = [];
   organizationList: [] = [];
   subscription: Subscription = new Subscription();
@@ -40,7 +40,7 @@ export class StudyContributorComponent implements OnInit {
   len: any;
   isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectService: DataObjectService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private commonLookup: CommonLookupService) { 
+  constructor( private fb: UntypedFormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectService: DataObjectService, private studyService: StudyService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private commonLookup: CommonLookupService) { 
     this.form = this.fb.group({
       studyContributors: this.fb.array([])
     });
@@ -54,11 +54,11 @@ export class StudyContributorComponent implements OnInit {
       this.getStudyContributor();
     }
   }
-  studyContributors(): FormArray {
-    return this.form.get('studyContributors') as FormArray;
+  studyContributors(): UntypedFormArray {
+    return this.form.get('studyContributors') as UntypedFormArray;
   }
 
-  newStudyContributor(): FormGroup {
+  newStudyContributor(): UntypedFormGroup {
     return this.fb.group({
       id: '',
       sdSid: '',
@@ -153,8 +153,8 @@ export class StudyContributorComponent implements OnInit {
   patchForm(contributors) {
     this.form.setControl('studyContributors', this.patchArray(contributors));
   }
-  patchArray(contributors): FormArray {
-    const formArray = new FormArray([]);
+  patchArray(contributors): UntypedFormArray {
+    const formArray = new UntypedFormArray([]);
     contributors.forEach(contributor => {
       formArray.push(this.fb.group({
         id: contributor.id,

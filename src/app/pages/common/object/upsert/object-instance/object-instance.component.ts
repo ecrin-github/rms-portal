@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./object-instance.component.scss']
 })
 export class ObjectInstanceComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   sizeUnit: [] = [];
   resourceType: [] = [];
   subscription: Subscription = new Subscription();
@@ -33,7 +33,7 @@ export class ObjectInstanceComponent implements OnInit {
   @Output() emitInstance: EventEmitter<any> = new EventEmitter();
   len: any;
 
-  constructor( private fb: FormBuilder, private router: Router, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
+  constructor( private fb: UntypedFormBuilder, private router: Router, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
       objectInstances: this.fb.array([])
     });
@@ -47,11 +47,11 @@ export class ObjectInstanceComponent implements OnInit {
       this.getObjectInstance();
     }
   }
-  objectInstances(): FormArray {
-    return this.form.get('objectInstances') as FormArray;
+  objectInstances(): UntypedFormArray {
+    return this.form.get('objectInstances') as UntypedFormArray;
   }
 
-  newObjectInstance(): FormGroup {
+  newObjectInstance(): UntypedFormGroup {
     return this.fb.group({
       id: '',
       sdOid: '',
@@ -139,8 +139,8 @@ export class ObjectInstanceComponent implements OnInit {
   patchForm(instances) {
     this.form.setControl('objectInstances', this.patchArray(instances));
   }
-  patchArray(instances): FormArray {
-    const formArray = new FormArray([]);
+  patchArray(instances): UntypedFormArray {
+    const formArray = new UntypedFormArray([]);
     instances.forEach(instance => {
       formArray.push(this.fb.group({
         id: instance.id,

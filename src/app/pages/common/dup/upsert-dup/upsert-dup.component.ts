@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -23,8 +23,8 @@ import { ConfirmationWindow1Component } from '../../confirmation-window1/confirm
   styleUrls: ['./upsert-dup.component.scss']
 })
 export class UpsertDupComponent implements OnInit {
-  form: FormGroup;
-  preReqForm: FormGroup;
+  form: UntypedFormGroup;
+  preReqForm: UntypedFormGroup;
   isEdit: boolean = false;
   isView: boolean = false;
   organizationList:[] = [];
@@ -52,7 +52,7 @@ export class UpsertDupComponent implements OnInit {
   role: any;
   showUploadButton: boolean = false;
 
-  constructor(private router: Router, private fb: FormBuilder, private dupService: DupService, private spinner: NgxSpinnerService, private toastr: ToastrService,
+  constructor(private router: Router, private fb: UntypedFormBuilder, private dupService: DupService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService, private pdfGeneratorService: PdfGeneratorService,
     private jsonGenerator: JsonGeneratorService, private listService: ListService) {
     this.form = this.fb.group({
@@ -154,10 +154,10 @@ export class UpsertDupComponent implements OnInit {
       }
     })
   }
-  notes(): FormArray {
-    return this.form.get('notes') as FormArray;
+  notes(): UntypedFormArray {
+    return this.form.get('notes') as UntypedFormArray;
   }
-  newDupNote(): FormGroup {
+  newDupNote(): UntypedFormGroup {
     return this.fb.group({
       id: '',
       text: '',
@@ -170,8 +170,8 @@ export class UpsertDupComponent implements OnInit {
   patchNote(notes) {
     this.form.setControl('notes', this.patchNoteArray(notes));
   }
-  patchNoteArray(notes): FormArray {
-    const formArray = new FormArray([]);
+  patchNoteArray(notes): UntypedFormArray {
+    const formArray = new UntypedFormArray([]);
     notes.forEach(note => {
       formArray.push(this.fb.group({
         id: note.id,
@@ -260,10 +260,10 @@ export class UpsertDupComponent implements OnInit {
     this.getPrereqTypes();
     this.getDupById(this.id, 'isPreReq');
   }
-  preReqs(): FormArray {
-    return this.preReqForm.get('preRequisite') as FormArray;
+  preReqs(): UntypedFormArray {
+    return this.preReqForm.get('preRequisite') as UntypedFormArray;
   }
-  newPreReq(): FormGroup {
+  newPreReq(): UntypedFormGroup {
     return this.fb.group({
       id: '',
       preRequisiteId: '',
@@ -287,8 +287,8 @@ export class UpsertDupComponent implements OnInit {
   patchPreReq(preReqs) {
     this.preReqForm.setControl('preRequisite', this.patchPreReqArray(preReqs))
   }
-  patchPreReqArray(preReqs): FormArray {
-    const formArray = new FormArray([]);
+  patchPreReqArray(preReqs): UntypedFormArray {
+    const formArray = new UntypedFormArray([]);
     preReqs.forEach(preReq => {
       formArray.push(this.fb.group({
         id: preReq.id,
