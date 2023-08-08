@@ -826,7 +826,7 @@ export class UpsertDupComponent implements OnInit {
   }
   goToTsd() {
     this.router.navigate([])
-    .then(result => { window.open('https://covid-19-repo.usit.uio.no/', '_blank'); });
+    .then(result => { window.open('https://crr.tsd.usit.no/', '_blank'); });
 }
 
 }

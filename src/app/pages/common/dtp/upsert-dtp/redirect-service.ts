@@ -13,14 +13,14 @@ export class RedirectService {
 
     public postRedirect(instanceId: number, objectId: number, token: string) {
         const xhttp = new XMLHttpRequest();
-        xhttp.open('POST', `https://covid-19-repo.usit.uio.no/direct/${objectId}/${instanceId}`, false);
+        xhttp.open('POST', `https://crr.tsd.usit.no/direct/${objectId}/${instanceId}`, false);
         xhttp.setRequestHeader('Authorization', 'Bearer ' + token);
         xhttp.setRequestHeader('Access-Control-Allow-Origin', '*');
 
         const form = this.document.createElement('form');
         form.method = 'POST';
         form.target = '_top';
-        form.action = `https://covid-19-repo.usit.uio.no/direct/${objectId}/${instanceId}`;
+        form.action = `https://crr.tsd.usit.no/direct/${objectId}/${instanceId}`;
         const input = this.document.createElement('input');
         input.type = 'hidden';
         input.name = 'id_token';

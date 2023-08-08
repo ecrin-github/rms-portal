@@ -27,9 +27,9 @@
   <div class="card-body pt-0 pb-3" style="height: 500px; overflow: auto;">
     <mat-table [dataSource]="dataSource">
 
-      <ng-container matColumnDef="id">
+      <ng-container matColumnDef="sdSid">
         <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+        <mat-cell *matCellDef="let row"> {{row.sdSid}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="title">

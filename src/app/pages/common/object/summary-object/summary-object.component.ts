@@ -20,7 +20,7 @@ import { Subject } from 'rxjs';
 })
 export class SummaryObjectComponent implements OnInit {
 
-  displayedColumns = ['id', 'title', 'type', 'linkedStudy', 'actions'];
+  displayedColumns = ['sdOid', 'title', 'type', 'linkedStudy', 'actions'];
   dataSource: MatTableDataSource<ObjectListEntryInterface>;
   filterOption: string = 'title';
   searchText:string = '';

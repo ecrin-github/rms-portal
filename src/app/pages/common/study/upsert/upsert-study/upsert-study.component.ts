@@ -126,15 +126,13 @@ export class UpsertStudyComponent implements OnInit {
     if (this.isEdit || this.isView) {
       this.id = this.activatedRoute.snapshot.params.id;
       this.getStudyById(this.id);
+      this.getAssociatedObject(this.id);
     }
     this.activatedRoute.queryParams.subscribe(params => {
       this.addType = params.type;
     })
     if (this.addType === 'usingTrialId') {
       this.getTrialRegistries();
-    }
-    if (this.isBrowsing) {
-      this.getAssociatedObject();
     }
   }
   get g() { return this.studyForm.controls; }
@@ -552,15 +550,20 @@ export class UpsertStudyComponent implements OnInit {
       behavior: 'smooth' 
     });
   }
-  getAssociatedObject() {
-    this.listService.getBrowsingObjectByMultiStudies(this.id).subscribe((res: any) => {
+  getAssociatedObject(id) {
+    this.listService.getBrowsingObjectByMultiStudies(id).subscribe((res: any) => {
       this.associatedObjects = res.data;
     }, error => {
       this.toastr.error(error.error.title);
     })
   }
   goToObject(sdOid) {
-    this.router.navigate([])
-    .then(result => { window.open(`/browsing/data-objects/${sdOid}/view`, '_blank'); });
+    if (this.isBrowsing) {
+      this.router.navigate([])
+      .then(result => { window.open(`/browsing/data-objects/${sdOid}/view`, '_blank'); });
+    } else {
+      this.router.navigate([])
+      .then(result => { window.open(`/data-objects/${sdOid}/view`, '_blank'); });  
+    }
   }
 }

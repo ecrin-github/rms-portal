@@ -21,7 +21,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 export class SummaryStudyComponent implements OnInit {
 
-  displayedColumns = ['id', 'title', 'type', 'status', 'actions'];
+  displayedColumns = ['sdSid', 'title', 'type', 'status', 'actions'];
   dataSource: MatTableDataSource<StudyListEntryInterface>;
   filterOption: string = 'title';
   searchText:string = '';

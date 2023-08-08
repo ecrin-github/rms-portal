@@ -22,6 +22,7 @@ export class UpsertObjectComponent implements OnInit {
   objectForm: FormGroup;
   isEdit: boolean = false;
   isView: boolean = false;
+  isAdd: boolean = false;
   objectClass: [] = [];
   objectType: [] = [];
   accessType: [] = [];
@@ -114,6 +115,7 @@ export class UpsertObjectComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.isAdd = this.router.url.includes('add') ? true : false;
     this.isEdit = this.router.url.includes('edit') ? true : false;
     this.isView = this.router.url.includes('view') ? true : false;
     this.isBrowsing = this.router.url.includes('browsing') ? true : false;
@@ -171,6 +173,10 @@ export class UpsertObjectComponent implements OnInit {
         this.spinner.hide();
       })
     }
+  }
+  findStudyById(sdSid) {
+    const arr: any = this.studyList.filter((item: any) => item.sdSid === sdSid);
+    return arr && arr.length ? arr[0].displayTitle+'('+arr[0].sdSid+')' : ''
   }
   customSearchFn(term: string, item) {
     term = term.toLocaleLowerCase();
@@ -658,6 +664,15 @@ export class UpsertObjectComponent implements OnInit {
   onChangeAccessType() {
     const arr: any = this.accessType.filter((item: any) => item.name === 'Public on-screen access and download');
     this.showAccessDetails = parseInt(this.objectForm.value.accessTypeId) === arr[0].id ? false : true;
+  }
+  goToParentStudy(sdSid) {
+    if (this.isBrowsing) {
+      this.router.navigate([])
+      .then(result => { window.open(`/browsing/studies/${sdSid}/view`, '_blank'); });
+    } else {
+      this.router.navigate([])
+      .then(result => { window.open(`/studies/${sdSid}/view`, '_blank'); });  
+    }
   }
   gotoTop() {
     window.scroll({ 
