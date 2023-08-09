@@ -104,7 +104,7 @@
                 <div class="row form-group">
                     <div class="col-md-12">
                         <label for="briefDescription" class="font-style text-capitalize">Brief description</label>
-                        <textarea class="form-control" cols="30" rows="5" placeholder="Please enter a brief (less than xxx characters) description of your study"
+                        <textarea class="form-control" cols="30" rows="5" placeholder="Please enter a brief description of your study"
                             formControlName="briefDescription" *ngIf="!isView" id="briefDescription">
                             </textarea>
                         <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.briefDescription}}</h6>
@@ -129,7 +129,7 @@
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
                         <label for="studyEnrolment" class="font-style text-capitalize">Study enrollment</label>
-                        <input type="text" class="form-control" placeholder="Enter enrollment, e.g. estimated or actual number of participants in the study"
+                        <input type="text" class="form-control" placeholder="Estimated or actual number of participants in the study"
                             formControlName="studyEnrolment" *ngIf="!isView" id="studyEnrolment" />
                         <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.studyEnrolment}}</h6>
                     </div>
@@ -137,7 +137,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <label for="minAge" class="font-style text-capitalize">Min age</label>
-                                <input type="text" id="minAge" class="form-control" placeholder="Enter a min age value"
+                                <input type="text" id="minAge" class="form-control" placeholder="Minimum age value"
                                     formControlName="minAge" *ngIf="!isView" />
                                 <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.minAge ? studyData?.minAge :
                                     ''}}</h6>
@@ -156,7 +156,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <label for="maxAge" class="font-style text-capitalize">Max age</label>
-                                <input id="maxAge" type="text" class="form-control" placeholder="Enter a max age value..."
+                                <input id="maxAge" type="text" class="form-control" placeholder="Maximum age value"
                                     formControlName="maxAge" *ngIf="!isView" />
                                 <h6 *ngIf="isView" class="pt-4" style="font-weight: 100;">{{studyData?.maxAge ? studyData?.maxAge :
                                     ''}}</h6>

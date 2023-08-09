@@ -26,7 +26,7 @@
                             <div class="col-md-6">
                                 <label for="titleTypeId" class="font-style text-capitalize">Title type</label>
                                 <select class="form-control" id="titleTypeId" formControlName="titleTypeId" *ngIf="!isView">
-                                    <option disabled selected value="">Select an option...</option>
+                                    <option disabled selected value="null">Select title type</option>
                                     <option [value]="title.id" *ngFor="let title of titleType">{{title.name}}</option>
                                 </select>
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{findTitleType(studyTitle.value.titleTypeId)}}</h6>
@@ -43,7 +43,7 @@
                         <div class="row form-group">
                             <div class="col-md-12">
                                 <label for="titleText" class="font-style text-capitalize">Title text</label>
-                                <textarea id="titleText" class="form-control" placeholder="Enter a parameter..."
+                                <textarea id="titleText" class="form-control" placeholder="Please enter title"
                                 formControlName="titleText" *ngIf="!isView" cols="30" rows="3"></textarea>
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{studyTitle.value.titleText}}</h6>
                             </div>

@@ -65,7 +65,7 @@ export class UpsertObjectComponent implements OnInit {
       objectClassId: null,
       objectTypeId: null,
       publicationYear: null,
-      langCode: '',
+      langCode: 'en',
       managingOrg: '',
       accessTypeId: null,
       accessDetails: '',

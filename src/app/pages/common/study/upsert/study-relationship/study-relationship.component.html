@@ -26,14 +26,6 @@
                         </mat-expansion-panel-header>
                         <div class="row form-group">
                             <div class="col-md-6">
-                                <label for="relationshipTypeId" class="font-style text-capitalize">Relationship type</label>
-                                <select class="form-control" id="relationshipTypeId" formControlName="relationshipTypeId" *ngIf="!isView">
-                                    <option disabled selected value="">Select an option...</option>
-                                    <option [value]="relationship.id" *ngFor="let relationship of relationshipType">{{relationship.name}}</option>
-                                </select>
-                                <h6 style="font-weight: 100;" *ngIf="isView">{{findRelationshipType(studyRelation.value.relationshipTypeId)}}</h6>
-                            </div>
-                            <div class="col-md-6">
                                 <label for="targetSdSid" class="font-style text-capitalize">Target study</label>
                                 <ng-select [items]="studyType" bindLabel="sdSid" bindValue="sdSid" formControlName="targetSdSid"
                                 [multiple]="false" [virtualScroll]="true" class="custom" notFoundText="No members found"
@@ -52,6 +44,14 @@
                                 </ng-select>
                                 <!-- <input type="text" id="targetSdSid" class="form-control" formControlName="targetSdSid" *ngIf="!isView"/> -->
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{studyRelation.value.targetSdSid}}</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="relationshipTypeId" class="font-style text-capitalize">Relationship type</label>
+                                <select class="form-control" id="relationshipTypeId" formControlName="relationshipTypeId" *ngIf="!isView">
+                                    <option disabled selected value="null">Please select relationship type</option>
+                                    <option [value]="relationship.id" *ngFor="let relationship of relationshipType">{{relationship.name}}</option>
+                                </select>
+                                <h6 style="font-weight: 100;" *ngIf="isView">{{findRelationshipType(studyRelation.value.relationshipTypeId)}}</h6>
                             </div>
                         </div>
                         <mat-action-row *ngIf="!isView">

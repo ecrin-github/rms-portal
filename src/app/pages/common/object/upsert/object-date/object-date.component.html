@@ -26,7 +26,7 @@
                             <div class="col-md-6">
                                 <label for="dateTypeId" class="font-style text-capitalize">Date type</label>
                                 <select id="dateTypeId" class="form-control" formControlName="dateTypeId" *ngIf="!isView">
-                                    <option disabled selected value="">Select an option...</option>
+                                    <option disabled selected value="null">Please select the type of date</option>
                                     <option [value]=date.id *ngFor="let date of dateType">{{date.name}}</option>
                                 </select>
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{findDateType(objectDate.value.dateTypeId)}}</h6>
