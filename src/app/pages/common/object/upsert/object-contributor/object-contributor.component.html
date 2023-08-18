@@ -20,7 +20,7 @@
                 [formGroupName]="i">
                 <div class="col-12 mb-5" [id]="'objectconst'+i">
                     <mat-expansion-panel [expanded]="objectContributor.value.alreadyExist ? false : true">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{findContributorType(objectContributor.value.contribTypeId)}}
                         </mat-expansion-panel-header>
 

@@ -19,7 +19,7 @@
             <div class="row" *ngFor="let studyIdentifier of studyIdentifiers().controls; let i = index" [formGroupName]="i">
                 <div class="col-12 mb-5" [id]="'idenpanel'+i">
                     <mat-expansion-panel [expanded]="studyIdentifier.value.alreadyExist ? false : true">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{findIdentifierType(studyIdentifier.value.identifierTypeId)}}: {{studyIdentifier.value.identifierValue}}
                         </mat-expansion-panel-header> 
 

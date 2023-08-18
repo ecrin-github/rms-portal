@@ -19,7 +19,7 @@
             <div class="row" *ngFor="let objectTitle of objectTitles().controls; let i = index;" [formGroupName]="i">
                 <div class="col-12 mb-5" [id]="'objecttitle'+i">
                     <mat-expansion-panel [expanded]="objectTitle.value.alreadyExist ? false : true">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{objectTitle.value.titleText}}
                         </mat-expansion-panel-header>
 

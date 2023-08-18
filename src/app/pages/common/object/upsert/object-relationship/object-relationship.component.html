@@ -21,7 +21,7 @@
                 [formGroupName]="i">
                 <div class="col-12 mb-5" [id]="'objectrel'+i">
                     <mat-expansion-panel [expanded]="objectRelation.value.alreadyExist ? false : true">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{findRelationType(objectRelation.value.relationshipTypeId)}}
                         </mat-expansion-panel-header>
 

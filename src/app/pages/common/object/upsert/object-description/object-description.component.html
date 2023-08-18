@@ -21,7 +21,7 @@
                 [formGroupName]="i">
                 <div class="col-12 mb-5" [id]="'objectdesc'+i">
                     <mat-expansion-panel [expanded]="objectDescription.value.alreadyExist ? false : true">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{findDescriptionType(objectDescription.value.descriptionTypeId)}}:{{objectDescription.value.label}}
                         </mat-expansion-panel-header>
 

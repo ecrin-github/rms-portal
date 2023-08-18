@@ -122,6 +122,35 @@
 .mat-column-title {
   padding: 25px !important;
 }
+@media screen and (max-width: 500px) {
+  .mat-column-status {
+    padding-right: 80px !important;
+  }
+  .mat-column-title {
+    padding-right: 80px !important;
+  }
+  .mat-column-type {
+    padding-right: 100px !important;
+  }
+  .mat-column-linkedStudy {
+    padding-right: 80px !important;
+  }
+  .mat-column-name {
+    padding-right: 80px !important;
+  }
+  .mat-column-roleName {
+    padding-right: 100px !important;
+  }
+  .mat-column-orgName {
+    padding-right: 80px !important;
+  }
+  .text-truncate {
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
 .font-style {
   font-size: 1.175rem !important;
   font-weight: 600 !important;

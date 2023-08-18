@@ -20,7 +20,7 @@
                 [formGroupName]="i">
                 <div class="col-12 mb-5" [id]="'objectinst'+i">
                     <mat-expansion-panel [expanded]="objectInstance.value.alreadyExist ? false : true">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{findResourceType(objectInstance.value.resourceTypeId)}} : {{objectInstance.value.repositoryOrg}}
                         </mat-expansion-panel-header>
                         <div class="row form-group">

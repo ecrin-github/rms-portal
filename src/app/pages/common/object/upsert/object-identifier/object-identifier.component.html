@@ -20,7 +20,7 @@
                 [formGroupName]="i">
                 <div class="col-12 mb-5" [id]="'objectiden'+i">
                     <mat-expansion-panel [expanded]="objectIdentifier.value.alreadyExist ? false : true">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{findIdentifierTyepe(objectIdentifier.value.identifierTypeId)}}:{{objectIdentifier.value.identifierValue}}
                         </mat-expansion-panel-header>
 

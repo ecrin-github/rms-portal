@@ -20,7 +20,7 @@
                 [formGroupName]="i">
                 <div class="col-12 mb-5" [id]="'relpanel'+i">
                     <mat-expansion-panel [expanded]="studyRelation.value.alreadyExist ? false : true">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{findRelationshipType(studyRelation.value.relationshipTypeId)}}&nbsp;{{studyRelation.value.targetSdSid}}
                             <!-- ,&nbsp; {{findStudyTitle(studyRelation.value.targetSdSid)}} -->
                         </mat-expansion-panel-header>

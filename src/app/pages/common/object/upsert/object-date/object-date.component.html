@@ -18,7 +18,7 @@
             <div class="row" *ngFor="let objectDate of objectDates().controls; let i = index;" [formGroupName]="i">
                 <div class="col-12 mb-5" [id]="'objectdate'+i">
                     <mat-expansion-panel [expanded]="objectDate.value.alreadyExist ? false : true">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{findDateType(objectDate.value.dateTypeId)}} : {{objectDateData[i]?.startYear}}-{{objectDate.value.startMonth}}-{{objectDate.value.startDay}}
                         </mat-expansion-panel-header>
 

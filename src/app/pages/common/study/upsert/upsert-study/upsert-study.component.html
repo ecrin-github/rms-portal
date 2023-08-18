@@ -1,21 +1,27 @@
 <div class="card">
     <div class="card-header">
-        <h2 class="text-capitalize">{{ isView ? 'Study Details' : isEdit ? 'Edit Study Details' : 'Add a new study'}}</h2>
-        <div style="float: right; margin-top: -40px;" *ngIf="isView && !isBrowsing">
-            <a [routerLink]="['/studies', id, 'edit']"
-               class="btn btn-primary mr-1" target="tempTab">
-                <i class="fa fa-edit"></i> Edit
-            </a>
-            <button class="btn btn-primary mr-1" (click)="print()">
-                <i class="fa fa-print"></i> PDF
-            </button>
-            <button class="btn btn-primary mr-1" (click)="jsonExport()">
-                <i class="fa fa-code"></i> JSON
-            </button>
-            <button class="btn btn-warning" (click)="close()"> {{isView ? 'Back' : 'Cancel'}}</button>
-        </div>
-        <div style="float: right; margin-top: -40px;" *ngIf="isView && isBrowsing">
-            <button class="btn btn-warning" (click)="close()"> {{isView ? 'Back' : 'Cancel'}}</button>
+        <div class="row">
+            <div class="col-md-4">
+                <h2 class="text-capitalize">{{ isView ? 'Study Details' : isEdit ? 'Edit Study Details' : 'Add a new study'}}</h2>
+            </div>
+            <div class="col-md-8 text-right">
+                <ng-container *ngIf="isView && !isBrowsing">
+                    <a [routerLink]="['/studies', id, 'edit']"
+                       class="btn btn-primary mr-1" target="tempTab">
+                        <i class="fa fa-edit"></i> Edit
+                    </a>
+                    <button class="btn btn-primary mr-1" (click)="print()">
+                        <i class="fa fa-print"></i> PDF
+                    </button>
+                    <button class="btn btn-primary mr-1" (click)="jsonExport()">
+                        <i class="fa fa-code"></i> JSON
+                    </button>
+                    <button class="btn btn-warning" (click)="close()"> {{isView ? 'Back' : 'Cancel'}}</button>
+                </ng-container>
+                <ng-container *ngIf="isView && isBrowsing">
+                    <button class="btn btn-warning" (click)="close()"> {{isView ? 'Back' : 'Cancel'}}</button>
+                </ng-container>
+            </div>
         </div>
         <div id="navbar" [ngClass]="sticky ? 'text-center' : ''">
             <h6>{{studyData?.displayTitle}}</h6>

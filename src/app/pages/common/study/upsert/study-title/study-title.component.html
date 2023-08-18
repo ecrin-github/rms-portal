@@ -19,7 +19,7 @@
             <div class="row" *ngFor="let studyTitle of studyTitles().controls;let i = index" [formGroupName]="i">
                 <div class="col-12 mb-5" [id]="'titlepanel'+i">
                     <mat-expansion-panel [expanded]="studyTitle.value.alreadyExist ? false : true">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{studyTitle.value.titleText}}
                         </mat-expansion-panel-header>
                         <div class="row form-group">

@@ -22,7 +22,7 @@
                 <div class="col-12 mb-5" [id]="'conpanel'+i">
                     <mat-expansion-panel [expanded]="studyContributor.value.alreadyExist ? false : true"
                         *ngIf="!isView">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{findContributorType(studyContributor.value.contribTypeId)}}:
                             {{studyContributor.value.isIndividual ? studyContributor.value.personGivenName +' '+
                             studyContributor.value.personFamilyName : studyContributor.value.organisationName}}

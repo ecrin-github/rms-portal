@@ -19,7 +19,7 @@
             <div class="row" *ngFor="let studyTopic of studyTopics().controls; let i = index;" [formGroupName]="i">
                 <div class="col-12 mb-5" [id]="'topicpanel'+i">
                     <mat-expansion-panel [expanded]="studyTopic.value.alreadyExist ? false : true">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{findTopicType(studyTopic.value.topicTypeId)}} : {{studyTopic.value.meshValue}}
                         </mat-expansion-panel-header>
 

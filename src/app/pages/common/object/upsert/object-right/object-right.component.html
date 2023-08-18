@@ -20,7 +20,7 @@
             <div class="row" *ngFor="let objectRight of objectRights().controls; let i = index;" [formGroupName]="i">
                 <div class="col-12 mb-5" [id]="'objectright'+i">
                     <mat-expansion-panel [expanded]="objectRight.value.alreadyExist ? false : true">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{objectRight.value.rightsName}}
                         </mat-expansion-panel-header>
 
