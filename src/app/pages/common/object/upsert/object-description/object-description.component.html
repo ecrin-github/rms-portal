@@ -21,7 +21,7 @@
                 [formGroupName]="i">
                 <div class="col-12 mb-5" [id]="'objectdesc'+i">
                     <mat-expansion-panel [expanded]="objectDescription.value.alreadyExist ? false : true">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{findDescriptionType(objectDescription.value.descriptionTypeId)}}:{{objectDescription.value.label}}
                         </mat-expansion-panel-header>
 
@@ -29,14 +29,14 @@
                             <div class="col-md-6">
                                 <label for="descriptionTypeId" class="font-style text-capitalize">Description type</label>
                                 <select id="descriptionTypeId" class="form-control" *ngIf="!isView" formControlName="descriptionTypeId">
-                                    <option disabled selected value="">Select an option...</option>
+                                    <option disabled selected value="null">Please select the type of description</option>
                                     <option [value]=description.id *ngFor="let description of descriptionType">{{description.name}}</option>
                                 </select>
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{findDescriptionType(objectDescription.value.descriptionTypeId)}}</h6>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label for="label" class="font-style text-capitalize">Description label</label>
-                                <input id="label" type="text" class="form-control" placeholder="Enter a parameter..."
+                                <input id="label" type="text" class="form-control" placeholder="Please enter label (Can be used as a sub-header) a parameter..."
                                 formControlName="label" *ngIf="!isView" />
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{objectDescription.value.label}}</h6>
                             </div>
@@ -44,7 +44,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="descriptionText" class="font-style text-capitalize">Description text</label>
-                                <textarea id="descriptionText" cols="30" rows="5" placeholder="Enter a parameter..."
+                                <textarea id="descriptionText" cols="30" rows="5" placeholder="Please enter description"
                                     formControlName="descriptionText" class="form-control" *ngIf="!isView"></textarea>
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{objectDescription.value.descriptionText}}</h6>
                             </div>

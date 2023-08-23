@@ -20,20 +20,20 @@
             <div class="row" *ngFor="let objectRight of objectRights().controls; let i = index;" [formGroupName]="i">
                 <div class="col-12 mb-5" [id]="'objectright'+i">
                     <mat-expansion-panel [expanded]="objectRight.value.alreadyExist ? false : true">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{objectRight.value.rightsName}}
                         </mat-expansion-panel-header>
 
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="rightsName" class="font-style text-capitalize">Rights name</label>
-                                <input id="rightsName" type="text" class="form-control" placeholder="Enter a parameter..."
+                                <input id="rightsName" type="text" class="form-control" placeholder="Usual common name or code for the rights to be applied"
                                     formControlName="rightsName" *ngIf="!isView">
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{objectRight.value.rightsName}}</h6>
                             </div>
                             <div class="col-md-6">
                                 <label for="rightsUri" class="font-style text-capitalize">Rights URL</label>
-                                <input id="rightsUri" type="text" class="form-control" placeholder="Enter a parameter..."
+                                <input id="rightsUri" type="text" class="form-control" placeholder="Uri of a more detailed description of rights"
                                     formControlName="rightsUri" *ngIf="!isView">
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{objectRight.value.rightsUri}}</h6>
                             </div>
@@ -41,7 +41,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="comments" class="font-style text-capitalize">Comments</label>
-                                <textarea id="comments" cols="30" rows="5" placeholder="Enter a parameter..." class="form-control"
+                                <textarea id="comments" cols="30" rows="5" placeholder="Any additional comments" class="form-control"
                                 formControlName="comments" *ngIf="!isView"></textarea>
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{objectRight.value.comments}}</h6>
                             </div>

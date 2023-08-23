@@ -11,7 +11,7 @@
     <div class="card-toolbar">
       <a [routerLink]="['/data-objects', 'add']"
          class="btn btn-success font-weight-bolder font-size-sm mr-3"
-         target="_blank" *ngIf="role === 'User'"
+         target="_blank" 
       >Add</a
       >
       <a [routerLink]="['/data-objects']"
@@ -27,9 +27,9 @@
   <div class="card-body pt-0 pb-3" style="height: 500px; overflow: auto;">
     <mat-table [dataSource]="dataSource">
 
-      <ng-container matColumnDef="id">
+      <ng-container matColumnDef="sdOid">
           <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+          <mat-cell *matCellDef="let row"><a [routerLink]="['/data-objects', row.sdOid, 'view']" target="_blank">{{row.sdOid}}</a> </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="title">

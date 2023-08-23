@@ -12,7 +12,7 @@ import { StudyListEntryInterface } from 'src/app/_rms/interfaces/study/study-lis
 export class RecentStudiesComponent {
   @Input() cssClass;
   @Input() studyTotal: number = 0;
-  displayedColumns = ['id', 'title', 'type', 'status', 'actions'];
+  displayedColumns = ['sdSid', 'title', 'type', 'status', 'actions'];
   dataSource: MatTableDataSource<StudyListEntryInterface>;
  
   constructor( private dashboardService: DashboardService, 

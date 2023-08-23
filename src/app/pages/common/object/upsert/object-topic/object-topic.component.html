@@ -20,7 +20,7 @@
             <div class="row" *ngFor="let objectTopic of objectTopics().controls; let i = index;" [formGroupName]="i">
                 <div class="col-12 mb-5" [id]="'objecttopic'+i">
                     <mat-expansion-panel [expanded]="objectTopic.value.alreadyExist ? false : true">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{findTopicType(objectTopic.value.topicTypeId)}}
                         </mat-expansion-panel-header>
 

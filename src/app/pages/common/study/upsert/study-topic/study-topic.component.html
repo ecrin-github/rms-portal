@@ -19,7 +19,7 @@
             <div class="row" *ngFor="let studyTopic of studyTopics().controls; let i = index;" [formGroupName]="i">
                 <div class="col-12 mb-5" [id]="'topicpanel'+i">
                     <mat-expansion-panel [expanded]="studyTopic.value.alreadyExist ? false : true">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{findTopicType(studyTopic.value.topicTypeId)}} : {{studyTopic.value.meshValue}}
                         </mat-expansion-panel-header>
 
@@ -27,14 +27,14 @@
                             <div class="col-md-6">
                                 <label for="topicTypeId" class="font-style text-capitalize">Topic type</label>
                                 <select class="form-control" id="topicTypeId" formControlName="topicTypeId" *ngIf="!isView">
-                                    <option disabled selected value="">Select an option...</option>
+                                    <option disabled selected value="null">Please select topic type</option>
                                     <option [value]="title.id" *ngFor="let title of topicTypes">{{title.name}}</option>
                                 </select>
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{findTopicType(studyTopic.value.topicTypeId)}}</h6>
                             </div>
                             <div class="col-md-6">
                                 <label for="meshValue" class="font-style text-capitalize">Topic value</label>
-                                <input type="text" id="meshValue" class="form-control" placeholder="Enter a parameter..."
+                                <input type="text" id="meshValue" class="form-control" placeholder="Please enter topic"
                                 formControlName="meshValue" *ngIf="!isView"/>
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{studyTopic.value.meshValue}}</h6>
                             </div>
@@ -62,7 +62,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="meshCode" class="font-style text-capitalize">CT code</label>
-                                <input type="text" id="meshCode" class="form-control" placeholder="Enter a parameter..."
+                                <input type="text" id="meshCode" class="form-control" placeholder="Please enter terminology code"
                                 formControlName="meshCode" *ngIf="!isView"/>
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{studyTopic.value.meshCode}}</h6>
                             </div>

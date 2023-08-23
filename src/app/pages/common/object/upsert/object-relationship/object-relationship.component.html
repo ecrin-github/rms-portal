@@ -21,7 +21,7 @@
                 [formGroupName]="i">
                 <div class="col-12 mb-5" [id]="'objectrel'+i">
                     <mat-expansion-panel [expanded]="objectRelation.value.alreadyExist ? false : true">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{findRelationType(objectRelation.value.relationshipTypeId)}}
                         </mat-expansion-panel-header>
 
@@ -29,7 +29,7 @@
                             <div class="col-md-6">
                                 <label for="relationshipTypeId" class="font-style text-capitalize">Relationship type</label>
                                 <select id="relationshipTypeId" class="form-control" formControlName="relationshipTypeId" *ngIf="!isView">
-                                    <option disabled selected value="">Select an option...</option>
+                                    <option disabled selected value="null">Please select the type of relationship</option>
                                     <option [value]=relationship.id *ngFor="let relationship of relationshipType">{{relationship.name}}</option>
                                 </select>
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{findRelationType(objectRelation.value.relationshipTypeId)}}</h6>
@@ -39,7 +39,7 @@
                                 <!-- <input id="targetSdOid" type="text" class="form-control" formControlName="targetSdOid"
                                     placeholder="Enter a parameter..." *ngIf="!isView" /> -->
                                 <ng-select [items]="objectList" bindLabel="sdOid" bindValue="sdOid" formControlName="targetSdOid" [multiple]="false"
-                                    [virtualScroll]="true" class="custom" notFoundText="No members found" placeholder="Select target study"
+                                    [virtualScroll]="true" class="custom" notFoundText="No members found" placeholder="Please select the related data object"
                                     *ngIf="!isView" [searchFn]="customSearchFn">
                                     <ng-template ng-label-tmp let-item="item">
                                         {{item.sdOid}}

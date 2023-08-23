@@ -13,7 +13,7 @@ import { DashboardService } from 'src/app/_rms/services/entities/dashboard/dashb
 export class RecentObjectsComponent {
   @Input() cssClass;
   @Input() objectTotal: number = 0;
-  displayedColumns = ['id', 'title', 'type', 'linkedStudy', 'actions'];
+  displayedColumns = ['sdOid', 'title', 'type', 'linkedStudy', 'actions'];
   dataSource: MatTableDataSource<ObjectListEntryInterface>;
   role: any;
 

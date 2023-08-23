@@ -20,7 +20,7 @@
                 [formGroupName]="i">
                 <div class="col-12 mb-5" [id]="'objectiden'+i">
                     <mat-expansion-panel [expanded]="objectIdentifier.value.alreadyExist ? false : true">
-                        <mat-expansion-panel-header>
+                        <mat-expansion-panel-header class="text-truncate">
                             {{findIdentifierTyepe(objectIdentifier.value.identifierTypeId)}}:{{objectIdentifier.value.identifierValue}}
                         </mat-expansion-panel-header>
 
@@ -29,14 +29,14 @@
                             <div class="col-md-6">
                                 <label for="identifierTypeId" class="font-style text-capitalize">Identifier type</label>
                                 <select id="identifierTypeId" class="form-control" formControlName="identifierTypeId" *ngIf="!isView">
-                                    <option disabled selected value="">Select an option...</option>
+                                    <option disabled selected value="null">Please select the type</option>
                                     <option [value]=identifier.id *ngFor="let identifier of identifierType">{{identifier.name}}</option>
                                 </select>
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{findIdentifierTyepe(objectIdentifier.value.identifierTypeId)}}</h6>
                             </div>
                             <div class="col-md-6">
                                 <label for="identifierValue" class="font-style text-capitalize">Identifier value</label>
-                                <input id="identifierValue" type="text" class="form-control" placeholder="Enter a parameter..."
+                                <input id="identifierValue" type="text" class="form-control" placeholder="Enter the identifier"
                                 formControlName="identifierValue" *ngIf="!isView" />
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{objectIdentifier.value.identifierValue}}</h6>
                             </div>
@@ -44,7 +44,7 @@
                         <div class="row form-group">
                             <div class="col-md-6">
                                 <label for="identifierOrg" class="font-style text-capitalize">Identifier organisation</label>
-                                <input id="identifierOrg" type="text" class="form-control" placeholder="Enter a parameter..."
+                                <input id="identifierOrg" type="text" class="form-control" placeholder="Please enter organisation"
                                 formControlName="identifierOrg" *ngIf="!isView" />
                                 <h6 style="font-weight: 100;" *ngIf="isView">{{objectIdentifier.value.identifierOrg}}</h6>
                             </div>

@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-header">
         <h2>Data Objects</h2>
-        <div style="float: right; margin-top: -40px;" *ngIf="!isBrowsing && role === 'User'">
+        <div style="float: right; margin-top: -40px;" *ngIf="!isBrowsing">
             <a [routerLink]="['/data-objects', 'add']" class="btn btn-success" target="tempTab">
                 <i class="fa fa-plus"></i> New data object
             </a>
@@ -31,9 +31,9 @@
 
         <mat-table [dataSource]="dataSource">
 
-            <ng-container matColumnDef="id">
+            <ng-container matColumnDef="sdOid">
                 <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+                <mat-cell *matCellDef="let row"><a [routerLink]="isBrowsing ? ['/browsing/data-objects', row.sdOid, 'view'] : ['/data-objects', row.sdOid, 'view']" target="_blank">{{row.sdOid}}</a> </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="title">
