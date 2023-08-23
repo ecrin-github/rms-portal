@@ -25,9 +25,9 @@
     </header>
     <article>
       <div class="row">
-        <div class="col-md-6 p-10">
-        </div>
-        <div class="col-md-6 p-10">
+        <!-- <div class="col-md-6 p-10">
+        </div> -->
+        <div class="col-md-12 p-10 m-auto" style="max-width: 810px;">
             <form [formGroup]="contactForm">
                 <div class="row form-group">
                     <div class="col-md-12">
@@ -96,6 +96,16 @@
                             <p *ngIf="isSubmitted && g.email.errors.required"> Please enter your email</p>
                         </div>
                     </div>
+                </div>
+                <div class="row form-group">
+                  <div class="col-md-12">
+                      <label for="" class="text-capitalize"
+                          style="font-size: 12px; color: #5979af !important; font-weight: bold;" for="confirmEmail">Confirm Email <small>(*Please re-enter your organization email address)</small> </label>
+                      <input type="text" class="form-control" placeholder="Email" id="confirmEmail" formControlName="confirmEmail" [ngClass]="{ 'is-invalid': isSubmitted && g.confirmEmail.errors }">
+                      <div class="col-md-12 invalid-feedback" *ngIf="isSubmitted && g.confirmEmail.errors">
+                          <p *ngIf="isSubmitted && g.confirmEmail.errors.required"> Please re-enter your email</p>
+                      </div>
+                  </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-md-12 text-center">
