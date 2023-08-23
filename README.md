@@ -1,2 +1,7 @@
 # rms-portal
- The RMS front-end
+**The Repository Management System front-end**
+
+requires: 
+
+- node 16.x
+- angular 14
