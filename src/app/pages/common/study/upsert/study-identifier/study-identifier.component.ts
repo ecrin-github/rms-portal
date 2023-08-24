@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./study-identifier.component.scss']
 })
 export class StudyIdentifierComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   identifierTypes: [] = [];
   subscription: Subscription = new Subscription();
   studyIdentifier: StudyIdentifierInterface;
@@ -37,7 +37,7 @@ export class StudyIdentifierComponent implements OnInit {
   @Output() emitIdentifier: EventEmitter<any> = new EventEmitter();
   @ViewChildren("panel", { read: ElementRef }) panel: QueryList<ElementRef>;
 
-  constructor( private fb: FormBuilder, private studyService: StudyService, private studyLookupService: StudyLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private router: Router, private commonLookup: CommonLookupService) { 
+  constructor( private fb: UntypedFormBuilder, private studyService: StudyService, private studyLookupService: StudyLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private router: Router, private commonLookup: CommonLookupService) { 
     this.form = this.fb.group({
       studyIdentifiers: this.fb.array([])
     });
@@ -51,11 +51,11 @@ export class StudyIdentifierComponent implements OnInit {
       this.getStudyIdentifier();
     }
   }
-  studyIdentifiers(): FormArray {
-    return this.form.get('studyIdentifiers') as FormArray;
+  studyIdentifiers(): UntypedFormArray {
+    return this.form.get('studyIdentifiers') as UntypedFormArray;
   }
 
-  newStudyIdentifier(): FormGroup {
+  newStudyIdentifier(): UntypedFormGroup {
     return this.fb.group({
       id: '',
       sdSid: '',
@@ -150,8 +150,8 @@ export class StudyIdentifierComponent implements OnInit {
   patchForm(identifiers) {
     this.form.setControl('studyIdentifiers', this.patchArray(identifiers));
   }
-  patchArray(identifiers): FormArray {
-    const formArray = new FormArray([]);
+  patchArray(identifiers): UntypedFormArray {
+    const formArray = new UntypedFormArray([]);
     identifiers.forEach((identifier, index) => {
       formArray.push(this.fb.group({
         id: identifier.id,

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./object-title.component.scss']
 })
 export class ObjectTitleComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   languageCode: [] = [];
   titleType: [] = [];
   subscription: Subscription = new Subscription();
@@ -35,7 +35,7 @@ export class ObjectTitleComponent implements OnInit {
   len: any;
   isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectService: DataObjectService, private objectLookupService: ObjectLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: UntypedFormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectService: DataObjectService, private objectLookupService: ObjectLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectTitles: this.fb.array([])
     });
@@ -49,11 +49,11 @@ export class ObjectTitleComponent implements OnInit {
       this.getObjectTitle();
     }
   }
-  objectTitles(): FormArray {
-    return this.form.get('objectTitles') as FormArray;
+  objectTitles(): UntypedFormArray {
+    return this.form.get('objectTitles') as UntypedFormArray;
   }
 
-  newObjectTitle(): FormGroup {
+  newObjectTitle(): UntypedFormGroup {
     return this.fb.group({
       id: '',
       sdOid: '',
@@ -134,8 +134,8 @@ export class ObjectTitleComponent implements OnInit {
   patchForm(titles) {
     this.form.setControl('objectTitles', this.patchArray(titles));
   }
-  patchArray(titles): FormArray {
-    const formArray = new FormArray([]);
+  patchArray(titles): UntypedFormArray {
+    const formArray = new UntypedFormArray([]);
     titles.forEach(title => {
       formArray.push(this.fb.group({
         id: title.id,

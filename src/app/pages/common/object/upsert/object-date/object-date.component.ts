@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./object-date.component.scss']
 })
 export class ObjectDateComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   dateType: [] = [];
   subscription: Subscription = new Subscription();
   @Input() sdOid: string;
@@ -35,7 +35,7 @@ export class ObjectDateComponent implements OnInit {
   len: any;
   isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder, private router: Router, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: UntypedFormBuilder, private router: Router, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectDates: this.fb.array([])
     })
@@ -48,11 +48,11 @@ export class ObjectDateComponent implements OnInit {
       this.getObjectDate();
     }
   }
-  objectDates(): FormArray {
-    return this.form.get('objectDates') as FormArray;
+  objectDates(): UntypedFormArray {
+    return this.form.get('objectDates') as UntypedFormArray;
   }
 
-  newObjectDate(): FormGroup {
+  newObjectDate(): UntypedFormGroup {
     return this.fb.group({
       id: '',
       sdOid: '',
@@ -134,8 +134,8 @@ export class ObjectDateComponent implements OnInit {
   patchForm(dates) {
     this.form.setControl('objectDates',this.patchArray(dates));
   }
-  patchArray(dates): FormArray {
-    const formArray = new FormArray([]);
+  patchArray(dates): UntypedFormArray {
+    const formArray = new UntypedFormArray([]);
     dates.forEach((date, index) => {
       formArray.push(this.fb.group({
         id: date.id,

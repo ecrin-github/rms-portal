@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -16,8 +16,8 @@ import { ProcessLookupService } from 'src/app/_rms/services/entities/process-loo
 })
 export class AddModalComponent implements OnInit {
   objectList: [] = [];
-  preReqForm: FormGroup;
-  embargoForm: FormGroup;
+  preReqForm: UntypedFormGroup;
+  embargoForm: UntypedFormGroup;
   title: any;
   dtpId: any;
   dupId: any;
@@ -25,10 +25,10 @@ export class AddModalComponent implements OnInit {
   type: any;
   todayDate: any;
   accessTypes: [] = [];
-  dupPreReqForm: FormGroup;
+  dupPreReqForm: UntypedFormGroup;
   isEmbargoRequested: boolean = false;
 
-  constructor( private spinner: NgxSpinnerService, private fb: FormBuilder, private dtpService: DtpService, private toastr: ToastrService, private processLookup: ProcessLookupService,
+  constructor( private spinner: NgxSpinnerService, private fb: UntypedFormBuilder, private dtpService: DtpService, private toastr: ToastrService, private processLookup: ProcessLookupService,
     private activeModal: NgbActiveModal, private objectLookupService: ObjectLookupService, private dupService: DupService) { 
     this.preReqForm = this.fb.group({
       sdOid: '',

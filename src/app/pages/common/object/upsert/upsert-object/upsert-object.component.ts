@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -19,7 +19,7 @@ import { PdfGeneratorService } from 'src/app/_rms/services/entities/pdf-generato
 })
 export class UpsertObjectComponent implements OnInit {
   public isCollapsed: boolean = true;
-  objectForm: FormGroup;
+  objectForm: UntypedFormGroup;
   isEdit: boolean = false;
   isView: boolean = false;
   isAdd: boolean = false;
@@ -55,7 +55,7 @@ export class UpsertObjectComponent implements OnInit {
   isSubmitted: boolean = false;
   isBrowsing: boolean = false;
 
-  constructor(private fb: FormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService,
+  constructor(private fb: UntypedFormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService,
     private toastr: ToastrService, private activatedRoute: ActivatedRoute, private listService: ListService, private pdfGenerator: PdfGeneratorService, private jsonGenerator: JsonGeneratorService) {
     this.objectForm = this.fb.group({
       SdSid: ['', Validators.required],

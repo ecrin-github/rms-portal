@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {  NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -28,9 +28,9 @@ import {RedirectService} from './redirect-service';
   styleUrls: ['./upsert-dtp.component.scss']
 })
 export class UpsertDtpComponent implements OnInit {
-  form: FormGroup;
-  preReqForm: FormGroup;
-  objectEmbargoForm: FormGroup;
+  form: UntypedFormGroup;
+  preReqForm: UntypedFormGroup;
+  objectEmbargoForm: UntypedFormGroup;
   isEdit: boolean = false;
   isView: boolean = false;
   organizationList:[] = [];
@@ -64,7 +64,7 @@ export class UpsertDtpComponent implements OnInit {
   showUploadButton: boolean = false;
   instanceArray = [];
 
-  constructor( private router: Router, private fb: FormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
+  constructor( private router: Router, private fb: UntypedFormBuilder, private dtpService: DtpService, private spinner: NgxSpinnerService, private toastr: ToastrService,
     private activatedRoute: ActivatedRoute, private modalService: NgbModal, private commonLookup: CommonLookupService, private processLookup: ProcessLookupService,
     private listService: ListService, private pdfGeneratorService: PdfGeneratorService, private jsonGenerator: JsonGeneratorService,
                private dataObjectService: DataObjectService, private oidcSecurityService: OidcSecurityService, private http: HttpClient,
@@ -181,10 +181,10 @@ export class UpsertDtpComponent implements OnInit {
       }
     });
   }
-  notes(): FormArray {
-   return this.form.get('notes') as FormArray;
+  notes(): UntypedFormArray {
+   return this.form.get('notes') as UntypedFormArray;
   }
-  newDtpNote(): FormGroup {
+  newDtpNote(): UntypedFormGroup {
     return this.fb.group({
       id: '',
       text: '',
@@ -197,8 +197,8 @@ export class UpsertDtpComponent implements OnInit {
   patchNote(notes) {
     this.form.setControl('notes', this.patchNoteArray(notes));
   }
-  patchNoteArray(notes): FormArray {
-    const formArray = new FormArray([]);
+  patchNoteArray(notes): UntypedFormArray {
+    const formArray = new UntypedFormArray([]);
     notes.forEach(note => {
       formArray.push(this.fb.group({
         id: note.id,
@@ -270,10 +270,10 @@ export class UpsertDtpComponent implements OnInit {
       })
     }
   }
-  preReqs(): FormArray {
-    return this.preReqForm.get('preRequisite') as FormArray
+  preReqs(): UntypedFormArray {
+    return this.preReqForm.get('preRequisite') as UntypedFormArray
   }
-  newPreReq(): FormGroup {
+  newPreReq(): UntypedFormGroup {
     return this.fb.group({
       id: '',
       preRequisiteNotes: '',
@@ -296,8 +296,8 @@ export class UpsertDtpComponent implements OnInit {
   patchPreReq(preReqs) {
     this.preReqForm.setControl('preRequisite', this.patchPreReqArray(preReqs));
   }
-  patchPreReqArray(preReqs): FormArray {
-    const formArray = new FormArray([]);
+  patchPreReqArray(preReqs): UntypedFormArray {
+    const formArray = new UntypedFormArray([]);
     preReqs.forEach(preReq => {
       formArray.push(this.fb.group({
         id: preReq.id,
@@ -335,10 +335,10 @@ export class UpsertDtpComponent implements OnInit {
       }
     }, error => {})
   }
-  embargos(): FormArray {
-    return this.objectEmbargoForm.get('embargo') as FormArray
+  embargos(): UntypedFormArray {
+    return this.objectEmbargoForm.get('embargo') as UntypedFormArray
   }
-  newEmbargo(): FormGroup{
+  newEmbargo(): UntypedFormGroup{
     return this.fb.group({
       accessCheckStatusId: '',
       accessCheckBy: '',
@@ -368,8 +368,8 @@ export class UpsertDtpComponent implements OnInit {
   patchEmbargo(embargos) {
     this.objectEmbargoForm.setControl('embargo', this.patchEmbargoArray(embargos))
   }
-  patchEmbargoArray(embargos): FormArray {
-    const formArray = new FormArray([]);
+  patchEmbargoArray(embargos): UntypedFormArray {
+    const formArray = new UntypedFormArray([]);
     embargos.forEach((embargo, index) => {
       formArray.push(this.fb.group({
         accessCheckStatusId: embargo.accessCheckStatusId,

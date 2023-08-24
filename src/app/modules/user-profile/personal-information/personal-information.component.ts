@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import {UserInterface} from '../../../_rms/interfaces/user/user.interface';
@@ -14,7 +14,7 @@ import {States} from '../../../_rms/states/states';
   styleUrls: ['./personal-information.component.scss']
 })
 export class PersonalInformationComponent implements OnInit, OnDestroy {
-  formGroup: FormGroup;
+  formGroup: UntypedFormGroup;
   user: UserInterface;
   firstUserState: UserInterface;
   subscriptions: Subscription[] = [];
@@ -25,7 +25,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
       private userService: AuthService,
       private states: States,
       private statesService: StatesService,
-      private fb: FormBuilder
+      private fb: UntypedFormBuilder
   ) {
     this.isLoading$ = this.states.isLoadingSubject.asObservable();
   }

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./object-contributor.component.scss']
 })
 export class ObjectContributorComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   contributorType: [] = [];
   subscription: Subscription = new Subscription();
   @Input() sdOid: string;
@@ -33,7 +33,7 @@ export class ObjectContributorComponent implements OnInit {
   len: any;
   isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder,private router: Router, private commonLooupService: CommonLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
+  constructor( private fb: UntypedFormBuilder,private router: Router, private commonLooupService: CommonLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) { 
     this.form = this.fb.group({
       objectContributors: this.fb.array([])
     });
@@ -46,11 +46,11 @@ export class ObjectContributorComponent implements OnInit {
       this.getObjectContributor();
     }
   }
-  objectContributors(): FormArray {
-    return this.form.get('objectContributors') as FormArray;
+  objectContributors(): UntypedFormArray {
+    return this.form.get('objectContributors') as UntypedFormArray;
   }
 
-  newObjectContributor(): FormGroup {
+  newObjectContributor(): UntypedFormGroup {
     return this.fb.group({
       id: '',
       sdOid: '',
@@ -124,8 +124,8 @@ export class ObjectContributorComponent implements OnInit {
   patchForm(contributors) {
     this.form.setControl('objectContributors', this.patchArray(contributors));
   }
-  patchArray(contributors): FormArray {
-    const formArray = new FormArray([]);
+  patchArray(contributors): UntypedFormArray {
+    const formArray = new UntypedFormArray([]);
     contributors.forEach(contributor => {
       formArray.push(this.fb.group({
         id: contributor.id,

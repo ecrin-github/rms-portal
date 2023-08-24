@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./object-relationship.component.scss']
 })
 export class ObjectRelationshipComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   relationshipType: [] = [];
   objectList: [] = [];
   subscription: Subscription = new Subscription();
@@ -34,7 +34,7 @@ export class ObjectRelationshipComponent implements OnInit {
   len: any;
   isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder, private router: Router, private listService: ListService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: UntypedFormBuilder, private router: Router, private listService: ListService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectRelationships: this.fb.array([])
     });
@@ -48,11 +48,11 @@ export class ObjectRelationshipComponent implements OnInit {
       this.getObjectRelation();
     }
   }
-  objectRelationships(): FormArray {
-    return this.form.get('objectRelationships') as FormArray;
+  objectRelationships(): UntypedFormArray {
+    return this.form.get('objectRelationships') as UntypedFormArray;
   }
 
-  newObjectRelation(): FormGroup {
+  newObjectRelation(): UntypedFormGroup {
     return this.fb.group({
       id: '',
       sdOid: '',
@@ -136,8 +136,8 @@ export class ObjectRelationshipComponent implements OnInit {
   patchForm(relations) {
     this.form.setControl('objectRelationships', this.patchArray(relations));
   }
-  patchArray(relations): FormArray {
-    const formArray = new FormArray([]);
+  patchArray(relations): UntypedFormArray {
+    const formArray = new UntypedFormArray([]);
     relations.forEach(relation => {
       formArray.push(this.fb.group({
         id: relation.id,

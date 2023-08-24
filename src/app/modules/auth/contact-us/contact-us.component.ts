@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommonLookupService } from 'src/app/_rms/services/entities/common-lookup/common-lookup.service';
@@ -10,15 +10,16 @@ import { CommonLookupService } from 'src/app/_rms/services/entities/common-looku
   styleUrls: ['./contact-us.component.scss']
 })
 export class ContactUsComponent implements OnInit {
-  contactForm: FormGroup
+  contactForm: UntypedFormGroup
   reason: any;
   isSubmitted: boolean = false;
 
-  constructor( private fb: FormBuilder, private commonLookUpService: CommonLookupService, private toastr: ToastrService, private router: Router) { 
+  constructor( private fb: UntypedFormBuilder, private commonLookUpService: CommonLookupService, private toastr: ToastrService, private router: Router) { 
     this.contactForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', Validators.required],
+      confirmEmail: ['', Validators.required],
       organization: '',
       message: ['', Validators.required],
       reason: ['', Validators.required]
@@ -54,16 +55,22 @@ export class ContactUsComponent implements OnInit {
   submitContact() {
     this.isSubmitted = true;
     if (this.contactForm.valid) {
-      const payload = {to: [this.contactForm.value.email],
-      subject: this.contactForm.value.reason,
-      text: this.contactForm.value.message}
-      this.commonLookUpService.emailAPI(payload).subscribe((res: any) => {
-        if (res.status === 'Success') {
-          this.toastr.success('Thank you for contacting us. An email has been sent to you mail address.')
+      if (this.contactForm.value.email === this.contactForm.value.confirmEmail) {
+        const payload = {
+          to: [this.contactForm.value.email],
+          subject: this.contactForm.value.reason,
+          text: this.contactForm.value.message
         }
-      }, error => {
-        this.toastr.error(error);
-      })
+        this.commonLookUpService.emailAPI(payload).subscribe((res: any) => {
+          if (res.status === 'Success') {
+            this.toastr.success('Thank you for contacting us. An email has been sent to you mail address.')
+          }
+        }, error => {
+          this.toastr.error(error);
+        })
+      } else {
+        this.toastr.error('Email entered are not same. Please enter the correct email.')
+      }
     }
   }
 }

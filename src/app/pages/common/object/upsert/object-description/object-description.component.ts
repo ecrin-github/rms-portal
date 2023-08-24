@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./object-description.component.scss']
 })
 export class ObjectDescriptionComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   descriptionType: [] = [];
   languageCode: [] = [];
   subscription: Subscription = new Subscription();
@@ -34,7 +34,7 @@ export class ObjectDescriptionComponent implements OnInit {
   len: any;
   isBrowsing: boolean = false;
   
-  constructor( private fb: FormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
+  constructor( private fb: UntypedFormBuilder, private router: Router, private commonLookupService: CommonLookupService, private objectLookupService: ObjectLookupService, private objectService: DataObjectService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectDescriptions: this.fb.array([])
     })
@@ -48,11 +48,11 @@ export class ObjectDescriptionComponent implements OnInit {
       this.getObjectDescription();
     }
   }
-  objectDescriptions(): FormArray {
-    return this.form.get('objectDescriptions') as FormArray;
+  objectDescriptions(): UntypedFormArray {
+    return this.form.get('objectDescriptions') as UntypedFormArray;
   }
 
-  newObjectDescription(): FormGroup {
+  newObjectDescription(): UntypedFormGroup {
     return this.fb.group({
       id: '',
       sdOid: '',
@@ -133,8 +133,8 @@ export class ObjectDescriptionComponent implements OnInit {
   patchForm(descriptions) {
     this.form.setControl('objectDescriptions', this.patchArray(descriptions));
   }
-  patchArray(descriptions): FormArray {
-    const formArray = new FormArray([]);
+  patchArray(descriptions): UntypedFormArray {
+    const formArray = new UntypedFormArray([]);
     descriptions.forEach(description => {
       formArray.push(this.fb.group({
         id: description.id,

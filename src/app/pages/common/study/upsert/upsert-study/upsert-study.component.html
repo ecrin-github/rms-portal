@@ -1,8 +1,8 @@
 <div class="card">
     <div class="card-header">
-        <div class="row">
+        <div class="row" id="navbar" [ngClass]="sticky ? '' : ''">
             <div class="col-md-4">
-                <h2 class="text-capitalize">{{ isView ? 'Study Details' : isEdit ? 'Edit Study Details' : 'Add a new study'}}</h2>
+                <h2 class="text-capitalize">{{ isView ? 'Viewing Study Details' : isEdit ? 'Edit Study Details' : 'Add a new study'}}</h2>
             </div>
             <div class="col-md-8 text-right">
                 <ng-container *ngIf="isView && !isBrowsing">
@@ -22,9 +22,9 @@
                     <button class="btn btn-warning" (click)="close()"> {{isView ? 'Back' : 'Cancel'}}</button>
                 </ng-container>
             </div>
-        </div>
-        <div id="navbar" [ngClass]="sticky ? 'text-center' : ''">
-            <h6>{{studyData?.displayTitle}}</h6>
+            <div class="pl-5">
+                <h6>{{studyData?.displayTitle}}</h6>
+            </div>    
         </div>
     </div>
 

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./study-title.component.scss']
 })
 export class StudyTitleComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   titleType: [] = [];
   languageCodes: [] = [];
   subscription: Subscription = new Subscription();
@@ -42,7 +42,7 @@ export class StudyTitleComponent implements OnInit {
   studyTitle: StudyTitleInterface
   len: any;
 
-  constructor( private fb: FormBuilder, private studyService: StudyService, private commonLookupService: CommonLookupService, private studyLookupService: StudyLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private router: Router) {
+  constructor( private fb: UntypedFormBuilder, private studyService: StudyService, private commonLookupService: CommonLookupService, private studyLookupService: StudyLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private router: Router) {
     this.form = this.fb.group({
       studyTitles: this.fb.array([])
     });
@@ -56,11 +56,11 @@ export class StudyTitleComponent implements OnInit {
       this.getStudyTitle();
     }
   }
-  studyTitles(): FormArray {
-    return this.form.get('studyTitles') as FormArray;
+  studyTitles(): UntypedFormArray {
+    return this.form.get('studyTitles') as UntypedFormArray;
   }
 
-  newStudyTitle(): FormGroup {
+  newStudyTitle(): UntypedFormGroup {
     return this.fb.group({
       id: '',
       sdSid: '',
@@ -121,7 +121,7 @@ export class StudyTitleComponent implements OnInit {
         }))
       } 
       if (this.titleAdded) {
-        let titleArr = <FormArray>this.form.controls["studyTitles"];
+        let titleArr = <UntypedFormArray>this.form.controls["studyTitles"];
         titleArr.controls[0].patchValue({
           titleText: title
         });
@@ -175,8 +175,8 @@ export class StudyTitleComponent implements OnInit {
   patchForm(titles) {
     this.form.setControl('studyTitles', this.patchArray(titles));
   }
-  patchArray(titles): FormArray {
-    const formArray = new FormArray([]);
+  patchArray(titles): UntypedFormArray {
+    const formArray = new UntypedFormArray([]);
     titles.forEach(title => {
       formArray.push(this.fb.group({
         id: title.id,

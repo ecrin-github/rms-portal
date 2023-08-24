@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./object-topic.component.scss']
 })
 export class ObjectTopicComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   topicType: [] = [];
   subscription: Subscription = new Subscription();
   @Input() sdOid: string;
@@ -32,7 +32,7 @@ export class ObjectTopicComponent implements OnInit {
   len: any;
   isBrowsing: boolean = false;
 
-  constructor( private fb: FormBuilder,private router: Router, private commonLookupService: CommonLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private objectService: DataObjectService, private modalService: NgbModal) {
+  constructor( private fb: UntypedFormBuilder,private router: Router, private commonLookupService: CommonLookupService, private spinner: NgxSpinnerService, private toastr: ToastrService, private objectService: DataObjectService, private modalService: NgbModal) {
     this.form = this.fb.group({
       objectTopics: this.fb.array([])
     });
@@ -45,11 +45,11 @@ export class ObjectTopicComponent implements OnInit {
       this.getObjectTopic();
     }
   }
-  objectTopics(): FormArray {
-    return this.form.get('objectTopics') as FormArray;
+  objectTopics(): UntypedFormArray {
+    return this.form.get('objectTopics') as UntypedFormArray;
   }
 
-  newObjectTopic(): FormGroup {
+  newObjectTopic(): UntypedFormGroup {
     return this.fb.group({
       id: '',
       sdOid: '',
@@ -123,8 +123,8 @@ export class ObjectTopicComponent implements OnInit {
   patchForm(topics) {
     this.form.setControl('objectTopics', this.patchArray(topics));
   }
-  patchArray(topics): FormArray {
-    const formArray = new FormArray([]);
+  patchArray(topics): UntypedFormArray {
+    const formArray = new UntypedFormArray([]);
     topics.forEach(topic => {
       formArray.push(this.fb.group({
         id: topic.id,
