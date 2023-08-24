@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <div class="row">
+        <div class="row" [ngClass]="sticky ? '' : ''"  id="navbar">
             <div class="col-md-7">
                 <h2>{{ isView ? 'Viewing ' + dupData?.coreDup.displayName + ' data use process' : isEdit ? 'Edit '+
                     dupData?.coreDup.displayName + ' data use process' : 'Adding new data use process'}}</h2>
@@ -17,10 +17,12 @@
                     <i class="fa fa-code"></i> JSON
                 </button>
             </div>
-            <div class="text-right" [ngClass]="sticky ? 'col-md-12' : 'col-md-5'" *ngIf="!isView && showButton" id="navbar">
+            <!-- <div class="text-right" [ngClass]="sticky ? 'col-md-12' : 'col-md-5'"  id="navbar"> -->
+            <div class="col-md-5 text-right" *ngIf="!isView && showButton">
                 <button class="btn btn-success mr-5" *ngIf="!isView" (click)="onSave()">{{isEdit ? 'Apply Changes' : 'Save'}}</button>
                 <button class="btn btn-warning" *ngIf="!isView" (click)="close()"> Cancel</button>
             </div>
+            <!-- </div> -->
         </div>
     </div>
     <div class="card-body">
