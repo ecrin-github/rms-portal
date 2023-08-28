@@ -6,7 +6,7 @@
             </div>
             <div class="col-md-8 text-right">
                 <ng-container *ngIf="isView && !isBrowsing">
-                    <a [routerLink]="['/studies', id, 'edit']"
+                    <a [routerLink]="['/studies', id, 'edit']" [queryParams]="{type: 'manual'}"
                        class="btn btn-primary mr-1" target="tempTab">
                         <i class="fa fa-edit"></i> Edit
                     </a>
