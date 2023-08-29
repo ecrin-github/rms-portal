@@ -19,7 +19,8 @@ export class UserProfileComponent implements OnInit {
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
-      country: ['', Validators.required]
+      country: ['', Validators.required],
+      organisation: ['', Validators.required]
     });
   }
 
@@ -30,19 +31,25 @@ export class UserProfileComponent implements OnInit {
   patchForm() {
     this.form.patchValue({
       pic: this.user.pic,
-      userName: this.user.preferred_username,
+      userName: this.user.name,
       firstName: this.user.given_name ? this.user.given_name : '',
       lastName: this.user.family_name,
       email: this.user.email,
       phone: this.user.phone,
-      country: this.user.location
+      country: this.user.location,
+      organisation: this.user.organisation ? this.user.organisation : ''
     });
   }
   getUserData() {
     if (localStorage.getItem('userData')) {
       this.user = JSON.parse(localStorage.getItem('userData'));
+      this.user.pic = 'none';
+      this.user.country = '';
+      this.user.phone = '';
+      this.patchForm();
     } else {
       this.userService.getUser().subscribe((res: any) => {
+        console.log('res', res);
         if (res) {
           this.user = res;
           this.user.pic = 'none';
@@ -59,7 +66,6 @@ export class UserProfileComponent implements OnInit {
     if (!this.user?.pic) {
       return 'none';
     }
-
     return `url('${this.user?.pic}')`;
   }
   deletePic() {

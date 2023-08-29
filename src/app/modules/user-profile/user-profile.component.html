@@ -1,7 +1,13 @@
 <div class="row">
   <div class="col-md-4">
     <div class="card">
-      <div class="card-body">
+      <div class="card-body text-center">
+        <h5 class="my-3">{{user?.name}}</h5>
+        <p class="text-muted mb-1">{{user?.organisation}}</p>
+        <p class="text-muted mb-1">{{user?.email}}</p>
+      </div>
+
+      <!-- <div class="card-body">
         <div class="d-flex align-items-center">
           <div class="symbol symbol-60 symbol-xxl-100 mr-5 align-self-start align-self-xxl-center">
             <div class="symbol-label" [style.backgroundImage]="'url('+ user?.pic +')'"></div>
@@ -12,7 +18,7 @@
               {{user?.name}}
             </a>
             <div class="text-muted">
-              <!-- {{user.companyName}} -->
+              {{user.companyName}}
             </div>
           </div>
         </div>
@@ -30,22 +36,22 @@
             <span class="text-muted">{{user?.location}}</span>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="col-md-8">
     <div class="card h-100">
       <div class="card-header">
         <div class="row">
-          <div class="col-md-7">
+          <div class="col-md-12">
             <h3 class="card-label font-weight-bolder text-dark">Personal Information</h3>
-            <span class="text-muted font-weight-bold font-size-sm mt-1">Update your personal informaiton</span>
+            <!-- <span class="text-muted font-weight-bold font-size-sm mt-1">Update your personal informaiton</span> -->
           </div>
-          <div class="col-md-5 text-right">
+          <!-- <div class="col-md-5 text-right">
             <button type="submit" class="btn btn-success mr-2">Save
               Changes</button>
             <button type="reset" class="btn btn-secondary">Cancel</button>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="card-body">
@@ -55,7 +61,7 @@
               <h5 class="font-weight-bold mb-6">User's information</h5>
             </div>
           </div>
-          <div class="form-group row">
+          <!-- <div class="form-group row">
             <label class="col-xl-3 col-lg-3 col-form-label">Avatar</label>
             <div class="col-lg-9 col-xl-6">
               <div class="image-input image-input-outline" id="kt_profile_avatar" [class.image-input-empty]="!user?.pic"
@@ -80,54 +86,47 @@
               </div>
               <span class="form-text text-muted">Allowed file types: png, jpg, jpeg.</span>
             </div>
-          </div>
+          </div> -->
           <div class="form-group row">
             <label class="col-xl-3 col-lg-3 col-form-label">UserName</label>
             <div class="col-lg-9 col-xl-6">
-              <input class="form-control form-control-lg form-control-solid" type="text" formControlName="userName"
-                [class.is-invalid]="isControlInvalid('userName')" [class.is-valid]="isControlValid('userName')" />
-              <span class="form-text text-muted">If you want your invoices addressed to a company. Leave blank to use
-                your
-                full name.</span>
+              <input class="form-control form-control-lg" type="text" formControlName="userName" readonly/>
             </div>
           </div>
           <div class="form-group row">
             <label class="col-xl-3 col-lg-3 col-form-label">First Name</label>
             <div class="col-lg-9 col-xl-6">
-              <input class="form-control form-control-lg form-control-solid" type="text" formControlName="firstName"
-                [class.is-invalid]="isControlInvalid('firstName')" [class.is-valid]="isControlValid('firstName')" />
+              <input class="form-control form-control-lg" type="text" formControlName="firstName" readonly/>
             </div>
           </div>
           <div class="form-group row">
             <label class="col-xl-3 col-lg-3 col-form-label">Last Name</label>
             <div class="col-lg-9 col-xl-6">
-              <input class="form-control form-control-lg form-control-solid" type="text" value="Bold"
-                formControlName="lastName" [class.is-invalid]="isControlInvalid('lastName')"
-                [class.is-valid]="isControlValid('lastName')" />
+              <input class="form-control form-control-lg" type="text" value="Bold"
+                formControlName="lastName" readonly/>
             </div>
           </div>
-          <div class="row">
+          <!-- <div class="row">
             <label class="col-xl-3"></label>
             <div class="col-lg-9 col-xl-6">
               <h5 class="font-weight-bold mt-10 mb-6">Contact Info</h5>
             </div>
-          </div>
+          </div> -->
           <div class="form-group row">
             <label class="col-xl-3 col-lg-3 col-form-label">Email Address</label>
             <div class="col-lg-9 col-xl-6">
-              <div class="input-group input-group-lg input-group-solid">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">
-                    <i class="fa fa-at"></i>
-                  </span>
-                </div>
-                <input type="email" class="form-control form-control-lg form-control-solid" placeholder="Email"
-                  formControlName="email" [class.is-invalid]="isControlInvalid('email')"
-                  [class.is-valid]="isControlValid('email')" />
-              </div>
+                <input type="email" class="form-control form-control-lg" placeholder="Email"
+                  formControlName="email" readonly/>
             </div>
           </div>
           <div class="form-group row">
+            <label class="col-xl-3 col-lg-3 col-form-label">Organisation</label>
+            <div class="col-lg-9 col-xl-6">
+                <input type="organisation" class="form-control form-control-lg" placeholder="organisation"
+                  formControlName="organisation" readonly/>
+            </div>
+          </div>
+          <!-- <div class="form-group row">
             <label class="col-xl-3 col-lg-3 col-form-label">Contact Phone</label>
             <div class="col-lg-9 col-xl-6">
               <div class="input-group input-group-lg input-group-solid">
@@ -136,23 +135,23 @@
                     <i class="fa fa-phone"></i>
                   </span>
                 </div>
-                <input type="text" class="form-control form-control-lg form-control-solid" placeholder="Phone"
+                <input type="text" class="form-control form-control-lg" placeholder="Phone"
                   formControlName="phone" [class.is-invalid]="isControlInvalid('phone')"
                   [class.is-valid]="isControlValid('phone')" />
               </div>
               <span class="form-text text-muted">We'll never share your email with anyone else.</span>
             </div>
-          </div>
-          <div class="form-group row">
+          </div> -->
+          <!-- <div class="form-group row">
             <label class="col-xl-3 col-lg-3 col-form-label">Country</label>
             <div class="col-lg-9 col-xl-6">
               <div class="input-group input-group-lg input-group-solid">
-                <input type="text" class="form-control form-control-lg form-control-solid" placeholder="Country"
+                <input type="text" class="form-control form-control-lg" placeholder="Country"
                   formControlName="country" [class.is-invalid]="isControlInvalid('country')"
                   [class.is-valid]="isControlValid('country')" />
               </div>
             </div>
-          </div>
+          </div> -->
         </form>
       </div>
     </div>
