@@ -1,11 +1,20 @@
 <div class="card">
     <div class="card-header">
-        <h2>Data Objects</h2>
-        <div style="float: right; margin-top: -40px;" *ngIf="!isBrowsing">
+        <div class="row" [ngClass]="sticky ? '' : ''"  id="navbar">
+            <div class="col-md-6">
+                <h2>Data Objects</h2>
+            </div>
+            <div class="col-md-6 text-right" *ngIf="!isBrowsing">
+                <a [routerLink]="['/data-objects', 'add']" class="btn btn-success" target="tempTab">
+                    <i class="fa fa-plus"></i> New data object
+                </a>    
+            </div>
+        </div>
+        <!-- <div style="float: right; margin-top: -40px;" *ngIf="!isBrowsing">
             <a [routerLink]="['/data-objects', 'add']" class="btn btn-success" target="tempTab">
                 <i class="fa fa-plus"></i> New data object
             </a>
-        </div>
+        </div> -->
     </div>
 
     <div class="card-body">
