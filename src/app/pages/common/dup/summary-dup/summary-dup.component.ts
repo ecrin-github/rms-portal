@@ -29,6 +29,7 @@ export class SummaryDupComponent implements OnInit {
   role: any;
   deBouncedInputValue = this.searchText;
   searchDebounec: Subject<string> = new Subject();
+  sticky: boolean = false;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild('deleteModal') deleteModal : TemplateRef<any>;
@@ -129,7 +130,18 @@ export class SummaryDupComponent implements OnInit {
     this.getDupList();
     localStorage.removeItem('updateDupList');
   }
-
+  @HostListener('window:scroll', ['$event'])
+  onScroll() {
+    const navbar = document.getElementById('navbar');
+    const sticky = navbar.offsetTop;
+    if (window.pageYOffset >= sticky) {
+      navbar.classList.add('sticky');
+      this.sticky = true;
+    } else {
+      navbar.classList.remove('sticky');
+      this.sticky = false;
+    }
+  }
   deleteRecord(id) {
     this.dupService.checkDupAgreed(id).subscribe((res: any) => {
       if (res && res.data) {
