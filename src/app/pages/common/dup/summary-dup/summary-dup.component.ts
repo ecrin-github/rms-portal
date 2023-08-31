@@ -132,14 +132,16 @@ export class SummaryDupComponent implements OnInit {
   }
   @HostListener('window:scroll', ['$event'])
   onScroll() {
-    const navbar = document.getElementById('navbar');
-    const sticky = navbar.offsetTop;
-    if (window.pageYOffset >= sticky) {
-      navbar.classList.add('sticky');
-      this.sticky = true;
-    } else {
-      navbar.classList.remove('sticky');
-      this.sticky = false;
+    if (this.role !== 'User') {
+      const navbar = document.getElementById('navbar');
+      const sticky = navbar.offsetTop;
+      if (window.pageYOffset >= sticky) {
+        navbar.classList.add('sticky');
+        this.sticky = true;
+      } else {
+        navbar.classList.remove('sticky');
+        this.sticky = false;
+      }
     }
   }
   deleteRecord(id) {

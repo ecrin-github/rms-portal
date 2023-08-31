@@ -166,7 +166,7 @@ export class SummaryStudyComponent implements OnInit {
   }
   @HostListener('window:scroll', ['$event'])
   onScroll() {
-    if (!this.isBrowsing) {
+    if (!this.isBrowsing && this.role !== 'User') {
       const navbar = document.getElementById('navbar');
       const sticky = navbar.offsetTop;
       if (window.pageYOffset >= sticky) {
