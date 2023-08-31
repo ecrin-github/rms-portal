@@ -1,7 +1,25 @@
 <div class="card">
     <div class="card-header">
-        <h2>Studies</h2>
-        <ng-container *ngIf="!isBrowsing">
+        <div class="row" [ngClass]="sticky ? '' : ''"  id="navbar">
+            <div class="col-md-6">
+                <h2>Studies</h2>
+            </div>
+            <ng-container *ngIf="!isBrowsing">
+                <div class="col-md-6 text-right"  *ngxPermissionsOnly="['Admin', 'Manager']">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            <i class="fa fa-plus"></i> New study
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/studies/add?type=usingTrialId" target="tempTab">Using Trial Registry</a>
+                            <a class="dropdown-item" href="/studies/add?type=manual" target="tempTab">Manually</a>
+                        </div>
+                    </div>
+                </div>    
+            </ng-container>
+        </div>
+        <!-- <ng-container *ngIf="!isBrowsing">
             <div style="float: right; margin-top: -40px;" *ngxPermissionsOnly="['Admin', 'Manager']">
                 <div class="btn-group">
                     <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
@@ -14,7 +32,7 @@
                     </div>
                 </div>
             </div>
-        </ng-container>
+        </ng-container> -->
     </div>
 
     <div class="card-body">

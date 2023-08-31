@@ -1,8 +1,8 @@
 <div class="card">
     <div class="card-header">
-        <div class="row" id="navbar" [ngClass]="sticky ? '' : ''">
+        <div class="row" id="navbar" [ngClass]="isBrowsing? 'browsing-header' : ''">
             <div class="col-md-4">
-                <h2>{{ isView ? 'Viewing Data Object Details' : isEdit ? 'Edit Data Object Details' : 'Add new data object'}}</h2>
+                <h2>{{ isView ? 'Data Object Details' : isEdit ? 'Editing Data Object Details' : 'Add new data object'}}</h2>
             </div>
             <div class="col-md-8 text-right">
                 <ng-container *ngIf="isView && !isBrowsing">

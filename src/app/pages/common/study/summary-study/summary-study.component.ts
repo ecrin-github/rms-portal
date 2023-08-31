@@ -33,6 +33,7 @@ export class SummaryStudyComponent implements OnInit {
   isBrowsing: boolean = false;
   deBouncedInputValue = this.searchText;
   searchDebounec: Subject<string> = new Subject();
+  sticky: boolean = false;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild('studyDeleteModal') studyDeleteModal : TemplateRef<any>;
@@ -162,6 +163,20 @@ export class SummaryStudyComponent implements OnInit {
     console.log('event triggered', event)
     this.getStudyList();
     localStorage.removeItem('updateStudyList');
+  }
+  @HostListener('window:scroll', ['$event'])
+  onScroll() {
+    if (!this.isBrowsing) {
+      const navbar = document.getElementById('navbar');
+      const sticky = navbar.offsetTop;
+      if (window.pageYOffset >= sticky) {
+        navbar.classList.add('sticky');
+        this.sticky = true;
+      } else {
+        navbar.classList.remove('sticky');
+        this.sticky = false;
+      }
+    }
   }
 
   deleteRecord(id) {
