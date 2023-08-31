@@ -31,6 +31,7 @@ export class SummaryDtpComponent implements OnInit {
   role: any;
   deBouncedInputValue = this.searchText;
   searchDebounec: Subject<string> = new Subject();
+  sticky: boolean = false;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild('exampleModal') exampleModal : TemplateRef<any>;
@@ -131,7 +132,18 @@ export class SummaryDtpComponent implements OnInit {
     this.getDtpList();
     localStorage.removeItem('updateDtpList');
   }
-
+  @HostListener('window:scroll', ['$event'])
+  onScroll() {
+    const navbar = document.getElementById('navbar');
+    const sticky = navbar.offsetTop;
+    if (window.pageYOffset >= sticky) {
+      navbar.classList.add('sticky');
+      this.sticky = true;
+    } else {
+      navbar.classList.remove('sticky');
+      this.sticky = false;
+    }
+  }
   deleteRecord(id) {
     this.dtpService.checkDtaAgreed(id).subscribe((res: any) => {
       if (res && res.data) {

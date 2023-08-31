@@ -1,11 +1,17 @@
 <div class="card">
     <div class="card-header">
-        <h2>Data Transfers</h2>
-        <div style="float: right; margin-top: -40px;" *ngxPermissionsOnly="['Admin', 'Manager']">
-            <a [routerLink]="['/data-transfers', 'add']" class="btn btn-success" target="tempTab">
-                <i class="fa fa-plus"></i> New data transfer
-            </a>
+        <div class="row" id="navbar">
+            <div class="col-md-6">
+                <h2>Data Transfers</h2>
+            </div>
+            <div class="col-md-6 text-right" *ngxPermissionsOnly="['Admin', 'Manager']">
+                <a [routerLink]="['/data-transfers', 'add']" class="btn btn-success" target="tempTab">
+                    <i class="fa fa-plus"></i> New data transfer
+                </a>    
+            </div>
         </div>
+        <!-- <div style="float: right; margin-top: -40px;" >
+        </div> -->
     </div>
     <div class="card-body">
         <div class="row" *ngxPermissionsOnly="['Admin', 'Manager']">
