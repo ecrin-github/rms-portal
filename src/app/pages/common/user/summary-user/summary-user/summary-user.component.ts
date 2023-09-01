@@ -10,6 +10,7 @@ import { PeopleService } from 'src/app/_rms/services/entities/people/people.serv
 import { ConfirmationWindowComponent } from '../../../confirmation-window/confirmation-window.component';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-summary-user',
@@ -26,9 +27,11 @@ export class SummaryUserComponent implements OnInit {
   role: any;
   deBouncedInputValue = this.searchText;
   searchDebounec: Subject<string> = new Subject();
+  notDashboard:boolean = false;
+  sticky: boolean = false;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  constructor( private listService: ListService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private permissionService: NgxPermissionsService) { }
+  constructor( private listService: ListService, private spinner: NgxSpinnerService, private toastr: ToastrService, private modalService: NgbModal, private permissionService: NgxPermissionsService, private router: Router) { }
 
   ngOnInit(): void {
     if (localStorage.getItem('role')) {
@@ -38,6 +41,7 @@ export class SummaryUserComponent implements OnInit {
     if (localStorage.getItem('organisationId')) {
       this.orgId = localStorage.getItem('organisationId');
     }
+    this.notDashboard = this.router.url.includes('people') ? true : false;
     this.getPeople();
     this.setupSearchDeBouncer();
   }
@@ -123,6 +127,20 @@ export class SummaryUserComponent implements OnInit {
     console.log('event triggered', event);
     this.getPeople();
     localStorage.removeItem('updateUserList');
+  }
+  @HostListener('window:scroll', ['$event'])
+  onScroll() {
+    if (this.role !== 'User' || this.notDashboard) {
+      const navbar = document.getElementById('navbar');
+      const sticky = navbar.offsetTop;
+      if (window.pageYOffset >= sticky) {
+        navbar.classList.add('sticky');
+        this.sticky = true;
+      } else {
+        navbar.classList.remove('sticky');
+        this.sticky = false;
+      }
+    }
   }
   onInputChange(e) {
     const searchText = e.target.value;

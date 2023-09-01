@@ -34,6 +34,7 @@ export class SummaryStudyComponent implements OnInit {
   deBouncedInputValue = this.searchText;
   searchDebounec: Subject<string> = new Subject();
   sticky: boolean = false;
+  notDashboard:boolean = false;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild('studyDeleteModal') studyDeleteModal : TemplateRef<any>;
@@ -56,6 +57,7 @@ export class SummaryStudyComponent implements OnInit {
       this.orgId = localStorage.getItem('organisationId');
     }
     this.isBrowsing = this.router.url.includes('browsing') ? true : false
+    this.notDashboard = this.router.url.includes('studies') ? true : false;
     this.getStudyList();
     this.setupSearchDeBouncer();
   }
@@ -166,7 +168,7 @@ export class SummaryStudyComponent implements OnInit {
   }
   @HostListener('window:scroll', ['$event'])
   onScroll() {
-    if (!this.isBrowsing && this.role !== 'User') {
+    if (!this.isBrowsing && this.role !== 'User' || this.notDashboard) {
       const navbar = document.getElementById('navbar');
       const sticky = navbar.offsetTop;
       if (window.pageYOffset >= sticky) {

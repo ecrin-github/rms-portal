@@ -1,10 +1,14 @@
 <div class="card">
     <div class="card-header">
-        <h2>People</h2>
-        <div style="float: right; margin-top: -40px" *ngxPermissionsOnly="['Admin', 'Manager']">
-            <a [routerLink]="['/people', 'add']" class="btn btn-success" target="newTab">
-                <i class="fa fa-plus"></i> New Person
-            </a>
+        <div class="row" id="navbar">
+            <div class="col-md-6">
+                <h2>People</h2>
+            </div>
+            <div class="col-md-6 text-right" *ngxPermissionsOnly="['Admin', 'Manager']">
+                <a [routerLink]="['/people', 'add']" class="btn btn-success" target="newTab">
+                    <i class="fa fa-plus"></i> New Person
+                </a>    
+            </div>
         </div>
     </div>
     <div class="card-body">
