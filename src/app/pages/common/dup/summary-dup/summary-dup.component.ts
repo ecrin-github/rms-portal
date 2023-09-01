@@ -11,6 +11,7 @@ import { DupService } from 'src/app/_rms/services/entities/dup/dup.service';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-summary-dup',
@@ -30,6 +31,7 @@ export class SummaryDupComponent implements OnInit {
   deBouncedInputValue = this.searchText;
   searchDebounec: Subject<string> = new Subject();
   sticky: boolean = false;
+  notDashboard:boolean = false;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild('deleteModal') deleteModal : TemplateRef<any>;
@@ -39,7 +41,7 @@ export class SummaryDupComponent implements OnInit {
                private toastr: ToastrService, 
                private modalService: NgbModal,
                private dupService: DupService,
-               private permissionService: NgxPermissionsService) {
+               private permissionService: NgxPermissionsService, private router: Router) {
   }
 
   ngOnInit() {
@@ -50,6 +52,7 @@ export class SummaryDupComponent implements OnInit {
     if (localStorage.getItem('organisationId')) {
       this.orgId = localStorage.getItem('organisationId');
     }
+    this.notDashboard = this.router.url.includes('data-use') ? true : false;
     this.getDupList();
     this.setupSearchDeBouncer();
   }
@@ -132,14 +135,16 @@ export class SummaryDupComponent implements OnInit {
   }
   @HostListener('window:scroll', ['$event'])
   onScroll() {
-    const navbar = document.getElementById('navbar');
-    const sticky = navbar.offsetTop;
-    if (window.pageYOffset >= sticky) {
-      navbar.classList.add('sticky');
-      this.sticky = true;
-    } else {
-      navbar.classList.remove('sticky');
-      this.sticky = false;
+    if (this.role !== 'User' || this.notDashboard) {
+      const navbar = document.getElementById('navbar');
+      const sticky = navbar.offsetTop;
+      if (window.pageYOffset >= sticky) {
+        navbar.classList.add('sticky');
+        this.sticky = true;
+      } else {
+        navbar.classList.remove('sticky');
+        this.sticky = false;
+      }
     }
   }
   deleteRecord(id) {

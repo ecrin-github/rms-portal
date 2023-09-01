@@ -12,6 +12,7 @@ import { NgxPermission } from 'ngx-permissions/lib/model/permission.model';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class SummaryDtpComponent implements OnInit {
   deBouncedInputValue = this.searchText;
   searchDebounec: Subject<string> = new Subject();
   sticky: boolean = false;
+  notDashboard:boolean = false;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild('exampleModal') exampleModal : TemplateRef<any>;
@@ -41,7 +43,7 @@ export class SummaryDtpComponent implements OnInit {
                private toastr: ToastrService, 
                private modalService: NgbModal,
                private dtpService: DtpService,
-               private permissionService: NgxPermissionsService) {
+               private permissionService: NgxPermissionsService, private router: Router) {
   }
 
   ngOnInit() {
@@ -52,6 +54,7 @@ export class SummaryDtpComponent implements OnInit {
     if (localStorage.getItem('organisationId')) {
       this.orgId = localStorage.getItem('organisationId');
     }
+    this.notDashboard = this.router.url.includes('data-transfers') ? true : false;
     this.getDtpList();
     this.setupSearchDeBouncer();
   }
@@ -134,14 +137,16 @@ export class SummaryDtpComponent implements OnInit {
   }
   @HostListener('window:scroll', ['$event'])
   onScroll() {
-    const navbar = document.getElementById('navbar');
-    const sticky = navbar.offsetTop;
-    if (window.pageYOffset >= sticky) {
-      navbar.classList.add('sticky');
-      this.sticky = true;
-    } else {
-      navbar.classList.remove('sticky');
-      this.sticky = false;
+    if (this.role !== 'User' || this.notDashboard) {
+      const navbar = document.getElementById('navbar');
+      const sticky = navbar.offsetTop;
+      if (window.pageYOffset >= sticky) {
+        navbar.classList.add('sticky');
+        this.sticky = true;
+      } else {
+        navbar.classList.remove('sticky');
+        this.sticky = false;
+      }
     }
   }
   deleteRecord(id) {
