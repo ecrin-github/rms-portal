@@ -56,7 +56,7 @@ export class SummaryObjectComponent implements OnInit {
       this.orgId = localStorage.getItem('organisationId');
     }
     this.isBrowsing = this.router.url.includes('browsing') ? true : false;
-    this.notDashboard = this.router.url.includes('studies') ? true : false;
+    this.notDashboard = this.router.url.includes('data-objects') ? true : false;
     this.getObjectList();
     this.setupSearchDeBouncer();
   }
