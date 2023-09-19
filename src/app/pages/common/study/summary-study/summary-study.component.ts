@@ -49,14 +49,16 @@ export class SummaryStudyComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (localStorage.getItem('role')) {
-      this.role = localStorage.getItem('role');
-      this.permissionService.loadPermissions([this.role]);
-    }
-    if(localStorage.getItem('organisationId')) {
-      this.orgId = localStorage.getItem('organisationId');
-    }
     this.isBrowsing = this.router.url.includes('browsing') ? true : false
+    if (!this.isBrowsing) {
+      if (localStorage.getItem('role')) {
+        this.role = localStorage.getItem('role');
+        this.permissionService.loadPermissions([this.role]);
+      }
+      if(localStorage.getItem('organisationId')) {
+        this.orgId = localStorage.getItem('organisationId');
+      }
+    }
     this.notDashboard = this.router.url.includes('studies') ? true : false;
     this.getStudyList();
     this.setupSearchDeBouncer();
